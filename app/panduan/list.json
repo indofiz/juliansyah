@@ -1,0 +1,54 @@
+[
+  {
+    "id": 1,
+    "text": "Buka Aplikasi lalu masukan email anda dengan format email@email.com",
+    "photo": "/screenshot/1.png"
+  },
+  {
+    "id": 2,
+    "text": "Setelah masuk di halaman depan, silahkan klik tombol yang memiliki ikon kamera",
+    "photo": "/screenshot/2.png"
+  },
+  {
+    "id": 3,
+    "text": "Pilih salah satu metode untuk pengambilan citra gambar di smartphone kamu.",
+    "photo": "/screenshot/3.png"
+  },
+  {
+    "id": 4,
+    "text": "Setelah gambar dipilih lalu akan masuk ke tahap croping gambar, potong gambar hanya pada area lingkaran mata, lalu klik tanda centang pada pojok kanan atas.",
+    "photo": "/screenshot/4.png"
+  },
+  {
+    "id": 5,
+    "text": "Setelah dilakukan proses cropping makan akan diarahkan ke halaman detail, untuk kembali silahkan tekan tombol kembali.",
+    "photo": "/screenshot/5.png"
+  },
+
+  {
+    "id": 6,
+    "text": "Setelah kembali akan diarahkan ke halaman awal klik menu history pada menu bawah untuk melihat riwayat.",
+    "photo": "/screenshot/6.png"
+  },
+  {
+    "id": 7,
+    "text": "Untuk melihat kembali hasil riwayat klasifikasi klik pada salah satu list, makan akan diarahkan kehalaman detail.",
+    "photo": "/screenshot/7.png"
+  },
+
+  {
+    "id": 8,
+    "text": "Untuk menghapus cukup menggeser list kearah kanan dan akan ada tombol untuk menghapus riwayat.",
+    "photo": "/screenshot/8.png"
+  },
+  {
+    "id": 9,
+    "text": "Sebagai tambahan kalau untuk melihat ciri - ciri ikan selar como bisa kembali kehalaman depan dan klik ciri-ciri ikan selar como",
+    "photo": "/screenshot/extra-1.png"
+  },
+  {
+    "id": 10,
+    "text": "Untuk melihat cici-ciri ikan kembung bisa lihat pada halaman depan dan klik ikan kembung.",
+    "photo": "/screenshot/extra-2.png"
+  }
+]
