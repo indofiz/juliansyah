@@ -25,7 +25,7 @@ const Header = () => {
           </p>
           <div className="mt-8 mx-6 flex flex-col items-center gap-4 justify-center text-white">
             <Link
-              href={"https://kerjamolen.com"}
+              href={"/ikanSegarV9.apk"}
               className={cn(
                 "w-full border shadow-button border-lime-500 bg-gradient-to-b from-lime-500 to-lime-600 hover:from-green-500 hover:to-green-600  py-2 px-2 rounded-lg",
                 source_sans.className

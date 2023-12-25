@@ -2,7 +2,6 @@ import React from "react";
 import { Oswald, Source_Sans_3 } from "next/font/google";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowLeftIcon } from "lucide-react";
 import CardList from "./card";
 import data from "./list.json";
@@ -36,7 +35,9 @@ const Panduan = () => {
             source_sans.className
           )}
         >
-          {data.length ? data.map((item) => <CardList item={item} />) : null}
+          {data.length
+            ? data.map((item) => <CardList key={item.id} item={item} />)
+            : null}
         </div>
       </div>
       <div className="absolute -top-32 -right-32 h-60 md:h-[400px] aspect-square border-[32px] md:border-[70px] border-sky-300/40 rounded-full"></div>
