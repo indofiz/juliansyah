@@ -1,13 +1,27 @@
-import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Bricolage_Grotesque, Instrument_Serif, Inter } from "next/font/google";
+import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
+
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin"],
+  variable: "--font-bricolage",
+});
+
+const instrumentSerif = Instrument_Serif({
+  weight: "400",
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  variable: "--font-instrument",
+});
 
 export const metadata: Metadata = {
-  title: "Aplikasi Kesegaran Ikan Laut Juliansyah",
-  description:
-    "Download aplikasi kesegaran ikan laut, kembung, selar como, selar hijau, menggunakan machine learning",
+  title: "Juliansyah | Portfolio",
+  description: "Personal portfolio website",
 };
 
 export default function RootLayout({
@@ -16,8 +30,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" className="dark">
+      <body
+        className={`${inter.variable} ${bricolage.variable} ${instrumentSerif.variable} font-[family-name:var(--font-inter)] antialiased`}
+      >
+        {children}
+      </body>
     </html>
   );
 }
