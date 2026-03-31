@@ -9,7 +9,7 @@ const navLinks = [
 export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 flex w-full items-center justify-center px-4 py-4 animate-fade-in-nav">
-      <nav className="glass-nav flex h-16 w-full max-w-175 items-center rounded-lg px-5">
+      <nav className="flex h-16 w-full max-w-175 items-center rounded-lg px-5 border border-[rgba(156,243,91,0.1)] bg-[rgba(15,16,19,0.45)] backdrop-blur-xl backdrop-saturate-180">
         {/* Logo / Name */}
         <Link
           href="#hero"

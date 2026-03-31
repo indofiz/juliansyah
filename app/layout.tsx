@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Instrument_Serif, Inter } from "next/font/google";
 import "./globals.css";
+import CursorDot from "@/components/cursor-dot";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -34,6 +35,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${bricolage.variable} ${instrumentSerif.variable} font-[family-name:var(--font-inter)] antialiased`}
       >
+        <CursorDot />
         {children}
       </body>
     </html>
