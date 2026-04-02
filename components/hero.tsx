@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function Hero() {
   return (
     <section id="hero" className="relative w-full overflow-hidden">
@@ -7,10 +9,15 @@ export default function Hero() {
       {/* Content */}
       <div className="relative flex flex-col items-center gap-7 px-6 pt-11.25 pb-28.75 md:px-25">
         {/* Profile Image */}
-        <div className="animate-slide-up-long h-50 w-50 overflow-hidden rounded-full">
-          <div className="flex h-full w-full items-center justify-center rounded-full bg-[#1a1a1d] text-6xl">
-            👋
-          </div>
+        <div className="animate-slide-up-long h-40 w-40 overflow-hidden rounded-full">
+          <Image
+            src="/image.png"
+            alt="Juliansyah"
+            width={200}
+            height={200}
+            className="h-full w-full object-cover"
+            priority
+          />
         </div>
 
         {/* Greeting */}
@@ -18,7 +25,7 @@ export default function Hero() {
           className="animate-slide-up-long font-(family-name:--font-bricolage) text-2xl font-normal text-white text-center"
           style={{ animationDelay: "0.1s" }}
         >
-          Hello, I&apos;m Juliansyah !!
+          Hello, I&apos;m Juliansyah 👋
         </h3>
 
         {/* Main Heading */}
@@ -27,16 +34,16 @@ export default function Hero() {
           style={{ animationDelay: "0.2s" }}
         >
           <span className="font-(family-name:--font-bricolage) text-[clamp(3rem,5vw,75px)] font-normal not-italic">
-            Crafting{" "}
+            Interfaces That{" "}
           </span>
           <span className="font-(family-name:--font-instrument) text-[clamp(3rem,5vw,75px)] italic">
-            Thoughtful{" "}
+            Look Good{" "}
           </span>
           <span className="font-(family-name:--font-bricolage) text-[clamp(3rem,5vw,75px)] font-normal not-italic">
-            Digital{" "}
+            and{" "}
           </span>
           <span className="font-(family-name:--font-instrument) text-[clamp(3rem,5vw,75px)] italic">
-            Experiences
+            Work Better
           </span>
         </h1>
 
@@ -45,7 +52,7 @@ export default function Hero() {
           className="animate-slide-up-long max-w-178 text-center font-(family-name:--font-bricolage) text-2xl font-bold text-brand"
           style={{ animationDelay: "0.3s" }}
         >
-          Full-Stack Developer &amp; Creative Problem Solver
+          Front-End Developer &amp; UI/UX Designer
         </p>
 
         {/* Description */}
@@ -53,9 +60,10 @@ export default function Hero() {
           className="animate-slide-up-long max-w-178 text-center font-[Helvetica,Arial,sans-serif] text-lg leading-normal text-gray-text"
           style={{ animationDelay: "0.4s" }}
         >
-          I&apos;m a developer passionate about building modern web applications
-          and digital experiences. I focus on clean code, intuitive interfaces,
-          and solving real-world problems through technology.
+          I&apos;m a T-shaped developer who goes deep in Front-End engineering
+          and UI/UX design — bridging the gap between how things look and how
+          they work. I turn complex problems into interfaces people actually
+          enjoy using.
         </p>
 
         {/* Marquee / Logo Strip */}
