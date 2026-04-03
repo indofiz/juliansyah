@@ -30,6 +30,14 @@ body {
   -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
 }
 
+@media (max-width: 767px) {
+  .hero-mesh-gradient {
+    background:
+      radial-gradient(ellipse 55% 70% at 35% 0%, rgba(255, 68, 68, 0.15) 0%, transparent 70%),
+      radial-gradient(ellipse 55% 70% at 65% 0%, rgba(255, 150, 51, 0.15) 0%, transparent 70%);
+  }
+}
+
 /* Grid background pattern */
 .grid-background {
   background-image:

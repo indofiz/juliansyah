@@ -77,12 +77,13 @@ export default function Hero() {
       );
     });
 
-    window.addEventListener("mousemove", handleMouseMove);
+    const isDesktop = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (isDesktop) window.addEventListener("mousemove", handleMouseMove);
 
     return () => {
       ctx.revert();
       marqueeTweenRef.current?.kill();
-      window.removeEventListener("mousemove", handleMouseMove);
+      if (isDesktop) window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
 
@@ -109,24 +110,24 @@ export default function Hero() {
       <div className="grid-background grid-fade absolute inset-0 h-full w-full" />
 
       {/* Content */}
-      <div className="relative flex flex-col items-center gap-7 px-6 pt-28 pb-28.75 md:px-25">
+      <div className="relative flex flex-col items-center gap-7 px-6 pt-16 pb-28.75 md:px-25">
         {/* Profile Image */}
         <div ref={imageWrapRef} className="group relative h-40 w-40">
           {/* Hobby icons — pop up on hover, overlapping image corners */}
           {/* Top Left — Reading */}
-          <div className="absolute -top-4 -left-4 z-20 flex h-13 w-13 items-center justify-center rounded-full border border-white/15 bg-black/50 text-2xl shadow-lg backdrop-blur-md ring-1 ring-white/5 opacity-100 scale-100 md:opacity-0 md:scale-50 transition-all duration-300 ease-out md:group-hover:opacity-100 md:group-hover:scale-100">
+          <div className="absolute -top-4 -left-4 z-20 hidden md:flex h-13 w-13 items-center justify-center rounded-full border border-white/15 bg-black/50 text-2xl shadow-lg backdrop-blur-md ring-1 ring-white/5 opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100">
             📚
           </div>
           {/* Top Right — Gym */}
-          <div className="absolute -top-4 -right-4 z-20 flex h-13 w-13 items-center justify-center rounded-full border border-white/15 bg-black/50 text-2xl shadow-lg backdrop-blur-md ring-1 ring-white/5 opacity-100 scale-100 md:opacity-0 md:scale-50 transition-all duration-300 ease-out md:group-hover:opacity-100 md:group-hover:scale-100 delay-75">
+          <div className="absolute -top-4 -right-4 z-20 hidden md:flex h-13 w-13 items-center justify-center rounded-full border border-white/15 bg-black/50 text-2xl shadow-lg backdrop-blur-md ring-1 ring-white/5 opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 delay-75">
             🏋️
           </div>
           {/* Bottom Left — Running */}
-          <div className="absolute -bottom-4 -left-4 z-20 flex h-13 w-13 items-center justify-center rounded-full border border-white/15 bg-black/50 text-2xl shadow-lg backdrop-blur-md ring-1 ring-white/5 opacity-100 scale-100 md:opacity-0 md:scale-50 transition-all duration-300 ease-out md:group-hover:opacity-100 md:group-hover:scale-100 delay-150">
+          <div className="absolute -bottom-4 -left-4 z-20 hidden md:flex h-13 w-13 items-center justify-center rounded-full border border-white/15 bg-black/50 text-2xl shadow-lg backdrop-blur-md ring-1 ring-white/5 opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 delay-150">
             🏃
           </div>
           {/* Bottom Right — Coding & Design */}
-          <div className="absolute -bottom-4 -right-4 z-20 flex h-13 w-13 items-center justify-center rounded-full border border-white/15 bg-black/50 text-2xl shadow-lg backdrop-blur-md ring-1 ring-white/5 opacity-100 scale-100 md:opacity-0 md:scale-50 transition-all duration-300 ease-out md:group-hover:opacity-100 md:group-hover:scale-100 delay-225">
+          <div className="absolute -bottom-4 -right-4 z-20 hidden md:flex h-13 w-13 items-center justify-center rounded-full border border-white/15 bg-black/50 text-2xl shadow-lg backdrop-blur-md ring-1 ring-white/5 opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 delay-225">
             💻
           </div>
 
@@ -145,7 +146,7 @@ export default function Hero() {
         {/* Greeting */}
         <p
           data-hero-animate
-          className="font-(family-name:--font-bricolage) text-2xl font-normal text-white text-center"
+          className="font-(family-name:--font-bricolage) text-lg md:text-2xl font-normal text-white text-center"
         >
           Hi, I&apos;m Juliansyah.
         </p>
@@ -155,16 +156,16 @@ export default function Hero() {
           ref={headingRef}
           className="heading-gradient max-w-4xl text-center leading-[1.1]"
         >
-          <span className="font-(family-name:--font-bricolage) text-[clamp(3rem,5vw,75px)] font-normal not-italic">
+          <span className="font-(family-name:--font-bricolage) text-[clamp(2rem,5vw,75px)] font-normal not-italic">
             I Build What{" "}
           </span>
-          <span className="font-(family-name:--font-instrument) text-[clamp(3rem,5vw,75px)] italic">
+          <span className="font-(family-name:--font-instrument) text-[clamp(2rem,5vw,75px)] italic">
             Designers Dream{" "}
           </span>
-          <span className="font-(family-name:--font-bricolage) text-[clamp(3rem,5vw,75px)] font-normal not-italic">
+          <span className="font-(family-name:--font-bricolage) text-[clamp(2rem,5vw,75px)] font-normal not-italic">
             and{" "}
           </span>
-          <span className="font-(family-name:--font-instrument) text-[clamp(3rem,5vw,75px)] italic">
+          <span className="font-(family-name:--font-instrument) text-[clamp(2rem,5vw,75px)] italic">
             Engineers Ship
           </span>
         </h1>
@@ -172,7 +173,7 @@ export default function Hero() {
         {/* Status / Subtitle */}
         <p
           data-hero-animate
-          className="max-w-178 text-center font-(family-name:--font-bricolage) text-2xl font-bold text-brand"
+          className="max-w-178 text-center font-(family-name:--font-bricolage) text-base md:text-2xl font-bold text-brand"
         >
           Frontend Engineer with a Design Edge
         </p>
@@ -180,7 +181,7 @@ export default function Hero() {
         {/* Description */}
         <p
           data-hero-animate
-          className="max-w-178 text-center font-[Helvetica,Arial,sans-serif] text-lg leading-normal text-gray-text"
+          className="max-w-178 text-center font-[Helvetica,Arial,sans-serif] text-sm md:text-lg leading-normal text-gray-text"
         >
           Most developers hand off to designers. I don&apos;t. I write
           production-ready frontend code and design the interfaces myself —

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import gsap from "gsap";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 
@@ -64,13 +65,11 @@ export default function Navbar() {
       className="sticky top-0 z-50 flex w-full items-center justify-center px-4 py-4"
     >
       <div className="w-full max-w-175">
-        <nav className="flex h-16 w-full items-center rounded-lg px-5 border border-white/10 bg-black/40 backdrop-blur-xl">
+        <nav className="flex h-16 w-full items-center rounded-lg px-4 border border-white/10 bg-black/40 backdrop-blur-xl">
           {/* Logo / Name */}
-          <Link
-            href="/"
-            className="font-(family-name:--font-dancing) text-2xl font-bold text-white"
-          >
-            Juliansyah
+          <Link href="/">
+            <span className="md:hidden font-(family-name:--font-dancing) text-2xl font-bold text-white">Juliansyah</span>
+            <Image src="/LOGO.png" alt="Juliansyah" width={32} height={32} className="hidden md:block w-8 h-8" />
           </Link>
 
           {/* Nav Links — desktop */}

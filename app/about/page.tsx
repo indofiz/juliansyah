@@ -45,9 +45,9 @@ export default function AboutPage() {
               About Me
             </span>
             <h1 className="font-(family-name:--font-bricolage) text-5xl font-semibold leading-tight text-white md:text-6xl">
-              I build things{" "}
+              I build{" "}
               <span className="font-(family-name:--font-instrument) italic text-brand">
-                for the web.
+                digital products.
               </span>
             </h1>
           </div>
@@ -58,7 +58,7 @@ export default function AboutPage() {
             <div className="shrink-0 mx-auto md:mx-0">
               <div className="h-72 w-72 overflow-hidden rounded-2xl border border-white-15">
                 <Image
-                  src="/image.png"
+                  src="/image-me.png"
                   alt="Juliansyah"
                   width={288}
                   height={288}

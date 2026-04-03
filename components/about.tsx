@@ -23,7 +23,7 @@ export default function About() {
           <div className="shrink-0 mx-auto md:mx-0">
             <div className="h-64 w-64 overflow-hidden rounded-2xl border border-white-15">
               <Image
-                src="/image.png"
+                src="/image-me.png"
                 alt="Juliansyah"
                 width={256}
                 height={256}
@@ -36,7 +36,7 @@ export default function About() {
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-4">
               <h3 className="font-(family-name:--font-bricolage) text-4xl font-semibold text-white">
-                I build things for the web.
+                I build digital products — web, mobile, desktop, UI & UX.
               </h3>
               <p className="text-base leading-relaxed text-gray-text">
                 I&apos;m a full-stack developer with a passion for building clean,
