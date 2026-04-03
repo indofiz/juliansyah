@@ -8,30 +8,46 @@ export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
   const marqueeRef = useRef<HTMLDivElement>(null);
+  const setRef = useRef<HTMLDivElement>(null);
+  const imageWrapRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const marqueeTweenRef = useRef<gsap.core.Tween | null>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
     const glow = glowRef.current;
-    const marquee = marqueeRef.current;
-    if (!section || !glow || !marquee) return;
+    const imageWrap = imageWrapRef.current;
+    const heading = headingRef.current;
+    if (!section || !glow || !imageWrap || !heading) return;
 
     const ctx = gsap.context(() => {
-      // Hero entrance animations — staggered slide-up
-      gsap.from("[data-hero-animate]", {
-        y: 150,
+      const tl = gsap.timeline();
+
+      // 1. Image — scale bounce entrance
+      tl.from(imageWrap, {
+        scale: 0.5,
         opacity: 0,
         duration: 1,
+        ease: "back.out(1.7)",
+      })
+      // 2. H1 — each word phrase slides up individually
+      .from(heading.children, {
+        y: 50,
+        opacity: 0,
+        duration: 0.7,
         ease: "power3.out",
         stagger: 0.1,
-      });
+      }, "-=0.4")
+      // 3. Remaining elements — greeting, subtitle, description, marquee
+      .from("[data-hero-animate]", {
+        y: 40,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out",
+        stagger: 0.1,
+      }, "-=0.3");
 
-      // Marquee — infinite horizontal scroll
-      gsap.to(marquee, {
-        xPercent: -50,
-        duration: 20,
-        ease: "none",
-        repeat: -1,
-      });
+
     }, section);
 
     // Mesh gradient cursor tracking (horizontal only)
@@ -43,13 +59,29 @@ export default function Hero() {
     const handleMouseMove = (e: MouseEvent) => {
       // Map cursor X to -100..100 range
       const normalized = (e.clientX / window.innerWidth - 0.5) * 2;
-      xTo(normalized * 100);
+      xTo(normalized * 300);
     };
+
+    // Marquee — measure one set's exact offsetWidth (includes trailing pr-12 gap).
+    // Animating by exactly that distance means the repeat reset is pixel-perfect:
+    // content at x=0 and x=-setWidth is visually identical → no jump, no gap.
+    document.fonts.ready.then(() => {
+      const marquee = marqueeRef.current;
+      const set = setRef.current;
+      if (!marquee || !set) return;
+      const setWidth = set.offsetWidth;
+      marqueeTweenRef.current = gsap.fromTo(
+        marquee,
+        { x: 0 },
+        { x: -setWidth, duration: 22, ease: "none", repeat: -1 }
+      );
+    });
 
     window.addEventListener("mousemove", handleMouseMove);
 
     return () => {
       ctx.revert();
+      marqueeTweenRef.current?.kill();
       window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
@@ -79,11 +111,29 @@ export default function Hero() {
       {/* Content */}
       <div className="relative flex flex-col items-center gap-7 px-6 pt-28 pb-28.75 md:px-25">
         {/* Profile Image */}
-        <div data-hero-animate>
-          <div className="h-40 w-40 overflow-hidden rounded-full transition-transform duration-500 ease-out hover:scale-120">
+        <div ref={imageWrapRef} className="group relative h-40 w-40">
+          {/* Hobby icons — pop up on hover, overlapping image corners */}
+          {/* Top Left — Reading */}
+          <div className="absolute -top-4 -left-4 z-20 flex h-13 w-13 items-center justify-center rounded-full border border-white/15 bg-black/50 text-2xl shadow-lg backdrop-blur-md ring-1 ring-white/5 opacity-100 scale-100 md:opacity-0 md:scale-50 transition-all duration-300 ease-out md:group-hover:opacity-100 md:group-hover:scale-100">
+            📚
+          </div>
+          {/* Top Right — Gym */}
+          <div className="absolute -top-4 -right-4 z-20 flex h-13 w-13 items-center justify-center rounded-full border border-white/15 bg-black/50 text-2xl shadow-lg backdrop-blur-md ring-1 ring-white/5 opacity-100 scale-100 md:opacity-0 md:scale-50 transition-all duration-300 ease-out md:group-hover:opacity-100 md:group-hover:scale-100 delay-75">
+            🏋️
+          </div>
+          {/* Bottom Left — Running */}
+          <div className="absolute -bottom-4 -left-4 z-20 flex h-13 w-13 items-center justify-center rounded-full border border-white/15 bg-black/50 text-2xl shadow-lg backdrop-blur-md ring-1 ring-white/5 opacity-100 scale-100 md:opacity-0 md:scale-50 transition-all duration-300 ease-out md:group-hover:opacity-100 md:group-hover:scale-100 delay-150">
+            🏃
+          </div>
+          {/* Bottom Right — Coding & Design */}
+          <div className="absolute -bottom-4 -right-4 z-20 flex h-13 w-13 items-center justify-center rounded-full border border-white/15 bg-black/50 text-2xl shadow-lg backdrop-blur-md ring-1 ring-white/5 opacity-100 scale-100 md:opacity-0 md:scale-50 transition-all duration-300 ease-out md:group-hover:opacity-100 md:group-hover:scale-100 delay-225">
+            💻
+          </div>
+
+          <div className="h-40 w-40 overflow-hidden rounded-full transition-transform duration-500 ease-out group-hover:scale-110">
             <Image
               src="/image.png"
-              alt="Juliansyah"
+              alt="Juliansyah — Frontend Engineer"
               width={200}
               height={200}
               className="h-full w-full object-cover"
@@ -93,29 +143,29 @@ export default function Hero() {
         </div>
 
         {/* Greeting */}
-        <h3
+        <p
           data-hero-animate
           className="font-(family-name:--font-bricolage) text-2xl font-normal text-white text-center"
         >
-          Hello, I&apos;m Juliansyah
-        </h3>
+          Hi, I&apos;m Juliansyah.
+        </p>
 
         {/* Main Heading */}
         <h1
-          data-hero-animate
+          ref={headingRef}
           className="heading-gradient max-w-4xl text-center leading-[1.1]"
         >
           <span className="font-(family-name:--font-bricolage) text-[clamp(3rem,5vw,75px)] font-normal not-italic">
-            Interfaces That{" "}
+            I Build What{" "}
           </span>
           <span className="font-(family-name:--font-instrument) text-[clamp(3rem,5vw,75px)] italic">
-            Look Good{" "}
+            Designers Dream{" "}
           </span>
           <span className="font-(family-name:--font-bricolage) text-[clamp(3rem,5vw,75px)] font-normal not-italic">
             and{" "}
           </span>
           <span className="font-(family-name:--font-instrument) text-[clamp(3rem,5vw,75px)] italic">
-            Work Better
+            Engineers Ship
           </span>
         </h1>
 
@@ -124,7 +174,7 @@ export default function Hero() {
           data-hero-animate
           className="max-w-178 text-center font-(family-name:--font-bricolage) text-2xl font-bold text-brand"
         >
-          Front-End Developer &amp; UI/UX Designer
+          Frontend Engineer with a Design Edge
         </p>
 
         {/* Description */}
@@ -132,10 +182,10 @@ export default function Hero() {
           data-hero-animate
           className="max-w-178 text-center font-[Helvetica,Arial,sans-serif] text-lg leading-normal text-gray-text"
         >
-          I&apos;m a T-shaped developer who goes deep in Front-End engineering
-          and UI/UX design — bridging the gap between how things look and how
-          they work. I turn complex problems into interfaces people actually
-          enjoy using.
+          Most developers hand off to designers. I don&apos;t. I write
+          production-ready frontend code and design the interfaces myself —
+          which means less back-and-forth, faster delivery, and products that
+          look intentional because they are.
         </p>
 
         {/* Marquee / Logo Strip */}
@@ -149,23 +199,36 @@ export default function Hero() {
               "linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 12.5%, rgba(0,0,0,1) 87.5%, rgba(0,0,0,0) 100%)",
           }}
         >
-          <div ref={marqueeRef} className="flex h-full w-max items-center gap-30">
+          <div ref={marqueeRef} className="flex h-full w-max items-center">
             {[...Array(2)].map((_, setIndex) => (
-              <div key={setIndex} className="flex items-center gap-30">
-                {[
-                  "Next.js",
-                  "React",
-                  "TypeScript",
-                  "Tailwind CSS",
-                  "Node.js",
-                  "PostgreSQL",
-                ].map((tech) => (
-                  <span
-                    key={`${setIndex}-${tech}`}
-                    className="whitespace-nowrap text-sm font-medium uppercase tracking-widest text-gray-text"
+              <div
+                key={setIndex}
+                ref={setIndex === 0 ? setRef : undefined}
+                className="flex items-center gap-12 pr-12"
+              >
+                {(
+                  [
+                    { name: "Next.js",      type: "wide"   },
+                    { name: "React",        type: "square" },
+                    { name: "TypeScript",   type: "square" },
+                    { name: "Tailwind CSS", type: "wide"   },
+                    { name: "Node.js",      type: "wide"   },
+                    { name: "PostgreSQL",   type: "wide"   },
+                    { name: "Docker",       type: "square" },
+                    { name: "Figma",        type: "square" },
+                  ] as { name: string; type: "square" | "wide" }[]
+                ).map((logo) => (
+                  <div
+                    key={`${setIndex}-${logo.name}`}
+                    className={`flex shrink-0 items-center justify-center rounded border border-dashed border-white/20 bg-white/3 ${
+                      logo.type === "wide" ? "h-9 w-24" : "h-9 w-9"
+                    }`}
+                    title={logo.name}
                   >
-                    {tech}
-                  </span>
+                    <span className="select-none text-[10px] font-medium text-gray-text/60">
+                      {logo.type === "wide" ? logo.name : logo.name.slice(0, 2)}
+                    </span>
+                  </div>
                 ))}
               </div>
             ))}

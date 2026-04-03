@@ -6,9 +6,9 @@ import gsap from "gsap";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 
 const navLinks = [
-  { label: "Projects", href: "#projects" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Projects", href: "/projects" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {
@@ -67,7 +67,7 @@ export default function Navbar() {
         <nav className="flex h-16 w-full items-center rounded-lg px-5 border border-white/10 bg-black/40 backdrop-blur-xl">
           {/* Logo / Name */}
           <Link
-            href="#hero"
+            href="/"
             className="font-(family-name:--font-dancing) text-2xl font-bold text-white"
           >
             Juliansyah
@@ -88,7 +88,7 @@ export default function Navbar() {
 
           {/* Resume CTA — desktop */}
           <Link
-            href="#contact"
+            href="/contact"
             className="hidden md:flex h-9 items-center rounded-lg bg-white px-5 text-sm font-medium text-[#060703] transition-opacity hover:opacity-90"
           >
             Resume
@@ -126,7 +126,7 @@ export default function Navbar() {
             <div className="mx-3 my-2 h-px bg-white/10" />
             <Link
               data-menu-item
-              href="#contact"
+              href="/contact"
               onClick={closeMenu}
               className="flex h-11 items-center justify-center rounded-lg bg-white mx-1 text-sm font-medium text-[#060703] transition-opacity hover:opacity-90"
             >

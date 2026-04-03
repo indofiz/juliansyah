@@ -54,7 +54,7 @@ export default function CursorDot() {
   return (
     <div
       ref={dotRef}
-      className="pointer-events-none fixed top-0 left-0 z-[9999] hidden md:block"
+      className="pointer-events-none fixed top-0 left-0 z-9999 hidden md:block"
       style={{ willChange: "transform" }}
     >
       <div className="h-3 w-3 rounded-full bg-brand" />
