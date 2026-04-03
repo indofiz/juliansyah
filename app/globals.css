@@ -20,11 +20,21 @@ body {
   color: var(--color-foreground);
 }
 
+/* Hero mesh gradient */
+.hero-mesh-gradient {
+  background:
+    radial-gradient(ellipse 25% 70% at 40% 0%, rgba(255, 68, 68, 0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 25% 70% at 55% 0%, rgba(255, 150, 51, 0.15) 0%, transparent 70%);
+  will-change: transform;
+  mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+}
+
 /* Grid background pattern */
 .grid-background {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
   background-size: 80px 80px;
 }
 
@@ -42,88 +52,72 @@ body {
   background-clip: text;
 }
 
-
-/* Marquee animation */
-@keyframes marquee {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-.animate-marquee {
-  animation: marquee 20s linear infinite;
-}
-
-/* Hero entrance animations */
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(60px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slide-up-long {
-  from {
-    opacity: 0;
-    transform: translateY(150px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fade-in-nav {
-  from {
-    opacity: 0;
-    transform: translateY(-60px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-slide-up {
-  animation: slide-up 0.8s ease-out both;
-}
-
-.animate-slide-up-long {
-  animation: slide-up-long 1s ease-out both;
-}
-
-.animate-fade-in-nav {
-  animation: fade-in-nav 0.8s ease-out both;
-}
-
-/* Scroll indicator dot */
-@keyframes scroll-bounce {
+/* Blob gradient animations */
+@keyframes blob-drift-1 {
   0%, 100% {
-    transform: translateY(0);
-    opacity: 1;
+    transform: translate(0, 0) scale(1);
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  }
+  25% {
+    transform: translate(100px, 50px) scale(1.15);
+    border-radius: 70% 30% 50% 50% / 30% 60% 40% 70%;
   }
   50% {
-    transform: translateY(12px);
-    opacity: 0.3;
+    transform: translate(-80px, -60px) scale(0.9);
+    border-radius: 50% 60% 30% 70% / 60% 40% 70% 30%;
+  }
+  75% {
+    transform: translate(-120px, 40px) scale(1.1);
+    border-radius: 30% 70% 60% 40% / 50% 70% 30% 60%;
   }
 }
 
-@keyframes scroll-fade-in {
-  from {
-    opacity: 0;
+@keyframes blob-drift-2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
   }
-  to {
-    opacity: 1;
+  25% {
+    transform: translate(-100px, 80px) scale(1.1);
+    border-radius: 40% 60% 70% 30% / 70% 40% 50% 60%;
+  }
+  50% {
+    transform: translate(120px, -50px) scale(1.15);
+    border-radius: 70% 50% 40% 60% / 30% 70% 60% 40%;
+  }
+  75% {
+    transform: translate(60px, -90px) scale(0.95);
+    border-radius: 50% 30% 60% 40% / 60% 50% 30% 70%;
   }
 }
 
-.animate-scroll-dot {
-  animation: scroll-fade-in 0.5s ease-out 2s both, scroll-bounce 2s ease-in-out 2.5s infinite;
+@keyframes blob-drift-3 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    border-radius: 50% 60% 40% 50% / 40% 60% 50% 60%;
+  }
+  25% {
+    transform: translate(80px, -70px) scale(1.12);
+    border-radius: 30% 70% 50% 60% / 70% 40% 60% 30%;
+  }
+  50% {
+    transform: translate(-60px, 90px) scale(0.92);
+    border-radius: 60% 40% 70% 30% / 50% 60% 30% 70%;
+  }
+  75% {
+    transform: translate(-100px, -40px) scale(1.08);
+    border-radius: 40% 50% 30% 70% / 60% 30% 70% 40%;
+  }
+}
+
+.animate-blob-1 {
+  animation: blob-drift-1 15s ease-in-out infinite;
+}
+
+.animate-blob-2 {
+  animation: blob-drift-2 18s ease-in-out infinite;
+}
+
+.animate-blob-3 {
+  animation: blob-drift-3 20s ease-in-out infinite;
 }

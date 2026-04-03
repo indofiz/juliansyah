@@ -7,13 +7,10 @@ export default function CursorDot() {
   const mouse = useRef({ x: 0, y: 0 });
   const pos = useRef({ x: 0, y: 0 });
   const rafId = useRef<number>(0);
+  const isMoving = useRef(false);
+  const stopTimer = useRef<ReturnType<typeof setTimeout>>(null);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      mouse.current.x = e.clientX;
-      mouse.current.y = e.clientY;
-    };
-
     const animate = () => {
       pos.current.x += (mouse.current.x - pos.current.x) * 0.15;
       pos.current.y += (mouse.current.y - pos.current.y) * 0.15;
@@ -22,26 +19,34 @@ export default function CursorDot() {
         dotRef.current.style.transform = `translate(${pos.current.x}px, ${pos.current.y}px)`;
       }
 
-      rafId.current = requestAnimationFrame(animate);
+      const dx = mouse.current.x - pos.current.x;
+      const dy = mouse.current.y - pos.current.y;
+      if (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) {
+        rafId.current = requestAnimationFrame(animate);
+      } else {
+        isMoving.current = false;
+      }
     };
 
-    // Pause when tab is hidden
-    const handleVisibility = () => {
-      if (document.hidden) {
-        cancelAnimationFrame(rafId.current);
-      } else {
+    const startLoop = () => {
+      if (!isMoving.current) {
+        isMoving.current = true;
         rafId.current = requestAnimationFrame(animate);
       }
     };
 
+    const handleMouseMove = (e: MouseEvent) => {
+      mouse.current.x = e.clientX;
+      mouse.current.y = e.clientY;
+      startLoop();
+    };
+
     window.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("visibilitychange", handleVisibility);
-    rafId.current = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("visibilitychange", handleVisibility);
       cancelAnimationFrame(rafId.current);
+      if (stopTimer.current) clearTimeout(stopTimer.current);
     };
   }, []);
 

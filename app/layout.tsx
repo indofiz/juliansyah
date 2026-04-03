@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Instrument_Serif, Inter } from "next/font/google";
+import { Bricolage_Grotesque, Dancing_Script, Instrument_Serif, Inter } from "next/font/google";
 import "./globals.css";
 import CursorDot from "@/components/cursor-dot";
 
@@ -11,6 +11,11 @@ const inter = Inter({
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   variable: "--font-bricolage",
+});
+
+const dancingScript = Dancing_Script({
+  subsets: ["latin"],
+  variable: "--font-dancing",
 });
 
 const instrumentSerif = Instrument_Serif({
@@ -33,7 +38,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${inter.variable} ${bricolage.variable} ${instrumentSerif.variable} font-[family-name:var(--font-inter)] antialiased`}
+        className={`${inter.variable} ${bricolage.variable} ${dancingScript.variable} ${instrumentSerif.variable} font-[family-name:var(--font-inter)] antialiased`}
       >
         <CursorDot />
         {children}
