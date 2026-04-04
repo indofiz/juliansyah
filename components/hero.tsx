@@ -114,21 +114,21 @@ export default function Hero() {
         {/* Profile Image */}
         <div ref={imageWrapRef} className="group relative h-40 w-40">
           {/* Hobby icons — pop up on hover, overlapping image corners */}
-          {/* Top Left — Reading */}
-          <div className="absolute -top-4 -left-4 z-20 hidden md:flex h-13 w-13 items-center justify-center rounded-full border border-white/15 bg-black/50 text-2xl shadow-lg backdrop-blur-md ring-1 ring-white/5 opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100">
-            📚
+          {/* Top Left — Ideas */}
+          <div className="absolute -top-4 -left-4 z-20 hidden md:flex h-13 w-13 items-center justify-center rounded-full border border-white/30 bg-white/20 shadow-lg backdrop-blur-md ring-1 ring-white/10 opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100">
+            <Image src="/what-i-like/bulb 1.png" alt="Ideas" width={28} height={28} className="" />
           </div>
-          {/* Top Right — Gym */}
-          <div className="absolute -top-4 -right-4 z-20 hidden md:flex h-13 w-13 items-center justify-center rounded-full border border-white/15 bg-black/50 text-2xl shadow-lg backdrop-blur-md ring-1 ring-white/5 opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 delay-75">
-            🏋️
+          {/* Top Right — Coding */}
+          <div className="absolute -top-4 -right-4 z-20 hidden md:flex h-13 w-13 items-center justify-center rounded-full border border-white/30 bg-white/20 shadow-lg backdrop-blur-md ring-1 ring-white/10 opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 delay-75">
+            <Image src="/what-i-like/laptop 1.png" alt="Coding" width={28} height={28} className="" />
           </div>
-          {/* Bottom Left — Running */}
-          <div className="absolute -bottom-4 -left-4 z-20 hidden md:flex h-13 w-13 items-center justify-center rounded-full border border-white/15 bg-black/50 text-2xl shadow-lg backdrop-blur-md ring-1 ring-white/5 opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 delay-150">
-            🏃
+          {/* Bottom Left — Design */}
+          <div className="absolute -bottom-4 -left-4 z-20 hidden md:flex h-13 w-13 items-center justify-center rounded-full border border-white/30 bg-white/20 shadow-lg backdrop-blur-md ring-1 ring-white/10 opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 delay-150">
+            <Image src="/what-i-like/push-pins 1.png" alt="Design" width={28} height={28} className="" />
           </div>
-          {/* Bottom Right — Coding & Design */}
-          <div className="absolute -bottom-4 -right-4 z-20 hidden md:flex h-13 w-13 items-center justify-center rounded-full border border-white/15 bg-black/50 text-2xl shadow-lg backdrop-blur-md ring-1 ring-white/5 opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 delay-225">
-            💻
+          {/* Bottom Right — Collaboration */}
+          <div className="absolute -bottom-4 -right-4 z-20 hidden md:flex h-13 w-13 items-center justify-center rounded-full border border-white/30 bg-white/20 shadow-lg backdrop-blur-md ring-1 ring-white/10 opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 delay-225">
+            <Image src="/what-i-like/discussion 1.png" alt="Collaboration" width={28} height={28} className="" />
           </div>
 
           <div className="h-40 w-40 overflow-hidden rounded-full transition-transform duration-500 ease-out group-hover:scale-110">
@@ -205,30 +205,34 @@ export default function Hero() {
               <div
                 key={setIndex}
                 ref={setIndex === 0 ? setRef : undefined}
-                className="flex items-center gap-12 pr-12"
+                className="flex items-center gap-10 pr-10"
               >
                 {(
                   [
-                    { name: "Next.js",      type: "wide"   },
-                    { name: "React",        type: "square" },
-                    { name: "TypeScript",   type: "square" },
-                    { name: "Tailwind CSS", type: "wide"   },
-                    { name: "Node.js",      type: "wide"   },
-                    { name: "PostgreSQL",   type: "wide"   },
-                    { name: "Docker",       type: "square" },
-                    { name: "Figma",        type: "square" },
-                  ] as { name: string; type: "square" | "wide" }[]
+                    { src: "/logos/linknet.png",                    name: "Linknet",                   type: "wide"   },
+                    { src: "/logos/uswah_salam.png",                name: "Uswah",                     type: "wide"   },
+                    { src: "/logos/mabes_tni.png",                  name: "Mabes TNI",                 type: "square" },
+                    { src: "/logos/malinau.png",                    name: "Kabupaten Malinau",         type: "square" },
+                    { src: "/logos/nizamia.png",                    name: "Nizamia Andalusia",         type: "square" },
+                    { src: "/logos/pangkalpinang.png",              name: "Kota Pangkalpinang",        type: "square" },
+                    { src: "/logos/thi.png",                        name: "THI",                       type: "square" },
+                    { src: "/logos/yayasan_pendidikan_alazhar.png", name: "Yayasan Al Azhar",          type: "square" },
+                  ] as { src: string; name: string; type: "square" | "wide" }[]
                 ).map((logo) => (
                   <div
                     key={`${setIndex}-${logo.name}`}
-                    className={`flex shrink-0 items-center justify-center rounded border border-dashed border-white/20 bg-white/3 ${
-                      logo.type === "wide" ? "h-9 w-24" : "h-9 w-9"
+                    className={`flex shrink-0 items-center justify-center ${
+                      logo.type === "wide" ? "h-12 w-28" : "h-12 w-12"
                     }`}
                     title={logo.name}
                   >
-                    <span className="select-none text-[10px] font-medium text-gray-text/60">
-                      {logo.type === "wide" ? logo.name : logo.name.slice(0, 2)}
-                    </span>
+                    <Image
+                      src={logo.src}
+                      alt={logo.name}
+                      width={logo.type === "wide" ? 100 : 40}
+                      height={40}
+                      className="h-full w-full object-contain mix-blend-screen grayscale transition-[filter] duration-300 ease-out hover:grayscale-0"
+                    />
                   </div>
                 ))}
               </div>
