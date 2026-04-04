@@ -1,5 +1,14 @@
+import type { Metadata } from "next";
 import Navbar from "@/components/navbar";
 import { ArrowUpRight } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Projects",
+  description:
+    "Selected projects by Juliansyah — e-commerce platforms, SaaS dashboards, mobile apps, and more built across React, Next.js, and Node.js.",
+  alternates: { canonical: "/projects" },
+  openGraph: { title: "Projects | Juliansyah", description: "A portfolio of selected web development projects." },
+};
 
 const projects = [
   {
@@ -60,7 +69,7 @@ const projects = [
 
 export default function ProjectsPage() {
   return (
-    <main className="min-h-screen">
+    <main id="main-content" className="min-h-screen">
       <Navbar />
 
       <section className="w-full px-6 py-20 md:px-25">

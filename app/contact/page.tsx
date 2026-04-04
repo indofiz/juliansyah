@@ -1,5 +1,14 @@
+import type { Metadata } from "next";
 import Navbar from "@/components/navbar";
 import { ArrowUpRight } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description:
+    "Get in touch with Juliansyah — open to freelance projects, full-time roles, and collaboration opportunities.",
+  alternates: { canonical: "/contact" },
+  openGraph: { title: "Contact | Juliansyah", description: "Open to freelance & full-time opportunities." },
+};
 
 const socials = [
   { label: "GitHub", href: "https://github.com/indofiz", description: "See my open-source work" },
@@ -10,7 +19,7 @@ const socials = [
 
 export default function ContactPage() {
   return (
-    <main className="min-h-screen">
+    <main id="main-content" className="min-h-screen">
       <Navbar />
 
       <section className="w-full px-6 py-20 md:px-25">
@@ -44,43 +53,53 @@ export default function ContactPage() {
 
               <form className="flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-medium uppercase tracking-widest text-gray-text">
+                  <label htmlFor="contact-name" className="text-xs font-medium uppercase tracking-widest text-gray-text">
                     Name
                   </label>
                   <input
+                    id="contact-name"
                     type="text"
+                    name="name"
+                    autoComplete="name"
                     placeholder="John Doe"
                     className="h-12 rounded-lg border border-white-15 bg-white/5 px-4 text-sm text-white placeholder-gray-text outline-none transition-colors focus:border-brand focus:bg-white/[0.07]"
                   />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-medium uppercase tracking-widest text-gray-text">
+                  <label htmlFor="contact-email" className="text-xs font-medium uppercase tracking-widest text-gray-text">
                     Email
                   </label>
                   <input
+                    id="contact-email"
                     type="email"
+                    name="email"
+                    autoComplete="email"
                     placeholder="john@example.com"
                     className="h-12 rounded-lg border border-white-15 bg-white/5 px-4 text-sm text-white placeholder-gray-text outline-none transition-colors focus:border-brand focus:bg-white/[0.07]"
                   />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-medium uppercase tracking-widest text-gray-text">
+                  <label htmlFor="contact-subject" className="text-xs font-medium uppercase tracking-widest text-gray-text">
                     Subject
                   </label>
                   <input
+                    id="contact-subject"
                     type="text"
+                    name="subject"
                     placeholder="Project inquiry / Just saying hi"
                     className="h-12 rounded-lg border border-white-15 bg-white/5 px-4 text-sm text-white placeholder-gray-text outline-none transition-colors focus:border-brand focus:bg-white/[0.07]"
                   />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-medium uppercase tracking-widest text-gray-text">
+                  <label htmlFor="contact-message" className="text-xs font-medium uppercase tracking-widest text-gray-text">
                     Message
                   </label>
                   <textarea
+                    id="contact-message"
+                    name="message"
                     rows={5}
                     placeholder="Tell me about your project or idea..."
                     className="resize-none rounded-lg border border-white-15 bg-white/5 px-4 py-3 text-sm text-white placeholder-gray-text outline-none transition-colors focus:border-brand focus:bg-white/[0.07]"

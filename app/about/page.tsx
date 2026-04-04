@@ -1,5 +1,14 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Navbar from "@/components/navbar";
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Learn about Juliansyah — a full-stack developer based in Jakarta with 3+ years of experience building fast, design-driven web products.",
+  alternates: { canonical: "/about" },
+  openGraph: { title: "About | Juliansyah", description: "Full-stack developer based in Jakarta, Indonesia." },
+};
 
 const skills = [
   { category: "Frontend", items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "GSAP", "Framer Motion"] },
@@ -33,7 +42,7 @@ const experience = [
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen">
+    <main id="main-content" className="min-h-screen">
       <Navbar />
 
       <section className="w-full px-6 py-20 md:px-25">
@@ -62,6 +71,7 @@ export default function AboutPage() {
                   alt="Juliansyah"
                   width={288}
                   height={288}
+                  sizes="(max-width: 768px) 288px, 288px"
                   className="h-full w-full object-cover"
                 />
               </div>

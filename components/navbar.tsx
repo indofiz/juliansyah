@@ -97,7 +97,9 @@ export default function Navbar() {
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="ml-auto md:hidden flex items-center justify-center text-white"
-            aria-label="Toggle menu"
+            aria-label={isOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isOpen}
+            aria-controls="mobile-menu"
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -105,9 +107,11 @@ export default function Navbar() {
 
         {/* Mobile menu */}
         <div
+          id="mobile-menu"
           ref={mobileMenuRef}
           className="md:hidden overflow-hidden mt-2 rounded-xl border border-white/10 bg-black/60 backdrop-blur-xl"
           style={{ height: 0, opacity: 0 }}
+          aria-hidden={!isOpen}
         >
           <div className="flex flex-col p-3">
             {navLinks.map((link) => (

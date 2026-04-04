@@ -117,21 +117,21 @@ export default function Hero() {
           {/* Orange bg — bottom layer */}
           <div className="absolute inset-0 z-10 rounded-full transition-transform duration-500 ease-out group-hover:scale-110" style={{ background: "linear-gradient(to bottom right, #FF5029, #A7280B)" }} />
 
-          {/* Top Left — Ideas */}
-          <div className="absolute -top-4 -left-4 z-20 hidden md:block opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100">
-            <Image src="/what-i-like/bulb 1.png" alt="Ideas" width={72} height={72} />
+          {/* Top Left — Coding */}
+          <div aria-hidden="true" className="absolute -top-4 -left-4 z-20 hidden md:block opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100">
+            <Image src="/what-i-like/laptop 1.png" alt="" width={72} height={72} className="-rotate-45" />
           </div>
-          {/* Top Right — Coding */}
-          <div className="absolute -top-4 -right-4 z-20 hidden md:block opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 delay-75">
-            <Image src="/what-i-like/laptop 1.png" alt="Coding" width={72} height={72} />
+          {/* Top Right — Fitness */}
+          <div aria-hidden="true" className="absolute -top-4 -right-4 z-20 hidden md:block opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 delay-75">
+            <Image src="/what-i-like/barbbel.png" alt="" width={72} height={72} className="rotate-45" />
           </div>
-          {/* Bottom Left — Design */}
-          <div className="absolute -bottom-1 -left-4 z-20 hidden md:block opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 delay-150">
-            <Image src="/what-i-like/push-pins 1.png" alt="Design" width={72} height={72} />
+          {/* Bottom Left — Running */}
+          <div aria-hidden="true" className="absolute -bottom-1 -left-4 z-40 hidden md:block opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 delay-150">
+            <Image src="/what-i-like/shoe.png" alt="" width={72} height={72} className="rotate-45" />
           </div>
-          {/* Bottom Right — Collaboration */}
-          <div className="absolute -bottom-1 -right-4 z-20 hidden md:block opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 delay-225">
-            <Image src="/what-i-like/discussion 1.png" alt="Collaboration" width={72} height={72} />
+          {/* Bottom Right — Notes */}
+          <div aria-hidden="true" className="absolute -bottom-1 -right-4 z-40 hidden md:block opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 delay-225">
+            <Image src="/what-i-like/notebook.png" alt="" width={72} height={72} className="rotate-45" />
           </div>
 
           {/* Character image — top layer */}
@@ -141,6 +141,7 @@ export default function Hero() {
               alt="Juliansyah — Frontend Engineer"
               width={200}
               height={200}
+              sizes="160px"
               className="h-full w-full object-cover"
               priority
             />
@@ -235,6 +236,7 @@ export default function Hero() {
                       alt={logo.name}
                       width={logo.type === "wide" ? 100 : 40}
                       height={40}
+                      sizes={logo.type === "wide" ? "100px" : "40px"}
                       className="h-full w-full object-contain grayscale opacity-70 transition-[filter,opacity] duration-300 ease-out hover:grayscale-0 hover:opacity-100"
                     />
                   </div>
