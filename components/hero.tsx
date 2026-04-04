@@ -114,26 +114,30 @@ export default function Hero() {
         {/* Profile Image */}
         <div ref={imageWrapRef} className="group relative h-40 w-40">
           {/* Hobby icons — pop up on hover, overlapping image corners */}
+          {/* Orange bg — bottom layer */}
+          <div className="absolute inset-0 z-10 rounded-full transition-transform duration-500 ease-out group-hover:scale-110" style={{ background: "linear-gradient(to bottom right, #FF5029, #A7280B)" }} />
+
           {/* Top Left — Ideas */}
-          <div className="absolute -top-4 -left-4 z-20 hidden md:flex h-13 w-13 items-center justify-center rounded-full border border-white/30 bg-white/20 shadow-lg backdrop-blur-md ring-1 ring-white/10 opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100">
-            <Image src="/what-i-like/bulb 1.png" alt="Ideas" width={28} height={28} className="" />
+          <div className="absolute -top-4 -left-4 z-20 hidden md:block opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100">
+            <Image src="/what-i-like/bulb 1.png" alt="Ideas" width={72} height={72} />
           </div>
           {/* Top Right — Coding */}
-          <div className="absolute -top-4 -right-4 z-20 hidden md:flex h-13 w-13 items-center justify-center rounded-full border border-white/30 bg-white/20 shadow-lg backdrop-blur-md ring-1 ring-white/10 opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 delay-75">
-            <Image src="/what-i-like/laptop 1.png" alt="Coding" width={28} height={28} className="" />
+          <div className="absolute -top-4 -right-4 z-20 hidden md:block opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 delay-75">
+            <Image src="/what-i-like/laptop 1.png" alt="Coding" width={72} height={72} />
           </div>
           {/* Bottom Left — Design */}
-          <div className="absolute -bottom-4 -left-4 z-20 hidden md:flex h-13 w-13 items-center justify-center rounded-full border border-white/30 bg-white/20 shadow-lg backdrop-blur-md ring-1 ring-white/10 opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 delay-150">
-            <Image src="/what-i-like/push-pins 1.png" alt="Design" width={28} height={28} className="" />
+          <div className="absolute -bottom-1 -left-4 z-20 hidden md:block opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 delay-150">
+            <Image src="/what-i-like/push-pins 1.png" alt="Design" width={72} height={72} />
           </div>
           {/* Bottom Right — Collaboration */}
-          <div className="absolute -bottom-4 -right-4 z-20 hidden md:flex h-13 w-13 items-center justify-center rounded-full border border-white/30 bg-white/20 shadow-lg backdrop-blur-md ring-1 ring-white/10 opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 delay-225">
-            <Image src="/what-i-like/discussion 1.png" alt="Collaboration" width={28} height={28} className="" />
+          <div className="absolute -bottom-1 -right-4 z-20 hidden md:block opacity-0 scale-50 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-100 delay-225">
+            <Image src="/what-i-like/discussion 1.png" alt="Collaboration" width={72} height={72} />
           </div>
 
-          <div className="h-40 w-40 overflow-hidden rounded-full transition-transform duration-500 ease-out group-hover:scale-110">
+          {/* Character image — top layer */}
+          <div className="absolute inset-0 z-30 overflow-hidden rounded-full transition-transform duration-500 ease-out group-hover:scale-110">
             <Image
-              src="/image.png"
+              src="/image-transparent.png"
               alt="Juliansyah — Frontend Engineer"
               width={200}
               height={200}
@@ -231,7 +235,7 @@ export default function Hero() {
                       alt={logo.name}
                       width={logo.type === "wide" ? 100 : 40}
                       height={40}
-                      className="h-full w-full object-contain mix-blend-screen grayscale transition-[filter] duration-300 ease-out hover:grayscale-0"
+                      className="h-full w-full object-contain grayscale opacity-70 transition-[filter,opacity] duration-300 ease-out hover:grayscale-0 hover:opacity-100"
                     />
                   </div>
                 ))}
