@@ -54,6 +54,7 @@ export default function CursorDot() {
   return (
     <div
       ref={dotRef}
+      aria-hidden="true"
       className="pointer-events-none fixed top-0 left-0 z-9999 hidden md:block"
       style={{ willChange: "transform" }}
     >

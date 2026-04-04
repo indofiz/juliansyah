@@ -112,6 +112,7 @@ export default function Navbar() {
           className="md:hidden overflow-hidden mt-2 rounded-xl border border-white/10 bg-black/60 backdrop-blur-xl"
           style={{ height: 0, opacity: 0 }}
           aria-hidden={!isOpen}
+          inert={!isOpen}
         >
           <div className="flex flex-col p-3">
             {navLinks.map((link) => (

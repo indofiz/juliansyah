@@ -27,6 +27,7 @@ export default function About() {
                 alt="Juliansyah"
                 width={256}
                 height={256}
+                sizes="256px"
                 className="h-full w-full object-cover"
               />
             </div>

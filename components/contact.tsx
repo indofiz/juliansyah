@@ -37,6 +37,7 @@ export default function Contact() {
                 href={href}
                 target={href.startsWith("http") ? "_blank" : undefined}
                 rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                aria-label={href.startsWith("http") ? `${label} (opens in new tab)` : label}
                 className="group flex items-center gap-3 text-gray-text transition-colors hover:text-white"
               >
                 <span className="h-px w-6 bg-gray-text transition-all group-hover:w-10 group-hover:bg-brand" />

@@ -48,7 +48,7 @@ export default function Projects() {
               >
                 {/* Thumbnail */}
                 <div className="aspect-[16/10] w-full overflow-hidden rounded-xl border border-white-15 bg-[#1a1a1d] md:w-1/2">
-                  <div className="flex h-full w-full items-center justify-center text-gray-text">
+                  <div aria-hidden="true" className="flex h-full w-full items-center justify-center text-gray-text">
                     <svg
                       width="48"
                       height="48"

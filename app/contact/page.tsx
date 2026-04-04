@@ -146,6 +146,7 @@ export default function ContactPage() {
                       href={href}
                       target={href.startsWith("http") ? "_blank" : undefined}
                       rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      aria-label={href.startsWith("http") ? `${label} (opens in new tab)` : label}
                       className="group flex items-center justify-between rounded-xl border border-white-15 p-4 transition-colors hover:border-brand/30 hover:bg-white/5"
                     >
                       <div className="flex flex-col gap-0.5">
