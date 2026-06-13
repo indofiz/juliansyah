@@ -237,7 +237,7 @@ export default function Hero() {
                       width={logo.type === "wide" ? 100 : 40}
                       height={40}
                       sizes={logo.type === "wide" ? "100px" : "40px"}
-                      className="h-full w-full object-contain grayscale opacity-70 transition-[filter,opacity] duration-300 ease-out hover:grayscale-0 hover:opacity-100"
+                      className="h-full w-full object-contain opacity-70 transition-opacity duration-300 ease-out hover:opacity-100"
                     />
                   </div>
                 ))}
