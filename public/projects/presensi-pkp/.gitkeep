@@ -1,0 +1,4 @@
+# Drop project assets here:
+#   thumbnail.webp        1200x630  (card + hero + social/OG image)
+#   screen-01.webp ... screen-08.webp   portrait phone screenshots (~1080x2340)
+# Filenames must match those in lib/projects.ts. Until then, the UI shows placeholders.

@@ -1,35 +1,46 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { featuredProjects } from "@/lib/projects";
 
-const projects = [
-  {
-    title: "E-Commerce Platform",
-    description:
-      "A full-featured online store with cart, checkout, and payment integration built for seamless shopping experiences.",
-    badges: ["Full-Stack", "Next.js", "Stripe", "PostgreSQL"],
-  },
-  {
-    title: "Task Management App",
-    description:
-      "Real-time collaborative workspace for teams to organize, track, and manage projects efficiently.",
-    badges: ["Frontend", "React", "TypeScript", "Firebase"],
-  },
-  {
-    title: "Analytics Dashboard",
-    description:
-      "Interactive data visualization platform that transforms complex datasets into actionable business insights.",
-    badges: ["UI/UX", "D3.js", "Node.js", "Freelance"],
-  },
-  {
-    title: "Mobile Banking App",
-    description:
-      "Secure and intuitive mobile banking experience with biometric auth, transfers, and spending analytics.",
-    badges: ["Full-Stack", "React Native", "Fintech", "AWS"],
-  },
-];
+/** Thumbnail media — real preview image with a graceful icon fallback. */
+function ThumbMedia({ thumbnail, title }: { thumbnail?: string; title: string }) {
+  const [failed, setFailed] = useState(false);
+
+  if (thumbnail && !failed) {
+    return (
+      <Image
+        src={thumbnail}
+        alt={`${title} preview`}
+        fill
+        sizes="(max-width: 768px) 100vw, 50vw"
+        className="object-cover"
+        onError={() => setFailed(true)}
+      />
+    );
+  }
+
+  return (
+    <svg
+      width="48"
+      height="48"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+      <circle cx="8.5" cy="8.5" r="1.5" />
+      <polyline points="21 15 16 10 5 21" />
+    </svg>
+  );
+}
 
 export default function Projects() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -216,18 +227,12 @@ export default function Projects() {
 
         {/* Project List */}
         <div className="flex flex-col gap-16">
-          {projects.map((project, index) => {
+          {featuredProjects.map((project, index) => {
             const isOdd = index % 2 !== 0;
+            const internal = project.href.startsWith("/");
 
-            return (
-              <div
-                key={project.title}
-                data-project-row
-                style={{ perspective: "1200px" }}
-                className={`flex flex-col gap-8 md:flex-row md:items-center md:gap-16 ${
-                  isOdd ? "md:flex-row-reverse" : ""
-                }`}
-              >
+            const rowInner = (
+              <>
                 {/* Thumbnail */}
                 <div
                   data-thumb
@@ -240,22 +245,13 @@ export default function Projects() {
                     <div
                       data-thumb-float
                       aria-hidden="true"
-                      className="flex h-full w-full items-center justify-center text-gray-text"
+                      className={
+                        project.thumbnail
+                          ? "relative h-full w-full"
+                          : "flex h-full w-full items-center justify-center text-gray-text"
+                      }
                     >
-                      <svg
-                        width="48"
-                        height="48"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                        <circle cx="8.5" cy="8.5" r="1.5" />
-                        <polyline points="21 15 16 10 5 21" />
-                      </svg>
+                      <ThumbMedia thumbnail={project.thumbnail} title={project.title} />
                     </div>
                   </div>
 
@@ -299,6 +295,32 @@ export default function Projects() {
                     ))}
                   </div>
                 </div>
+              </>
+            );
+
+            const rowClass = `flex flex-col gap-8 md:flex-row md:items-center md:gap-16 ${
+              isOdd ? "md:flex-row-reverse" : ""
+            }`;
+
+            return internal ? (
+              <Link
+                key={project.title}
+                href={project.href}
+                data-project-row
+                aria-label={`View ${project.title}`}
+                style={{ perspective: "1200px" }}
+                className={rowClass}
+              >
+                {rowInner}
+              </Link>
+            ) : (
+              <div
+                key={project.title}
+                data-project-row
+                style={{ perspective: "1200px" }}
+                className={rowClass}
+              >
+                {rowInner}
               </div>
             );
           })}

@@ -1,93 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 import { ArrowUpRight } from "lucide-react";
-
-type Category = "Frontend" | "UI/UX" | "Mobile";
-
-type Project = {
-  title: string;
-  description: string;
-  year: string;
-  role: string;
-  category: Category;
-  badges: string[];
-  link: string;
-};
-
-const projects: Project[] = [
-  {
-    title: "E-Commerce Platform",
-    description:
-      "A full storefront with cart, checkout, and Stripe payments — built for speed and a seamless mobile experience, on a component system designed to scale.",
-    year: "2024",
-    role: "Frontend Engineer",
-    category: "Frontend",
-    badges: ["Next.js", "TypeScript", "Tailwind", "Stripe", "Zustand"],
-    link: "#",
-  },
-  {
-    title: "Task Management App",
-    description:
-      "Real-time collaborative workspace with drag-and-drop kanban boards, live updates, and a snappy, keyboard-friendly interface.",
-    year: "2024",
-    role: "Frontend Engineer",
-    category: "Frontend",
-    badges: ["React", "TypeScript", "Tailwind", "dnd-kit", "Zustand"],
-    link: "#",
-  },
-  {
-    title: "Analytics Dashboard",
-    description:
-      "Designed and built a data-viz platform that turns complex datasets into clear, actionable insight — custom widgets, date filtering, and CSV export.",
-    year: "2023",
-    role: "UI/UX & Frontend",
-    category: "UI/UX",
-    badges: ["Figma", "Design System", "React", "Recharts"],
-    link: "#",
-  },
-  {
-    title: "Mobile Banking App",
-    description:
-      "A secure, intuitive banking experience with biometric auth, peer-to-peer transfers, and spending analytics — one Flutter codebase, native feel on iOS & Android.",
-    year: "2023",
-    role: "Mobile Developer · Flutter",
-    category: "Mobile",
-    badges: ["Flutter", "Dart", "Riverpod", "Biometrics"],
-    link: "#",
-  },
-  {
-    title: "AI Content Generator",
-    description:
-      "A polished interface for an LLM writing tool — streaming responses, prompt presets, and an editor that stays fast under heavy load.",
-    year: "2023",
-    role: "Frontend Engineer",
-    category: "Frontend",
-    badges: ["Next.js", "TypeScript", "Streaming UI", "Tailwind"],
-    link: "#",
-  },
-  {
-    title: "Real Estate Platform",
-    description:
-      "Property search with interactive maps, advanced filters, and saved searches — designed end-to-end, from wireframes to shipped UI.",
-    year: "2022",
-    role: "UI/UX & Frontend",
-    category: "UI/UX",
-    badges: ["Figma", "Next.js", "Mapbox", "Design System"],
-    link: "#",
-  },
-  {
-    title: "Habit & Fitness Tracker",
-    description:
-      "A cross-platform habit and workout tracker with delightful micro-animations, progress charts, and an offline-first local store.",
-    year: "2022",
-    role: "Mobile Developer · Flutter",
-    category: "Mobile",
-    badges: ["Flutter", "Dart", "Animations", "Local DB"],
-    link: "#",
-  },
-];
+import { projects } from "@/lib/projects";
 
 const CATEGORIES = ["All", "Frontend", "UI/UX", "Mobile"] as const;
 type Filter = (typeof CATEGORIES)[number];
@@ -284,7 +201,55 @@ export default function AllProjects() {
         {/* Project List */}
         <div ref={listRef} className="flex flex-col">
           {filtered.map((project, index) => {
-            const external = project.link.startsWith("http");
+            const external = project.href.startsWith("http");
+            const internal = project.href.startsWith("/");
+            const linkClass =
+              "relative z-10 flex flex-col gap-4 px-3 py-10 transition-[padding] duration-500 md:flex-row md:items-start md:gap-12 md:group-hover:px-6";
+            const ariaLabel = external
+              ? `View ${project.title} (opens in new tab)`
+              : `View ${project.title}`;
+
+            const rowContent = (
+              <>
+                {/* Index + Year */}
+                <div className="flex shrink-0 flex-row items-center gap-4 md:w-24 md:flex-col md:items-start md:gap-1">
+                  <span className="font-(family-name:--font-bricolage) text-4xl font-semibold text-dark-gray transition-colors duration-300 group-hover:text-brand">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-xs text-gray-text">{project.year}</span>
+                </div>
+
+                {/* Content */}
+                <div className="flex flex-1 flex-col gap-4">
+                  <div className="flex items-start justify-between gap-4">
+                    <h2 className="font-(family-name:--font-bricolage) text-2xl font-semibold text-white transition-colors duration-300 group-hover:text-brand md:text-3xl">
+                      {project.title}
+                    </h2>
+                    <ArrowUpRight
+                      size={22}
+                      className="mt-1 shrink-0 text-gray-text transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand"
+                    />
+                  </div>
+                  <span className="text-xs font-medium uppercase tracking-widest text-brand">
+                    {project.role}
+                  </span>
+                  <p className="max-w-2xl text-base leading-relaxed text-gray-text">
+                    {project.description}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {project.badges.map((badge) => (
+                      <span
+                        key={badge}
+                        className="rounded-full border border-white-15 px-3 py-1 text-xs font-medium text-gray-text"
+                      >
+                        {badge}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </>
+            );
+
             return (
               <div
                 key={project.title}
@@ -307,54 +272,21 @@ export default function AllProjects() {
                   className="absolute left-0 top-0 h-full w-0.5 origin-top scale-y-0 bg-brand transition-transform duration-500 ease-out group-hover:scale-y-100"
                 />
 
-                <a
-                  href={project.link}
-                  target={external ? "_blank" : undefined}
-                  rel={external ? "noopener noreferrer" : undefined}
-                  aria-label={
-                    external
-                      ? `View ${project.title} (opens in new tab)`
-                      : `View ${project.title}`
-                  }
-                  className="relative z-10 flex flex-col gap-4 px-3 py-10 transition-[padding] duration-500 md:flex-row md:items-start md:gap-12 md:group-hover:px-6"
-                >
-                  {/* Index + Year */}
-                  <div className="flex shrink-0 flex-row items-center gap-4 md:w-24 md:flex-col md:items-start md:gap-1">
-                    <span className="font-(family-name:--font-bricolage) text-4xl font-semibold text-dark-gray transition-colors duration-300 group-hover:text-brand">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <span className="text-xs text-gray-text">{project.year}</span>
-                  </div>
-
-                  {/* Content */}
-                  <div className="flex flex-1 flex-col gap-4">
-                    <div className="flex items-start justify-between gap-4">
-                      <h2 className="font-(family-name:--font-bricolage) text-2xl font-semibold text-white transition-colors duration-300 group-hover:text-brand md:text-3xl">
-                        {project.title}
-                      </h2>
-                      <ArrowUpRight
-                        size={22}
-                        className="mt-1 shrink-0 text-gray-text transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand"
-                      />
-                    </div>
-                    <span className="text-xs font-medium uppercase tracking-widest text-brand">
-                      {project.role}
-                    </span>
-                    <p className="max-w-2xl text-base leading-relaxed text-gray-text">
-                      {project.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {project.badges.map((badge) => (
-                        <span
-                          key={badge}
-                          className="rounded-full border border-white-15 px-3 py-1 text-xs font-medium text-gray-text"
-                        >
-                          {badge}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </a>
+                {internal ? (
+                  <Link href={project.href} aria-label={ariaLabel} className={linkClass}>
+                    {rowContent}
+                  </Link>
+                ) : (
+                  <a
+                    href={project.href}
+                    target={external ? "_blank" : undefined}
+                    rel={external ? "noopener noreferrer" : undefined}
+                    aria-label={ariaLabel}
+                    className={linkClass}
+                  >
+                    {rowContent}
+                  </a>
+                )}
               </div>
             );
           })}
