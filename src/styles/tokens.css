@@ -1,0 +1,204 @@
+/* ==========================================================================
+   Design tokens + base styles
+   Dark "terminal" aesthetic: near-black canvas, mint glow accent, wide
+   grotesk type with gradient headings. Purple / gold / indigo / rose are
+   secondary accents used sparingly for single highlighted elements.
+   ========================================================================== */
+
+/* ==========================================================================
+   Fluid scaling
+   Everything is sized in rem. On desktop (≥ 1024px) the root font size grows
+   and shrinks with the window, so the page looks like the same 1440×900
+   design zoomed in or out: identical proportions at 1440px, 2560px or 4K.
+   It follows whichever of width or height is tighter, so short or ultrawide
+   windows still fit. --vw is "1% of the design width" for fluid clamp()s.
+   Below 1024px it's a normal responsive layout with a 16px base.
+   ========================================================================== */
+:root {
+  --vw: 1vw;
+}
+
+html {
+  font-size: 100%;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    /* 1% of the 1440px design width, expressed in (fluid) rem */
+    --vw: 0.9rem;
+  }
+
+  html {
+    /* 16px at 1440×900; min(...) = tighter of width and height */
+    font-size: clamp(13px, min(calc(100vw / 90), calc(100vh / 56.25)), 48px);
+  }
+}
+
+:root {
+  --font: "Instrument Sans Variable", "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --bg: #030506;
+  --bg-2: #04070a;
+  --surface: #080b0b;
+  --surface-2: #0d1211;
+  --surface-3: #131817;
+  --border: rgba(255, 255, 255, 0.075);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  --text: #f3f6f5;
+  --muted: #9aa39f;
+  --dim: #5f6865;
+
+  --mint: #2fe39a;
+  --mint-2: #1fc584;
+  --mint-bright: #66ffc4;
+  --mint-pale: #c8f8e2;
+  --mint-ink: #04140d;
+  --glow: rgba(47, 227, 154, 0.55);
+  --glow-soft: rgba(47, 227, 154, 0.18);
+
+  --purple: #8b5cf6;
+  --purple-bright: #a78bfa;
+  --gold: #d6aa4c;
+  --indigo: #6366f1;
+  --rose: #ff6a88;
+  --red: #ff5a5f;
+
+  --radius-sm: 0.625rem;
+  --radius: 1rem;
+  --radius-lg: 1.375rem;
+  --radius-xl: 1.75rem;
+
+  --gutter: clamp(1.25rem, calc(4.4 * var(--vw)), 4rem);
+  --container: 80rem;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-stretch: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  overflow-x: hidden;
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg) 40%, var(--bg-2) 100%);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+img,
+svg {
+  display: block;
+}
+
+::selection {
+  background: rgba(47, 227, 154, 0.35);
+}
+
+/* ---------- Typography ---------- */
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.04;
+}
+
+.grad-text {
+  background: linear-gradient(180deg, #ffffff 30%, #9b9b9b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.display {
+  font-size: clamp(2.75rem, calc(4.9 * var(--vw)), 5.5rem);
+  letter-spacing: -0.035em;
+}
+
+.h2 {
+  font-size: clamp(2.125rem, calc(4.3 * var(--vw)), 3.625rem);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+/* ---------- Layout helpers ---------- */
+.container {
+  width: 100%;
+  max-width: calc(var(--container) + var(--gutter) * 2);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.section {
+  position: relative;
+  padding: clamp(5rem, 12vh, 8.75rem) 0;
+}
+
+.center {
+  text-align: center;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- WebGL layer: fixed behind everything ---------- */
+.scene-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.scene-layer canvas {
+  display: block;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
