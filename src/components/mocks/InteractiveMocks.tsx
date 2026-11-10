@@ -90,13 +90,13 @@ export function ChatMock() {
           <Icon name="search" size={13} /> Search chats…
         </div>
         <div className="chat-tabs">
-          {["Chats", "Projects", "Estimates"].map((t) => (
+          {["Chats", "Projects", "Stack"].map((t) => (
             <span key={t} className={t === active ? "on" : ""} onClick={() => setActive(t)} role="button" tabIndex={0}>
               {t}
             </span>
           ))}
         </div>
-        {(thread.length ? thread : [{ q: "Which project fits my budget?", a: "" }]).map((t) => (
+        {(thread.length ? thread : [{ q: "Can you design and build it?", a: "" }]).map((t) => (
           <div className="chat-hist" key={t.q}>
             <Icon name="message" size={12} /> {t.q}
           </div>
@@ -117,7 +117,7 @@ export function ChatMock() {
               <Icon name="message" size={22} />
             </span>
             <b>Ask me anything about my work</b>
-            <small>I can only see public portfolio info, nothing else.</small>
+            <small>Pick a question to see my answer.</small>
             <div className="chat-suggest">
               {assistant.suggestions.map((s) => (
                 <button key={s.q} onClick={() => setThread([s])}>

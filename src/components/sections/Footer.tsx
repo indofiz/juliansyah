@@ -1,6 +1,9 @@
-import { footer, site } from "@/content/site";
+import { footer, site, socials } from "@/content/site";
 import { Icon } from "../ui/Icon";
 import { Logo } from "../ui/primitives";
+
+const external = (href: string) =>
+  /^https?:\/\//.test(href) ? { target: "_blank", rel: "noopener noreferrer" } : {};
 
 /** Link columns, button cards, giant glowing wordmark, small print. */
 export function Footer() {
@@ -16,9 +19,9 @@ export function Footer() {
               {site.email}
             </a>
             <div className="footer-social">
-              {(["github", "linkedin", "x", "dribbble"] as const).map((n) => (
-                <a key={n} href="#" aria-label={n}>
-                  <Icon name={n} size={19} />
+              {socials.map((s) => (
+                <a key={s.label} href={s.href} aria-label={s.label} {...external(s.href)}>
+                  <Icon name={s.icon} size={19} />
                 </a>
               ))}
             </div>
@@ -27,8 +30,8 @@ export function Footer() {
             <div className="footer-col" key={c.title}>
               <h4>{c.title}</h4>
               {c.links.map((l) => (
-                <a key={l} href="#">
-                  {l}
+                <a key={l.label} href={l.href}>
+                  {l.label}
                 </a>
               ))}
             </div>
@@ -37,7 +40,7 @@ export function Footer() {
 
         <div className="footer-buttons">
           {footer.buttons.map((b) => (
-            <a key={b.bottom} href="#" className="footer-btn">
+            <a key={b.bottom} href={b.href} className="footer-btn" {...external(b.href)}>
               <Icon name={b.icon} size={24} />
               <span>
                 <small>{b.top}</small>
@@ -63,13 +66,6 @@ export function Footer() {
         <div className="footer-bottom">
           <span>
             © 2026 {site.name}. All rights reserved.
-          </span>
-          <span className="footer-legal">
-            {footer.legal.map((l) => (
-              <a key={l} href="#">
-                {l}
-              </a>
-            ))}
           </span>
         </div>
       </div>

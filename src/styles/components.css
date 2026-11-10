@@ -515,3 +515,28 @@
 [data-light] {
   opacity: 0.16;
 }
+
+.status-muted::before {
+  background: #7d8783;
+  box-shadow: none;
+}
+
+/* ---------- Skip link (keyboard / screen-reader users) ---------- */
+.skip-link {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1000;
+  padding: 0.625rem 1rem;
+  border-radius: 0.5rem;
+  background: #fff;
+  color: #030506;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transform: translateY(-200%);
+  transition: transform 0.2s;
+}
+
+.skip-link:focus {
+  transform: none;
+}

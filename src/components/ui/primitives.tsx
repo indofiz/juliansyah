@@ -45,8 +45,9 @@ export function Button({
   const cls = ["btn", `btn-${variant}`, size && `btn-${size}`, block && "btn-block", tone && `tone-${tone}`, className]
     .filter(Boolean)
     .join(" ");
+  const external = /^https?:\/\//.test(href);
   return (
-    <a href={href} className={cls}>
+    <a href={href} className={cls} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
       {icon && <Icon name={icon} size={16} />}
       {children}
     </a>

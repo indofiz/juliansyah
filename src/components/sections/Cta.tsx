@@ -33,7 +33,7 @@ export function Cta() {
               <Button href={`mailto:${site.email}`} icon="wand">
                 {cta.primary}
               </Button>
-              <Button href="#" variant="ghost">
+              <Button href={site.github} variant="ghost">
                 {cta.secondary}
               </Button>
             </div>

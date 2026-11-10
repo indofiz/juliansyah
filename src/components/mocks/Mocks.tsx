@@ -7,7 +7,7 @@ const sideNav: { icon: IconName; label: string; tail?: "chevron" | "hot" | "ai" 
   { icon: "grid", label: "Dashboard" },
   { icon: "folder", label: "Projects", tail: "chevron" },
   { icon: "cube", label: "Lab", tail: "chevron" },
-  { icon: "rocket", label: "Launch Sprint", tail: "hot" },
+  { icon: "phone", label: "Mobile apps", tail: "hot" },
   { icon: "globe", label: "Case studies", tail: "chevron" },
   { icon: "file", label: "Writing" },
   { icon: "activity", label: "Analytics", tail: "ai" },
@@ -56,7 +56,7 @@ export function MockShell({
         ))}
         <div className="mock-side-foot">
           <div className="mock-tour">
-            <Icon name="eye" size={13} /> Studio tour · 2 min
+            <Icon name="eye" size={13} /> Portfolio tour · 2 min
           </div>
           <div className="mock-switch">
             <span>Client</span>
@@ -79,7 +79,7 @@ export function MockShell({
           <div className="mock-top-right">
             <span className="mock-live">Available</span>
             <span className="mock-chip">
-              <Icon name="calendar" size={13} /> Next slot <b>Jan 2027</b>
+              <Icon name="globe" size={13} /> Open to <b>remote</b>
             </span>
             <span className="mock-chip mock-bell">
               <Icon name="bell" size={13} />
@@ -106,16 +106,16 @@ export function DashboardMock() {
               Good evening, visitor <Icon name="eye" size={14} />
             </div>
             <div className="mock-big">
-              140<small>projects shipped</small>
+              7,000+<small>active app users</small>
             </div>
-            <div className="mock-delta">+18 this year · 60+ clients</div>
+            <div className="mock-delta">Presensi PKP · Android &amp; iOS</div>
           </div>
           <div className="mock-actions">
             <span className="mock-action on">
-              <Icon name="download" size={14} /> Résumé
+              <Icon name="github" size={14} /> GitHub
             </span>
             <span className="mock-action">
-              <Icon name="calendar" size={14} /> Book a call
+              <Icon name="star" size={14} /> Case study
             </span>
             <span className="mock-action">
               <Icon name="mail" size={14} /> Email
@@ -127,18 +127,18 @@ export function DashboardMock() {
         </div>
         <div className="mock-tiles">
           <div className="mock-panel mock-tile">
-            <span className="mock-tile-label">Avg. Lighthouse score</span>
-            <span className="mock-tile-value">98</span>
+            <span className="mock-tile-label">Crash-free sessions</span>
+            <span className="mock-tile-value">99.9%</span>
             <Sparkline values={series(3, 28, 0.9, 0.35)} height={44} />
           </div>
           <div className="mock-panel mock-tile">
-            <span className="mock-tile-label">Avg. delivery time</span>
-            <span className="mock-tile-value">4.2 wk</span>
+            <span className="mock-tile-label">Client organisations</span>
+            <span className="mock-tile-value">8</span>
             <Sparkline values={series(8, 28, -0.2, 0.5)} height={44} color="#66ffc4" />
           </div>
           <div className="mock-panel mock-tile">
-            <span className="mock-tile-label">Client rating</span>
-            <span className="mock-tile-value">4.9 / 5</span>
+            <span className="mock-tile-label">Years building</span>
+            <span className="mock-tile-value">3+</span>
             <Sparkline values={series(12, 28, 0.5, 0.25)} height={44} />
           </div>
         </div>
@@ -147,40 +147,42 @@ export function DashboardMock() {
   );
 }
 
+// Illustrative data for the case-study screens (not real figures).
 const fleet = [
-  { g: "SG", name: "Singapore Hub", tag: ["Air", "Express", "Priority"], up: "+24.6%", eta: "98%", n: "1,842", rank: 1 },
-  { g: "RT", name: "Rotterdam Port", tag: ["Sea", "Bulk", "EU"], up: "+18.1%", eta: "96%", n: "1,126", rank: 2 },
-  { g: "LA", name: "Los Angeles", tag: ["Sea", "Retail", "US"], up: "+36.8%", eta: "97%", n: "2,341", rank: 3 },
-  { g: "DB", name: "Dubai Gateway", tag: ["Air", "Transit"], up: "+21.3%", eta: "95%", n: "904", rank: 4 },
-  { g: "SH", name: "Shanghai", tag: ["Sea", "Electronics"], up: "+48.2%", eta: "99%", n: "1,683", rank: 5 },
-  { g: "SP", name: "São Paulo", tag: ["Road", "LATAM"], up: "+29.7%", eta: "94%", n: "1,077", rank: 6 },
+  { g: "DK", name: "Diskominfo", tag: ["Dinas", "Office"], up: "+2.4%", eta: "98%", n: "126", rank: 1 },
+  { g: "SD", name: "Sekretariat Daerah", tag: ["Setda", "Office"], up: "+1.8%", eta: "97%", n: "312", rank: 2 },
+  { g: "BI", name: "Kec. Bukit Intan", tag: ["Kecamatan", "Field"], up: "+3.6%", eta: "96%", n: "84", rank: 3 },
+  { g: "KS", name: "Dinas Kesehatan", tag: ["Dinas", "Shifts"], up: "+1.3%", eta: "95%", n: "268", rank: 4 },
+  { g: "GR", name: "Kec. Gerunggang", tag: ["Kecamatan", "Field"], up: "+4.1%", eta: "95%", n: "77", rank: 5 },
+  { g: "PU", name: "Dinas PUPR", tag: ["Dinas", "Field"], up: "+2.9%", eta: "94%", n: "193", rank: 6 },
 ];
 
-/** Case-study screens, switched by the spotlight section as you scroll. */
+/** Case-study screens (illustrations), switched by the spotlight section as you scroll.
+ *  Replace with real Presensi PKP screenshots when available. */
 export function SpotlightScreen({ index }: { index: number }) {
   if (index === 1) {
     const routes = [
-      ["Shanghai → LA", "14.2 d", "$2,940", "-6.1%", "down"],
-      ["Rotterdam → NY", "9.8 d", "$2,180", "+3.4%", "up"],
-      ["Singapore → Dubai", "6.1 d", "$1,420", "+8.9%", "up"],
-      ["Santos → Lisbon", "11.5 d", "$1,960", "-2.2%", "down"],
-      ["Busan → Seattle", "12.9 d", "$2,610", "+5.7%", "up"],
+      ["Diskominfo", "07:24", "98.1%", "+1.2%", "up"],
+      ["Dinas Kesehatan", "07:31", "96.4%", "+0.8%", "up"],
+      ["Kec. Bukit Intan", "07:38", "94.9%", "-0.6%", "down"],
+      ["Sekretariat Daerah", "07:27", "97.3%", "+2.1%", "up"],
+      ["Dinas PUPR", "07:42", "93.8%", "-1.4%", "down"],
     ];
     return (
-      <MockShell active="Case studies" crumb="Route analytics" sub={["Live globe", "Route analytics", "Alerts"]}>
+      <MockShell active="Case studies" crumb="History" sub={["Live attendance", "History", "Alerts"]}>
         <div className="mock-body">
           <div>
-            <div className="mock-h">Route Analytics</div>
-            <div className="mock-sub">Cost, delay and carbon for every lane, updated hourly.</div>
+            <div className="mock-h">Attendance History</div>
+            <div className="mock-sub">Check-ins, leave and lateness for every office, updated hourly.</div>
           </div>
           <div className="mock-filters">
-            <span className="on">All lanes</span>
-            <span>Sea</span>
-            <span>Air</span>
-            <span>Road</span>
-            <span>High delay</span>
+            <span className="on">All</span>
+            <span>Present</span>
+            <span>Leave</span>
+            <span>Sick</span>
+            <span>Late</span>
             <span className="mock-search">
-              <Icon name="search" size={12} /> Search routes…
+              <Icon name="search" size={12} /> Search employees…
             </span>
           </div>
           <div className="mock-panel">
@@ -192,9 +194,9 @@ export function SpotlightScreen({ index }: { index: number }) {
           </div>
           <div className="mock-panel mock-table">
             <div className="mock-tr head">
-              <span>Lane</span>
-              <span>Avg. transit</span>
-              <span>Cost / TEU</span>
+              <span>Office</span>
+              <span>Avg. check-in</span>
+              <span>Present</span>
               <span>vs last month</span>
               <span>Status</span>
             </div>
@@ -215,18 +217,18 @@ export function SpotlightScreen({ index }: { index: number }) {
 
   if (index === 2) {
     const alerts = [
-      ["high", "Port congestion at Long Beach", "142 shipments may slip by 2 days", "2m ago"],
-      ["med", "Fuel surcharge change on 3 lanes", "Rotterdam, Hamburg, Antwerp", "18m ago"],
-      ["low", "Customs cleared early", "SG-4421 released 6h ahead of schedule", "1h ago"],
-      ["high", "Weather reroute suggested", "Typhoon path crosses Busan → Seattle", "2h ago"],
-      ["low", "Carrier on-time rate up", "Maersk lanes now at 97%", "4h ago"],
+      ["high", "Mock location blocked", "Fake-GPS app detected on 2 devices", "2m ago"],
+      ["med", "Check-in outside geofence", "Kec. Gerunggang · 340 m from office", "18m ago"],
+      ["low", "Offline check-ins synced", "48 records uploaded after reconnecting", "1h ago"],
+      ["high", "Device clock mismatch", "Timestamp replaced with server time", "2h ago"],
+      ["low", "Leave request approved", "Izin · 2 days · Dinas Kesehatan", "4h ago"],
     ];
     return (
-      <MockShell active="Case studies" crumb="Smart alerts" sub={["Live globe", "Route analytics", "Alerts"]}>
+      <MockShell active="Case studies" crumb="Alerts" sub={["Live attendance", "History", "Alerts"]}>
         <div className="mock-body">
           <div>
             <div className="mock-h">Smart Alerts</div>
-            <div className="mock-sub">Anomalies ranked by impact, with a suggested fix for each.</div>
+            <div className="mock-sub">Suspicious check-ins and sync issues, ranked by impact.</div>
           </div>
           <div className="mock-tabs">
             <span className="on">All</span>
@@ -255,26 +257,26 @@ export function SpotlightScreen({ index }: { index: number }) {
   }
 
   return (
-    <MockShell active="Case studies" crumb="Live globe" sub={["Live globe", "Route analytics", "Alerts"]}>
+    <MockShell active="Case studies" crumb="Live attendance" sub={["Live attendance", "History", "Alerts"]}>
       <div className="mock-body">
         <div>
-          <div className="mock-h">Live Shipments</div>
-          <div className="mock-sub">Every hub in the network, ranked by on-time performance.</div>
+          <div className="mock-h">Live Attendance</div>
+          <div className="mock-sub">Every office in the city, ranked by on-time check-ins today.</div>
         </div>
         <div className="mock-tabs">
-          <span className="on">Hubs</span>
-          <span>Carriers</span>
-          <span>Lanes</span>
+          <span className="on">Offices</span>
+          <span>Employees</span>
+          <span>Shifts</span>
         </div>
         <div className="mock-filters">
-          <span className="on">All regions</span>
-          <span>APAC</span>
-          <span>EMEA</span>
-          <span>Americas</span>
-          <span>Air</span>
-          <span>Sea</span>
+          <span className="on">All offices</span>
+          <span>Dinas</span>
+          <span>Kecamatan</span>
+          <span>Kelurahan</span>
+          <span>Office</span>
+          <span>Field</span>
           <span className="mock-search">
-            <Icon name="search" size={12} /> Search hubs…
+            <Icon name="search" size={12} /> Search offices…
           </span>
         </div>
         <div className="mock-cards">
@@ -291,18 +293,18 @@ export function SpotlightScreen({ index }: { index: number }) {
               <Sparkline values={series(30 + i, 30, 0.9, 0.55)} height={46} />
               <div className="mock-kpis">
                 <span>
-                  Growth<b className="up">{f.up}</b>
+                  vs last wk<b className="up">{f.up}</b>
                 </span>
                 <span>
                   On time<b>{f.eta}</b>
                 </span>
                 <span>
-                  Shipments<b>{f.n}</b>
+                  Checked in<b>{f.n}</b>
                 </span>
               </div>
               <div className="mock-card-foot">
                 <span>Updated live</span>
-                <span>Track</span>
+                <span>Details</span>
               </div>
             </div>
           ))}

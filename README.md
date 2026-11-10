@@ -1,4 +1,10 @@
-# Particle portfolio: scroll-driven earth
+# Juliansyah — portfolio (v2)
+
+> **Looking for the previous site?** The original Tailwind portfolio (v1, with
+> separate About / Projects / Contact pages) is preserved at git tag
+> `v1-legacy` and branch `legacy/v1`:
+> `git checkout v1-legacy` (or `git worktree add ../juliansyah-v1 legacy/v1`).
+> Its old URLs redirect to the matching section here (see `next.config.ts`).
 
 A Next.js portfolio landing page with a glowing particle globe that changes as
 you scroll, wrapped in a dark, mint-glow design system: gradient headings,
@@ -21,14 +27,14 @@ Open http://localhost:3000.
 | 1–2 | Intro (hero + stats) | `hero` / `about` | **Pinned scene on desktop.** Scrolling slides the headline up and the dashboard down while the globe rises to the centre, then the stats fade in around it. Normal scrolling on mobile |
 | 3 | Services | `services` | Globe dissolves → sinks → your portrait builds up from the bottom between 3 + 3 cards, with a light sweep and a small mouse turn |
 | 4 | Work | `work` | Project index in a glowing table, rows light up on scroll |
-| 5 | Pricing | `pricing` | Three plans, middle one highlighted |
-| 6 | Estimator | `estimator` | Clickable scope tiers update four stat boxes |
+| – | Pricing | `pricing` | *Not rendered.* Three plans, middle one highlighted |
+| – | Estimator | `estimator` | *Not rendered.* Clickable scope tiers update four stat boxes |
 | 7 | Process | `process` | Globe centre, steps with a track that fills on scroll |
 | 8 | Case study | `spotlight` | Sticky: scrolling switches the active feature and the framed screen |
 | 9 | Assistant | `assistant` | Purple orb, purple-framed chat with clickable suggestions |
 | 10 | Featured | `featured` | Statement, rose button pair, framed analytics screen |
 | 11 | Capabilities | `capabilities` | Bento grid with radial glows and line-art illustrations |
-| 12 | Portal | `portal` | Framed client-portal UI bleeding off the right edge, working toggles |
+| – | Portal | `portal` | *Not rendered.* Framed client-portal UI bleeding off the right edge, working toggles |
 | 13 | CTA | `cta` | Panel whose glow slides from the corner to the bottom, rising particle bars |
 | 14 | Footer | `footer` | Link columns, button cards, giant glowing wordmark |
 
@@ -61,6 +67,11 @@ themselves.
 | Outer shell "dance" (radius, speed, strands) and lighting | `src/components/canvas/shaders.ts` |
 | Particle look (size, glow, drift, sinking) | `src/components/canvas/shaders.ts` |
 | Particle count, bloom strength | `src/components/canvas/Scene.tsx` |
+
+**Hidden sections:** Pricing, Estimator and Portal still exist in
+`src/components/sections/` but aren't in `page.tsx` or `sceneKeyframes.ts`.
+To bring one back, update its copy in `site.ts` and re-add both entries in the
+same position.
 
 **Replacing the mock screens with real work:** the framed screens are built in
 HTML so the page works out of the box. When you have screenshots, drop an

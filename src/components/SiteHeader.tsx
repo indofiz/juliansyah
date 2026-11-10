@@ -1,4 +1,4 @@
-import { nav } from "@/content/site";
+import { nav, site } from "@/content/site";
 import { Icon } from "./ui/Icon";
 import { Button, Logo } from "./ui/primitives";
 
@@ -9,11 +9,11 @@ export function SiteHeader() {
       <div className="site-header">
         <Logo />
         <div className="header-actions">
-          <a className="icon-btn" href="#" aria-label="GitHub">
+          <a className="icon-btn" href={site.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
             <Icon name="github" size={19} />
           </a>
-          <Button variant="ghost" href="#">
-            Résumé
+          <Button variant="ghost" href={`mailto:${site.email}`}>
+            Email me
           </Button>
           <Button variant="glow" href="#cta">
             Hire me

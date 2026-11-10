@@ -1,4 +1,4 @@
-import { featured } from "@/content/site";
+import { featured, site } from "@/content/site";
 import { AnalyticsMock } from "../mocks/Mocks";
 import { Icon } from "../ui/Icon";
 import { GlowFrame } from "../ui/primitives";
@@ -18,7 +18,7 @@ export function Featured() {
               </span>
               {featured.primary}
             </a>
-            <a href="#" className="btn btn-rose-ghost">
+            <a href={site.github} className="btn btn-rose-ghost" target="_blank" rel="noopener noreferrer">
               {featured.secondary}
             </a>
           </div>

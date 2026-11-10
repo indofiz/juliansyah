@@ -12,8 +12,8 @@ export function Process() {
             <Button href="#cta" icon="wand">
               Start a project
             </Button>
-            <Button href="#estimator" variant="ghost">
-              Learn more
+            <Button href="#work" variant="ghost">
+              See my work
             </Button>
           </div>
         </div>
