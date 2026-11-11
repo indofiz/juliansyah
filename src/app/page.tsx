@@ -5,12 +5,12 @@ import { ScrollFx } from "@/components/ScrollFx";
 import { Carousels } from "@/components/Carousels";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Intro } from "@/components/sections/Intro";
-import { Services } from "@/components/sections/Services";
 import { Work } from "@/components/sections/Work";
 import { DesignToCode } from "@/components/sections/DesignToCode";
 import { Assistant } from "@/components/sections/Assistant";
 import { Featured } from "@/components/sections/Featured";
 import { Capabilities } from "@/components/sections/Capabilities";
+import { Playground } from "@/components/sections/Playground";
 import { Cta } from "@/components/sections/Cta";
 import { Footer } from "@/components/sections/Footer";
 import { jsonLdHtml, personJsonLd } from "@/lib/jsonLd";
@@ -29,12 +29,12 @@ export default function Home() {
       <SiteHeader />
       <main id="main-content">
         <Intro />
-        <Services />
         <Work />
         <DesignToCode />
+        <Capabilities />
+        <Playground />
         <Assistant />
         <Featured />
-        <Capabilities />
         <Cta />
       </main>
       <Footer />

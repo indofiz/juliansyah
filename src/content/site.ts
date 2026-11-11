@@ -6,7 +6,7 @@
  * with a dashed outline. List them with: grep -n "TODO:" src/content/site.ts
  */
 
-import type { LoopMedia, Platform, Project, ProofItem } from "./types";
+import type { Capability, LoopMedia, Platform, PlaygroundItem, Project, ProofItem } from "./types";
 
 export const site = {
   name: "Juliansyah",
@@ -91,20 +91,6 @@ export const proof = {
     { icon: "github", value: "TODO: GitHub stars", label: "GitHub stars" },
     { icon: "clock", value: "TODO: first year", label: "Shipping since" },
   ] satisfies ProofItem[],
-};
-
-export const services = {
-  title: "From Figma to Production, Under One Roof.",
-  left: [
-    { icon: "code", title: "Frontend Engineering", text: "React, Next.js and TypeScript interfaces that are fast, accessible and pixel-perfect.", cta: "Start a project", tone: "accent" },
-    { icon: "cube", title: "Motion & 3D", text: "GSAP and WebGL moments that make a product feel alive, like the scene on this page.", cta: "Let's talk", tone: "accent" },
-    { icon: "spark", title: "Design & Build Sprint", text: "From a Figma file to a live, production-ready page in one focused sprint.", cta: "Book a sprint", tone: "sky" },
-  ],
-  right: [
-    { icon: "pen", title: "UI / UX Design", text: "Wireframes, user flows and prototypes in Figma, designed around what users actually do.", cta: "Learn more", tone: "accent" },
-    { icon: "layers", title: "Design Systems", text: "Tokens and components your whole team can build with, in Figma and in code.", cta: "Try it", tone: "indigo" },
-    { icon: "phone", title: "Flutter Mobile Apps", text: "Android and iOS from one Flutter codebase, on Clean Architecture and BLoC.", cta: "Build an app", tone: "accent" },
-  ],
 };
 
 /* ---------------------------------------------------------------------------
@@ -323,63 +309,136 @@ export const featured = {
   secondary: "View my GitHub",
 };
 
-/**
- * Skills bento (section "capabilities"). Each card's illustration is a small
- * animated UI that plays on hover (see src/components/bento/Arts.tsx).
- *
- * Flutter screenshots: the phone shows a dummy app until you add real ones.
- * Put two PNGs (portrait, ~9:19.5, e.g. 390×844) in public/work/ and list them
- * in `flutterScreens`; the phone then swipes from the first to the second.
- */
-export const flutterScreens: string[] = [
-  // "/work/flutter-1.png",
-  // "/work/flutter-2.png",
-];
+/* ---------------------------------------------------------------------------
+ * 5. What I do: can you do what I need? Grouped by what the client gets.
+ * Each card's illustration plays on hover (or while in view on touch screens):
+ * see src/components/bento/Arts.tsx.
+ * ------------------------------------------------------------------------- */
+export const services = {
+  badge: "What I do",
+  title: "What you get when you work with me.",
+  text: "Grouped by outcome, not by tool. The tools sit underneath each one.",
+  toolsLabel: "Tools",
+  items: [
+    {
+      id: "mobile",
+      icon: "smartphone",
+      title: "Mobile apps in Flutter",
+      text: "One codebase for Android and iOS, on an architecture your team can keep extending.",
+      tools: ["Flutter", "Dart", "BLoC", "Riverpod", "Firebase"],
+    },
+    {
+      id: "design",
+      icon: "pen",
+      title: "UI/UX and design systems",
+      text: "Flows, wireframes and prototypes, plus the tokens and components that keep design and code in sync.",
+      tools: ["Figma", "Prototyping", "Design tokens", "Component libraries"],
+    },
+    {
+      id: "web",
+      icon: "code",
+      title: "Web front-ends",
+      text: "Fast, accessible sites and web apps, built straight from the design with no hand-off gap.",
+      tools: ["React", "Next.js", "TypeScript"],
+    },
+    {
+      id: "motion",
+      icon: "spark",
+      title: "Motion and interaction",
+      text: "Transitions and micro-interactions that explain what just happened.",
+      tools: ["Flutter animations", "GSAP", "Rive"],
+    },
+    {
+      id: "performance",
+      icon: "gauge",
+      title: "Performance and accessibility",
+      text: "Core Web Vitals budgets and WCAG AA from the first commit, checked before launch.",
+      tools: ["Lighthouse", "Core Web Vitals", "WCAG AA"],
+    },
+  ] satisfies Capability[],
+};
 
-export const capabilities = [
-  {
-    id: "flutter",
-    icon: "smartphone",
-    title: "Flutter Apps",
-    text: "Cross-platform apps for iOS, Android and web from one codebase.",
-    tags: ["Dart", "Riverpod", "Firebase", "Material 3"],
+/** Text inside the bento illustrations (decorative, hidden from screen readers). */
+export const bentoArt = {
+  flutter: {
+    /**
+     * Your Flutter screenshots: two portrait PNGs (~9:19.5, e.g. 390×844) in
+     * public/work/. The phone then swipes from the first to the second.
+     */
+    screens: [
+      // "/work/flutter-1.png",
+      // "/work/flutter-2.png",
+    ] as string[],
+    platforms: ["iOS", "Android", "Web"],
+    clock: "9:41",
+    toast: "Hot reload",
+    home: {
+      greeting: "Good morning",
+      title: "Explore Bali",
+      search: "Search places",
+      hero: "Mount Batur",
+      heroSub: "Sunrise trek",
+      tabs: ["Hiking", "Beach", "Food"],
+      tile: "Tegallalang",
+      tileSub: "Rice terraces",
+    },
+    detail: { title: "Mount Batur", place: "Kintamani, Bali", priceLabel: "From", price: "$45", cta: "Book trip" },
   },
-  {
-    id: "uiux",
-    icon: "pen",
-    title: "UI/UX Design",
-    text: "From research and wireframes to polished, tested interfaces.",
-    tags: ["Figma", "User research", "Prototyping"],
+  uiux: { frame: "Home · Mobile", button: "Get started", spacing: "16", size: "320 × 280", comment: "Bigger tap target?", client: "Client", you: "You" },
+  frontend: {
+    tabs: ["Ship.tsx", "page.tsx"],
+    url: "localhost:3000",
+    button: "Ship it",
+    done: "Shipped",
+    /** [token class, text] per line: k keyword, f function, t tag, a attribute, v value, s string, p plain. */
+    code: [
+      [["k", "export const "], ["f", "Ship"], ["p", " = () => {"]],
+      [["p", "  "], ["k", "const "], ["p", "[done, set] = "], ["f", "useState"], ["p", "("], ["v", "false"], ["p", ")"]],
+      [["p", "  "], ["k", "return "], ["p", "("]],
+      [["p", "    <"], ["t", "Button "], ["a", "glow onClick"], ["p", "={() => "], ["f", "set"], ["p", "("], ["v", "true"], ["p", ")}>"]],
+      [["p", "      {done ? "], ["s", '"Shipped"'], ["p", " : "], ["s", '"Ship it"'], ["p", "}"]],
+      [["p", "    </"], ["t", "Button"], ["p", ">"]],
+      [["p", "  )"]],
+      [["p", "}"]],
+    ] as [string, string][][],
   },
-  {
-    id: "frontend",
-    icon: "code",
-    title: "Front-end Development",
-    text: "Fast, accessible web apps in React and Next.js, built from your designs.",
-    tags: ["React", "Next.js", "TypeScript"],
-  },
-  {
-    id: "system",
-    icon: "layers",
-    title: "Design Systems",
-    text: "Tokens and components that keep design and code in sync.",
-    tags: ["Tokens", "Components", "Docs"],
-  },
-  {
-    id: "motion",
-    icon: "spark",
-    title: "Motion & Interaction",
-    text: "Micro-interactions that make interfaces feel alive.",
-    tags: ["Flutter animations", "GSAP", "Rive"],
-  },
-  {
-    id: "perf",
-    icon: "gauge",
-    title: "Performance & Accessibility",
-    text: "Lighthouse in the green and WCAG AA by default.",
-    tags: ["Core Web Vitals", "WCAG AA"],
-  },
-] as const;
+  motion: { curve: "ease-in-out · cubic-bezier(.65, 0, .35, 1)" },
+  /** Score rings. TODO: replace with this site's measured Lighthouse scores (mobile). */
+  perf: [
+    { label: "Performance", score: 90 },
+    { label: "Accessibility", score: 100 },
+    { label: "Best Practices", score: 100 },
+    { label: "SEO", score: 100 },
+  ],
+};
+
+/* ---------------------------------------------------------------------------
+ * 6. Playground: small experiments people can play with. Each tile loads
+ * only near the viewport and pauses (or unloads) when it leaves.
+ * ------------------------------------------------------------------------- */
+const experiment = (n: number, kind: PlaygroundItem["kind"]): PlaygroundItem => ({
+  slug: `experiment-${n}`,
+  title: `TODO: experiment ${n} name`,
+  text: "TODO: one line on what it explores",
+  kind,
+  media: { frame: "browser", label: `TODO: experiment ${n} preview loop` },
+  tags: ["TODO: tool"],
+});
+
+export const playground = {
+  badge: "Playground",
+  title: "Small experiments, built for fun.",
+  text: "Motion studies and interface ideas I build between projects. Go ahead and play.",
+  labels: { open: "Open", load: "Load experiment", source: "Source" },
+  items: [
+    experiment(1, "iframe"),
+    experiment(2, "video"),
+    experiment(3, "video"),
+    experiment(4, "iframe"),
+    experiment(5, "video"),
+    experiment(6, "video"),
+  ],
+};
 
 export const cta = {
   title: ["Let's Build Something", "Worth Scrolling For"],

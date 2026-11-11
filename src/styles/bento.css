@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Skills bento (section #capabilities)
+   What I do: bento (section #services)
    Cards: dark glass, hairline border, bright top edge. On hover (or while in
    view on touch screens) a card lifts, an accent spotlight follows the mouse,
    and its illustration plays. Shorthand used below:
@@ -29,18 +29,13 @@
   grid-row: 2;
 }
 
-.bento--system {
-  grid-column: 1 / span 4;
-  grid-row: 3;
-}
-
 .bento--motion {
-  grid-column: 5 / span 4;
+  grid-column: 1 / span 6;
   grid-row: 3;
 }
 
 .bento--perf {
-  grid-column: 9 / span 4;
+  grid-column: 7 / span 6;
   grid-row: 3;
 }
 
@@ -248,13 +243,11 @@
 }
 
 /* Small cards: tighter copy. */
-.bento--system .bento-copy,
 .bento--motion .bento-copy,
 .bento--perf .bento-copy {
   padding: 0 1.5rem 1.4rem;
 }
 
-.bento--system .bento-copy p,
 .bento--motion .bento-copy p,
 .bento--perf .bento-copy p {
   margin-top: 0.5rem;
@@ -1419,207 +1412,7 @@
 }
 
 /* ==========================================================================
-   4. Design systems: swatches fan out, type gets bolder, theme flips
-   ========================================================================== */
-.ds {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0 0.25rem;
-}
-
-.ds-swatches {
-  position: relative;
-  width: 8.5rem;
-  height: 7rem;
-  flex: none;
-}
-
-.ds-swatches span {
-  position: absolute;
-  left: 2.5rem;
-  bottom: 0;
-  width: 3rem;
-  height: 5.75rem;
-  display: flex;
-  align-items: flex-end;
-  padding: 0.3rem 0.35rem;
-  border-radius: 0.55rem;
-  font-size: 0.5rem;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.7);
-  background: var(--c);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0.5rem 1rem rgba(0, 0, 0, 0.45);
-  transform-origin: 50% 100%;
-  transform: translateX(calc((var(--k) - 2) * 0.4rem)) rotate(calc((var(--k) - 2) * 3deg));
-  transition: transform 0.65s cubic-bezier(0.25, 1.25, 0.4, 1);
-}
-
-.ds-swatches span.light {
-  color: rgb(var(--accent-ink-rgb) / 0.75);
-}
-
-.bento-card:is(:hover, .is-active) .ds-swatches span {
-  transform: translateX(calc((var(--k) - 2) * 0.55rem)) rotate(calc((var(--k) - 2) * 11deg));
-  transition-delay: calc(var(--k) * 0.04s);
-}
-
-.ds-type {
-  display: grid;
-  justify-items: center;
-  gap: 0.35rem;
-}
-
-.ds-type b {
-  font-size: 3.25rem;
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: -0.04em;
-  background: linear-gradient(180deg, #fff 30%, #9b9b9b);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  transition: font-weight 0.6s ease 0.15s, letter-spacing 0.6s ease 0.15s;
-}
-
-.bento-card:is(:hover, .is-active) .ds-type b {
-  font-weight: 700;
-  letter-spacing: -0.06em;
-}
-
-.ds-type small {
-  white-space: nowrap;
-  font-size: 0.5rem;
-  color: #8a847f;
-}
-
-.ds-panel {
-  width: 7.75rem;
-  flex: none;
-  display: grid;
-  gap: 0.5rem;
-  padding: 0.7rem;
-  border-radius: 0.8rem;
-  color: #efece9;
-  background: #14120f;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-  transition: background 0.5s 0.25s, box-shadow 0.5s 0.25s, color 0.5s 0.25s;
-}
-
-.ds-mode {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.5rem;
-  color: #8a847f;
-  transition: color 0.5s 0.25s;
-}
-
-.ds-mode-val {
-  display: grid;
-}
-
-.ds-mode-val em {
-  grid-area: 1 / 1;
-  font-style: normal;
-  font-weight: 600;
-  text-align: right;
-  transition: opacity 0.3s 0.25s;
-}
-
-.ds-mode-val .lite {
-  opacity: 0;
-}
-
-.ds-btn {
-  height: 1.5rem;
-  display: grid;
-  place-items: center;
-  border-radius: 999px;
-  font-size: 0.5625rem;
-  font-weight: 700;
-  color: var(--accent-ink);
-  background: var(--accent);
-}
-
-.ds-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.ds-toggle {
-  position: relative;
-  width: 1.9rem;
-  height: 1.1rem;
-  border-radius: 999px;
-  background: #302d2a;
-  transition: background 0.4s 0.35s;
-}
-
-.ds-toggle i {
-  position: absolute;
-  top: 0.15rem;
-  left: 0.15rem;
-  width: 0.8rem;
-  height: 0.8rem;
-  border-radius: 50%;
-  background: #d6d3cf;
-  transition: transform 0.45s cubic-bezier(0.3, 1.6, 0.5, 1) 0.35s, background 0.4s 0.35s;
-}
-
-.ds-chip {
-  padding: 0.2rem 0.5rem;
-  border-radius: 999px;
-  font-size: 0.5rem;
-  color: var(--accent-pale);
-  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.3);
-  transition: color 0.5s 0.25s;
-}
-
-.ds-check {
-  width: 1.1rem;
-  height: 1.1rem;
-  display: grid;
-  place-items: center;
-  border-radius: 0.3rem;
-  color: var(--accent-ink);
-  background: var(--accent);
-}
-
-.bento-card:is(:hover, .is-active) .ds-panel {
-  color: #100e0b;
-  background: #f4f1ee;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08), 0 0 2rem rgb(var(--accent-pale-rgb) / 0.25);
-}
-
-.bento-card:is(:hover, .is-active) .ds-mode {
-  color: #68645f;
-}
-
-.bento-card:is(:hover, .is-active) .ds-mode-val .dark {
-  opacity: 0;
-}
-
-.bento-card:is(:hover, .is-active) .ds-mode-val .lite {
-  opacity: 1;
-}
-
-.bento-card:is(:hover, .is-active) .ds-toggle {
-  background: var(--accent-2);
-}
-
-.bento-card:is(:hover, .is-active) .ds-toggle i {
-  background: #fff;
-  transform: translateX(0.8rem);
-}
-
-.bento-card:is(:hover, .is-active) .ds-chip {
-  color: var(--accent-700);
-}
-
-/* ==========================================================================
-   5. Motion: dot rides the easing curve, heart pops, toggle springs
+   4. Motion: dot rides the easing curve, heart pops, toggle springs
    ========================================================================== */
 .mo {
   display: flex;
@@ -1831,7 +1624,7 @@
 }
 
 /* ==========================================================================
-   6. Performance: score rings fill and count up
+   5. Performance: score rings fill and count up
    ========================================================================== */
 @property --n {
   syntax: "<integer>";

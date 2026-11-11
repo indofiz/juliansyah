@@ -47,34 +47,18 @@ export const sceneKeyframes: Record<string, SceneKeyframe> = {
     mobile: { y: -0.1, scale: 1 },
   },
 
-  // As the intro releases: the globe swells and drops, dissolves onto the
-  // glowing floor, then the cloud rises into the shape.
-  services: {
-    via: [
-      { y: -0.35, scale: 1.25, globeSpin: 0.5 },
-      { y: -0.05, scale: 1, morph: 1, sink: 0.85 },
-    ],
-    x: 0,
-    y: -0.26,
-    scale: 0.72,
-    globeSpin: 0.4,
-    shapeSpin: 0, // portrait faces the camera as photographed
-    morph: 2,
-    sink: 0,
-    opacity: 1,
-    mobile: { scale: 1, y: 0.3 },
-  },
-
-  // Shape breaks apart and fades while the table scrolls in.
+  // The globe dissolves into a loose cloud and fades as the work cards
+  // arrive, so the videos sit on a clean background.
   work: { x: 0, y: 0.1, scale: 0.9, globeSpin: 0.4, shapeSpin: 0.15, morph: 1, sink: 0, opacity: 0 },
 
   // Design → code is DOM only: the particles stay out of the way.
   "design-to-code": hidden,
+  services: hidden,
+  playground: hidden,
 
   // The rest of the page is DOM-only; the globe drifts up and fades out.
   assistant: hidden,
   featured: hidden,
-  capabilities: hidden,
   contact: hidden,
   footer: hidden,
 };

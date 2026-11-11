@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { flutterScreens } from "@/content/site";
+import { bentoArt } from "@/content/site";
 import { theme } from "@/lib/theme";
 import { Icon } from "../ui/Icon";
 
@@ -15,10 +15,13 @@ export const STAGE_SIZES = {
   flutter: [27, 28],
   uiux: [27, 17],
   frontend: [27, 17],
-  system: [24, 9.5],
   motion: [24, 9.5],
   perf: [24, 9.5],
 } as const;
+
+const F = bentoArt.flutter;
+const U = bentoArt.uiux;
+const FE = bentoArt.frontend;
 
 const v = (vars: Record<string, string | number>) => vars as CSSProperties;
 
@@ -46,31 +49,33 @@ function DummyHome() {
     <div className="fl-screen">
       <div className="fl-appbar">
         <div>
-          <small>Good morning</small>
-          <b>Explore Bali</b>
+          <small>{F.home.greeting}</small>
+          <b>{F.home.title}</b>
         </div>
         <span className="fl-avatar" />
       </div>
       <div className="fl-search">
-        <Icon name="search" size={9} /> Search places
+        <Icon name="search" size={9} /> {F.home.search}
       </div>
       <div className="fl-hero">
         <Landscape />
         <div className="fl-hero-text">
-          <b>Mount Batur</b>
-          <small>Sunrise trek · 4.9 ★</small>
+          <b>{F.home.hero}</b>
+          <small>{F.home.heroSub}</small>
         </div>
       </div>
       <div className="fl-cats">
-        <span className="on">Hiking</span>
-        <span>Beach</span>
-        <span>Food</span>
+        {F.home.tabs.map((t, k) => (
+          <span key={t} className={k === 0 ? "on" : ""}>
+            {t}
+          </span>
+        ))}
       </div>
       <div className="fl-tile">
         <span className="fl-thumb" />
         <div>
-          <b>Tegallalang</b>
-          <small>Rice terraces · 12 km</small>
+          <b>{F.home.tile}</b>
+          <small>{F.home.tileSub}</small>
         </div>
         <Icon name="heart" size={10} className="fl-fav" />
       </div>
@@ -91,22 +96,19 @@ function DummyDetail() {
         </span>
       </div>
       <div className="fl-detail-body">
-        <b>Mount Batur</b>
+        <b>{F.detail.title}</b>
         <small>
-          <Icon name="mapPin" size={8} /> Kintamani, Bali
+          <Icon name="mapPin" size={8} /> {F.detail.place}
         </small>
-        <div className="fl-rating">
-          ★★★★★ <span>4.9 (2.1k)</span>
-        </div>
         <i style={{ width: "100%" }} />
         <i style={{ width: "92%" }} />
         <i style={{ width: "68%" }} />
         <div className="fl-row">
           <div className="fl-price">
-            <small>From</small>
-            <b>$45</b>
+            <small>{F.detail.priceLabel}</small>
+            <b>{F.detail.price}</b>
           </div>
-          <span className="fl-cta">Book trip</span>
+          <span className="fl-cta">{F.detail.cta}</span>
         </div>
       </div>
     </div>
@@ -114,12 +116,12 @@ function DummyDetail() {
 }
 
 export function ArtFlutter() {
-  const real = flutterScreens.length >= 2;
+  const real = F.screens.length >= 2;
   return (
     <div className="stage fl">
       <span className="fl-glow" />
       <div className="fl-chips">
-        {["iOS", "Android", "Web"].map((p, k) => (
+        {F.platforms.map((p, k) => (
           <span key={p} style={v({ "--k": k })}>
             {p}
           </span>
@@ -141,7 +143,7 @@ export function ArtFlutter() {
         <span className="fl-notch" />
         <div className="fl-viewport">
           <div className="fl-status">
-            <span>9:41</span>
+            <span>{F.clock}</span>
             <span className="fl-status-icons">
               <i />
               <i />
@@ -150,7 +152,7 @@ export function ArtFlutter() {
           </div>
           <div className="fl-screens">
             {real ? (
-              flutterScreens.slice(0, 2).map((src) => (
+              F.screens.slice(0, 2).map((src) => (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img key={src} className="fl-shot" src={src} alt="" />
               ))
@@ -178,7 +180,7 @@ export function ArtFlutter() {
             </nav>
           )}
           <div className="fl-toast">
-            <Icon name="zap" size={9} /> Hot reload · 214 ms
+            <Icon name="zap" size={9} /> {F.toast}
           </div>
         </div>
       </div>
@@ -191,7 +193,7 @@ export function ArtUiux() {
   return (
     <div className="stage ux">
       <span className="ux-label">
-        <Icon name="frame" size={9} /> Home · Mobile
+        <Icon name="frame" size={9} /> {U.frame}
       </span>
       <div className="ux-frame">
         <div className="ux-bar">
@@ -208,9 +210,9 @@ export function ArtUiux() {
           <i />
           <i />
         </div>
-        <div className="ux-btn">Get started</div>
+        <div className="ux-btn">{U.button}</div>
         <span className="ux-guide">
-          <em>16</em>
+          <em>{U.spacing}</em>
         </span>
       </div>
       <div className="ux-sel">
@@ -218,17 +220,17 @@ export function ArtUiux() {
         <i />
         <i />
         <i />
-        <span>320 × 280</span>
+        <span>{U.size}</span>
       </div>
 
-      <div className="ux-comment">Love this flow!</div>
+      <div className="ux-comment">{U.comment}</div>
       <div className="ux-cur ux-cur--client">
         <Cursor />
-        <span>Client</span>
+        <span>{U.client}</span>
       </div>
       <div className="ux-cur ux-cur--you">
         <Cursor />
-        <span>You</span>
+        <span>{U.you}</span>
       </div>
 
       <div className="ux-tools">
@@ -254,16 +256,7 @@ export function ArtUiux() {
 
 /* ---------------------------------------------------------------- Front-end */
 type Tok = [cls: string, text: string];
-const CODE: Tok[][] = [
-  [["k", "export const "], ["f", "Ship"], ["p", " = () => {"]],
-  [["p", "  "], ["k", "const "], ["p", "[done, set] = "], ["f", "useState"], ["p", "("], ["v", "false"], ["p", ")"]],
-  [["p", "  "], ["k", "return "], ["p", "("]],
-  [["p", "    <"], ["t", "Button "], ["a", "glow onClick"], ["p", "={() => "], ["f", "set"], ["p", "("], ["v", "true"], ["p", ")}>"]],
-  [["p", "      {done ? "], ["s", '"Shipped"'], ["p", " : "], ["s", '"Ship it"'], ["p", "}"]],
-  [["p", "    </"], ["t", "Button"], ["p", ">"]],
-  [["p", "  )"]],
-  [["p", "}"]],
-];
+const CODE: Tok[][] = FE.code;
 const CHAR_S = 0.0085; // seconds per typed character
 const LINE_GAP_S = 0.05;
 
@@ -287,8 +280,8 @@ export function ArtFrontend() {
             <i />
             <i />
           </span>
-          <span className="fe-tab on">Ship.tsx</span>
-          <span className="fe-tab">page.tsx</span>
+          <span className="fe-tab on">{FE.tabs[0]}</span>
+          <span className="fe-tab">{FE.tabs[1]}</span>
         </div>
         <div className="fe-code">
           {lines.map((l, i) => (
@@ -317,7 +310,7 @@ export function ArtFrontend() {
             <i />
           </span>
           <span className="fe-url">
-            <Icon name="lock" size={7} /> localhost:3000
+            <Icon name="lock" size={7} /> {FE.url}
           </span>
         </div>
         <div className="fe-page">
@@ -326,9 +319,9 @@ export function ArtFrontend() {
             <i />
           </div>
           <div className="fe-btn">
-            <span className="fe-btn-a">Ship it</span>
+            <span className="fe-btn-a">{FE.button}</span>
             <span className="fe-btn-b">
-              <Icon name="check" size={10} /> Shipped
+              <Icon name="check" size={10} /> {FE.done}
             </span>
             <span className="fe-ripple" />
           </div>
@@ -336,46 +329,6 @@ export function ArtFrontend() {
       </div>
       <div className="fe-cur">
         <Cursor />
-      </div>
-    </div>
-  );
-}
-
-/* ---------------------------------------------------------------- Design systems */
-const SWATCHES = theme.swatches;
-
-export function ArtSystem() {
-  return (
-    <div className="stage ds">
-      <div className="ds-swatches">
-        {SWATCHES.map(([c, label], k) => (
-          <span key={label} style={v({ "--c": c, "--k": k })} className={k >= 3 ? "light" : ""}>
-            {label}
-          </span>
-        ))}
-      </div>
-      <div className="ds-type">
-        <b>Aa</b>
-        <small>Display · 48 / Body · 16</small>
-      </div>
-      <div className="ds-panel">
-        <div className="ds-mode">
-          <span>Theme</span>
-          <span className="ds-mode-val">
-            <em className="dark">Dark</em>
-            <em className="lite">Light</em>
-          </span>
-        </div>
-        <span className="ds-btn">Button</span>
-        <div className="ds-row">
-          <span className="ds-toggle">
-            <i />
-          </span>
-          <span className="ds-chip">Chip</span>
-          <span className="ds-check">
-            <Icon name="check" size={8} />
-          </span>
-        </div>
       </div>
     </div>
   );
@@ -395,7 +348,7 @@ export function ArtMotion() {
             <span className="mo-dot" />
           </span>
         </div>
-        <small>ease-in-out · cubic-bezier(.65, 0, .35, 1)</small>
+        <small>{bentoArt.motion.curve}</small>
       </div>
       <div className="mo-ui">
         <span className="mo-heart">
@@ -413,17 +366,10 @@ export function ArtMotion() {
 }
 
 /* ---------------------------------------------------------------- Performance */
-const SCORES = [
-  ["Performance", 98],
-  ["Accessibility", 100],
-  ["Best Practices", 100],
-  ["SEO", 100],
-] as const;
-
 export function ArtPerf() {
   return (
     <div className="stage pf">
-      {SCORES.map(([label, score], k) => (
+      {bentoArt.perf.map(({ label, score }, k) => (
         <div className="pf-item" key={label} style={v({ "--v": score, "--k": k })}>
           <div className="pf-ring">
             <svg viewBox="0 0 36 36" aria-hidden="true">
@@ -443,7 +389,6 @@ export const ARTS = {
   flutter: ArtFlutter,
   uiux: ArtUiux,
   frontend: ArtFrontend,
-  system: ArtSystem,
   motion: ArtMotion,
   perf: ArtPerf,
 } as const;
