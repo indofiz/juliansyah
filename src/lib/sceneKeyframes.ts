@@ -51,15 +51,46 @@ export const sceneKeyframes: Record<string, SceneKeyframe> = {
   // arrive, so the videos sit on a clean background.
   work: { x: 0, y: 0.1, scale: 0.9, globeSpin: 0.4, shapeSpin: 0.15, morph: 1, sink: 0, opacity: 0 },
 
-  // Design → code is DOM only: the particles stay out of the way.
+  // Design → code, what I do and the playground are DOM only.
   "design-to-code": hidden,
   services: hidden,
   playground: hidden,
 
-  // The rest of the page is DOM-only; the globe drifts up and fades out.
-  assistant: hidden,
-  featured: hidden,
-  contact: hidden,
+  // About: a cloud gathers on the glowing floor, then rises into the portrait
+  // (your face with the VR headset) in the left column beside the copy. On
+  // phones it sits above the copy instead.
+  about: {
+    via: { y: -0.15, scale: 1, morph: 1, sink: 0.85, opacity: 0.85 },
+    x: -0.5,
+    y: -0.2,
+    scale: 0.72,
+    globeSpin: 4.8,
+    shapeSpin: 0, // portrait faces the camera as photographed
+    morph: 2,
+    sink: 0,
+    opacity: 1,
+    mobile: { x: 0, y: 0.3, scale: 1 },
+  },
+
+  // The portrait breaks apart and fades as the quotes arrive.
+  testimonials: { x: -0.35, y: 0.25, scale: 0.85, globeSpin: 4.8, shapeSpin: 0.3, morph: 1, sink: 0, opacity: 0, mobile: { x: 0, y: 0.5 } },
+
+  // Contact bookends the page: the globe re-forms below the fold and rises
+  // behind the frosted contact panel, as it did behind the hero.
+  contact: {
+    via: { y: -1.3, scale: 1.05, morph: 0.4, opacity: 0.25 },
+    x: 0,
+    y: -0.78,
+    scale: 1.05,
+    globeSpin: 5.6,
+    shapeSpin: 0,
+    morph: 0,
+    sink: 0,
+    opacity: 1,
+    mobile: { y: -0.5, scale: 1 },
+  },
+
+  // The globe drifts up and fades as the footer comes in.
   footer: hidden,
 };
 

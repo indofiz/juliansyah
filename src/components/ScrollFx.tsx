@@ -11,7 +11,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
  *  - intro            pinned hero → proof scene, see Intro.tsx
  *  - [data-reveal]    fade up once when it enters the viewport
  *  - hero bars        frosted panels: in on load, out once you scroll, back in at the top
- *  - [data-cta]       corner glow slides to the bottom, particle bars rise
+ *  - [data-cta]       contact panel: corner glow slides to the bottom
  */
 export function ScrollFx() {
   useGSAP(() => {
@@ -91,14 +91,6 @@ export function ScrollFx() {
       const st = { trigger: panel, start: "top 85%", end: "center 45%", scrub: true };
       gsap.to(panel.querySelector(".cta-glow-corner"), { opacity: 0, ease: "none", scrollTrigger: st });
       gsap.to(panel.querySelector(".cta-glow-bottom"), { opacity: 1, ease: "none", scrollTrigger: st });
-      gsap.from(panel.querySelectorAll(".candle"), {
-        y: 80,
-        opacity: 0,
-        duration: 1.3,
-        ease: "power3.out",
-        stagger: 0.12,
-        scrollTrigger: { trigger: panel, start: "top 65%" },
-      });
     });
 
     // Layout can shift once fonts load; re-measure trigger positions.

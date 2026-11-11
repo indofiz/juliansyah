@@ -1836,7 +1836,204 @@ button.ci-btn:active {
   border-bottom-right-radius: 0;
 }
 
-/* ---------- CTA ---------- */
+/* ---------- About ---------- */
+.about {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(2rem, calc(4 * var(--vw)), 4rem);
+}
+
+.about-copy .sh {
+  margin-bottom: 1.75rem;
+}
+
+.about-copy {
+  display: grid;
+  gap: 2rem;
+}
+
+.about-intro {
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr);
+  align-items: start;
+  gap: 1.5rem;
+}
+
+.about-photo {
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  box-shadow:
+    0 0 0 1px rgb(var(--accent-rgb) / 0.3),
+    0 1rem 2.5rem rgba(0, 0, 0, 0.45),
+    0 0 2.5rem -0.5rem rgb(var(--accent-rgb) / 0.4);
+}
+
+.about-photo img {
+  width: 100%;
+  height: auto;
+}
+
+.about-story {
+  display: grid;
+  gap: 1rem;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: #ccc8c4;
+}
+
+.about-care h3,
+.about-where h3 {
+  margin-bottom: 0.875rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.about-care ul {
+  display: grid;
+  gap: 0.625rem;
+}
+
+.about-care li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.about-care svg {
+  margin-top: 0.25rem;
+  color: var(--accent);
+}
+
+.about-where {
+  padding: 1.5rem;
+}
+
+/* Local time + overlap (ui/LocalTime.tsx) */
+.lt-now {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.75rem;
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+
+.lt-time {
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.lt-title {
+  margin: 1.25rem 0 0.75rem !important;
+  font-size: 0.875rem !important;
+  color: var(--muted) !important;
+}
+
+.lt-list {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.lt-list li {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr) 6.5rem;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.lt-bar {
+  height: 0.375rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.lt-bar i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgb(var(--accent-rgb) / 0.4), var(--accent));
+  transition: width 0.6s ease;
+}
+
+.lt-list b {
+  font-weight: 500;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Testimonials ---------- */
+.quotes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.quote {
+  display: grid;
+  align-content: space-between;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 1.75rem;
+}
+
+.quote-mark {
+  color: var(--accent);
+}
+
+.quote blockquote p {
+  font-size: 1.125rem;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+}
+
+.quote-by {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+.quote-by > span:last-child {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.quote-by small {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.quote-avatar {
+  width: 3rem;
+  height: 3rem;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  object-fit: cover;
+  font-weight: 600;
+  color: var(--accent-pale);
+  background: linear-gradient(160deg, var(--accent-700), var(--accent-900));
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.3);
+}
+
+/* ---------- Contact ---------- */
+/* Frosted glass: the globe rises behind it (the "contact" keyframe). */
 .cta-panel {
   position: relative;
   min-height: 35rem;
@@ -1845,9 +2042,15 @@ button.ci-btn:active {
   padding: clamp(2.5rem, calc(6 * var(--vw)), 5rem) clamp(1.5rem, calc(5 * var(--vw)), 4rem);
   border-radius: 1.625rem;
   overflow: hidden;
-  background: #070604;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  background: rgba(7, 6, 4, 0.62);
+  -webkit-backdrop-filter: blur(1rem) saturate(1.4);
+  backdrop-filter: blur(1rem) saturate(1.4);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   isolation: isolate;
+}
+
+.cta-copy .badge {
+  margin-bottom: 1.25rem;
 }
 
 .cta-glow-corner {
@@ -1900,61 +2103,6 @@ button.ci-btn:active {
   margin: 1.25rem 0 1.75rem;
   font-size: 1.0625rem;
   color: var(--muted);
-}
-
-.candles {
-  position: absolute;
-  right: 6%;
-  top: 8%;
-  bottom: 12%;
-  width: 34%;
-}
-
-.candle {
-  position: absolute;
-  width: 1.875rem;
-  transform: translateX(-50%);
-  background-image:
-    radial-gradient(circle, rgb(var(--accent-pale-rgb) / 0.95) 0.05rem, transparent 0.0813rem),
-    radial-gradient(circle, rgb(var(--accent-bright-rgb) / 0.75) 0.0563rem, transparent 0.0875rem),
-    radial-gradient(circle, rgb(var(--accent-rgb) / 0.6) 0.0437rem, transparent 0.075rem);
-  background-size: 0.3125rem 0.25rem, 0.4375rem 0.375rem, 0.1875rem 0.5625rem;
-  background-position: 0 0, 0.125rem 0.1875rem, 1px 0.3125rem;
-  filter: drop-shadow(0 0 0.3125rem rgb(var(--accent-rgb) / 0.9));
-  -webkit-mask-image: radial-gradient(50% 50% at 50% 50%, #000 55%, rgba(0, 0, 0, 0.35) 85%, transparent 100%);
-  mask-image: radial-gradient(50% 50% at 50% 50%, #000 55%, rgba(0, 0, 0, 0.35) 85%, transparent 100%);
-  animation: candle-drift 3.2s ease-in-out infinite alternate;
-}
-
-.candle:nth-child(2n) {
-  animation-delay: -1.4s;
-}
-
-.candle::before,
-.candle::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  width: 0.4375rem;
-  transform: translateX(-50%);
-  background-image: inherit;
-  background-size: 0.1875rem 0.3125rem, 0.25rem 0.4375rem, 0.125rem 0.5625rem;
-}
-
-.candle::before {
-  bottom: 96%;
-  height: var(--up);
-}
-
-.candle::after {
-  top: 96%;
-  height: var(--down);
-}
-
-@keyframes candle-drift {
-  to {
-    background-position: 0 -0.5rem, 0.125rem -0.75rem, 1px -0.375rem;
-  }
 }
 
 /* Contact details under the buttons. */
@@ -2210,5 +2358,8 @@ button.ci-btn:active {
   }
   .pg-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .quotes {
+    grid-template-columns: 1fr;
   }
 }

@@ -7,16 +7,18 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Intro } from "@/components/sections/Intro";
 import { Work } from "@/components/sections/Work";
 import { DesignToCode } from "@/components/sections/DesignToCode";
-import { Assistant } from "@/components/sections/Assistant";
-import { Featured } from "@/components/sections/Featured";
 import { Capabilities } from "@/components/sections/Capabilities";
 import { Playground } from "@/components/sections/Playground";
+import { About } from "@/components/sections/About";
+import { Testimonials } from "@/components/sections/Testimonials";
 import { Contact } from "@/components/sections/Contact";
 import { Footer } from "@/components/sections/Footer";
 import { jsonLdHtml, personJsonLd } from "@/lib/jsonLd";
 
+// Sections answer a visitor's questions in order: who are you (hero, proof),
+// can you do what I need (work, design → code, what I do, playground),
+// can I trust you (about, testimonials), how do I reach you (contact).
 // Section ids must match the keys in src/lib/sceneKeyframes.ts (same order).
-// Pricing, Estimator and Portal exist in components/sections but aren't rendered.
 export default function Home() {
   return (
     <>
@@ -33,8 +35,8 @@ export default function Home() {
         <DesignToCode />
         <Capabilities />
         <Playground />
-        <Assistant />
-        <Featured />
+        <About />
+        <Testimonials />
         <Contact />
       </main>
       <Footer />
