@@ -7,9 +7,9 @@ export function Pricing() {
     <section id="pricing" className="section pricing">
       <div className="container">
         <SectionHeader badge={pricing.badge} badgeIcon="crown" title={pricing.title} />
-        <div className="plans">
+        <div className="plans" data-carousel>
           {pricing.plans.map((p) => (
-            <article key={p.name} className={`plan ${"popular" in p && p.popular ? "popular" : ""}`} data-reveal>
+            <article key={p.name} className={`plan ${"popular" in p && p.popular ? "popular" : ""}`} data-reveal data-slide>
               <div className="plan-head">
                 <h3>{p.name}</h3>
                 {"popular" in p && p.popular && (
@@ -33,6 +33,11 @@ export function Pricing() {
                 ))}
               </ul>
             </article>
+          ))}
+        </div>
+        <div className="carousel-dots" data-carousel-nav aria-label="Plans">
+          {pricing.plans.map((p) => (
+            <span key={p.name} role="button" tabIndex={-1} aria-label={p.name} />
           ))}
         </div>
       </div>

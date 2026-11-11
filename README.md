@@ -33,7 +33,7 @@ Open http://localhost:3000.
 | 8 | Case study | `spotlight` | Sticky: scrolling switches the active feature and the framed screen |
 | 9 | Assistant | `assistant` | Purple orb, purple-framed chat with clickable suggestions |
 | 10 | Featured | `featured` | Statement, rose button pair, framed analytics screen |
-| 11 | Capabilities | `capabilities` | Bento grid with radial glows and line-art illustrations |
+| 11 | Skills bento | `capabilities` | Six cards (Flutter, UI/UX, front-end, design systems, motion, performance). Each illustration is a small live UI that plays on hover, or while centred in view on touch screens |
 | – | Portal | `portal` | *Not rendered.* Framed client-portal UI bleeding off the right edge, working toggles |
 | 13 | CTA | `cta` | Panel whose glow slides from the corner to the bottom, rising particle bars |
 | 14 | Footer | `footer` | Link columns, button cards, giant glowing wordmark |
@@ -51,6 +51,32 @@ responsive layout with a 16px base.
 When adding CSS, write sizes in `rem` (px ÷ 16, so `24px → 1.5rem`). Keep
 `1px` for hairlines. Icons take their `size` in design px and convert to rem
 themselves.
+
+## Mobile (≤ 900px)
+
+Follows the reference's phone layout: fixed header with a ☰ full-screen menu
+(hides on scroll down, returns on scroll up), the same pinned hero → stats
+intro, your portrait above a swipe carousel of service cards, swipe carousels
+for plans and capabilities (glowing bar / dash indicators), centred section
+headers, stacked buttons, and a 2-column footer. All mobile rules live in
+`src/styles/mobile.css`; carousel indicators are driven by
+`src/components/Carousels.tsx` (`data-carousel` + `data-carousel-nav`).
+Globe/portrait positions on mobile are the `mobile` overrides in
+`sceneKeyframes.ts`.
+
+## Skills bento
+
+Cards and copy: `capabilities` in `src/content/site.ts`. Illustrations:
+`src/components/bento/Arts.tsx` (markup) and `src/styles/bento.css` (look and
+animations, all keyed off `.bento-card:is(:hover, .is-active)`).
+`src/components/bento/BentoFx.tsx` scales each illustration to its card,
+moves the hover spotlight and tilt, and on touch screens plays a card while
+it's in view.
+
+**Your Flutter screenshots:** the phone shows a dummy travel app for now. Put
+two portrait PNGs (e.g. 390×844) in `public/work/` and list them in
+`flutterScreens` in `site.ts`; the phone then swipes from the first to the
+second on hover.
 
 ## Where to edit
 
@@ -127,9 +153,14 @@ The headset is the brightest part; the shoulders fade out toward the bottom.
 
 ```bash
 pip install numpy scipy pillow "opencv-python-headless<5"   # one-time
-npm run portrait path/to/photo.jpg                # with the VR headset
+npm run portrait path/to/photo.jpg                # adds a VR headset
 npm run portrait path/to/photo.jpg -- --no-headset # just your face
 ```
+
+If your photo already shows a headset with a glowing visor (like the current
+`assets/portrait-source.png`), it's detected automatically: the visor sets
+the eye line and nose, it's pushed forward in depth, glows brightest, and no
+headset is drawn on top. Transparent PNG cut-outs are used as-is.
 
 That rewrites `public/portrait/portrait-map.png` (R = brightness, G = depth,
 B = mask) and saves `assets/portrait-preview.png` so you can check the
@@ -139,7 +170,8 @@ transparent PNG). Your original photo stays in `assets/`, which isn't served.
 
 **Tune it** in `src/components/canvas/Scene.tsx`:
 `brightness` (overall dot brightness, try 0.6–1.3), `height` (size), `depth`
-(how deep the relief is), `gridPoints` (dot count; fewer = coarser halftone).
+(how deep the relief is), `dotSpacing` (gap between dots as a fraction of the
+height; bigger = coarser halftone).
 The headset's shape and size are in `add_headset()` in
 `scripts/make-portrait.py` (it's placed from the detected eyes). Position per section is in `sceneKeyframes.ts`
 (`services`). Shine speed/width and the mouse turn are in `shaders.ts` and

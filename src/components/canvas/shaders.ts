@@ -209,7 +209,7 @@ export const particleVertex = /* glsl */ `
 
     float sizeKind = isShell > 0.5 ? 0.8 : 1.0;
     // Shape dots are smaller and more even (halftone look); shine enlarges them.
-    float size = uSize * mix(mix(0.55, 1.25, aRandom.w), 0.82, t2) * mix(sizeKind, 1.0, t1) * (1.0 + shine * 0.15);
+    float size = uSize * mix(mix(0.55, 1.25, aRandom.w), 1.08, t2) * mix(sizeKind, 1.0, t1) * (1.0 + shine * 0.15);
     gl_PointSize = size * uPixelRatio * uViewportScale / -mv.z;
   }
 `;

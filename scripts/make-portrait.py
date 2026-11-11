@@ -1,8 +1,11 @@
 """
 Turn a portrait photo into the particle "portrait map" used by the 3D scene.
 
-    python3 scripts/make-portrait.py path/to/photo.jpg              # with VR headset
+    python3 scripts/make-portrait.py path/to/photo.jpg              # adds a VR headset
     python3 scripts/make-portrait.py path/to/photo.jpg --no-headset # just your face
+
+If the photo already shows a headset with a glowing visor, it's detected and
+used (pushed forward in depth) and no headset is drawn.
 
 Writes public/portrait/portrait-map.png, plus assets/portrait-preview.png to
 check the cutout, depth and brightness (kept out of public/ so it isn't deployed).
@@ -113,6 +116,27 @@ def detect_face(gray: np.ndarray):
     return (x, y, w, h), eyes
 
 
+def find_visor(rgb: np.ndarray, face, mask: np.ndarray):
+    """A VR headset already in the photo: find its glowing (green/cyan) visor
+    in the upper part of the face. Returns the visor's bounding box or None."""
+    x, y, w, h = face
+    H, W = mask.shape
+    x0, x1 = max(0, int(x - 0.35 * w)), min(W, int(x + 1.35 * w))
+    y0, y1 = max(0, int(y)), min(H, int(y + 0.8 * h))
+    r, g, b = (rgb[y0:y1, x0:x1, i].astype(np.int32) for i in range(3))
+    glow = (g > r + 35) & (g > b + 10) & (g > 70) & mask[y0:y1, x0:x1]
+    glow = ndimage.binary_closing(glow, iterations=3)
+    lbl, n = ndimage.label(glow)
+    if n == 0:
+        return None
+    sizes = ndimage.sum(glow, lbl, range(1, n + 1))
+    k = int(np.argmax(sizes)) + 1
+    if sizes[k - 1] < 0.015 * w * h:
+        return None
+    ys, xs = np.nonzero(lbl == k)
+    return (int(xs.min() + x0), int(ys.min() + y0), int(xs.max() + x0), int(ys.max() + y0))
+
+
 def gauss(shape, cx, cy, sx, sy, angle=0.0):
     yy, xx = np.mgrid[0 : shape[0], 0 : shape[1]].astype(np.float32)
     dx, dy = xx - cx, yy - cy
@@ -144,15 +168,26 @@ def build_depth(rgb: np.ndarray, mask: np.ndarray) -> tuple[np.ndarray, dict]:
         # Head as an ellipsoid bulging toward the camera.
         head = gauss(lum.shape, cx, cy, w * 0.62, h * 0.78) * 0.55
 
+        # A headset in the photo hides the eyes: use its visor for the eye line.
+        visor = find_visor(rgb, face, mask) if len(eyes) < 2 else None
+        if visor:
+            info["visor"] = visor
+
         # Where is the face turned? Use the eyes' midpoint vs the face box.
-        if len(eyes) == 2:
+        if visor:
+            vx0, vy0, vx1, vy1 = visor
+            mid_x, eye_y, eye_dist = (vx0 + vx1) / 2, (vy0 + vy1) / 2, (vx1 - vx0) * 0.42
+        elif len(eyes) == 2:
             mid_x = (eyes[0][0] + eyes[1][0]) / 2
             eye_y = (eyes[0][1] + eyes[1][1]) / 2
             eye_dist = abs(eyes[0][0] - eyes[1][0])
         else:
             mid_x, eye_y, eye_dist = cx, y + h * 0.42, w * 0.38
-        nose_x = mid_x + (mid_x - cx) * 0.6  # nose sits further toward the turn
-        info["nose"] = (int(nose_x), int(eye_y + h * 0.2))
+        # Eyes: the nose sits further toward the turn. Visor: its centre is
+        # already over the nose bridge.
+        nose_x = mid_x if visor else mid_x + (mid_x - cx) * 0.6
+        nose_tip_y = (visor[3] + h * 0.06) if visor else (eye_y + h * 0.27)
+        info["nose"] = (int(nose_x), int(nose_tip_y))
         if len(eyes) == 2:
             (lx, ly, _), (rx, ry, _) = sorted(eyes, key=lambda e: e[0])
             angle = float(np.arctan2(ry - ly, rx - lx))
@@ -160,18 +195,21 @@ def build_depth(rgb: np.ndarray, mask: np.ndarray) -> tuple[np.ndarray, dict]:
             angle = 0.0
         info["eye_line"] = dict(mid_x=float(mid_x), eye_y=float(eye_y), eye_dist=float(eye_dist), nose_x=float(nose_x), angle=angle)
 
-        # Nose ridge + tip, brow, cheeks, chin; eye sockets pushed in.
-        relief += gauss(lum.shape, nose_x, eye_y + h * 0.16, w * 0.06, h * 0.17) * 0.32
-        relief += gauss(lum.shape, nose_x, eye_y + h * 0.27, w * 0.085, h * 0.07) * 0.22
-        relief += gauss(lum.shape, mid_x, eye_y - h * 0.11, w * 0.34, h * 0.06) * 0.1
+        # Nose tip, chin; with visible eyes also nose ridge, brow, cheeks and
+        # eye sockets (a headset covers those).
+        relief += gauss(lum.shape, nose_x, nose_tip_y, w * 0.085, h * 0.07) * 0.22
         relief += gauss(lum.shape, mid_x, y + h * 0.95, w * 0.17, h * 0.09) * 0.14
-        for ex, ey, *_ in (eyes or [(mid_x - eye_dist / 2, eye_y), (mid_x + eye_dist / 2, eye_y)]):
-            relief -= gauss(lum.shape, ex, ey, eye_dist * 0.26, eye_dist * 0.17) * 0.12
-            relief += gauss(lum.shape, ex, ey + eye_dist * 0.62, eye_dist * 0.32, eye_dist * 0.24) * 0.08
+        if not visor:
+            relief += gauss(lum.shape, nose_x, eye_y + h * 0.16, w * 0.06, h * 0.17) * 0.32
+            relief += gauss(lum.shape, mid_x, eye_y - h * 0.11, w * 0.34, h * 0.06) * 0.1
+            for ex, ey, *_ in (eyes or [(mid_x - eye_dist / 2, eye_y), (mid_x + eye_dist / 2, eye_y)]):
+                relief -= gauss(lum.shape, ex, ey, eye_dist * 0.26, eye_dist * 0.17) * 0.12
+                relief += gauss(lum.shape, ex, ey + eye_dist * 0.62, eye_dist * 0.32, eye_dist * 0.24) * 0.08
 
     # (b) Fine detail from shading (shape-from-shading approximation):
     #     a high-pass of brightness, so lit ridges come forward a little.
-    hp = lum - ndimage.gaussian_filter(lum, 9)
+    smooth = cv2.bilateralFilter(gray, 7, 38, 5).astype(np.float32) / 255
+    hp = smooth - ndimage.gaussian_filter(smooth, 9)
     detail = ndimage.gaussian_filter(hp, 1.2) * 0.45
 
     depth = bust * 0.55 + head + relief + detail
@@ -186,13 +224,33 @@ def build_depth(rgb: np.ndarray, mask: np.ndarray) -> tuple[np.ndarray, dict]:
 # --------------------------------------------------------------------------
 # 4. Brightness: equalise so the dots read well, keep hair/shirt visible.
 # --------------------------------------------------------------------------
-def build_brightness(rgb: np.ndarray, mask: np.ndarray) -> np.ndarray:
+def build_brightness(rgb: np.ndarray, mask: np.ndarray, info: dict) -> np.ndarray:
     gray = cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY)
-    clahe = cv2.createCLAHE(clipLimit=2.2, tileGridSize=(8, 8))
+    # Smooth skin/fabric texture but keep edges (visor, lips, hairline), so the
+    # dots read as shapes rather than noise on sharp photos.
+    gray = cv2.bilateralFilter(gray, 7, 38, 5)
+    clahe = cv2.createCLAHE(clipLimit=2.6, tileGridSize=(8, 8))
     eq = clahe.apply(gray).astype(np.float32) / 255
     # Lift the darks (black hair, shadowed shirt) so they still get some dots.
-    b = 0.18 + 0.82 * np.power(eq, 0.85)
-    return b * mask
+    b = 0.14 + 0.86 * np.power(eq, 1.0)
+
+    # Glowing green/cyan elements (e.g. a VR visor): use their real light
+    # level (brightest channel), not their luma, so they glow in the dots.
+    r, g, bl = (rgb[..., i].astype(np.int32) for i in range(3))
+    glow = (g > r + 35) & (g > bl + 10) & (g > 60) & mask
+    glow = ndimage.binary_dilation(glow, iterations=1)
+    v = rgb.max(axis=-1).astype(np.float32) / 255
+    b = np.where(glow, np.maximum(b, np.clip(0.6 + 0.55 * v, 0, 1)), b)
+
+    # Clothing below the chin fades out so the face stays the focus.
+    if "face" in info:
+        x, y, w, h = info["face"]
+        chin = y + h * 0.92
+        H = mask.shape[0]
+        yy = np.arange(H, dtype=np.float32)[:, None]
+        t = np.clip((yy - chin) / max(H - chin, 1), 0, 1)
+        b = b * (1 - 0.65 * np.sqrt(t))
+    return np.clip(b, 0, 1) * mask
 
 
 # --------------------------------------------------------------------------
@@ -267,6 +325,24 @@ def add_headset(depth: np.ndarray, bright: np.ndarray, mask: np.ndarray, info: d
     return np.clip(depth, 0, 1), np.clip(bright, 0, 1), mask
 
 
+def push_real_headset(depth: np.ndarray, mask: np.ndarray, info: dict) -> np.ndarray:
+    """A headset that's in the photo: bring its front (visor + frame) forward
+    so it sticks out from the face when the portrait turns."""
+    vx0, vy0, vx1, vy1 = info["visor"]
+    H, W = depth.shape
+    vw, vh = vx1 - vx0, vy1 - vy0
+    cx, cy = (vx0 + vx1) / 2, (vy0 + vy1) / 2
+    a, b = vw / 2 + vw * 0.07, vh / 2 + vh * 0.22  # include the black frame
+    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+    u, v = (xx - cx) / a, (yy - cy) / b
+    region = ((np.abs(u) ** 4 + np.abs(v) ** 4) <= 1) & mask
+    depth = depth * 0.82
+    base = float(np.percentile(depth[region], 90)) if region.any() else 0.7
+    front = base + 0.12 + 0.05 * (1 - np.clip(u * u, 0, 1))
+    depth = np.where(region, np.maximum(depth, front), depth)
+    return np.clip(ndimage.gaussian_filter(depth, 0.8), 0, 1) * mask
+
+
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     if not args:
@@ -276,8 +352,18 @@ def main():
     rgb, alpha = load(src)
     mask = person_mask(rgb, alpha)
     depth, info = build_depth(rgb, mask)
-    bright = build_brightness(rgb, mask)
-    if with_headset:
+    bright = build_brightness(rgb, mask, info)
+    if "visor" in info:
+        print("  headset found in the photo: using it (no drawn headset)")
+        depth = push_real_headset(depth, mask, info)
+        # Face and hair a step darker so the visor is the brightest part.
+        vx0, vy0, vx1, vy1 = info["visor"]
+        pad_x, pad_y = int((vx1 - vx0) * 0.08), int((vy1 - vy0) * 0.25)
+        keep = np.zeros(mask.shape, np.float32)
+        keep[max(0, vy0 - pad_y) : vy1 + pad_y, max(0, vx0 - pad_x) : vx1 + pad_x] = 1
+        keep = ndimage.gaussian_filter(keep, 6)
+        bright = bright * (0.8 + 0.2 * keep)
+    elif with_headset:
         depth, bright, mask = add_headset(depth, bright, mask, info)
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -292,6 +378,9 @@ def main():
     if "face" in info:
         x, y, w, h = info["face"]
         cv2.rectangle(preview, (x, y), (x + w, y + h), (47, 227, 154), 2)
+        if "visor" in info:
+            vx0, vy0, vx1, vy1 = info["visor"]
+            cv2.rectangle(preview, (vx0, vy0), (vx1, vy1), (255, 200, 60), 2)
         for ex, ey in info.get("eyes", []):
             cv2.circle(preview, (ex, ey), 6, (47, 227, 154), 2)
         if "nose" in info:

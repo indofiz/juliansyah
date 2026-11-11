@@ -139,12 +139,63 @@ export const featured = {
   secondary: "View my GitHub",
 };
 
-export const capabilities = [
-  { title: "Real-time 3D", text: "Particles, shaders and scroll-driven scenes that run smoothly on everyday laptops.", art: "cube" },
-  { title: "AI-Assisted Prototyping", text: "Rapid concept exploration, so ideas get tested in days, not weeks.", art: "ai" },
-  { title: "Motion Systems", text: "GSAP scroll choreography and transitions designed as a system, not one-offs.", art: "bars" },
-  { title: "Performance & Accessibility", text: "Core Web Vitals, semantic markup and keyboard support on every release.", art: "stats" },
+/**
+ * Skills bento (section "capabilities"). Each card's illustration is a small
+ * animated UI that plays on hover (see src/components/bento/Arts.tsx).
+ *
+ * Flutter screenshots: the phone shows a dummy app until you add real ones.
+ * Put two PNGs (portrait, ~9:19.5, e.g. 390×844) in public/work/ and list them
+ * in `flutterScreens`; the phone then swipes from the first to the second.
+ */
+export const flutterScreens: string[] = [
+  // "/work/flutter-1.png",
+  // "/work/flutter-2.png",
 ];
+
+export const capabilities = [
+  {
+    id: "flutter",
+    icon: "smartphone",
+    title: "Flutter Apps",
+    text: "Cross-platform apps for iOS, Android and web from one codebase.",
+    tags: ["Dart", "Riverpod", "Firebase", "Material 3"],
+  },
+  {
+    id: "uiux",
+    icon: "pen",
+    title: "UI/UX Design",
+    text: "From research and wireframes to polished, tested interfaces.",
+    tags: ["Figma", "User research", "Prototyping"],
+  },
+  {
+    id: "frontend",
+    icon: "code",
+    title: "Front-end Development",
+    text: "Fast, accessible web apps in React and Next.js, built from your designs.",
+    tags: ["React", "Next.js", "TypeScript"],
+  },
+  {
+    id: "system",
+    icon: "layers",
+    title: "Design Systems",
+    text: "Tokens and components that keep design and code in sync.",
+    tags: ["Tokens", "Components", "Docs"],
+  },
+  {
+    id: "motion",
+    icon: "spark",
+    title: "Motion & Interaction",
+    text: "Micro-interactions that make interfaces feel alive.",
+    tags: ["Flutter animations", "GSAP", "Rive"],
+  },
+  {
+    id: "perf",
+    icon: "gauge",
+    title: "Performance & Accessibility",
+    text: "Lighthouse in the green and WCAG AA by default.",
+    tags: ["Core Web Vitals", "WCAG AA"],
+  },
+] as const;
 
 export const cta = {
   title: ["Let's Build Something", "Worth Scrolling For"],

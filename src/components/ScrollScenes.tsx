@@ -20,7 +20,7 @@ function values(id: string, mobile: boolean): SceneValues {
  * For each pair of neighbouring sections A → B, one timeline blends
  * sceneState from A's values to B's (through any `via` states) while section
  * B scrolls from the bottom of the viewport to the top, or over B's custom
- * `scroll` range on desktop. `scrub` ties progress to the scrollbar, so it
+ * `scroll` range. `scrub` ties progress to the scrollbar, so it
  * plays forwards and backwards. Timelines rebuild when crossing 900px.
  */
 export function ScrollScenes() {
@@ -38,7 +38,7 @@ export function ScrollScenes() {
           continue;
         }
 
-        const custom = !mobile && kf.scroll;
+        const custom = kf.scroll;
         const scrollTrigger: ScrollTrigger.Vars = custom
           ? {
               trigger: custom.trigger,

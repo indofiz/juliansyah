@@ -2,6 +2,7 @@ import { SceneCanvas } from "@/components/SceneCanvas";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { ScrollScenes } from "@/components/ScrollScenes";
 import { ScrollFx } from "@/components/ScrollFx";
+import { Carousels } from "@/components/Carousels";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Intro } from "@/components/sections/Intro";
 import { Services } from "@/components/sections/Services";
@@ -23,6 +24,7 @@ export default function Home() {
       <SmoothScroll />
       <ScrollScenes />
       <ScrollFx />
+      <Carousels />
       <SiteHeader />
       <main id="main-content">
         <Intro />

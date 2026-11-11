@@ -162,8 +162,9 @@ export function geometryShape(geometry: THREE.BufferGeometry, count: number, siz
  * Portrait morph target from a "portrait map" (see scripts/make-portrait.py):
  * R = brightness, G = depth, B = mask.
  *
- * Up to `gridPoints` particles sit on an even, staggered dot grid (halftone
- * look); the photo's brightness drives each dot's brightness, very dark areas
+ * Particles sit on an even, staggered dot grid (halftone look) with a fixed
+ * spacing (`dotSpacing`, fraction of the image height); the photo's
+ * brightness drives each dot's brightness, very dark areas
  * are thinned a little, and the shoulders fade toward the bottom. A few
  * leftover particles become a faint dust aura; the rest are hidden.
  */
@@ -174,8 +175,9 @@ export async function loadPortraitShape(
     height = 3.3,
     depth = 0.34,
     fadeStart = 0.42,
-    gridPoints = 14000,
-  }: { height?: number; depth?: number; fadeStart?: number; gridPoints?: number } = {},
+    dotSpacing = 0.0064,
+    gridPoints = 16000,
+  }: { height?: number; depth?: number; fadeStart?: number; dotSpacing?: number; gridPoints?: number } = {},
 ): Promise<ShapeData> {
   const img = new Image();
   img.src = url;
@@ -192,13 +194,13 @@ export async function loadPortraitShape(
   const px = (x: number, y: number) =>
     (Math.min(H - 1, Math.max(0, Math.round(y))) * W + Math.min(W - 1, Math.max(0, Math.round(x)))) * 4;
   const fade = (v: number) => 1 - THREE.MathUtils.smoothstep(v, fadeStart, 1);
-  // Probability that a grid dot is kept: ~1 so the grid stays regular;
-  // only the very darkest areas and the bottom edge thin out.
+  // Probability that a grid dot is kept: 1 in lit areas so the grid stays
+  // regular, thinner in shadows (adds contrast) and toward the bottom edge.
   const keepProb = (x: number, y: number) => {
     const i = px(x, y);
     if (data[i + 2] < 128) return 0;
     const b = data[i] / 255;
-    return Math.min(1, 0.75 + 0.6 * b) * (0.12 + 0.88 * fade(y / H));
+    return Math.min(1, 0.4 + 0.95 * b) * (0.12 + 0.88 * fade(y / H));
   };
   const grid = (g: number) => {
     const pts: [number, number, number][] = [];
@@ -212,17 +214,23 @@ export async function loadPortraitShape(
     return pts;
   };
 
-  // Find the grid spacing whose expected kept dots ≈ target.
+  // Fixed dot spacing (fraction of the image height) so the halftone looks the
+  // same whatever the photo's framing; widened only if that would need more
+  // than `gridPoints` (or `count`) dots.
   const target = Math.min(count, gridPoints);
-  let lo = 0.5;
-  let hi = 16;
-  for (let k = 0; k < 20; k++) {
-    const mid = (lo + hi) / 2;
-    const expected = grid(mid).reduce((a, p) => a + p[2], 0);
-    if (expected > target) lo = mid;
-    else hi = mid;
+  let spacing = dotSpacing * H;
+  const expected = (g: number) => grid(g).reduce((a, p) => a + p[2], 0);
+  if (expected(spacing) > target) {
+    let lo = spacing;
+    let hi = spacing * 4;
+    for (let k = 0; k < 16; k++) {
+      const mid = (lo + hi) / 2;
+      if (expected(mid) > target) lo = mid;
+      else hi = mid;
+    }
+    spacing = hi;
   }
-  const cand = grid(lo);
+  const cand = grid(spacing);
   let dots = cand.filter((p) => Math.random() < p[2]);
   if (dots.length > target) {
     for (let i = dots.length - 1; i > 0; i--) {
@@ -252,7 +260,7 @@ export async function loadPortraitShape(
     positions[n * 3] = (x - cx) * s;
     positions[n * 3 + 1] = (cy - y) * s;
     positions[n * 3 + 2] = (data[j + 1] / 255 - 0.5) * depth * height;
-    shade[n] = (0.04 + 0.96 * Math.pow(data[j] / 255, 1.35)) * (0.1 + 0.9 * fade(y / H));
+    shade[n] = (0.03 + 0.97 * Math.pow(data[j] / 255, 1.7)) * (0.1 + 0.9 * fade(y / H));
     n++;
   }
 

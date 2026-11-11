@@ -20,7 +20,7 @@ import { atmosphereFragment, atmosphereVertex, particleFragment, particleVertex 
 
 /** What the cloud morphs into in the services section. */
 export type ShapeSource =
-  | { type: "portrait"; url: string; height?: number; depth?: number; gridPoints?: number; brightness?: number }
+  | { type: "portrait"; url: string; height?: number; depth?: number; dotSpacing?: number; brightness?: number }
   | { type: "model"; url: string }
   | { type: "default" };
 
@@ -129,7 +129,7 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
       shapeMeta.current = {
         minY: shape.minY,
         maxY: shape.maxY,
-        brightness: shapeSource.type === "portrait" ? (shapeSource.brightness ?? 0.95) : 1,
+        brightness: shapeSource.type === "portrait" ? (shapeSource.brightness ?? 1.1) : 1,
       };
       g.setAttribute("aRandom", new THREE.BufferAttribute(random, 4));
       g.setAttribute("aKind", new THREE.BufferAttribute(globe.kinds, 1));
