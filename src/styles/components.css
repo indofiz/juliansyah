@@ -750,7 +750,7 @@
 .loop-toggle {
   position: absolute;
   right: 0.625rem;
-  bottom: 0.625rem;
+  top: 0.625rem;
   z-index: 4;
   width: 2rem;
   height: 2rem;
@@ -769,6 +769,11 @@
 .loop-toggle:hover,
 .loop-toggle:focus-visible {
   opacity: 1;
+}
+
+.phone .loop-toggle {
+  top: 7%;
+  right: 9%;
 }
 
 /* Wireframe placeholder until a recording exists. */
@@ -887,11 +892,6 @@
 .toggle[aria-checked="true"]::after {
   transform: translateX(1rem);
   background: var(--accent-50);
-}
-
-/* ---------- Scroll reveal (progressive light-up lists) ---------- */
-[data-light] {
-  opacity: 0.16;
 }
 
 .status-muted::before {

@@ -47,24 +47,10 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: site.name,
-  url: site.url,
-  jobTitle: site.role,
-  worksFor: { "@type": "Organization", name: "Freelance" },
-  address: { "@type": "PostalAddress", addressLocality: "Jakarta", addressCountry: "ID" },
-  sameAs: [site.github],
-  email: site.email,
-  knowsAbout: ["Flutter", "Dart", "React", "Next.js", "TypeScript", "UI/UX design", "Figma", "Design systems"],
-};
-
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en">
       <body>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>

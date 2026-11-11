@@ -1,66 +1,25 @@
-import { work } from "@/content/site";
-import { Icon } from "../ui/Icon";
+import { projects, work } from "@/content/site";
+import { flagshipProject } from "@/lib/projects";
 import { SectionHeader } from "../ui/primitives";
+import { FlagshipCard, ProjectCard } from "../work/ProjectCard";
 
-type Row = (typeof work.rows)[number];
-
-function RowCells({ r }: { r: Row }) {
-  return (
-    <>
-      <span className="table-project" role="cell">
-        <span className="table-avatar" style={{ background: r.color }}>
-          {r.initials}
-        </span>
-        <span>
-          <b>{r.name}</b>
-          <small>{r.client}</small>
-        </span>
-      </span>
-      <span role="cell">{r.year}</span>
-      <span role="cell">{r.metric}</span>
-      <span role="cell">
-        <span className={`status ${r.status === "Live" ? "" : "status-muted"}`}>{r.status}</span>
-      </span>
-      <span role="cell" className="right table-cat">
-        {r.category} {"href" in r && <Icon name="chevronRight" size={14} />}
-      </span>
-    </>
-  );
-}
-
-/** Project index as a glowing table; rows light up as they scroll in. */
+/** Selected work: the flagship you can try, then the rest. Each opens /work/<slug>. */
 export function Work() {
+  const flagship = flagshipProject();
+  const rest = projects.filter((p) => p !== flagship);
+
   return (
-    <section id="work" className="section work">
+    <section id="work" className="section work" aria-labelledby="work-title">
       <div className="container">
-        <SectionHeader badge={work.badge} badgeIcon="star" title={work.title} text={work.text} />
-        <div className="table-glow" data-reveal>
-          <div className="table" role="table" aria-label="Selected projects">
-            <div className="table-row table-head" role="row">
-              <span role="columnheader">Project</span>
-              <span role="columnheader">Year</span>
-              <span role="columnheader">Highlight</span>
-              <span role="columnheader">Status</span>
-              <span role="columnheader" className="right">
-                Type
-              </span>
-            </div>
-            {work.rows.map((r) =>
-              "href" in r ? (
-                <a href={r.href} className="table-row" role="row" key={r.name} data-light>
-                  <RowCells r={r} />
-                </a>
-              ) : (
-                <div className="table-row" role="row" key={r.name} data-light>
-                  <RowCells r={r} />
-                </div>
-              ),
-            )}
+        <SectionHeader id="work-title" badge={work.badge} badgeIcon="star" title={work.title} text={work.text} />
+        <div className="work-grid">
+          <FlagshipCard p={flagship} />
+          <div className="work-list">
+            {rest.map((p) => (
+              <ProjectCard key={p.slug} p={p} />
+            ))}
           </div>
         </div>
-        <p className="table-note" data-reveal>
-          {work.note}
-        </p>
       </div>
     </section>
   );

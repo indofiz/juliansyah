@@ -87,7 +87,6 @@ export const sceneKeyframes: Record<string, SceneKeyframe> = {
   },
 
   // The rest of the page is DOM-only; the globe drifts up and fades out.
-  spotlight: hidden,
   assistant: hidden,
   featured: hidden,
   capabilities: hidden,

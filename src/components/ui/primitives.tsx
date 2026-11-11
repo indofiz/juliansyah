@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
 import { Icon, type IconName } from "./Icon";
 import { site } from "@/content/site";
@@ -108,7 +109,7 @@ export function GlowFrame({
 /** Small orb mark + two-tone spaced wordmark. Replace with your own logo. */
 export function Logo({ compact = false }: { compact?: boolean }) {
   return (
-    <a href="#hero" className="logo" aria-label={`${site.name} home`}>
+    <Link href="/" className="logo" aria-label={`${site.name} home`}>
       <svg className="logo-mark" viewBox="0 0 32 32" aria-hidden="true">
         <defs>
           <radialGradient id="lm-g" cx="35%" cy="30%" r="75%">
@@ -127,6 +128,6 @@ export function Logo({ compact = false }: { compact?: boolean }) {
           <span className="logo-second">{site.wordmark.second}</span>
         </span>
       )}
-    </a>
+    </Link>
   );
 }

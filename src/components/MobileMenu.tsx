@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { nav, site } from "@/content/site";
 import { Icon } from "./ui/Icon";
@@ -78,9 +79,9 @@ export function MobileMenu() {
             </div>
           ))}
           <div className="mm-footer">
-            <a href="#contact" className="btn btn-glow btn-block" onClick={close} tabIndex={open ? 0 : -1}>
+            <Link href="/#contact" className="btn btn-glow btn-block" onClick={close} tabIndex={open ? 0 : -1}>
               <Icon name="wand" size={16} /> Hire me
-            </a>
+            </Link>
             <a href={`mailto:${site.email}`} className="btn btn-ghost btn-block" onClick={close} tabIndex={open ? 0 : -1}>
               Email me
             </a>

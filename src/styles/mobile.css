@@ -457,63 +457,92 @@
     font-size: 0.75rem;
   }
 
-  /* ---------- Work: three-column glowing table ---------- */
-  .table {
-    padding: 0.25rem 0.875rem 0.5rem;
+  /* ---------- Selected work ---------- */
+  .work-flagship {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem 1.25rem 1.75rem;
   }
 
-  .table-row {
-    grid-template-columns: 1.6fr auto auto;
-    gap: 0.75rem;
-    min-height: 3.5rem;
-    font-size: 0.8125rem;
+  .work-flagship-glow {
+    left: 0;
+    width: 100%;
+    height: 55%;
   }
 
-  .table-row > :nth-child(2),
-  .table-row > :nth-child(3) {
-    display: none;
+  .work-flagship-body {
+    justify-items: center;
+    gap: 1rem;
+    text-align: center;
   }
 
-  .table-head {
-    min-height: 2.5rem;
-    font-size: 0.625rem;
+  .work-flagship-title {
+    font-size: 1.5rem;
   }
 
-  .table-project {
-    gap: 0.625rem;
+  .work-summary {
+    font-size: 0.9375rem;
   }
 
-  .table-project b {
-    font-size: 0.875rem;
+  .work-metric,
+  .work-flagship .work-meta {
+    justify-content: center;
   }
 
-  .table-project small {
-    font-size: 0.6875rem;
+  .work-metric strong {
+    font-size: 1.75rem;
   }
 
-  .table-avatar {
-    width: 1.75rem;
-    height: 1.75rem;
-    font-size: 0.625rem;
+  .try .phone {
+    width: 11rem;
   }
 
-  .table-row .status {
-    height: 1.5rem;
-    padding: 0 0.5rem;
-    font-size: 0.6875rem;
+  .work-media {
+    height: 13.5rem;
   }
 
-  .table-cat {
-    font-size: 0.75rem;
+  .work-title {
+    font-size: 1.125rem;
   }
 
-  .table-cat svg {
-    display: none;
+  /* ---------- Case study pages ---------- */
+  .cs-hero {
+    padding-top: 6rem;
   }
 
-  .table-note {
-    margin-top: 1.5rem;
-    font-size: 0.75rem;
+  .cs-hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cs-title {
+    font-size: 2rem;
+  }
+
+  .cs-summary {
+    font-size: 1rem;
+  }
+
+  .cs-facts {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 1.5rem;
+  }
+
+  .cs-media--phone .phone {
+    width: 14rem;
+  }
+
+  .cs-block {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding-top: 1.75rem;
+  }
+
+  .cs-prose {
+    font-size: 0.9375rem;
+  }
+
+  .cs-decisions {
+    grid-template-columns: 1fr;
   }
 
   /* ---------- Pricing: plan carousel ---------- */
@@ -693,56 +722,6 @@
 
   .step-text {
     font-size: 0.8125rem;
-  }
-
-  /* ---------- Case study ---------- */
-  .spotlight {
-    height: auto !important;
-  }
-
-  .spot-sticky {
-    position: relative;
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    padding: 4.5rem var(--gutter);
-  }
-
-  .spot-screen {
-    order: 2;
-  }
-
-  .spot-copy {
-    text-align: center;
-  }
-
-  .spot-title {
-    font-size: 2.25rem;
-  }
-
-  .spot-text {
-    max-width: 19rem;
-    margin: 0.75rem auto 0;
-    font-size: 0.875rem;
-  }
-
-  .spot-features {
-    gap: 1.25rem;
-    margin-top: 1.75rem;
-    text-align: left;
-  }
-
-  .spot-features h3 {
-    font-size: 1rem;
-  }
-
-  .spot-features p {
-    font-size: 0.8125rem;
-  }
-
-  .spot-frame-inner {
-    height: 26rem;
   }
 
   /* ---------- Assistant ---------- */
@@ -1019,5 +998,12 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 0.5rem 1.25rem;
+  }
+}
+
+/* One work card per row on phones. */
+@media (max-width: 640px) {
+  .work-list {
+    grid-template-columns: 1fr;
   }
 }

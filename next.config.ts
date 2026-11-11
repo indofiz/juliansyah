@@ -5,12 +5,12 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
 
   // The v1 site (git tag `v1-legacy`) had separate pages. Send those URLs to
-  // the matching section of the new one-page site so old links keep working.
+  // the matching section or case study so old links keep working.
   async redirects() {
     return [
       { source: "/about", destination: "/#about", permanent: true },
       { source: "/projects", destination: "/#work", permanent: true },
-      { source: "/projects/:slug", destination: "/#spotlight", permanent: true },
+      { source: "/projects/:slug", destination: "/work/:slug", permanent: true },
       { source: "/contact", destination: "/#contact", permanent: true },
     ];
   },

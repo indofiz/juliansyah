@@ -63,6 +63,8 @@ export type Project = {
   role: string;
   platforms: Platform[];
   year: string;
+  /** Optional status chip, e.g. "Live in production". */
+  status?: string;
   /** The one result shown on the card. */
   metric: Metric;
   media: LoopMedia;

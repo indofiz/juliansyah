@@ -10,7 +10,6 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
  * DOM scroll effects (the particle globe is handled by ScrollScenes):
  *  - intro            pinned hero → proof scene, see Intro.tsx
  *  - [data-reveal]    fade up once when it enters the viewport
- *  - [data-light]     brightens progressively while scrolling (table rows)
  *  - hero bars        frosted panels: in on load, out once you scroll, back in at the top
  *  - [data-steps]     progress track fills and the current step lights up
  *  - [data-cta]       corner glow slides to the bottom, particle bars rise
@@ -75,7 +74,6 @@ export function ScrollFx() {
     }
 
     if (reduce) {
-      gsap.set("[data-light]", { opacity: 1 });
       gsap.set(".cta-glow-bottom", { opacity: 1 });
       return;
     }
@@ -88,14 +86,6 @@ export function ScrollFx() {
         ease: "power3.out",
         scrollTrigger: { trigger: el, start: "top 88%" },
       });
-    });
-
-    gsap.utils.toArray<HTMLElement>("[data-light]").forEach((el) => {
-      gsap.fromTo(
-        el,
-        { opacity: 0.16 },
-        { opacity: 1, ease: "none", scrollTrigger: { trigger: el, start: "top 82%", end: "top 58%", scrub: true } },
-      );
     });
 
     document.querySelectorAll<HTMLElement>("[data-steps]").forEach((list) => {
