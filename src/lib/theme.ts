@@ -9,5 +9,5 @@ export const theme = {
   /** Bright rim and highlight colour of the particles (ramp 100). */
   particleRim: "#ffd6c4",
   /** WebGL clear colour behind the particles. */
-  canvasBg: "#020604",
+  canvasBg: "#060302",
 } as const;
