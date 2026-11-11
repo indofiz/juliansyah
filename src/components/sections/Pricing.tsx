@@ -23,7 +23,7 @@ export function Pricing() {
                 <Button href="#cta" icon="wand" block>
                   Start a project
                 </Button>
-                <Button href="#cta" variant="ghost-mint" block>
+                <Button href="#cta" variant="ghost-accent" block>
                   Book a call
                 </Button>
               </div>

@@ -21,7 +21,7 @@ export function Badge({
   );
 }
 
-type BtnVariant = "glow" | "ghost" | "ghost-mint" | "light" | "soft" | "rose" | "rose-ghost";
+type BtnVariant = "glow" | "ghost" | "ghost-accent" | "light" | "soft" | "rose" | "rose-ghost";
 
 export function Button({
   href = "#",

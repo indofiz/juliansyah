@@ -13,7 +13,7 @@ function ServiceCard({ s }: { s: Service }) {
       <div className="svc-body">
         <h3>{s.title}</h3>
         <p>{s.text}</p>
-        <Button variant="soft" tone={s.tone === "green" ? undefined : s.tone} href="#cta">
+        <Button variant="soft" tone={s.tone === "accent" ? undefined : s.tone} href="#cta">
           {s.cta}
         </Button>
       </div>

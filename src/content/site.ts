@@ -71,14 +71,14 @@ export const stats = {
 export const services = {
   title: "From Figma to Production, Under One Roof.",
   left: [
-    { icon: "code", title: "Frontend Engineering", text: "React, Next.js and TypeScript interfaces that are fast, accessible and pixel-perfect.", cta: "Start a project", tone: "green" },
-    { icon: "cube", title: "Motion & 3D", text: "GSAP and WebGL moments that make a product feel alive, like the scene on this page.", cta: "Let's talk", tone: "green" },
+    { icon: "code", title: "Frontend Engineering", text: "React, Next.js and TypeScript interfaces that are fast, accessible and pixel-perfect.", cta: "Start a project", tone: "accent" },
+    { icon: "cube", title: "Motion & 3D", text: "GSAP and WebGL moments that make a product feel alive, like the scene on this page.", cta: "Let's talk", tone: "accent" },
     { icon: "spark", title: "Design & Build Sprint", text: "From a Figma file to a live, production-ready page in one focused sprint.", cta: "Book a sprint", tone: "gold" },
   ],
   right: [
-    { icon: "pen", title: "UI / UX Design", text: "Wireframes, user flows and prototypes in Figma, designed around what users actually do.", cta: "Learn more", tone: "green" },
+    { icon: "pen", title: "UI / UX Design", text: "Wireframes, user flows and prototypes in Figma, designed around what users actually do.", cta: "Learn more", tone: "accent" },
     { icon: "layers", title: "Design Systems", text: "Tokens and components your whole team can build with, in Figma and in code.", cta: "Try it", tone: "indigo" },
-    { icon: "phone", title: "Flutter Mobile Apps", text: "Android and iOS from one Flutter codebase, on Clean Architecture and BLoC.", cta: "Build an app", tone: "green" },
+    { icon: "phone", title: "Flutter Mobile Apps", text: "Android and iOS from one Flutter codebase, on Clean Architecture and BLoC.", cta: "Build an app", tone: "accent" },
   ],
 };
 
