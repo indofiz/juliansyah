@@ -37,17 +37,17 @@ html {
 :root {
   --font: "Instrument Sans Variable", "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  --bg: #030506;
-  --bg-2: #04070a;
-  --surface: #080b0b;
-  --surface-2: #0d1211;
-  --surface-3: #131817;
+  --bg: #060403;
+  --bg-2: #0a0604;
+  --surface: #0b0908;
+  --surface-2: #120f0d;
+  --surface-3: #181513;
   --border: rgba(255, 255, 255, 0.075);
   --border-strong: rgba(255, 255, 255, 0.14);
 
-  --text: #f3f6f5;
-  --muted: #9aa39f;
-  --dim: #5f6865;
+  --text: #f6f4f3;
+  --muted: #a39d9a;
+  --dim: #68625f;
 
   /* Accent ramp. Every accent colour on the page (CSS) comes from these
      triplets, so recolouring the site means editing only this block plus

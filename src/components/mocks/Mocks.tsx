@@ -337,7 +337,7 @@ function Radar() {
       {labels.map((l, i) => {
         const a = -Math.PI / 2 + (i * 2 * Math.PI) / 5;
         return (
-          <text key={l} x={100 + Math.cos(a) * 88} y={100 + Math.sin(a) * 88 + 3} fill="#7d8783" fontSize="8.5" textAnchor="middle">
+          <text key={l} x={100 + Math.cos(a) * 88} y={100 + Math.sin(a) * 88 + 3} fill="#87807d" fontSize="8.5" textAnchor="middle">
             {l}
           </text>
         );

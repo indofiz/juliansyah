@@ -40,8 +40,8 @@
     rgb(var(--accent-800-rgb) / 0.8) 0%,
     rgb(var(--accent-800-rgb) / 0.62) 30%,
     rgb(var(--accent-900-rgb) / 0.4) 60%,
-    rgba(6, 13, 10, 0.16) 85%,
-    rgba(3, 5, 6, 0) 100%
+    rgba(13, 8, 6, 0.16) 85%,
+    rgba(6, 4, 3, 0) 100%
   );
 }
 
@@ -74,7 +74,7 @@
   margin-top: 0.75rem;
   font-size: 1.0938rem;
   line-height: 1.45;
-  color: #c4ccc8;
+  color: #ccc7c4;
 }
 
 .hero-cta {
@@ -107,7 +107,7 @@
   height: 100%;
   /* Frosting: blur plus a dark tint. Raise the tint's last number for more
      solid glass, lower it (or the blur) to see more of the globe. */
-  background: rgba(8, 18, 14, 0.22);
+  background: rgba(18, 11, 8, 0.22);
   -webkit-backdrop-filter: blur(0.5rem);
   backdrop-filter: blur(0.5rem);
   /* Fade the top edge so the glass doesn't cut a hard line across the shell. */
@@ -319,7 +319,7 @@
   margin: 0.5rem 0 1rem;
   font-size: 0.9375rem;
   line-height: 1.45;
-  color: #b7bfbb;
+  color: #bfbab7;
 }
 
 /* ---------- Work table ---------- */
@@ -361,7 +361,7 @@
   padding: 0.375rem 1.375rem 0.625rem;
   background:
     linear-gradient(180deg, rgb(var(--accent-rgb) / 0.09), rgb(var(--accent-rgb) / 0.015) 30%, rgba(0, 0, 0, 0)),
-    #070a0a;
+    #0a0807;
 }
 
 .table-row {
@@ -434,7 +434,7 @@ a.table-row:hover {
   align-items: center;
   gap: 0.375rem;
   font-size: 0.875rem;
-  color: #c3cbc7;
+  color: #cbc6c3;
 }
 
 .table-note {
@@ -459,14 +459,14 @@ a.table-row:hover {
   border-radius: var(--radius-lg);
   background:
     radial-gradient(110% 55% at 50% 0%, rgb(var(--accent-rgb) / 0.12), transparent 65%),
-    linear-gradient(180deg, #0a0e0d, #040505);
+    linear-gradient(180deg, #0e0b0a, #050404);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
 }
 
 .plan.popular {
   background:
     radial-gradient(110% 60% at 50% 0%, rgb(var(--accent-rgb) / 0.22), transparent 65%),
-    linear-gradient(180deg, #0b1210, #040505);
+    linear-gradient(180deg, #120d0b, #050404);
   box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.45), 0 -0.625rem 2.5rem -1.125rem rgb(var(--accent-rgb) / 0.9);
 }
 
@@ -500,7 +500,7 @@ a.table-row:hover {
   min-height: 4.5rem;
   font-size: 1rem;
   line-height: 1.45;
-  color: #a9b2ae;
+  color: #b2aca9;
 }
 
 .plan-actions {
@@ -514,7 +514,7 @@ a.table-row:hover {
   gap: 0.75rem;
   margin-top: 1.875rem;
   font-size: 0.9375rem;
-  color: #b2bab6;
+  color: #bab5b2;
 }
 
 .plan-list li {
@@ -530,7 +530,7 @@ a.table-row:hover {
   width: 0.25rem;
   height: 0.25rem;
   border-radius: 999px;
-  background: #7b8581;
+  background: #857e7b;
 }
 
 .plan-list li:first-child {
@@ -550,7 +550,7 @@ a.table-row:hover {
   overflow: hidden;
   background:
     radial-gradient(60% 45% at 75% 0%, rgb(var(--accent-rgb) / 0.12), transparent 70%),
-    linear-gradient(180deg, #070b0a, #040606);
+    linear-gradient(180deg, #0b0807, #060504);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
@@ -584,7 +584,7 @@ a.table-row:hover {
 .est-heading {
   margin-bottom: 1.125rem;
   font-size: 1.375rem;
-  color: #d5dcd9;
+  color: #dcd7d5;
 }
 
 .tiers {
@@ -601,17 +601,17 @@ a.table-row:hover {
   padding: 0 1rem;
   border-radius: 0.75rem;
   text-align: left;
-  background: #111414;
+  background: #141211;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
   transition: background 0.25s, box-shadow 0.25s;
 }
 
 .tier-row:hover {
-  background: #151a19;
+  background: #1a1715;
 }
 
 .tier-row.on {
-  background: linear-gradient(90deg, rgb(var(--accent-rgb) / 0.16), rgb(var(--accent-rgb) / 0.03) 60%, #111414);
+  background: linear-gradient(90deg, rgb(var(--accent-rgb) / 0.16), rgb(var(--accent-rgb) / 0.03) 60%, #141211);
   box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.25);
 }
 
@@ -633,19 +633,19 @@ a.table-row:hover {
 }
 
 .tier-row.last:not(.on) .tier-pill {
-  color: #c2c7c5;
-  background: #3a3e3d;
+  color: #c7c4c2;
+  background: #3e3b3a;
 }
 
 .tier-name {
   font-size: 0.9375rem;
-  color: #8f9894;
+  color: #98928f;
 }
 
 .tier-name em {
   margin-left: 0.375rem;
   font-style: normal;
-  color: #6b7470;
+  color: #746e6b;
 }
 
 .tier-row.on .tier-name,
@@ -658,8 +658,8 @@ a.table-row:hover {
   border-radius: 999px;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #e3e7e5;
-  background: #3a3d3c;
+  color: #e7e4e3;
+  background: #3d3b3a;
 }
 
 .tier-total {
@@ -689,7 +689,7 @@ a.table-row:hover {
   margin-top: 0.875rem;
   font-size: 0.8438rem;
   line-height: 1.5;
-  color: #a0a9a5;
+  color: #a9a3a0;
 }
 
 .est-stats {
@@ -791,8 +791,8 @@ a.table-row:hover {
   border-radius: 999px;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #0b100e;
-  background: #f1f5f3;
+  color: #100d0b;
+  background: #f5f2f1;
   box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.06);
 }
 
@@ -805,7 +805,7 @@ a.table-row:hover {
 .step-title {
   margin-top: 0.375rem;
   font-size: 1.4375rem;
-  color: #8a928f;
+  color: #928d8a;
   transition: color 0.4s;
 }
 
@@ -814,7 +814,7 @@ a.table-row:hover {
   max-width: 20rem;
   font-size: 0.9375rem;
   line-height: 1.45;
-  color: #646d69;
+  color: #6d6764;
   transition: color 0.4s;
 }
 
@@ -823,7 +823,7 @@ a.table-row:hover {
 }
 
 .step.on .step-text {
-  color: #b9c1bd;
+  color: #c1bcb9;
 }
 
 /* ---------- Spotlight (sticky) ---------- */
@@ -917,7 +917,7 @@ a.table-row:hover {
 
 .spot-features h3 {
   font-size: 1.3125rem;
-  color: #808986;
+  color: #898380;
   transition: color 0.4s;
 }
 
@@ -926,7 +926,7 @@ a.table-row:hover {
   margin-top: 0.5rem;
   font-size: 1rem;
   line-height: 1.45;
-  color: #545c59;
+  color: #5c5754;
   transition: color 0.4s;
 }
 
@@ -935,7 +935,7 @@ a.table-row:hover {
 }
 
 .spot-features li.on p {
-  color: #9aa39f;
+  color: #a39d9a;
 }
 
 /* ---------- Assistant (purple) ---------- */
@@ -1047,7 +1047,7 @@ a.table-row:hover {
   padding: clamp(2.5rem, calc(6 * var(--vw)), 5rem) clamp(1.5rem, calc(5 * var(--vw)), 4rem);
   border-radius: 1.625rem;
   overflow: hidden;
-  background: #040706;
+  background: #070504;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
   isolation: isolate;
 }
@@ -1166,7 +1166,7 @@ a.table-row:hover {
   margin-top: 2.5rem;
   padding-top: 4.5rem;
   overflow: hidden;
-  background: linear-gradient(180deg, #0b1110 0%, #0a0f0e 100%);
+  background: linear-gradient(180deg, #110d0b 0%, #0f0c0a 100%);
 }
 
 .footer-top {
@@ -1205,7 +1205,7 @@ a.table-row:hover {
   display: flex;
   gap: 1.625rem;
   margin-top: 1.125rem;
-  color: #d5dbd8;
+  color: #dbd7d5;
 }
 
 .footer-social a:hover {
@@ -1227,7 +1227,7 @@ a.table-row:hover {
 
 .footer-col a {
   font-size: 0.9375rem;
-  color: #a7b0ac;
+  color: #b0aaa7;
   transition: color 0.2s;
 }
 
@@ -1316,7 +1316,7 @@ a.table-row:hover {
   margin-top: 1.75rem;
   font-size: 0.8125rem;
   line-height: 1.55;
-  color: #7f8884;
+  color: #88827f;
 }
 
 .footer-small h4 {
@@ -1333,7 +1333,7 @@ a.table-row:hover {
   gap: 1rem;
   padding: 2.25rem 0 1.875rem;
   font-size: 0.875rem;
-  color: #8a938f;
+  color: #938d8a;
 }
 
 .footer-legal {

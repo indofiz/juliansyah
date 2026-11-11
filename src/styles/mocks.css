@@ -7,8 +7,8 @@
   display: grid;
   grid-template-columns: 13.75rem 1fr;
   font-size: 0.8125rem;
-  color: #dfe5e2;
-  background: #0a0d0d;
+  color: #e5e1df;
+  background: #0d0b0a;
   text-align: left;
 }
 
@@ -18,7 +18,7 @@
   gap: 0.25rem;
   padding: 1rem 0.75rem;
   border-right: 1px solid rgba(255, 255, 255, 0.06);
-  background: #0b0f0e;
+  background: #0f0c0b;
 }
 
 .mock-brand {
@@ -48,7 +48,7 @@
   place-items: center;
   background: rgba(255, 255, 255, 0.04);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-  color: #c5ccc9;
+  color: #ccc7c5;
 }
 
 .mock-nav {
@@ -58,12 +58,12 @@
   height: 2rem;
   padding: 0 0.625rem;
   border-radius: 0.5625rem;
-  color: #a9b2ae;
+  color: #b2aca9;
   font-size: 0.7812rem;
 }
 
 .mock-nav svg {
-  color: #7d8783;
+  color: #87807d;
 }
 
 .mock-nav .tail {
@@ -140,7 +140,7 @@
 .mock-switch span {
   padding: 0.3125rem 0;
   border-radius: 999px;
-  color: #8d9692;
+  color: #96908d;
 }
 
 .mock-switch span:first-child {
@@ -167,7 +167,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #8d9692;
+  color: #96908d;
 }
 
 .mock-crumb b {
@@ -207,7 +207,7 @@
   padding: 0 0.625rem;
   border-radius: 0.5625rem;
   font-size: 0.7188rem;
-  color: #c9d0cd;
+  color: #d0cbc9;
   background: rgba(255, 255, 255, 0.03);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
@@ -261,7 +261,7 @@
 
 .mock-sub {
   margin-top: 0.25rem;
-  color: #8d9692;
+  color: #96908d;
   font-size: 0.75rem;
 }
 
@@ -286,7 +286,7 @@
   padding: 0.375rem 0.75rem;
   border-radius: 0.5625rem;
   font-size: 0.75rem;
-  color: #a1aaa6;
+  color: #aaa4a1;
 }
 
 .mock-tabs span.on {
@@ -306,7 +306,7 @@
   padding: 0.3125rem 0.625rem;
   border-radius: 999px;
   font-size: 0.6875rem;
-  color: #a1aaa6;
+  color: #aaa4a1;
   background: rgba(255, 255, 255, 0.03);
 }
 
@@ -326,7 +326,7 @@
   padding: 0 0.625rem;
   border-radius: 0.5rem;
   font-size: 0.6875rem;
-  color: #727c78;
+  color: #7c7572;
   background: rgba(255, 255, 255, 0.03);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
 }
@@ -355,7 +355,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #8d9692;
+  color: #96908d;
   font-size: 0.875rem;
 }
 
@@ -371,7 +371,7 @@
   margin-left: 0.5rem;
   font-size: 0.9375rem;
   font-weight: 500;
-  color: #7d8783;
+  color: #87807d;
   letter-spacing: 0;
 }
 
@@ -395,7 +395,7 @@
   padding: 0 0.875rem;
   border-radius: 999px;
   font-size: 0.7812rem;
-  color: #b9c2be;
+  color: #c2bcb9;
   background: rgba(255, 255, 255, 0.025);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
@@ -420,7 +420,7 @@
 
 .mock-tile-label {
   font-size: 0.7188rem;
-  color: #8d9692;
+  color: #96908d;
 }
 
 .mock-tile-value {
@@ -459,7 +459,7 @@
 
 .mock-card-head small {
   font-size: 0.625rem;
-  color: #7d8783;
+  color: #87807d;
 }
 
 .mock-card-head em {
@@ -479,7 +479,7 @@
   font-size: 0.625rem;
   font-weight: 700;
   color: #fff;
-  background: #1a201f;
+  background: #201c1a;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
@@ -488,7 +488,7 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 0.25rem;
   font-size: 0.5938rem;
-  color: #7d8783;
+  color: #87807d;
 }
 
 .mock-kpis b {
@@ -507,15 +507,15 @@
   align-items: center;
   justify-content: space-between;
   font-size: 0.625rem;
-  color: #7d8783;
+  color: #87807d;
 }
 
 .mock-card-foot span:last-child {
   padding: 0.25rem 0.625rem;
   border-radius: 999px;
-  color: #0b100e;
+  color: #100d0b;
   font-weight: 600;
-  background: #eaf7f1;
+  background: #f7eeea;
 }
 
 /* Table (spotlight screen 2) */
@@ -535,7 +535,7 @@
 
 .mock-tr.head {
   font-size: 0.6562rem;
-  color: #6f7975;
+  color: #79726f;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -580,7 +580,7 @@
 }
 
 .mock-alert small {
-  color: #7d8783;
+  color: #87807d;
 }
 
 .sev {
@@ -616,7 +616,7 @@
   padding: 0.25rem 0.5625rem;
   border-radius: 999px;
   font-size: 0.6562rem;
-  color: #8d9692;
+  color: #96908d;
   background: rgba(255, 255, 255, 0.03);
 }
 
@@ -651,7 +651,7 @@
 
 .mock-metric small {
   font-size: 0.6562rem;
-  color: #8d9692;
+  color: #96908d;
 }
 
 .mock-metric b {
@@ -722,7 +722,7 @@
 
 .portal-toggle-card small {
   font-size: 0.7812rem;
-  color: #8d9692;
+  color: #96908d;
 }
 
 .portal-stat {
@@ -739,7 +739,7 @@
 }
 
 .portal-stat small {
-  color: #8d9692;
+  color: #96908d;
   font-size: 0.8125rem;
 }
 
@@ -764,7 +764,7 @@
   align-items: center;
   border-radius: 0.625rem;
   font-size: 0.8125rem;
-  color: #a9b2ae;
+  color: #b2aca9;
   background: rgba(255, 255, 255, 0.025);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
@@ -775,7 +775,7 @@
   display: grid;
   place-items: center;
   border-radius: 0.625rem;
-  color: #c9d0cd;
+  color: #d0cbc9;
   background: rgba(255, 255, 255, 0.025);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
@@ -792,7 +792,7 @@
   justify-content: space-between;
   padding: 0.5625rem 0;
   font-size: 0.875rem;
-  color: #c3cbc7;
+  color: #cbc6c3;
 }
 
 /* Chat (assistant) */
