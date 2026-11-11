@@ -35,14 +35,12 @@
   z-index: 0;
   height: 100vh;
   pointer-events: none;
-  /* A brighter ember core that falls off to black. A flat dark-orange wash
-     reads as brown, so keep the mid-tones saturated and the edges dark. */
   background: radial-gradient(
     95% 85% at 50% 0%,
     var(--hero-1) 0%,
-    var(--hero-2) 25%,
-    var(--hero-3) 50%,
-    var(--hero-4) 75%,
+    var(--hero-2) 30%,
+    var(--hero-3) 60%,
+    var(--hero-4) 85%,
     transparent 100%
   );
 }
@@ -76,7 +74,7 @@
   margin-top: 0.75rem;
   font-size: 1.0938rem;
   line-height: 1.45;
-  color: #c8c8c8;
+  color: #ccc8c4;
 }
 
 .hero-cta {
@@ -110,7 +108,7 @@
   /* Frosting: blur plus a dark tint. Raise the tint's last number for more
      solid glass, lower it (or the blur) to see more of the globe. */
   background: var(--bar-tint);
-  /* saturate keeps the frosted globe orange; dimmed orange alone reads brown. */
+  /* saturate keeps the frosted globe vivid; dimmed amber alone reads brown. */
   -webkit-backdrop-filter: blur(0.5rem) saturate(1.6);
   backdrop-filter: blur(0.5rem) saturate(1.6);
   /* Fade the top edge so the glass doesn't cut a hard line across the shell. */
@@ -274,12 +272,12 @@
   overflow: hidden;
 }
 
-.svc-card.tone-gold {
+.svc-card.tone-sky {
   background:
-    radial-gradient(90% 70% at 50% 110%, rgba(214, 170, 76, 0.24), transparent 70%),
+    radial-gradient(90% 70% at 50% 110%, rgb(var(--sky-rgb) / 0.24), transparent 70%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0)),
     #070707;
-  box-shadow: inset 0 0 0 1px rgba(214, 170, 76, 0.35);
+  box-shadow: inset 0 0 0 1px rgb(var(--sky-rgb) / 0.35);
 }
 
 .svc-card.tone-indigo {
@@ -301,10 +299,10 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 0 0 1px rgb(var(--accent-rgb) / 0.2);
 }
 
-.svc-icon.tone-gold {
-  color: #ffe6ad;
-  background: linear-gradient(160deg, #6a5222, #2a2010);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 0 0 1px rgba(214, 170, 76, 0.3);
+.svc-icon.tone-sky {
+  color: #d2f1ff;
+  background: linear-gradient(160deg, #1f566e, #0d212b);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 0 0 1px rgb(var(--sky-rgb) / 0.3);
 }
 
 .svc-icon.tone-indigo {
@@ -322,7 +320,7 @@
   margin: 0.5rem 0 1rem;
   font-size: 0.9375rem;
   line-height: 1.45;
-  color: #bbbbbb;
+  color: #bfbbb7;
 }
 
 /* ---------- Work table ---------- */
@@ -364,7 +362,7 @@
   padding: 0.375rem 1.375rem 0.625rem;
   background:
     linear-gradient(180deg, rgb(var(--accent-rgb) / 0.09), rgb(var(--accent-rgb) / 0.015) 30%, rgba(0, 0, 0, 0)),
-    #090909;
+    #0a0907;
 }
 
 .table-row {
@@ -437,7 +435,7 @@ a.table-row:hover {
   align-items: center;
   gap: 0.375rem;
   font-size: 0.875rem;
-  color: #c7c7c7;
+  color: #cbc7c3;
 }
 
 .table-note {
@@ -462,14 +460,14 @@ a.table-row:hover {
   border-radius: var(--radius-lg);
   background:
     radial-gradient(110% 55% at 50% 0%, rgb(var(--accent-rgb) / 0.12), transparent 65%),
-    linear-gradient(180deg, #0c0c0c, #050404);
+    linear-gradient(180deg, #0e0c0a, #050404);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
 }
 
 .plan.popular {
   background:
     radial-gradient(110% 60% at 50% 0%, rgb(var(--accent-rgb) / 0.22), transparent 65%),
-    linear-gradient(180deg, #0f0f0f, #050404);
+    linear-gradient(180deg, #120f0b, #050404);
   box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.45), 0 -0.625rem 2.5rem -1.125rem rgb(var(--accent-rgb) / 0.9);
 }
 
@@ -503,7 +501,7 @@ a.table-row:hover {
   min-height: 4.5rem;
   font-size: 1rem;
   line-height: 1.45;
-  color: #aeaeae;
+  color: #b2aea9;
 }
 
 .plan-actions {
@@ -517,7 +515,7 @@ a.table-row:hover {
   gap: 0.75rem;
   margin-top: 1.875rem;
   font-size: 0.9375rem;
-  color: #b6b6b6;
+  color: #bab6b2;
 }
 
 .plan-list li {
@@ -533,7 +531,7 @@ a.table-row:hover {
   width: 0.25rem;
   height: 0.25rem;
   border-radius: 999px;
-  background: #808080;
+  background: #85807b;
 }
 
 .plan-list li:first-child {
@@ -553,7 +551,7 @@ a.table-row:hover {
   overflow: hidden;
   background:
     radial-gradient(60% 45% at 75% 0%, rgb(var(--accent-rgb) / 0.12), transparent 70%),
-    linear-gradient(180deg, #090909, #050505);
+    linear-gradient(180deg, #0b0907, #060504);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
@@ -587,7 +585,7 @@ a.table-row:hover {
 .est-heading {
   margin-bottom: 1.125rem;
   font-size: 1.375rem;
-  color: #d9d9d9;
+  color: #dcd9d5;
 }
 
 .tiers {
@@ -610,7 +608,7 @@ a.table-row:hover {
 }
 
 .tier-row:hover {
-  background: #181818;
+  background: #1a1815;
 }
 
 .tier-row.on {
@@ -637,18 +635,18 @@ a.table-row:hover {
 
 .tier-row.last:not(.on) .tier-pill {
   color: #c4c4c4;
-  background: #3c3c3c;
+  background: #3d3c3a;
 }
 
 .tier-name {
   font-size: 0.9375rem;
-  color: #939393;
+  color: #98938f;
 }
 
 .tier-name em {
   margin-left: 0.375rem;
   font-style: normal;
-  color: #707070;
+  color: #74706b;
 }
 
 .tier-row.on .tier-name,
@@ -661,8 +659,8 @@ a.table-row:hover {
   border-radius: 999px;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #e5e5e5;
-  background: #3c3c3c;
+  color: #e7e5e3;
+  background: #3d3c3a;
 }
 
 .tier-total {
@@ -692,7 +690,7 @@ a.table-row:hover {
   margin-top: 0.875rem;
   font-size: 0.8438rem;
   line-height: 1.5;
-  color: #a4a4a4;
+  color: #a9a4a0;
 }
 
 .est-stats {
@@ -794,8 +792,8 @@ a.table-row:hover {
   border-radius: 999px;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #0e0e0e;
-  background: #f3f3f3;
+  color: #100e0b;
+  background: #f5f3f1;
   box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.06);
 }
 
@@ -808,7 +806,7 @@ a.table-row:hover {
 .step-title {
   margin-top: 0.375rem;
   font-size: 1.4375rem;
-  color: #8e8e8e;
+  color: #928e8a;
   transition: color 0.4s;
 }
 
@@ -817,7 +815,7 @@ a.table-row:hover {
   max-width: 20rem;
   font-size: 0.9375rem;
   line-height: 1.45;
-  color: #696969;
+  color: #6d6964;
   transition: color 0.4s;
 }
 
@@ -826,7 +824,7 @@ a.table-row:hover {
 }
 
 .step.on .step-text {
-  color: #bdbdbd;
+  color: #c1bdb9;
 }
 
 /* ---------- Spotlight (sticky) ---------- */
@@ -920,7 +918,7 @@ a.table-row:hover {
 
 .spot-features h3 {
   font-size: 1.3125rem;
-  color: #848484;
+  color: #88847f;
   transition: color 0.4s;
 }
 
@@ -929,7 +927,7 @@ a.table-row:hover {
   margin-top: 0.5rem;
   font-size: 1rem;
   line-height: 1.45;
-  color: #585858;
+  color: #5c5854;
   transition: color 0.4s;
 }
 
@@ -938,7 +936,7 @@ a.table-row:hover {
 }
 
 .spot-features li.on p {
-  color: #9f9f9f;
+  color: #a39f9a;
 }
 
 /* ---------- Assistant (purple) ---------- */
@@ -1050,7 +1048,7 @@ a.table-row:hover {
   padding: clamp(2.5rem, calc(6 * var(--vw)), 5rem) clamp(1.5rem, calc(5 * var(--vw)), 4rem);
   border-radius: 1.625rem;
   overflow: hidden;
-  background: #060606;
+  background: #070604;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
   isolation: isolate;
 }
@@ -1169,7 +1167,7 @@ a.table-row:hover {
   margin-top: 2.5rem;
   padding-top: 4.5rem;
   overflow: hidden;
-  background: linear-gradient(180deg, #0e0e0e 0%, #0d0d0d 100%);
+  background: linear-gradient(180deg, #110e0b 0%, #0f0d0a 100%);
 }
 
 .footer-top {
@@ -1208,7 +1206,7 @@ a.table-row:hover {
   display: flex;
   gap: 1.625rem;
   margin-top: 1.125rem;
-  color: #d8d8d8;
+  color: #dbd8d5;
 }
 
 .footer-social a:hover {
@@ -1230,7 +1228,7 @@ a.table-row:hover {
 
 .footer-col a {
   font-size: 0.9375rem;
-  color: #acacac;
+  color: #b0aca7;
   transition: color 0.2s;
 }
 
@@ -1319,7 +1317,7 @@ a.table-row:hover {
   margin-top: 1.75rem;
   font-size: 0.8125rem;
   line-height: 1.55;
-  color: #848484;
+  color: #88847f;
 }
 
 .footer-small h4 {
@@ -1336,7 +1334,7 @@ a.table-row:hover {
   gap: 1rem;
   padding: 2.25rem 0 1.875rem;
   font-size: 0.875rem;
-  color: #8f8f8f;
+  color: #938f8a;
 }
 
 .footer-legal {

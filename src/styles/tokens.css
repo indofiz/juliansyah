@@ -1,9 +1,9 @@
 /* ==========================================================================
    Design tokens + base styles
-   Dark "terminal" aesthetic: warm near-black canvas, orange glow accent
-   (#ff4400), wide grotesk type with gradient headings. Purple /
-   gold / indigo / rose are secondary accents used sparingly for single
-   highlighted elements; --positive / --red are status colours.
+   Dark "terminal" aesthetic: warm near-black canvas, "Ember" amber glow
+   accent (#ffaf4f), wide grotesk type with gradient headings. Purple / sky /
+   indigo / rose are secondary accents used sparingly for single
+   highlighted elements; --red marks falling numbers in the mock screens.
    ========================================================================== */
 
 /* ==========================================================================
@@ -38,42 +38,42 @@ html {
 :root {
   --font: "Instrument Sans Variable", "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  --bg: #050505;
-  --bg-2: #070707;
-  --surface: #0a0a0a;
-  --surface-2: #101010;
-  --surface-3: #161616;
+  --bg: #060403;
+  --bg-2: #080605;
+  --surface: #0c0a07;
+  --surface-2: #13100d;
+  --surface-3: #191613;
   --border: rgba(255, 255, 255, 0.075);
   --border-strong: rgba(255, 255, 255, 0.14);
 
-  --text: #f4f4f4;
-  --muted: #9f9f9f;
-  --dim: #646464;
+  --text: #f5f3f0;
+  --muted: #a69f99;
+  --dim: #68625c;
 
   /* Accent. Every accent colour in the stylesheets comes from this block;
      colours set in code (WebGL, inline SVG, content) come from
      src/lib/theme.ts, which mirrors it. Solid: var(--accent).
      Translucent: rgb(var(--accent-rgb) / 0.4). */
-  --accent-rgb: 255 68 0; /* #ff4400 */
-  --accent-2-rgb: 230 54 0; /* #e63600 deeper */
-  --accent-bright-rgb: 255 122 69; /* #ff7a45 */
-  --accent-pale-rgb: 255 213 194; /* #ffd5c2 */
-  --accent-ink-rgb: 20 3 0; /* #140300 text on accent fills */
+  --accent-rgb: 255 175 79; /* #ffaf4f */
+  --accent-2-rgb: 231 145 5; /* #e79105 deeper */
+  --accent-bright-rgb: 254 215 174; /* #fed7ae */
+  --accent-pale-rgb: 254 231 207; /* #fee7cf */
+  --accent-ink-rgb: 25 14 3; /* #190e03 text on accent fills */
   --accent: rgb(var(--accent-rgb));
   --accent-2: rgb(var(--accent-2-rgb));
   --accent-bright: rgb(var(--accent-bright-rgb));
   --accent-pale: rgb(var(--accent-pale-rgb));
   --accent-ink: rgb(var(--accent-ink-rgb));
-  --glow: rgb(var(--accent-rgb) / 0.55);
-  --glow-soft: rgb(var(--accent-rgb) / 0.18);
+  --glow: rgba(255, 175, 79, 0.55);
+  --glow-soft: rgba(255, 175, 79, 0.18);
 
   /* Extra tints and shades of the accent for one-off details. */
-  --accent-50-rgb: 255 242 235; /* #fff2eb */
-  --accent-200-rgb: 255 172 133; /* #ffac85 */
-  --accent-600-rgb: 179 36 0; /* #b32400 */
-  --accent-700-rgb: 122 22 0; /* #7a1600 */
-  --accent-800-rgb: 68 11 0; /* #440b00 */
-  --accent-900-rgb: 38 6 0; /* #260600 */
+  --accent-50-rgb: 255 246 236; /* #fff6ec */
+  --accent-200-rgb: 254 223 190; /* #fedfbe */
+  --accent-600-rgb: 200 122 5; /* #c87a05 */
+  --accent-700-rgb: 168 98 6; /* #a86206 */
+  --accent-800-rgb: 58 34 5; /* #3a2205 */
+  --accent-900-rgb: 36 22 4; /* #241604 */
   --accent-50: rgb(var(--accent-50-rgb));
   --accent-200: rgb(var(--accent-200-rgb));
   --accent-600: rgb(var(--accent-600-rgb));
@@ -81,23 +81,21 @@ html {
   --accent-800: rgb(var(--accent-800-rgb));
   --accent-900: rgb(var(--accent-900-rgb));
 
-  /* Hero backdrop: the glow behind the headline (top to edge) and the tint
-     of the frosted glass bars over the globe. */
-  --hero-1: rgb(var(--accent-600-rgb) / 0.5);
-  --hero-2: rgb(var(--accent-700-rgb) / 0.42);
-  --hero-3: rgb(var(--accent-800-rgb) / 0.4);
-  --hero-4: rgb(var(--accent-900-rgb) / 0.3);
-  --bar-tint: rgba(13, 13, 13, 0.22);
+  /* Hero backdrop: the glow behind the headline (top to edge, stops at
+     0 / 30 / 60 / 85%) and the tint of the frosted glass bars over the globe. */
+  --hero-1: rgba(73, 47, 14, 0.8);
+  --hero-2: rgba(57, 36, 10, 0.62);
+  --hero-3: rgba(32, 19, 4, 0.4);
+  --hero-4: rgba(15, 8, 3, 0.16);
+  --bar-tint: rgba(20, 13, 6, 0.22);
 
   --purple: #8b5cf6;
   --purple-bright: #a78bfa;
-  --gold: #d6aa4c;
+  --sky: #6ecfff;
+  --sky-rgb: 110 207 255;
   --indigo: #6366f1;
   --rose: #ff6a88;
   --red: #ff5a5f;
-  /* Status colour for good / rising numbers in the mock screens. Separate
-     from the accent so it stays readable next to --red. */
-  --positive: #2fe39a;
 
   --radius-sm: 0.625rem;
   --radius: 1rem;

@@ -9,7 +9,7 @@
 > tag `v2-mint`.
 
 A Next.js portfolio landing page with a glowing particle globe that changes as
-you scroll, wrapped in a dark, orange-glow design system: gradient headings,
+you scroll, wrapped in a dark, amber-glow ("Ember") design system: gradient headings,
 glowing pill buttons, icon badges, glow-framed app screens, dotted textures and
 scroll-lit lists.
 

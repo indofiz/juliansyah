@@ -2,11 +2,11 @@
  * Accent colours for code: the WebGL scene, inline SVG and content data.
  * Mirrors the accent block in src/styles/tokens.css; keep the two in step.
  */
-const accent = "#ff4400";
-const accent2 = "#e63600";
-const accentBright = "#ff7a45";
-const accentPale = "#ffd5c2";
-const accentInk = "#140300";
+const accent = "#ffaf4f";
+const accent2 = "#e79105";
+const accentBright = "#fed7ae";
+const accentPale = "#fee7cf";
+const accentInk = "#190e03";
 
 export const theme = {
   accent,
@@ -18,17 +18,17 @@ export const theme = {
   /** Globe / portrait particle colour. */
   particle: accent,
   /** Bright rim and highlight colour of the particles. */
-  particleRim: "#ffd5c2",
+  particleRim: "#ffe7ce",
   /** WebGL clear colour behind the particles. */
-  canvasBg: "#040404",
+  canvasBg: "#050301",
 
   /** Logo orb: radial gradient (light -> mid -> dark), orbit ring, highlight dot. */
-  logo: { light: accentPale, mid: accent, dark: "#440b00", ring: accentBright, dot: "#fff2eb" },
+  logo: { light: "#ffe2bd", mid: accent, dark: "#3a2205", ring: accentBright, dot: "#fff6ec" },
 
   /** Design-system card swatches, darkest first. */
   swatches: [
-    ["#260600", "900"],
-    ["#7a1600", "700"],
+    ["#4a2a05", "900"],
+    ["#a86206", "700"],
     [accent2, "500"],
     [accent, "400"],
     [accentPale, "100"],

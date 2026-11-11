@@ -58,7 +58,7 @@
   background:
     radial-gradient(120% 60% at 50% 0%, rgb(var(--accent-rgb) / 0.06), transparent 60%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0) 45%),
-    #080808;
+    #090806;
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.07),
     0 1.5rem 3rem rgba(0, 0, 0, 0.35);
@@ -203,7 +203,7 @@
   margin-top: 0.625rem;
   font-size: 0.9375rem;
   line-height: 1.45;
-  color: #aeaeae;
+  color: #b2aea9;
 }
 
 .bento-tags {
@@ -314,7 +314,7 @@
   position: absolute;
   padding: 0.45rem;
   border-radius: 2.1rem;
-  background: linear-gradient(160deg, #303030, #0d0d0d 40%, #1a1a1a);
+  background: linear-gradient(160deg, #33302c, #0e0d0b 40%, #1c1a17);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.14),
     inset 0 0 0 0.22rem #060606,
@@ -361,7 +361,7 @@
 .fl-ghost i {
   height: 2.75rem;
   border-radius: 0.6rem;
-  background: #1a1a1a;
+  background: #1d1a16;
 }
 
 .fl-ghost i:first-child {
@@ -387,7 +387,7 @@
   height: 100%;
   overflow: hidden;
   border-radius: 1.7rem;
-  background: #0d0d0d;
+  background: #0f0d0b;
 }
 
 .fl-status {
@@ -400,7 +400,7 @@
   justify-content: space-between;
   font-size: 0.5rem;
   font-weight: 600;
-  color: #ececec;
+  color: #efece9;
 }
 
 .fl-status-icons {
@@ -413,7 +413,7 @@
   width: 0.6rem;
   height: 0.35rem;
   border-radius: 0.1rem;
-  background: #ececec;
+  background: #efece9;
 }
 
 .fl-status-icons i:first-child {
@@ -446,7 +446,7 @@
   gap: 0.55rem;
   padding: 1.9rem 0.75rem 3.4rem;
   font-size: 0.5625rem;
-  color: #e3e3e3;
+  color: #e7e3df;
 }
 
 .fl-appbar {
@@ -458,7 +458,7 @@
 .fl-appbar small {
   display: block;
   font-size: 0.5rem;
-  color: #848484;
+  color: #8a847f;
 }
 
 .fl-appbar b {
@@ -482,8 +482,8 @@
   padding: 0 0.65rem;
   border-radius: 999px;
   font-size: 0.5rem;
-  color: #7c7c7c;
-  background: #181818;
+  color: #817c76;
+  background: #1b1815;
 }
 
 .fl-hero {
@@ -521,8 +521,8 @@
   padding: 0.25rem 0.55rem;
   border-radius: 999px;
   font-size: 0.5rem;
-  color: #a0a0a0;
-  background: #181818;
+  color: #a5a09a;
+  background: #1b1815;
 }
 
 .fl-cats span.on {
@@ -537,7 +537,7 @@
   gap: 0.5rem;
   padding: 0.45rem;
   border-radius: 0.75rem;
-  background: #151515;
+  background: #181512;
 }
 
 .fl-thumb {
@@ -556,7 +556,7 @@
 
 .fl-tile small {
   font-size: 0.5rem;
-  color: #848484;
+  color: #8a847f;
 }
 
 .fl-fav {
@@ -575,8 +575,8 @@
   align-items: center;
   justify-content: space-around;
   border-radius: 1.2rem;
-  color: #7c7c7c;
-  background: rgba(24, 24, 24, 0.94);
+  color: #817c76;
+  background: rgba(27, 24, 21, 0.94);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
@@ -635,7 +635,7 @@
   margin-top: -1rem;
   padding: 0.8rem 0.85rem;
   border-radius: 1rem 1rem 0 0;
-  background: #0d0d0d;
+  background: #0f0d0b;
 }
 
 .fl-detail-body > b {
@@ -648,7 +648,7 @@
   align-items: center;
   gap: 0.2rem;
   font-size: 0.5rem;
-  color: #848484;
+  color: #8a847f;
 }
 
 .fl-rating {
@@ -657,14 +657,14 @@
 }
 
 .fl-rating span {
-  color: #a0a0a0;
+  color: #a5a09a;
 }
 
 .fl-detail-body > i {
   display: block;
   height: 0.3rem;
   border-radius: 0.2rem;
-  background: #202020;
+  background: #24201c;
 }
 
 .fl-row {
@@ -677,7 +677,7 @@
 .fl-price small {
   display: block;
   font-size: 0.45rem;
-  color: #848484;
+  color: #8a847f;
 }
 
 .fl-price b {
@@ -739,8 +739,8 @@
   border-radius: 999px;
   font-size: 0.6875rem;
   font-weight: 500;
-  color: #929292;
-  background: rgba(12, 12, 12, 0.85);
+  color: #96928d;
+  background: rgba(14, 12, 10, 0.85);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   transition: color 0.35s, box-shadow 0.35s, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -750,7 +750,7 @@
   width: 0.4rem;
   height: 0.4rem;
   border-radius: 50%;
-  background: #3e3e3e;
+  background: #423e3a;
   transition: background 0.35s, box-shadow 0.35s;
 }
 
@@ -778,7 +778,7 @@
   align-items: center;
   gap: 0.3rem;
   font-size: 0.625rem;
-  color: #848484;
+  color: #8a847f;
 }
 
 .ux-frame {
@@ -792,7 +792,7 @@
   gap: 0.55rem;
   padding: 0.8rem;
   border-radius: 0.5rem;
-  background: #101010;
+  background: #12100d;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   transition: background 0.6s 0.45s;
 }
@@ -808,7 +808,7 @@
   width: 2.4rem;
   height: 0.45rem;
   border-radius: 0.2rem;
-  background: #272727;
+  background: #2a2723;
   transition: background 0.5s 0.55s;
 }
 
@@ -827,7 +827,7 @@
   background:
     linear-gradient(to top right, transparent calc(50% - 0.5px), rgba(255, 255, 255, 0.12) 50%, transparent calc(50% + 0.5px)),
     linear-gradient(to bottom right, transparent calc(50% - 0.5px), rgba(255, 255, 255, 0.12) 50%, transparent calc(50% + 0.5px)),
-    #1d1d1d;
+    #201d1a;
 }
 
 .ux-img-hi {
@@ -843,7 +843,7 @@
   height: 0.4rem;
   margin-top: 0.35rem;
   border-radius: 0.2rem;
-  background: #272727;
+  background: #2a2723;
   transition: background 0.5s 0.6s;
 }
 
@@ -868,8 +868,8 @@
   border-radius: 999px;
   font-size: 0.5625rem;
   font-weight: 600;
-  color: #757575;
-  border: 1px dashed #3e3e3e;
+  color: #7a756f;
+  border: 1px dashed #423e3a;
   transition: color 0.5s 0.7s, background 0.5s 0.7s, border-color 0.5s 0.7s, box-shadow 0.5s 0.7s;
 }
 
@@ -1037,7 +1037,7 @@
   gap: 0.15rem;
   padding: 0.25rem;
   border-radius: 0.7rem;
-  background: #101010;
+  background: #12100d;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   transform: translateY(-50%);
 }
@@ -1048,7 +1048,7 @@
   display: grid;
   place-items: center;
   border-radius: 0.45rem;
-  color: #929292;
+  color: #96928d;
   transition: background 0.3s, color 0.3s;
 }
 
@@ -1074,7 +1074,7 @@
 }
 
 .bento-card:is(:hover, .is-active) .ux-frame {
-  background: #141414;
+  background: #171411;
 }
 
 .bento-card:is(:hover, .is-active) .ux-img-hi {
@@ -1086,11 +1086,11 @@
 }
 
 .bento-card:is(:hover, .is-active) .ux-lines i:nth-child(1) {
-  background: #ececec;
+  background: #efece9;
 }
 
 .bento-card:is(:hover, .is-active) .ux-lines i:nth-child(n + 2) {
-  background: #5b5b5b;
+  background: #605b56;
 }
 
 .bento-card:is(:hover, .is-active) .ux-btn {
@@ -1122,7 +1122,7 @@
   height: 14rem;
   overflow: hidden;
   border-radius: 0.75rem;
-  background: #0c0c0c;
+  background: #0d0c0a;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 1.5rem 3rem rgba(0, 0, 0, 0.45);
 }
 
@@ -1132,10 +1132,10 @@
   align-items: center;
   gap: 0.3rem;
   padding: 0 0.6rem;
-  background: #101010;
+  background: #12100d;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   font-size: 0.5625rem;
-  color: #848484;
+  color: #8a847f;
 }
 
 .fe-tabs {
@@ -1156,7 +1156,7 @@
   width: 0.42rem;
   height: 0.42rem;
   border-radius: 50%;
-  background: #2d2d2d;
+  background: #302d2a;
 }
 
 .fe-tab {
@@ -1165,7 +1165,7 @@
 }
 
 .fe-tab.on {
-  color: #ececec;
+  color: #efece9;
   background: rgba(255, 255, 255, 0.05);
 }
 
@@ -1175,7 +1175,7 @@
   font-size: 0.5625rem;
   line-height: 1.15rem;
   white-space: pre;
-  color: #cdcdcd;
+  color: #d1cdc9;
 }
 
 .fe-line {
@@ -1187,7 +1187,7 @@
   flex: none;
   padding-right: 0.65rem;
   text-align: right;
-  color: #3f3f3f;
+  color: #443f3a;
 }
 
 .fe-txt .k {
@@ -1215,7 +1215,7 @@
 }
 
 .fe-txt .p {
-  color: #ababab;
+  color: #b0aba6;
 }
 
 .fe-line:last-child .fe-txt::after {
@@ -1237,7 +1237,7 @@
   height: 9rem;
   overflow: hidden;
   border-radius: 0.75rem;
-  background: #101010;
+  background: #12100d;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 1.5rem 3rem rgba(0, 0, 0, 0.6);
 }
 
@@ -1271,7 +1271,7 @@
   width: 6.5rem;
   height: 0.4rem;
   border-radius: 0.2rem;
-  background: #202020;
+  background: #24201c;
 }
 
 .fe-skel i:last-child {
@@ -1491,7 +1491,7 @@
 .ds-type small {
   white-space: nowrap;
   font-size: 0.5rem;
-  color: #848484;
+  color: #8a847f;
 }
 
 .ds-panel {
@@ -1501,8 +1501,8 @@
   gap: 0.5rem;
   padding: 0.7rem;
   border-radius: 0.8rem;
-  color: #ececec;
-  background: #121212;
+  color: #efece9;
+  background: #14120f;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   transition: background 0.5s 0.25s, box-shadow 0.5s 0.25s, color 0.5s 0.25s;
 }
@@ -1511,7 +1511,7 @@
   display: flex;
   justify-content: space-between;
   font-size: 0.5rem;
-  color: #848484;
+  color: #8a847f;
   transition: color 0.5s 0.25s;
 }
 
@@ -1553,7 +1553,7 @@
   width: 1.9rem;
   height: 1.1rem;
   border-radius: 999px;
-  background: #2d2d2d;
+  background: #302d2a;
   transition: background 0.4s 0.35s;
 }
 
@@ -1564,7 +1564,7 @@
   width: 0.8rem;
   height: 0.8rem;
   border-radius: 50%;
-  background: #d3d3d3;
+  background: #d6d3cf;
   transition: transform 0.45s cubic-bezier(0.3, 1.6, 0.5, 1) 0.35s, background 0.4s 0.35s;
 }
 
@@ -1588,13 +1588,13 @@
 }
 
 .bento-card:is(:hover, .is-active) .ds-panel {
-  color: #0e0e0e;
-  background: #f1f1f1;
+  color: #100e0b;
+  background: #f4f1ee;
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08), 0 0 2rem rgb(var(--accent-pale-rgb) / 0.25);
 }
 
 .bento-card:is(:hover, .is-active) .ds-mode {
-  color: #646464;
+  color: #68645f;
 }
 
 .bento-card:is(:hover, .is-active) .ds-mode-val .dark {
@@ -1692,7 +1692,7 @@
 .mo-graph small {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.5rem;
-  color: #848484;
+  color: #8a847f;
 }
 
 .mo-ui {
@@ -1708,8 +1708,8 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  color: #848484;
-  background: #141414;
+  color: #8a847f;
+  background: #171411;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   transition: color 0.2s 0.45s, box-shadow 0.4s 0.45s;
 }
@@ -1740,7 +1740,7 @@
   width: 2.75rem;
   height: 1.5rem;
   border-radius: 999px;
-  background: #2d2d2d;
+  background: #302d2a;
   transition: background 0.35s 0.75s;
 }
 
@@ -1751,7 +1751,7 @@
   width: 1.1rem;
   height: 1.1rem;
   border-radius: 50%;
-  background: #d3d3d3;
+  background: #d6d3cf;
   transition: transform 0.55s cubic-bezier(0.3, 1.7, 0.45, 1) 0.75s, background 0.3s 0.75s;
 }
 
@@ -1901,7 +1901,7 @@
   line-height: 1.2;
   text-align: center;
   white-space: nowrap;
-  color: #9f9f9f;
+  color: #a39f9a;
 }
 
 .bento-card:is(:hover, .is-active) .pf-arc {
