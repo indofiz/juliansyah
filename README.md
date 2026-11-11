@@ -26,11 +26,10 @@ npm run build
 | 2 | Track record | `proof` | Can I trust you? | Second screen of the pinned intro: one-line stats (icon, white number, amber label) around the centred globe; View work / Learn more on desktop |
 | 3 | Selected work | `work` | Can you do what I need? | Flagship card with "Tap to try" (lazy Flutter web iframe), then project cards. Each opens `/work/[slug]` |
 | 4 | Design → code | `design-to-code` | Can you do what I need? | **Pinned and scrubbed**: one component from sketch to wireframe, design, Flutter code and the running component |
-| 5 | What I do | `services` | Can you do what I need? | Bento of five outcome groups; illustrations play on hover (in view on touch) |
+| 5 | About | `about` | Who are you, and can you do what I need? | Main's "Under One Roof" layout, titled "From Design to Production, Under One Roof.": three cards a side (Who I am, then five expertise cards with their tools) with the particle portrait forming in the empty middle column. Phones: title, portrait, then a card carousel. Without WebGL the real photo fills the middle column |
 | 6 | Playground | `playground` | Can you do what I need? | Experiments that load near the viewport and pause off screen |
-| 7 | About | `about` | Who are you, really? | Main's "Under One Roof" layout: three cards a side (who I am / what I care about) with the particle portrait forming in the empty middle column; the clock card shows live Jakarta time and the visitor's workday overlap. Phones: title, portrait, then a card carousel. Without WebGL the real photo fills the middle column |
-| 8 | Testimonials | `testimonials` | Can I trust you? | Short quotes, just before Contact |
-| 9 | Contact | `contact` | How do I reach you? | Email + copy, book a call, reply time, availability. The globe rises behind the frosted panel |
+| 7 | Testimonials | `testimonials` | Can I trust you? | Short quotes, just before Contact |
+| 8 | Contact | `contact` | How do I reach you? | Email + copy, book a call, reply time, availability. The globe rises behind the frosted panel |
 | – | Footer | `footer` | | Socials, résumé, last updated (build date) |
 
 Case studies live at `/work/[slug]` (problem → my role → process → key
@@ -92,7 +91,6 @@ Below 1024px it's a normal responsive layout with a 16px base; phone rules
 | Pinned intro timing (headline up, dashboard down, proof in) | intro timeline in `src/components/ScrollFx.tsx` |
 | Design → code sequence | `src/components/craft/*` |
 | Code highlighting (build time, no runtime library) | `src/lib/highlight.ts` |
-| Bento illustrations | `src/components/bento/Arts.tsx` + `src/styles/bento.css` |
 | Particle look, count, bloom | `src/components/canvas/shaders.ts`, `Scene.tsx` |
 
 **Adding a section:** add a `<section id="my-section">` to `page.tsx` and a

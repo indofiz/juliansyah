@@ -6,7 +6,7 @@
  * with a dashed outline. List them with: grep -n "TODO:" src/content/site.ts
  */
 
-import type { AboutCard, Capability, ClientLogo, IconName, Link, LoopMedia, MockNavItem, Platform, PlaygroundItem, Project, ProofItem, Testimonial } from "./types";
+import type { AboutCard, ClientLogo, IconName, Link, LoopMedia, MockNavItem, Platform, PlaygroundItem, Project, ProofItem, Testimonial } from "./types";
 
 export const site = {
   name: "Juliansyah",
@@ -117,7 +117,7 @@ export const proof = {
   text: "From production apps for government, education and enterprise clients, as of November 2026.",
   /** Desktop only (hidden on phones, as on the old site). */
   primary: { label: "View work", href: "/#work" },
-  secondary: { label: "Learn more", href: "/#services" },
+  secondary: { label: "Learn more", href: "/#about" },
   /** Keep labels short: they sit on one line next to the number. */
   items: [
     { icon: "users", value: "12K+", label: "App users" },
@@ -329,110 +329,73 @@ class CheckInCard extends StatelessWidget {
 };
 
 /* ---------------------------------------------------------------------------
- * 5. What I do: can you do what I need? Grouped by what the client gets.
- * Each card's illustration plays on hover (or while in view on touch screens):
- * see src/components/bento/Arts.tsx.
+ * 5. About: who are you, and can you do what I need? Main's "Under One
+ * Roof" layout: three cards either side of an empty middle column, where
+ * the particle portrait forms. The first card is about you; the other five
+ * are your expertise, grouped by what the client gets (tools underneath).
  * ------------------------------------------------------------------------- */
-export const services = {
-  badge: "What I do",
-  title: "What you get when you work with me.",
-  text: "Grouped by outcome, not by tool. The tools sit underneath each one.",
+export const about = {
+  badge: "About",
+  title: "From Design to Production, Under One Roof.",
+  photo: {
+    src: "/image-me.png",
+    alt: "Juliansyah, smiling, in a green batik shirt against an orange background",
+    width: 1024,
+    height: 1024,
+  },
   toolsLabel: "Tools",
-  items: [
-    {
-      id: "mobile",
-      icon: "smartphone",
-      title: "Mobile apps in Flutter",
-      text: "One codebase for Android and iOS, on an architecture your team can keep extending.",
-      tools: ["Flutter", "Dart", "BLoC", "Riverpod", "Firebase"],
-    },
-    {
-      id: "design",
-      icon: "pen",
-      title: "UI/UX and design systems",
-      text: "Flows, wireframes and prototypes, plus the tokens and components that keep design and code in sync.",
-      tools: ["Figma", "Prototyping", "Design tokens", "Component libraries"],
-    },
-    {
-      id: "web",
-      icon: "code",
-      title: "Web front-ends",
-      text: "Fast, accessible sites and web apps, built straight from the design with no hand-off gap.",
-      tools: ["React", "Next.js", "TypeScript"],
-    },
-    {
-      id: "motion",
-      icon: "spark",
-      title: "Motion and interaction",
-      text: "Transitions and micro-interactions that explain what just happened.",
-      tools: ["Flutter animations", "GSAP", "Rive"],
-    },
-    {
-      id: "performance",
-      icon: "gauge",
-      title: "Performance and accessibility",
-      text: "Core Web Vitals budgets and WCAG AA from the first commit, checked before launch.",
-      tools: ["Lighthouse", "Core Web Vitals", "WCAG AA"],
-    },
-  ] satisfies Capability[],
-};
-
-/** Text inside the bento illustrations (decorative, hidden from screen readers). */
-export const bentoArt = {
-  flutter: {
-    /**
-     * Your Flutter screenshots: two portrait PNGs (~9:19.5, e.g. 390×844) in
-     * public/work/. The phone then swipes from the first to the second.
-     */
-    screens: [
-      // "/work/flutter-1.png",
-      // "/work/flutter-2.png",
-    ] as string[],
-    platforms: ["iOS", "Android", "Web"],
-    clock: "9:41",
-    toast: "Hot reload",
-    home: {
-      greeting: "Good morning",
-      title: "Explore Bali",
-      search: "Search places",
-      hero: "Mount Batur",
-      heroSub: "Sunrise trek",
-      tabs: ["Hiking", "Beach", "Food"],
-      tile: "Tegallalang",
-      tileSub: "Rice terraces",
-    },
-    detail: { title: "Mount Batur", place: "Kintamani, Bali", priceLabel: "From", price: "$45", cta: "Book trip" },
-  },
-  uiux: { frame: "Home · Mobile", button: "Get started", spacing: "16", size: "320 × 280", comment: "Bigger tap target?", client: "Client", you: "You" },
-  frontend: {
-    tabs: ["Ship.tsx", "page.tsx"],
-    url: "localhost:3000",
-    button: "Ship it",
-    done: "Shipped",
-    /** [token class, text] per line: k keyword, f function, t tag, a attribute, v value, s string, p plain. */
-    code: [
-      [["k", "export const "], ["f", "Ship"], ["p", " = () => {"]],
-      [["p", "  "], ["k", "const "], ["p", "[done, set] = "], ["f", "useState"], ["p", "("], ["v", "false"], ["p", ")"]],
-      [["p", "  "], ["k", "return "], ["p", "("]],
-      [["p", "    <"], ["t", "Button "], ["a", "glow onClick"], ["p", "={() => "], ["f", "set"], ["p", "("], ["v", "true"], ["p", ")}>"]],
-      [["p", "      {done ? "], ["s", '"Shipped"'], ["p", " : "], ["s", '"Ship it"'], ["p", "}"]],
-      [["p", "    </"], ["t", "Button"], ["p", ">"]],
-      [["p", "  )"]],
-      [["p", "}"]],
-    ] as [string, string][][],
-  },
-  motion: { curve: "ease-in-out · cubic-bezier(.65, 0, .35, 1)" },
   /**
-   * Score rings: this site's homepage, measured with Lighthouse 13.6 (mobile
-   * profile) on 2026-11-11 against a local production build. Re-measure on the
-   * live site after deploying and update these.
+   * Desktop rows read across the portrait: Who I am | UI/UX, Flutter |
+   * Motion, Web | Performance. Phones swipe through left, then right.
    */
-  perf: [
-    { label: "Performance", score: 80 },
-    { label: "Accessibility", score: 100 },
-    { label: "Best Practices", score: 100 },
-    { label: "SEO", score: 100 },
-  ],
+  cards: {
+    left: [
+      {
+        id: "me",
+        icon: "user",
+        photo: true,
+        title: "Who I am",
+        text: "I'm a Flutter developer, front-end developer and UI/UX designer in Jakarta. I design the screens, then build them myself, for phones and the web.",
+      },
+      {
+        id: "mobile",
+        icon: "smartphone",
+        title: "Mobile apps in Flutter",
+        text: "One codebase for Android and iOS, on an architecture your team can keep extending.",
+        tools: ["Flutter", "Dart", "BLoC", "Riverpod", "Firebase"],
+      },
+      {
+        id: "web",
+        icon: "code",
+        title: "Web front-ends",
+        text: "Fast, accessible sites and web apps, built straight from the design with no hand-off gap.",
+        tools: ["React", "Next.js", "TypeScript"],
+      },
+    ],
+    right: [
+      {
+        id: "design",
+        icon: "pen",
+        title: "UI/UX and design systems",
+        text: "Flows, wireframes and prototypes, plus the tokens and components that keep design and code in sync.",
+        tools: ["Figma", "Prototyping", "Design tokens", "Component libraries"],
+      },
+      {
+        id: "motion",
+        icon: "spark",
+        title: "Motion and interaction",
+        text: "Transitions and micro-interactions that explain what just happened.",
+        tools: ["Flutter animations", "GSAP", "Rive"],
+      },
+      {
+        id: "performance",
+        icon: "gauge",
+        title: "Performance and accessibility",
+        text: "Core Web Vitals budgets and WCAG AA from the first commit, checked before launch.",
+        tools: ["Lighthouse", "Core Web Vitals", "WCAG AA"],
+      },
+    ],
+  } satisfies { left: AboutCard[]; right: AboutCard[] },
 };
 
 /* ---------------------------------------------------------------------------
@@ -464,67 +427,7 @@ export const playground = {
 };
 
 /* ---------------------------------------------------------------------------
- * 7. About: who are you, really? Three cards either side of the particle
- * portrait, which forms in the empty middle column (main's "Under One Roof"
- * layout). Left: who I am. Right: what I care about.
- * ------------------------------------------------------------------------- */
-export const about = {
-  badge: "About",
-  title: "Hi, I'm Juliansyah.",
-  photo: {
-    src: "/image-me.png",
-    alt: "Juliansyah, smiling, in a green batik shirt against an orange background",
-    width: 1024,
-    height: 1024,
-  },
-  cards: {
-    left: [
-      {
-        id: "who",
-        icon: "user",
-        photo: true,
-        title: "Who I am",
-        text: "I'm a Flutter developer, front-end developer and UI/UX designer in Jakarta. I design the screens, then build them myself, for phones and the web.",
-      },
-      {
-        id: "start",
-        icon: "rocket",
-        title: "How I started",
-        text: "TODO: two or three sentences on how you got started and the problems you like solving.",
-      },
-      {
-        id: "when",
-        icon: "clock",
-        title: "Where and when",
-        widget: "localTime",
-        cta: { label: "Let's talk", href: "#contact" },
-      },
-    ],
-    // What I care about. Titles drafted from your lines: confirm or rewrite.
-    right: [
-      { id: "conditions", icon: "smartphone", title: "Built for real conditions", text: "Apps that keep working on weak networks and older phones." },
-      { id: "everyone", icon: "hand", title: "Usable by everyone", text: "Interfaces anyone can use: keyboard, screen reader or large text." },
-      { id: "handover", icon: "code", title: "Easy to hand over", text: "Code the next developer can read without me in the room." },
-    ],
-  } satisfies { left: AboutCard[]; right: AboutCard[] },
-  location: { place: "Jakarta, Indonesia", localTime: "Local time" },
-  /** Working hours used for the overlap: 09:00–18:00 in both places. */
-  workday: { start: 9, end: 18 },
-  /**
-   * The visitor's side of the clock card, from their browser's time zone.
-   * {h} is replaced with a number of hours.
-   */
-  you: {
-    same: "Same time zone as you",
-    ahead: "{h} h ahead of you",
-    behind: "{h} h behind you",
-    /** Hours our 09:00–18:00 working days share. */
-    overlap: "{h} h workday overlap",
-  },
-};
-
-/* ---------------------------------------------------------------------------
- * 8. Testimonials: can I trust you? Real quotes only, with permission.
+ * 7. Testimonials: can I trust you? Real quotes only, with permission.
  * ------------------------------------------------------------------------- */
 const quote = (n: number): Testimonial => ({
   quote: `TODO: a one- or two-sentence quote from client ${n}, used with permission.`,
@@ -540,7 +443,7 @@ export const testimonials = {
 };
 
 /* ---------------------------------------------------------------------------
- * 9. Contact: how do I reach you? One obvious next step.
+ * 8. Contact: how do I reach you? One obvious next step.
  * ------------------------------------------------------------------------- */
 export const contact = {
   badge: "Contact",
@@ -568,7 +471,7 @@ export const contact = {
 };
 
 /* ---------------------------------------------------------------------------
- * 10. Footer
+ * 9. Footer
  * ------------------------------------------------------------------------- */
 export const footer = {
   tagline: "Flutter · Front-end · UI/UX",
@@ -578,7 +481,6 @@ export const footer = {
       links: [
         { label: "Selected work", href: "/#work" },
         { label: "Design → code", href: "/#design-to-code" },
-        { label: "What I do", href: "/#services" },
         { label: "Playground", href: "/#playground" },
       ],
     },

@@ -68,7 +68,7 @@ export function PlaygroundTile({ item }: { item: PlaygroundItem }) {
           <Placeholder text={item.text} />
         </p>
         <div className="pg-foot">
-          <ul className="bento-tags">
+          <ul className="tags">
             {item.tags.map((t) => (
               <li key={t}>
                 <Placeholder text={t} />

@@ -19,7 +19,7 @@ import {
 } from "@/lib/particleShapes";
 import { atmosphereFragment, atmosphereVertex, particleFragment, particleVertex } from "./shaders";
 
-/** What the cloud morphs into in the services section. */
+/** What the cloud morphs into in the about section. */
 export type ShapeSource =
   | { type: "portrait"; url: string; height?: number; depth?: number; dotSpacing?: number; brightness?: number }
   | { type: "model"; url: string }

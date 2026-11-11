@@ -5,7 +5,6 @@ import "@/styles/tokens.css";
 import "@/styles/components.css";
 import "@/styles/mocks.css";
 import "@/styles/sections.css";
-import "@/styles/bento.css";
 import "@/styles/mobile.css";
 import "@/styles/reduced-motion.css";
 import { site } from "@/content/site";

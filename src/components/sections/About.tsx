@@ -2,9 +2,8 @@ import Image from "next/image";
 import { about } from "@/content/site";
 import type { AboutCard as Card } from "@/content/types";
 import { Icon } from "../ui/Icon";
-import { LocalTime } from "../ui/LocalTime";
 import { Placeholder } from "../ui/Placeholder";
-import { Button, SectionHeader } from "../ui/primitives";
+import { SectionHeader } from "../ui/primitives";
 
 function AboutCard({ c }: { c: Card }) {
   return (
@@ -20,16 +19,15 @@ function AboutCard({ c }: { c: Card }) {
       )}
       <div className="about-card-body">
         <h3>{c.title}</h3>
-        {c.text && (
-          <p>
-            <Placeholder text={c.text} />
-          </p>
-        )}
-        {c.widget === "localTime" && <LocalTime />}
-        {c.cta && (
-          <Button variant="ghost-accent" size="sm" href={c.cta.href} iconEnd="arrowRight">
-            {c.cta.label}
-          </Button>
+        <p>
+          <Placeholder text={c.text} />
+        </p>
+        {c.tools && (
+          <ul className="tags" aria-label={about.toolsLabel}>
+            {c.tools.map((t) => (
+              <li key={t}>{t}</li>
+            ))}
+          </ul>
         )}
       </div>
     </article>
@@ -37,10 +35,11 @@ function AboutCard({ c }: { c: Card }) {
 }
 
 /**
- * About: three cards either side of an empty middle column, where the
- * particle portrait (your face with the VR headset) forms (the "about"
- * keyframe in sceneKeyframes). On phones the portrait forms between the
- * title and the cards, which become a swipe carousel.
+ * About: who I am and what I do, in main's "Under One Roof" layout. Three
+ * cards either side of an empty middle column, where the particle portrait
+ * (your face with the VR headset) forms (the "about" keyframe in
+ * sceneKeyframes). On phones the portrait forms between the title and the
+ * cards, which become a swipe carousel.
  *
  * Without WebGL there are no particles: on desktop the real photo fills the
  * middle column instead, on phones the space closes up (.no-webgl, set by

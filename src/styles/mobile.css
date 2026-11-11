@@ -375,7 +375,6 @@
   }
 
   /* ---------- Carousels (shared) ---------- */
-  .bento,
   .pg-grid,
   .about-grid {
     display: flex;
@@ -390,7 +389,6 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  .bento::-webkit-scrollbar,
   .pg-grid::-webkit-scrollbar,
   .about-grid::-webkit-scrollbar {
     display: none;
@@ -617,53 +615,8 @@
     scroll-snap-align: center;
   }
 
-  /* ---------- What I do: bento card carousel ---------- */
-  .bento {
-    grid-template-rows: none;
-  }
-
-  .bento-card {
-    flex: 0 0 84%;
-    height: 28rem;
-    scroll-snap-align: center;
-  }
-
-  .bento--uiux,
-  .bento--frontend {
-    flex-direction: column;
-  }
-
-  .bento--uiux .bento-copy,
-  .bento--frontend .bento-copy,
-  .bento-card .bento-copy {
-    order: 0;
-    width: auto;
-    padding: 0 1.25rem 1.25rem;
-  }
-
-  .bento-title {
-    gap: 0.625rem;
-  }
-
-  .bento-icon {
-    width: 1.875rem;
-    height: 1.875rem;
-  }
-
-  .bento-copy h3 {
-    font-size: 1.125rem;
-  }
-
-  .bento-card .bento-copy p {
-    margin-top: 0.5rem;
-    font-size: 0.8125rem;
-  }
-
-  .bento-tags {
-    margin-top: 0.75rem;
-  }
-
-  .bento-tags li {
+  /* ---------- Tool chips (shared) ---------- */
+  .tags li {
     font-size: 0.6875rem;
   }
 
@@ -711,12 +664,8 @@
     font-size: 0.875rem;
   }
 
-  .about-card-body .btn {
-    margin-top: 0.875rem;
-  }
-
-  .lt-time {
-    font-size: 1.5rem;
+  .about-card .tags {
+    margin-top: 0.75rem;
   }
 
   /* ---------- Testimonials ---------- */

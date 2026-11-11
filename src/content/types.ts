@@ -87,28 +87,18 @@ export type Project = {
   caseStudy: CaseStudy;
 };
 
-/** "What I do": grouped by what the client gets. `id` also picks the bento illustration. */
-export type Capability = {
-  id: "mobile" | "web" | "design" | "motion" | "performance";
-  icon: IconName;
-  title: string;
-  text: string;
-  tools: string[];
-};
-
 /**
- * A card beside the particle portrait in About. `photo` swaps the icon tile
- * for your real photo; `widget: "localTime"` adds the live clock under the
- * title.
+ * A card beside the particle portrait in About: the first is about you (with
+ * `photo`, your real photo replaces the icon tile), the rest are expertise,
+ * each with the tools underneath.
  */
 export type AboutCard = {
   id: string;
   icon: IconName;
   photo?: boolean;
   title: string;
-  text?: string;
-  widget?: "localTime";
-  cta?: Link;
+  text: string;
+  tools?: string[];
 };
 
 export type PlaygroundItem = {
