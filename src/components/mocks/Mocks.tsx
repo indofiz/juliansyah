@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Icon, type IconName } from "../ui/Icon";
+import { theme } from "@/lib/theme";
 import { Logo } from "../ui/primitives";
 import { Sparkline, series } from "../ui/Sparkline";
 
@@ -134,7 +135,7 @@ export function DashboardMock() {
           <div className="mock-panel mock-tile">
             <span className="mock-tile-label">Client organisations</span>
             <span className="mock-tile-value">8</span>
-            <Sparkline values={series(8, 28, -0.2, 0.5)} height={44} color="var(--accent-300)" />
+            <Sparkline values={series(8, 28, -0.2, 0.5)} height={44} color={theme.accentBright} />
           </div>
           <div className="mock-panel mock-tile">
             <span className="mock-tile-label">Years building</span>
@@ -249,7 +250,7 @@ export function SpotlightScreen({ index }: { index: number }) {
             ))}
           </div>
           <div className="mock-panel" style={{ padding: "0.875rem" }}>
-            <Sparkline values={series(21, 40, 0.3, 0.7)} height={80} color="var(--accent-300)" />
+            <Sparkline values={series(21, 40, 0.3, 0.7)} height={80} color={theme.accentBright} />
           </div>
         </div>
       </MockShell>
@@ -333,7 +334,7 @@ function Radar() {
       {[70, 52, 34].map((r) => (
         <polygon key={r} points={pts(r)} fill="none" stroke="rgba(255,255,255,0.08)" />
       ))}
-      <polygon points={shape} style={{ fill: "rgb(var(--accent-rgb) / 0.25)", stroke: "var(--accent)" }} strokeWidth="1.5" />
+      <polygon points={shape} style={{ fill: theme.accent, fillOpacity: 0.25, stroke: theme.accent }} strokeWidth="1.5" />
       {labels.map((l, i) => {
         const a = -Math.PI / 2 + (i * 2 * Math.PI) / 5;
         return (

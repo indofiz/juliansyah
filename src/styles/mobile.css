@@ -82,7 +82,7 @@
   .site-header.is-scrolled {
     border-bottom-color: rgba(255, 255, 255, 0.1);
     background:
-      radial-gradient(40% 120% at 50% 50%, rgb(var(--accent-500-rgb) / 0.1), transparent 75%),
+      radial-gradient(40% 120% at 50% 50%, rgb(var(--accent-2-rgb) / 0.1), transparent 75%),
       rgba(17, 17, 17, 0.62);
     -webkit-backdrop-filter: blur(1rem) saturate(1.5);
     backdrop-filter: blur(1rem) saturate(1.5);
@@ -247,7 +247,7 @@
   }
 
   .hero-bar {
-    background: rgba(13, 13, 13, 0.22);
+    background: var(--bar-tint);
     -webkit-backdrop-filter: blur(0.45rem) saturate(1.6);
     backdrop-filter: blur(0.45rem) saturate(1.6);
   }
@@ -371,7 +371,7 @@
     left: 0;
     width: calc(var(--w, 0.3) * 100%);
     border-radius: 3px;
-    background: linear-gradient(90deg, rgb(var(--accent-rgb) / 0.35), var(--accent-300));
+    background: linear-gradient(90deg, rgb(var(--accent-rgb) / 0.35), var(--accent-bright));
     box-shadow: 0 0 10px var(--accent);
     transform: translateX(calc(var(--p, 0) * (1 / var(--w, 0.3) - 1) * 100%));
   }

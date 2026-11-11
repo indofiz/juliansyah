@@ -76,7 +76,7 @@
   left: 14%;
   right: 14%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgb(var(--accent-300-rgb) / 0.7), transparent);
+  background: linear-gradient(90deg, transparent, rgb(var(--accent-bright-rgb) / 0.7), transparent);
   opacity: 0.35;
   transition: opacity 0.5s, left 0.5s, right 0.5s;
 }
@@ -98,7 +98,7 @@
   z-index: 3;
   padding: 1px;
   border-radius: inherit;
-  background: radial-gradient(18rem circle at var(--mx) var(--my), rgb(var(--accent-300-rgb) / 0.85), transparent 60%);
+  background: radial-gradient(18rem circle at var(--mx) var(--my), rgb(var(--accent-bright-rgb) / 0.85), transparent 60%);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
@@ -188,7 +188,7 @@
   display: grid;
   place-items: center;
   border-radius: 0.625rem;
-  color: var(--accent-100);
+  color: var(--accent-pale);
   background: linear-gradient(160deg, var(--accent-700), var(--accent-900));
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 0 0 1px rgb(var(--accent-rgb) / 0.2);
 }
@@ -217,7 +217,7 @@
   padding: 0.25rem 0.625rem;
   border-radius: 999px;
   font-size: 0.75rem;
-  color: var(--accent-100);
+  color: var(--accent-pale);
   background: rgb(var(--accent-rgb) / 0.06);
   box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.16);
 }
@@ -527,7 +527,7 @@
 
 .fl-cats span.on {
   font-weight: 600;
-  color: var(--accent-950);
+  color: var(--accent-ink);
   background: var(--accent);
 }
 
@@ -589,7 +589,7 @@
 .fl-nav span.on {
   padding: 0.3rem 0.9rem;
   border-radius: 999px;
-  color: var(--accent-300);
+  color: var(--accent-bright);
   background: rgb(var(--accent-rgb) / 0.18);
 }
 
@@ -689,7 +689,7 @@
   border-radius: 999px;
   font-size: 0.5625rem;
   font-weight: 700;
-  color: var(--accent-950);
+  color: var(--accent-ink);
   background: var(--accent);
   box-shadow: 0 0 0.8rem rgb(var(--accent-rgb) / 0.5);
 }
@@ -707,8 +707,8 @@
   white-space: nowrap;
   font-size: 0.5rem;
   font-weight: 700;
-  color: var(--accent-950);
-  background: var(--accent-100);
+  color: var(--accent-ink);
+  background: var(--accent-pale);
   box-shadow: 0 0 1rem rgb(var(--accent-rgb) / 0.55);
   opacity: 0;
   transform: translate(-50%, -1rem);
@@ -968,7 +968,7 @@
   white-space: nowrap;
   font-size: 0.5rem;
   font-weight: 700;
-  color: var(--accent-950);
+  color: var(--accent-ink);
   background: var(--accent);
   transform: translateX(-50%);
 }
@@ -988,7 +988,7 @@
   border-radius: 0.3rem;
   font-size: 0.5rem;
   font-weight: 700;
-  color: var(--accent-950);
+  color: var(--accent-ink);
 }
 
 .ux-cur--you {
@@ -1053,7 +1053,7 @@
 }
 
 .ux-tools span.on {
-  color: var(--accent-950);
+  color: var(--accent-ink);
   background: var(--accent);
 }
 
@@ -1094,7 +1094,7 @@
 }
 
 .bento-card:is(:hover, .is-active) .ux-btn {
-  color: var(--accent-950);
+  color: var(--accent-ink);
   background: var(--accent);
   border-color: transparent;
   box-shadow: 0 0 1rem rgb(var(--accent-rgb) / 0.45);
@@ -1203,7 +1203,7 @@
 }
 
 .fe-txt .t {
-  color: var(--accent-300);
+  color: var(--accent-bright);
 }
 
 .fe-txt .a {
@@ -1225,7 +1225,7 @@
   height: 0.75rem;
   margin-left: 0.1rem;
   vertical-align: middle;
-  background: var(--accent-300);
+  background: var(--accent-bright);
   opacity: 0;
 }
 
@@ -1288,7 +1288,7 @@
   border-radius: 999px;
   font-size: 0.625rem;
   font-weight: 600;
-  color: var(--accent-100);
+  color: var(--accent-pale);
   background: rgb(var(--accent-rgb) / 0.12);
   box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.3);
 }
@@ -1395,7 +1395,7 @@
 
 @keyframes fe-btn {
   to {
-    color: var(--accent-950);
+    color: var(--accent-ink);
     background: var(--accent);
     box-shadow: 0 0 1.2rem rgb(var(--accent-rgb) / 0.6);
   }
@@ -1457,7 +1457,7 @@
 }
 
 .ds-swatches span.light {
-  color: rgb(var(--accent-950-rgb) / 0.75);
+  color: rgb(var(--accent-ink-rgb) / 0.75);
 }
 
 .bento-card:is(:hover, .is-active) .ds-swatches span {
@@ -1538,7 +1538,7 @@
   border-radius: 999px;
   font-size: 0.5625rem;
   font-weight: 700;
-  color: var(--accent-950);
+  color: var(--accent-ink);
   background: var(--accent);
 }
 
@@ -1572,7 +1572,7 @@
   padding: 0.2rem 0.5rem;
   border-radius: 999px;
   font-size: 0.5rem;
-  color: var(--accent-100);
+  color: var(--accent-pale);
   box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.3);
   transition: color 0.5s 0.25s;
 }
@@ -1583,14 +1583,14 @@
   display: grid;
   place-items: center;
   border-radius: 0.3rem;
-  color: var(--accent-950);
+  color: var(--accent-ink);
   background: var(--accent);
 }
 
 .bento-card:is(:hover, .is-active) .ds-panel {
   color: #0e0e0e;
   background: #f1f1f1;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08), 0 0 2rem rgb(var(--accent-100-rgb) / 0.25);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08), 0 0 2rem rgb(var(--accent-pale-rgb) / 0.25);
 }
 
 .bento-card:is(:hover, .is-active) .ds-mode {
@@ -1606,7 +1606,7 @@
 }
 
 .bento-card:is(:hover, .is-active) .ds-toggle {
-  background: var(--accent-500);
+  background: var(--accent-2);
 }
 
 .bento-card:is(:hover, .is-active) .ds-toggle i {
@@ -1732,7 +1732,7 @@
 }
 
 .mo-heart i:nth-child(even) {
-  background: var(--accent-300);
+  background: var(--accent-bright);
 }
 
 .mo-toggle {
@@ -1778,7 +1778,7 @@
 }
 
 .bento-card:is(:hover, .is-active) .mo-toggle {
-  background: var(--accent-500);
+  background: var(--accent-2);
 }
 
 .bento-card:is(:hover, .is-active) .mo-toggle i {

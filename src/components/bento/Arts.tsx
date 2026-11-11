@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import { flutterScreens } from "@/content/site";
+import { theme } from "@/lib/theme";
 import { Icon } from "../ui/Icon";
 
 /*
@@ -24,7 +25,7 @@ const v = (vars: Record<string, string | number>) => vars as CSSProperties;
 function Cursor() {
   return (
     <svg viewBox="0 0 16 16" width="16" height="16" style={{ width: "1rem", height: "1rem" }} aria-hidden="true">
-      <path d="M2.2 1.6 13.6 8.2 8.4 9.4 6.2 14.3Z" fill="currentColor" style={{ stroke: "var(--accent-950)" }} strokeWidth="1" strokeLinejoin="round" />
+      <path d="M2.2 1.6 13.6 8.2 8.4 9.4 6.2 14.3Z" fill="currentColor" style={{ stroke: theme.accentInk }} strokeWidth="1" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -341,13 +342,7 @@ export function ArtFrontend() {
 }
 
 /* ---------------------------------------------------------------- Design systems */
-const SWATCHES = [
-  ["var(--accent-900)", "900"],
-  ["var(--accent-700)", "700"],
-  ["var(--accent-500)", "500"],
-  ["var(--accent)", "400"],
-  ["var(--accent-100)", "100"],
-];
+const SWATCHES = theme.swatches;
 
 export function ArtSystem() {
   return (

@@ -145,7 +145,7 @@
 
 .mock-switch span:first-child {
   color: #fff;
-  background: var(--accent-500);
+  background: var(--accent-2);
 }
 
 .mock-main {
@@ -292,7 +292,7 @@
 .mock-tabs span.on {
   color: #fff;
   background: linear-gradient(180deg, var(--accent-600), var(--accent-700));
-  box-shadow: inset 0 0 0 1px rgb(var(--accent-300-rgb) / 0.35);
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-bright-rgb) / 0.35);
 }
 
 .mock-filters {
@@ -403,7 +403,7 @@
 .mock-action.on {
   color: var(--accent-50);
   background: linear-gradient(180deg, var(--accent-700), var(--accent-800));
-  box-shadow: inset 0 0 0 1px rgb(var(--accent-300-rgb) / 0.35), 0 0 1rem rgb(var(--accent-rgb) / 0.3);
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-bright-rgb) / 0.35), 0 0 1rem rgb(var(--accent-rgb) / 0.3);
 }
 
 .mock-tiles {
@@ -559,7 +559,7 @@
 .mock-bars i {
   flex: 1;
   border-radius: 0.25rem 0.25rem 0 0;
-  background: linear-gradient(180deg, rgb(var(--accent-300-rgb) / 0.9), rgb(var(--accent-rgb) / 0.15));
+  background: linear-gradient(180deg, rgb(var(--accent-bright-rgb) / 0.9), rgb(var(--accent-rgb) / 0.15));
 }
 
 /* Alerts (spotlight screen 3) */
@@ -621,9 +621,9 @@
 }
 
 .mock-range span.on {
-  color: var(--accent-950);
+  color: var(--accent-ink);
   font-weight: 700;
-  background: var(--accent-100);
+  background: var(--accent-pale);
   box-shadow: 0 0 0.625rem rgb(var(--accent-rgb) / 0.55);
 }
 

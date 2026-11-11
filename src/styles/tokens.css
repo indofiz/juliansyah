@@ -50,35 +50,44 @@ html {
   --muted: #9f9f9f;
   --dim: #646464;
 
-  /* Accent ramp. Every accent colour on the page (CSS) comes from these
-     triplets, so recolouring the site means editing only this block plus
-     src/lib/theme.ts (the WebGL scene can't read CSS variables).
-     Use `var(--accent-300)` for a solid colour and
-     `rgb(var(--accent-300-rgb) / 0.4)` for a translucent one.
-     400 is the main accent and is spelled `--accent` / `--accent-rgb`. */
-  --accent-50-rgb: 255 242 235; /* #fff2eb */
-  --accent-100-rgb: 255 213 194; /* #ffd5c2 */
-  --accent-200-rgb: 255 172 133; /* #ffac85 */
-  --accent-300-rgb: 255 122 69; /* #ff7a45 */
+  /* Accent. Every accent colour in the stylesheets comes from this block;
+     colours set in code (WebGL, inline SVG, content) come from
+     src/lib/theme.ts, which mirrors it. Solid: var(--accent).
+     Translucent: rgb(var(--accent-rgb) / 0.4). */
   --accent-rgb: 255 68 0; /* #ff4400 */
-  --accent-500-rgb: 230 54 0; /* #e63600 */
+  --accent-2-rgb: 230 54 0; /* #e63600 deeper */
+  --accent-bright-rgb: 255 122 69; /* #ff7a45 */
+  --accent-pale-rgb: 255 213 194; /* #ffd5c2 */
+  --accent-ink-rgb: 20 3 0; /* #140300 text on accent fills */
+  --accent: rgb(var(--accent-rgb));
+  --accent-2: rgb(var(--accent-2-rgb));
+  --accent-bright: rgb(var(--accent-bright-rgb));
+  --accent-pale: rgb(var(--accent-pale-rgb));
+  --accent-ink: rgb(var(--accent-ink-rgb));
+  --glow: rgb(var(--accent-rgb) / 0.55);
+  --glow-soft: rgb(var(--accent-rgb) / 0.18);
+
+  /* Extra tints and shades of the accent for one-off details. */
+  --accent-50-rgb: 255 242 235; /* #fff2eb */
+  --accent-200-rgb: 255 172 133; /* #ffac85 */
   --accent-600-rgb: 179 36 0; /* #b32400 */
   --accent-700-rgb: 122 22 0; /* #7a1600 */
   --accent-800-rgb: 68 11 0; /* #440b00 */
   --accent-900-rgb: 38 6 0; /* #260600 */
-  --accent-950-rgb: 20 3 0; /* #140300 */
-
   --accent-50: rgb(var(--accent-50-rgb));
-  --accent-100: rgb(var(--accent-100-rgb));
   --accent-200: rgb(var(--accent-200-rgb));
-  --accent-300: rgb(var(--accent-300-rgb));
-  --accent: rgb(var(--accent-rgb));
-  --accent-500: rgb(var(--accent-500-rgb));
   --accent-600: rgb(var(--accent-600-rgb));
   --accent-700: rgb(var(--accent-700-rgb));
   --accent-800: rgb(var(--accent-800-rgb));
   --accent-900: rgb(var(--accent-900-rgb));
-  --accent-950: rgb(var(--accent-950-rgb));
+
+  /* Hero backdrop: the glow behind the headline (top to edge) and the tint
+     of the frosted glass bars over the globe. */
+  --hero-1: rgb(var(--accent-600-rgb) / 0.5);
+  --hero-2: rgb(var(--accent-700-rgb) / 0.42);
+  --hero-3: rgb(var(--accent-800-rgb) / 0.4);
+  --hero-4: rgb(var(--accent-900-rgb) / 0.3);
+  --bar-tint: rgba(13, 13, 13, 0.22);
 
   --purple: #8b5cf6;
   --purple-bright: #a78bfa;
