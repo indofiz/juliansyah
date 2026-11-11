@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Build date for the footer's "Last updated" (inlined, so the page stays static).
+  env: { NEXT_PUBLIC_BUILD_DATE: new Date().toISOString().slice(0, 10) },
   cacheComponents: true,
   partialPrefetching: true,
 

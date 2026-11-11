@@ -1,16 +1,19 @@
 "use client";
 
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { nav, site } from "@/content/site";
 import { Icon } from "./ui/Icon";
 
 /**
- * Mobile only (hidden above 900px): hamburger button + full-screen menu, and
- * the header hides while scrolling down and comes back when scrolling up.
+ * Mobile only (hidden above 900px): hamburger button + full-screen menu with
+ * the same four links as the desktop pill, and the header hides while
+ * scrolling down and comes back when scrolling up. Escape closes the menu
+ * and returns focus to the button.
  */
 export function MobileMenu() {
   const [open, setOpen] = useState(false);
+  const burger = useRef<HTMLButtonElement>(null);
+  const firstLink = useRef<HTMLAnchorElement>(null);
 
   // Hide-on-scroll-down / show-on-scroll-up for the fixed mobile header.
   useEffect(() => {
@@ -38,18 +41,26 @@ export function MobileMenu() {
 
   useEffect(() => {
     document.documentElement.classList.toggle("menu-open", open);
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    if (open) firstLink.current?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && open) {
+        setOpen(false);
+        burger.current?.focus();
+      }
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
   const close = () => setOpen(false);
+  const tab = open ? 0 : -1;
 
   return (
     <>
       <button
+        ref={burger}
         className={`burger ${open ? "is-open" : ""}`}
-        aria-label={open ? "Close menu" : "Open menu"}
+        aria-label={open ? nav.menu.close : nav.menu.open}
         aria-expanded={open}
         aria-controls="mobile-menu"
         onClick={() => setOpen((v) => !v)}
@@ -59,31 +70,23 @@ export function MobileMenu() {
       </button>
 
       <div id="mobile-menu" className={`mobile-menu ${open ? "is-open" : ""}`} aria-hidden={!open}>
-        <nav className="mobile-menu-inner" aria-label="Mobile">
-          {nav.map((item) => (
-            <div className="mm-group" key={item.label}>
-              {"items" in item ? (
-                <>
-                  <span className="mm-title">{item.label}</span>
-                  {item.items.map((sub) => (
-                    <a key={sub.href} href={sub.href} onClick={close} tabIndex={open ? 0 : -1}>
-                      {sub.label}
-                    </a>
-                  ))}
-                </>
-              ) : (
-                <a className="mm-title-link" href={item.href} onClick={close} tabIndex={open ? 0 : -1}>
+        <nav className="mobile-menu-inner" aria-label={nav.menu.label}>
+          <ul className="mm-links">
+            {nav.links.map((item, i) => (
+              <li key={item.href}>
+                <a ref={i === 0 ? firstLink : undefined} href={item.href} onClick={close} tabIndex={tab}>
                   {item.label}
+                  <Icon name="arrowRight" size={18} />
                 </a>
-              )}
-            </div>
-          ))}
+              </li>
+            ))}
+          </ul>
           <div className="mm-footer">
-            <Link href="/#contact" className="btn btn-glow btn-block" onClick={close} tabIndex={open ? 0 : -1}>
-              <Icon name="wand" size={16} /> Hire me
-            </Link>
-            <a href={`mailto:${site.email}`} className="btn btn-ghost btn-block" onClick={close} tabIndex={open ? 0 : -1}>
-              Email me
+            <a href={nav.hire.href} className="btn btn-glow btn-block" onClick={close} tabIndex={tab}>
+              {nav.hire.label}
+            </a>
+            <a href={`mailto:${site.email}`} className="btn btn-ghost btn-block" onClick={close} tabIndex={tab}>
+              {nav.email}
             </a>
             <span className="mm-email">{site.email}</span>
           </div>

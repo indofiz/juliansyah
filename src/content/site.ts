@@ -6,7 +6,7 @@
  * with a dashed outline. List them with: grep -n "TODO:" src/content/site.ts
  */
 
-import type { Capability, LoopMedia, Platform, PlaygroundItem, Project, ProofItem } from "./types";
+import type { Capability, IconName, Link, LoopMedia, Platform, PlaygroundItem, Project, ProofItem, Testimonial } from "./types";
 
 export const site = {
   name: "Juliansyah",
@@ -23,34 +23,26 @@ export const site = {
     "Juliansyah designs and builds Flutter apps and web front-ends from Jakarta (UTC+7): UI/UX design, Flutter, React and Next.js, from first sketch to shipped release.",
 };
 
-/** Social icons in the footer. Add LinkedIn / X / Dribbble here when ready. */
-export const socials = [
+/** Social icons in the footer. A "TODO:" href renders as a dashed placeholder. */
+export const socials: { icon: IconName; label: string; href: string }[] = [
   { icon: "github", label: "GitHub", href: site.github },
+  { icon: "linkedin", label: "LinkedIn", href: "TODO: LinkedIn URL" },
+  { icon: "dribbble", label: "Dribbble", href: "TODO: Dribbble or Behance URL" },
   { icon: "mail", label: "Email", href: `mailto:${site.email}` },
-] as const;
+];
 
-export const nav = [
-  {
-    label: "Work",
-    items: [
-      { label: "Selected projects", href: "/#work" },
-      { label: "Case study", href: "/work/presensi-pkp" },
-      { label: "Capabilities", href: "/#capabilities" },
-    ],
-  },
-  {
-    label: "Services",
-    items: [
-      { label: "What I do", href: "/#services" },
-      { label: "Design → code", href: "/#design-to-code" },
-    ],
-  },
-  {
-    label: "About",
-    items: [{ label: "Quick answers", href: "/#assistant" }],
-  },
-  { label: "Contact", href: "/#contact" },
-] as const;
+/** Main navigation (desktop pill and mobile menu). "Hire me" goes to Contact. */
+export const nav = {
+  links: [
+    { label: "Work", href: "/#work" },
+    { label: "About", href: "/#about" },
+    { label: "Playground", href: "/#playground" },
+    { label: "Contact", href: "/#contact" },
+  ] satisfies Link[],
+  hire: { label: "Hire me", href: "/#contact" },
+  email: "Email me",
+  menu: { open: "Open menu", close: "Close menu", label: "Main" },
+};
 
 /* ---------------------------------------------------------------------------
  * 1. Hero: who are you?
@@ -440,47 +432,119 @@ export const playground = {
   ],
 };
 
-export const cta = {
-  title: ["Let's Build Something", "Worth Scrolling For"],
-  text: "Tell me about your project or role.",
-  primary: "Email me",
-  secondary: "View GitHub",
+/* ---------------------------------------------------------------------------
+ * 7. About: who are you, really? The particle portrait forms beside it.
+ * ------------------------------------------------------------------------- */
+export const about = {
+  badge: "About",
+  title: "Hi, I'm Juliansyah.",
+  photo: {
+    src: "/image-me.png",
+    alt: "Juliansyah, smiling, in a green batik shirt against an orange background",
+    width: 1024,
+    height: 1024,
+  },
+  story: [
+    "I'm a Flutter developer, front-end developer and UI/UX designer in Jakarta. I design the screens, then build them myself, for phones and the web.",
+    "TODO: two or three sentences on how you got started and the problems you like solving.",
+  ],
+  careTitle: "What I care about",
+  // Drafted from the work on this site: confirm or rewrite them.
+  care: [
+    "Apps that keep working on weak networks and older phones.",
+    "Interfaces anyone can use: keyboard, screen reader or large text.",
+    "Code the next developer can read without me in the room.",
+  ],
+  location: { title: "Where and when", place: "Jakarta, Indonesia", localTime: "Local time" },
+  /** Working hours used for the overlap: 09:00–18:00 in both places. */
+  workday: { start: 9, end: 18 },
+  overlapTitle: "Hours my working day overlaps with yours",
+  overlapUnit: "h overlap",
+  // Which markets to show is a choice: edit freely (IANA time-zone names).
+  zones: [
+    { city: "Singapore", tz: "Asia/Singapore" },
+    { city: "Tokyo", tz: "Asia/Tokyo" },
+    { city: "Sydney", tz: "Australia/Sydney" },
+    { city: "Dubai", tz: "Asia/Dubai" },
+    { city: "Amsterdam", tz: "Europe/Amsterdam" },
+    { city: "London", tz: "Europe/London" },
+  ],
 };
 
+/* ---------------------------------------------------------------------------
+ * 8. Testimonials: can I trust you? Real quotes only, with permission.
+ * ------------------------------------------------------------------------- */
+const quote = (n: number): Testimonial => ({
+  quote: `TODO: a one- or two-sentence quote from client ${n}, used with permission.`,
+  name: `TODO: client ${n} name`,
+  role: "TODO: role",
+  company: "TODO: company",
+});
+
+export const testimonials = {
+  badge: "Kind words",
+  title: "What it's like to work with me, in clients' words.",
+  items: [quote(1), quote(2), quote(3)],
+};
+
+/* ---------------------------------------------------------------------------
+ * 9. Contact: how do I reach you? One obvious next step.
+ * ------------------------------------------------------------------------- */
+export const contact = {
+  badge: "Contact",
+  title: "Tell me what you're building.",
+  text: "One email is enough to start: what you're making, who it's for and when you need it.",
+  emailLabel: "Email",
+  primary: "Email me",
+  copy: { label: "Copy email address", done: "Copied", fallback: "Press Ctrl+C or ⌘C to copy" },
+  call: { label: "Book a call", href: "TODO: booking URL (Cal.com or Calendly)" },
+  facts: [
+    { icon: "clock", label: "Typical reply", value: "TODO: e.g. within one working day" },
+    { icon: "calendar", label: "Availability", value: "TODO: e.g. taking new projects from January 2027" },
+    { icon: "mapPin", label: "Time zone", value: `${site.location} · ${site.utcOffset}` },
+  ] satisfies { icon: IconName; label: string; value: string }[],
+  form: {
+    title: "Or send a quick note",
+    name: "Your name",
+    email: "Your email",
+    message: "What are you building?",
+    submit: "Write the email",
+    note: "This opens your email app with the note filled in. Nothing is stored on this site.",
+    sent: "Your email app should open now. If it doesn't, write to",
+    subject: "Project enquiry from",
+  },
+};
+
+/* ---------------------------------------------------------------------------
+ * 10. Footer
+ * ------------------------------------------------------------------------- */
 export const footer = {
-  tagline: "Frontend · UI/UX · Flutter",
+  tagline: "Flutter · Front-end · UI/UX",
   columns: [
     {
       title: "Work",
       links: [
-        { label: "Projects", href: "/#work" },
-        { label: "Case study", href: "/work/presensi-pkp" },
-        { label: "Capabilities", href: "/#capabilities" },
-      ],
-    },
-    {
-      title: "Services",
-      links: [
-        { label: "What I do", href: "/#services" },
+        { label: "Selected work", href: "/#work" },
         { label: "Design → code", href: "/#design-to-code" },
+        { label: "What I do", href: "/#services" },
+        { label: "Playground", href: "/#playground" },
       ],
     },
     {
       title: "About",
       links: [
-        { label: "Quick answers", href: "/#assistant" },
+        { label: "About me", href: "/#about" },
+        { label: "Kind words", href: "/#testimonials" },
         { label: "Contact", href: "/#contact" },
       ],
     },
-  ],
-  buttons: [
-    { icon: "github", top: "View code on", bottom: "GitHub", href: site.github },
-    { icon: "mail", top: "Email me at", bottom: site.email, href: `mailto:${site.email}` },
-  ],
-  smallPrint: [
-    "Availability: open to freelance projects and full-time roles.",
-    "Built with Next.js, React Three Fiber and GSAP. The particle portrait is generated from a photo of me.",
-  ],
+  ] satisfies { title: string; links: Link[] }[],
+  resume: { label: "Download my résumé", hint: "PDF", href: "TODO: /resume.pdf" },
+  github: { top: "View code on", bottom: "GitHub" },
+  emailButton: { top: "Email me at" },
+  lastUpdated: "Last updated",
+  smallPrint: "Built with Next.js, React Three Fiber and GSAP. The particle portrait is generated from a photo of me.",
+  rights: "All rights reserved.",
 };
 
 /* ---------------------------------------------------------------------------

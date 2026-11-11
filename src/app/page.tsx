@@ -11,7 +11,7 @@ import { Assistant } from "@/components/sections/Assistant";
 import { Featured } from "@/components/sections/Featured";
 import { Capabilities } from "@/components/sections/Capabilities";
 import { Playground } from "@/components/sections/Playground";
-import { Cta } from "@/components/sections/Cta";
+import { Contact } from "@/components/sections/Contact";
 import { Footer } from "@/components/sections/Footer";
 import { jsonLdHtml, personJsonLd } from "@/lib/jsonLd";
 
@@ -35,7 +35,7 @@ export default function Home() {
         <Playground />
         <Assistant />
         <Featured />
-        <Cta />
+        <Contact />
       </main>
       <Footer />
     </>
