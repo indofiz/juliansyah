@@ -7,7 +7,7 @@ import { Proof } from "./Proof";
  * The wrapper is three screens tall and its stage sticks to the viewport, so
  * scrolling drives the animation instead of moving the page (see the intro
  * timeline in ScrollFx and the "proof" keyframe in sceneKeyframes):
- *   1st screen of scroll: headline slides up, work reel slides down,
+ *   1st screen of scroll: headline slides up, dashboard slides down,
  *                         globe rises from the bottom to the centre
  *   2nd screen:           proof copy and rows fade in around the globe
  *   then:                 the stage releases and the page scrolls on

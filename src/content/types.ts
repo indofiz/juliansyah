@@ -41,6 +41,12 @@ export type LoopMedia = {
 
 export type ProofItem = { icon: IconName; value: string; label: string };
 
+/** A logo in the hero's moving strip. width/height: the image file's real pixel size. */
+export type ClientLogo = { name: string; src: string; width: number; height: number };
+
+/** Sidebar row of the hero dashboard mock; `tail` adds a chevron or a coloured pill. */
+export type MockNavItem = { icon: IconName; label: string; tail?: "chevron" | "hot" | "ai" | "new" };
+
 export type CaseStudy = {
   /** The problem, in the client's words where possible. */
   problem: string[];

@@ -3,6 +3,7 @@ import "@fontsource-variable/instrument-sans/standard.css";
 import "lenis/dist/lenis.css";
 import "@/styles/tokens.css";
 import "@/styles/components.css";
+import "@/styles/mocks.css";
 import "@/styles/sections.css";
 import "@/styles/bento.css";
 import "@/styles/mobile.css";

@@ -167,6 +167,19 @@
   transform: translateY(0);
 }
 
+/* Trailing icon nudges the way it points. */
+.btn-icon-end {
+  transition: transform 0.25s ease;
+}
+
+.btn:hover .btn-icon-arrowUpRight {
+  transform: translate(0.125rem, -0.125rem);
+}
+
+.btn:hover .btn-icon-arrowRight {
+  transform: translateX(0.2rem);
+}
+
 .btn-sm {
   height: 2.25rem;
   padding: 0 1.125rem;

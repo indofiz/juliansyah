@@ -219,24 +219,26 @@
     padding-top: 5.75rem;
   }
 
-  .hero-status {
-    margin-bottom: 0.875rem;
-  }
-
-  .hero-name {
-    max-width: 20rem;
-    margin-bottom: 0.75rem;
+  .hero-eyebrow {
+    margin-bottom: 1rem;
+    padding: 0.3125rem 0.875rem;
+    gap: 0.25rem 0.5rem;
     font-size: 0.8125rem;
   }
 
+  .hero-eyebrow-spark {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
   .hero-title {
-    font-size: 1.875rem;
-    letter-spacing: -0.03em;
+    font-size: 2.25rem;
+    letter-spacing: -0.035em;
   }
 
   .hero-text {
-    max-width: 20rem;
-    margin-top: 0.75rem;
+    max-width: 22rem;
+    margin-top: 0.875rem;
     font-size: 0.9375rem;
   }
 
@@ -256,30 +258,47 @@
     backdrop-filter: blur(0.45rem) saturate(1.6);
   }
 
-  .hero-reel-wrap {
-    top: 80vh;
+  .hero-frame-wrap {
+    --peek: 19rem;
   }
 
-  .reel {
-    width: 88%;
-    margin: 0;
+  .hero-frame .frame-inner {
+    max-height: 30rem;
   }
 
-  .reel-phone {
-    right: -13%;
-    top: -3rem;
-    width: 6.75rem;
+  /* Top bar: keep the "preview" tag (it says the data is sample data), drop
+     the breadcrumb and the date chip to make room. */
+  .hero-frame .mock-crumb,
+  .hero-frame .mock-top .mock-chip:not(.mock-bell) {
+    display: none;
+  }
+
+  .hero-frame .mock-top-right {
+    flex: 1;
+    margin-left: 0;
+  }
+
+  .hero-frame .mock-live {
+    margin-right: auto;
+    white-space: nowrap;
+  }
+
+  .hero-frame .mock-hero-card {
+    gap: 1.25rem;
+    padding: 1.25rem;
+  }
+
+  .hero-frame .mock-big {
+    font-size: 2.125rem;
+  }
+
+  /* Stat card on the first screen: drop the decorative greeting. */
+  .hero-frame .mock-greet {
+    display: none;
   }
 
   .media-ph-label .todo {
     font-size: 0.625rem;
-  }
-
-  .reel-caption {
-    top: 1.25rem;
-    right: calc(100% - 0.75rem);
-    padding: 0.25rem 0.625rem;
-    font-size: 0.6875rem;
   }
 
   /* ---------- Intro (pinned): proof over the globe ---------- */
@@ -296,6 +315,10 @@
     gap: 1rem;
   }
 
+  .proof-copy .sh {
+    margin-bottom: 0;
+  }
+
   .proof-copy .h2 {
     font-size: 1.75rem;
   }
@@ -305,24 +328,37 @@
     font-size: 0.8125rem;
   }
 
+  .proof-actions,
   .proof-globe-space {
     display: none;
   }
 
+  /* The list sits over the lower half of the globe: a soft dark glow behind
+     it and a text shadow keep the numbers readable (no card). */
   .proof-list {
+    container-type: normal; /* it shrink-wraps here, so no size container */
+    position: relative;
+    isolation: isolate;
+    align-self: center;
     margin-top: auto;
-    gap: 0.875rem;
-    padding: 1rem 1.125rem;
-    border-radius: var(--radius);
-    background: rgba(8, 6, 4, 0.55);
-    box-shadow: inset 0 0 0 1px var(--border);
-    -webkit-backdrop-filter: blur(0.75rem);
-    backdrop-filter: blur(0.75rem);
+    margin-bottom: 6vh;
+    grid-template-columns: 1.5rem auto 1fr;
+    column-gap: 0.75rem;
+    row-gap: 1.125rem;
   }
 
-  .proof-row {
-    grid-template-columns: 1.5rem 1fr;
-    gap: 0.75rem;
+  .proof-list::before {
+    content: "";
+    position: absolute;
+    inset: -2.5rem -3rem;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(closest-side, rgba(5, 3, 1, 0.78), rgba(5, 3, 1, 0.45) 60%, transparent);
+  }
+
+  .proof-row strong,
+  .proof-row span {
+    text-shadow: 0 0 0.75rem rgba(5, 3, 1, 0.9), 0 1px 0.125rem rgba(5, 3, 1, 0.8);
   }
 
   .proof-row > svg {
@@ -330,16 +366,12 @@
     height: 1.25rem !important;
   }
 
-  .proof-value {
-    gap: 0.125rem;
+  .proof-row strong {
+    font-size: 1.375rem;
   }
 
-  .proof-value strong {
-    font-size: 1.125rem;
-  }
-
-  .proof-value span {
-    font-size: 0.75rem;
+  .proof-row span {
+    font-size: 1rem;
   }
 
   /* ---------- Carousels (shared) ---------- */

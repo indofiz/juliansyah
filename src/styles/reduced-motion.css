@@ -27,10 +27,24 @@
     padding-bottom: 3rem;
   }
 
-  .hero-reel-wrap {
-    position: relative;
-    top: auto;
+  .hero-frame-wrap {
+    height: auto;
     margin-top: 5rem;
+  }
+
+  /* Logo strip: no movement; swipe or scroll it sideways instead. */
+  .mock-marquee {
+    overflow-x: auto;
+    -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent);
+    mask-image: linear-gradient(90deg, #000 85%, transparent);
+  }
+
+  .mock-marquee-track {
+    animation: none;
+  }
+
+  .mock-marquee-set[aria-hidden] {
+    display: none;
   }
 
   .proof-layer {
@@ -45,11 +59,14 @@
   }
 
   .proof-copy .sh > *,
+  .proof-actions,
   .proof-row {
     opacity: 1;
+    visibility: visible;
   }
 
-  .status-live::before {
+  .status-live::before,
+  .hero-eyebrow-spark {
     animation: none;
   }
 

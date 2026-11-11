@@ -44,7 +44,7 @@
   height: 100vh;
   pointer-events: none;
   background: radial-gradient(
-    95% 85% at 50% 0%,
+    47.5% 85% at 50% 0%,
     var(--hero-1) 0%,
     var(--hero-2) 30%,
     var(--hero-3) 60%,
@@ -62,44 +62,65 @@
   padding-top: clamp(6.25rem, 13vh, 8.25rem);
 }
 
-.hero-status {
-  margin-bottom: 1.25rem;
-}
-
-.hero-name {
-  display: flex;
+/* Greeting pill: "Hi, I'm Juliansyah ✳ Your Technology Partner". */
+.hero-eyebrow {
+  display: inline-flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: baseline;
-  gap: 0.25rem 0.75rem;
-  margin-bottom: 1rem;
-  font-size: 1rem;
+  align-items: center;
+  gap: 0.25rem 0.625rem;
+  margin-bottom: 1.5rem;
+  padding: 0.4375rem 1rem;
+  border-radius: 999px;
+  font-size: 0.9375rem;
+  font-weight: 500;
   color: var(--muted);
+  background: rgba(255, 255, 255, 0.025);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
-.hero-name span {
-  text-wrap: balance;
-}
-
-.hero-name b {
+.hero-eyebrow b {
   font-weight: 600;
   color: var(--text);
 }
 
+.hero-eyebrow-tagline {
+  color: var(--text);
+}
+
+/* The ✳: accent, softly glowing, turning slowly (stands still with reduced motion). */
+.hero-eyebrow-spark {
+  flex: none;
+  width: 0.875rem;
+  height: 0.875rem;
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 0.25rem rgb(var(--accent-rgb) / 0.8));
+  animation: spark-turn 14s linear infinite;
+}
+
+@keyframes spark-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .hero-title {
-  max-width: 62rem;
-  font-size: clamp(2.25rem, calc(3.75 * var(--vw)), 4.5rem);
-  letter-spacing: -0.035em;
-  line-height: 1.06;
+  max-width: 60rem;
+  font-size: clamp(2.75rem, calc(4.9 * var(--vw)), 5.5rem);
+  letter-spacing: -0.04em;
+  line-height: 1.02;
   padding-bottom: 0.06em;
   text-wrap: balance;
 }
 
 .hero-text {
-  max-width: 35rem;
-  margin-top: 1rem;
+  max-width: 41rem;
+  margin-top: 1.25rem;
   font-size: 1.125rem;
-  line-height: 1.45;
+  line-height: 1.5;
   color: #ccc8c4;
   text-wrap: balance;
 }
@@ -160,44 +181,31 @@
   }
 }
 
-/* Work reel: browser frame with a phone overlapping its right edge. It peeks
-   up from the bottom of the first screen and slides away as you scroll. */
-.hero-reel-wrap {
-  position: absolute;
-  top: 74vh;
-  left: 0;
-  right: 0;
-  z-index: 2;
-  margin: 0 auto;
+/* Design-system preview: a dashboard in a glow frame. The hero is a column:
+   copy at the top, and the dashboard pushed to the bottom so its first
+   --peek of height (bezel, top bar, stat card with the social buttons) ends
+   right at the bottom of the first screen. On short screens the copy wins
+   and the dashboard moves down. It slides away as you scroll. */
+.hero-layer {
+  display: flex;
+  flex-direction: column;
 }
 
-.reel {
+.hero-copy {
+  padding-bottom: 2rem;
+}
+
+.hero-frame-wrap {
+  --peek: 15rem;
   position: relative;
-  width: min(100%, 58rem);
-  margin: 0 auto;
+  z-index: 2;
+  flex: none;
+  height: var(--peek);
+  margin-top: auto;
 }
 
-.reel-phone {
-  position: absolute;
-  right: -7%;
-  top: -4.5rem;
-  width: 13.5rem;
-}
-
-.reel-caption {
-  position: absolute;
-  top: 2.5rem;
-  right: calc(100% - 1.25rem);
-  padding: 0.375rem 0.75rem;
-  border-radius: 999px;
-  white-space: nowrap;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--text);
-  background: rgba(14, 12, 10, 0.72);
-  box-shadow: inset 0 0 0 1px var(--border-strong);
-  -webkit-backdrop-filter: blur(0.75rem);
-  backdrop-filter: blur(0.75rem);
+.hero-frame .frame-inner {
+  max-height: 37.5rem;
 }
 
 /* Proof layer: copy left, globe centre, signals right. */
@@ -220,7 +228,7 @@
 }
 
 .proof-copy .sh {
-  margin-bottom: 0;
+  margin-bottom: 1.625rem;
 }
 
 .proof-copy .h2 {
@@ -232,44 +240,53 @@
   max-width: 18.75rem;
 }
 
+/* One line per stat: icon, number (white), label (accent). The rows are
+   subgrids of the list, so every number and every label shares a column.
+   Number and label sizes follow the list's own width (cqi), so the longest
+   label always fits its column, even where the root font hits its floor. */
 .proof-list {
+  container-type: inline-size;
   display: grid;
-  gap: 1.5rem;
+  grid-template-columns: 2.25rem auto 1fr;
+  column-gap: 1rem;
+  row-gap: 1.875rem;
 }
 
 .proof-row {
+  grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: 2.25rem 1fr;
-  align-items: center;
-  gap: 1rem;
+  grid-template-columns: subgrid;
+  align-items: baseline;
 }
 
 .proof-row > svg {
+  align-self: center;
   justify-self: center;
-  color: var(--accent);
+  color: #fff;
 }
 
-.proof-value {
-  display: grid;
-  gap: 0.25rem;
-}
-
-.proof-value strong {
-  font-size: clamp(1.5rem, calc(2.2 * var(--vw)), 2rem);
+.proof-row strong {
+  font-size: clamp(1.25rem, 8.6cqi, 2.125rem);
   font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1.1;
 }
 
-.proof-value span {
-  font-size: 0.9375rem;
-  color: var(--muted);
+.proof-row span {
+  white-space: nowrap;
+  font-size: clamp(1rem, 6cqi, 1.5rem);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--accent);
 }
 
-/* Hidden until the intro timeline fades them in (avoids a flash on load). */
+/* Hidden until the intro timeline fades them in (no flash on load, and the
+   buttons can't be clicked or focused while invisible). */
 .proof-copy .sh > *,
+.proof-actions,
 .proof-row {
   opacity: 0;
+  visibility: hidden;
 }
 
 /* ---------- Selected work ---------- */

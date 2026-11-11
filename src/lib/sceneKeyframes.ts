@@ -28,11 +28,11 @@ export type SceneKeyframe = SceneValues & {
 const hidden = { x: 0, y: 0.6, scale: 0.7, globeSpin: 4.8, shapeSpin: 0.6, morph: 0, sink: 0, opacity: 0 };
 
 export const sceneKeyframes: Record<string, SceneKeyframe> = {
-  // Big globe rising from the bottom of the hero, behind the work reel.
+  // Big globe rising from the bottom of the hero, behind the dashboard preview.
   hero: { x: 0, y: -0.8, scale: 1.12, globeSpin: -0.45, shapeSpin: -0.25, morph: 0, sink: 0, opacity: 1, mobile: { y: -0.26 } },
 
   // Pinned intro: during the first screen of scroll the globe rises from the
-  // bottom to the centre while the headline and work reel part ways, then the
+  // bottom to the centre while the headline and dashboard part ways, then the
   // proof rows fade in around it.
   proof: {
     scroll: { trigger: "#hero", start: "top top", endVh: 1 },

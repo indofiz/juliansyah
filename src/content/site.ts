@@ -6,7 +6,7 @@
  * with a dashed outline. List them with: grep -n "TODO:" src/content/site.ts
  */
 
-import type { Capability, IconName, Link, LoopMedia, Platform, PlaygroundItem, Project, ProofItem, Testimonial } from "./types";
+import type { Capability, ClientLogo, IconName, Link, LoopMedia, MockNavItem, Platform, PlaygroundItem, Project, ProofItem, Testimonial } from "./types";
 
 export const site = {
   name: "Juliansyah",
@@ -16,6 +16,8 @@ export const site = {
   url: "https://juliansyah.dev",
   email: "juliansyah.ekt17@gmail.com",
   github: "https://github.com/indofiz",
+  linkedin: "TODO: LinkedIn URL",
+  dribbble: "TODO: Dribbble URL",
   location: "Jakarta, Indonesia",
   timeZone: "Asia/Jakarta",
   utcOffset: "UTC+7",
@@ -26,8 +28,8 @@ export const site = {
 /** Social icons in the footer. A "TODO:" href renders as a dashed placeholder. */
 export const socials: { icon: IconName; label: string; href: string }[] = [
   { icon: "github", label: "GitHub", href: site.github },
-  { icon: "linkedin", label: "LinkedIn", href: "TODO: LinkedIn URL" },
-  { icon: "dribbble", label: "Dribbble", href: "TODO: Dribbble or Behance URL" },
+  { icon: "linkedin", label: "LinkedIn", href: site.linkedin },
+  { icon: "dribbble", label: "Dribbble", href: site.dribbble },
   { icon: "mail", label: "Email", href: `mailto:${site.email}` },
 ];
 
@@ -48,40 +50,83 @@ export const nav = {
  * 1. Hero: who are you?
  * ------------------------------------------------------------------------- */
 export const hero = {
-  status: "Available for projects",
+  /** The pill above the headline: "Hi, I'm <name> ✳ <tagline>". The ✳ is drawn by Hero.tsx. */
+  eyebrow: { greeting: "Hi, I'm", tagline: "Your Technology Partner" },
+  /** Not shown in the hero any more; used as the footer line of the Open Graph image. */
   roles: "Flutter developer · Front-end developer · UI/UX designer",
-  title: "I design and build Flutter apps and web front-ends for teams that care how their product feels.",
-  text: "Design and code from one person, so nothing gets lost in the hand-off.",
-  primary: { label: "See my work", href: "/#work" },
-  secondary: { label: "Contact", href: "/#contact" },
-  /** The work reel under the headline: one browser frame, one phone frame. */
-  reel: [
-    {
-      frame: "browser",
-      label: "TODO: describe the web project in this loop",
-      caption: "TODO: web project",
+  title: "I Engineer Digital Products That Solve Real Problems.",
+  text: "I'm a software engineer with a strong eye for design and a product-driven mindset. I turn complex challenges into intuitive, functional digital experiences that help businesses work better.",
+  primary: { label: "Let's Work Together", href: "/#contact" },
+  secondary: { label: "Explore My Work", href: "/#work" },
+  /**
+   * The dashboard under the buttons: a preview of the free design system.
+   * The stat card is REAL (users, client logos). The sidebar, top
+   * bar and the three tiles below it are SAMPLE data; the `tag` says so.
+   */
+  dashboard: {
+    tag: "Design system preview",
+    nav: [
+      { icon: "grid", label: "Dashboard" },
+      { icon: "folder", label: "Projects", tail: "chevron" },
+      { icon: "cube", label: "Components", tail: "chevron" },
+      { icon: "phone", label: "Mobile", tail: "hot" },
+      { icon: "users", label: "Customers", tail: "chevron" },
+      { icon: "file", label: "Reports" },
+      { icon: "activity", label: "Analytics", tail: "ai" },
+      { icon: "layers", label: "Tokens", tail: "new" },
+      { icon: "message", label: "Messages" },
+    ] satisfies MockNavItem[],
+    pills: { hot: "Hot", ai: "AI", new: "New" },
+    tour: "Product tour · 2 min",
+    themes: ["Dark", "Light"],
+    crumb: "Dashboard",
+    range: "Last 30 days",
+    alerts: "3",
+    greet: "Good evening, visitor",
+    /** People using apps I've built (user's figure, 2026-11-11). */
+    users: { value: "12K+", label: "people use my apps", apps: "Presensi PKP, PKP Smart and more" },
+    /** Moving logo strip. Files in public/logos (from the v1 site); width/height are the PNG's real size. */
+    clients: {
+      label: "Organisations I've worked with",
+      logos: [
+        { name: "Linknet", src: "/logos/linknet.png", width: 562, height: 200 },
+        { name: "Uswah", src: "/logos/uswah_salam.png", width: 540, height: 200 },
+        { name: "Mabes TNI", src: "/logos/mabes_tni.png", width: 213, height: 200 },
+        { name: "Kabupaten Malinau", src: "/logos/malinau.png", width: 159, height: 200 },
+        { name: "Nizamia Andalusia", src: "/logos/nizamia.png", width: 200, height: 200 },
+        { name: "Kota Pangkalpinang", src: "/logos/pangkalpinang.png", width: 163, height: 200 },
+        { name: "THI", src: "/logos/thi.png", width: 200, height: 200 },
+        { name: "Yayasan Al Azhar", src: "/logos/yayasan_pendidikan_alazhar.png", width: 200, height: 200 },
+      ] satisfies ClientLogo[],
     },
-    {
-      frame: "phone",
-      label: "TODO: Presensi PKP check-in flow, screen recording",
-      caption: "Presensi PKP · Flutter",
-    },
-  ] satisfies LoopMedia[],
+    /** Sample data. */
+    tiles: [
+      { label: "Conversion rate", value: "3.8%" },
+      { label: "Avg. session", value: "4m 12s" },
+      { label: "Tickets resolved", value: "1,204" },
+    ],
+  },
 };
 
 /* ---------------------------------------------------------------------------
- * 2. Proof: can I trust you? (first signal). Real numbers only.
+ * 2. Track record (section id "proof"): can I trust you? The first numbers.
  * ------------------------------------------------------------------------- */
 export const proof = {
-  badge: "Proof",
-  title: "Shipped work, not mockups.",
-  text: "Signals from apps and sites running in production.",
+  badge: "Track record",
+  title: "Numbers from Shipped Work.",
+  text: "From production apps for government, education and enterprise clients, as of November 2026.",
+  /** Desktop only (hidden on phones, as on the old site). */
+  primary: { label: "View work", href: "/#work" },
+  secondary: { label: "Learn more", href: "/#services" },
+  /** Keep labels short: they sit on one line next to the number. */
   items: [
-    { icon: "building", value: "TODO: number of organisations", label: "Organisations I've shipped for" },
-    { icon: "star", value: "TODO: store rating", label: "Store rating, Presensi PKP" },
-    { icon: "download", value: "TODO: installs", label: "App installs" },
-    { icon: "github", value: "TODO: GitHub stars", label: "GitHub stars" },
-    { icon: "clock", value: "TODO: first year", label: "Shipping since" },
+    { icon: "users", value: "12K+", label: "App users" },
+    // UNCONFIRMED: placeholder figure kept at the user's request (2026-11-11); replace with the real one.
+    { icon: "shield", value: "99.9%", label: "Crash-free sessions" },
+    { icon: "award", value: "8", label: "Client organisations" },
+    // UNCONFIRMED: placeholder figure kept at the user's request (2026-11-11); replace with the real one.
+    { icon: "clock", value: "3+", label: "Years of experience" },
+    { icon: "layers", value: "3", label: "Web, UI/UX & mobile" },
   ] satisfies ProofItem[],
 };
 

@@ -22,8 +22,8 @@ npm run build
 
 | # | Section | id | Answers | Notes |
 | --- | --- | --- | --- | --- |
-| 1 | Hero | `hero` | Who are you? | Name, status chip, one-sentence promise (the only h1), work reel (browser + phone loops). **Pinned**: the copy slides up and the reel slides down while the globe rises |
-| 2 | Proof | `proof` | Can I trust you? | Second screen of the pinned intro: real signals around the centred globe |
+| 1 | Hero | `hero` | Who are you? | Greeting pill (name ✳ tagline), headline (the only h1), description, two CTAs, design-system dashboard whose stat card is real (12K+ users, moving strip of client logos in colour) inside sample chrome. **Pinned**: the copy slides up and the dashboard slides down while the globe rises |
+| 2 | Track record | `proof` | Can I trust you? | Second screen of the pinned intro: one-line stats (icon, white number, amber label) around the centred globe; View work / Learn more on desktop |
 | 3 | Selected work | `work` | Can you do what I need? | Flagship card with "Tap to try" (lazy Flutter web iframe), then project cards. Each opens `/work/[slug]` |
 | 4 | Design → code | `design-to-code` | Can you do what I need? | **Pinned and scrubbed**: one component from sketch to wireframe, design, Flutter code and the running component |
 | 5 | What I do | `services` | Can you do what I need? | Bento of five outcome groups; illustrations play on hover (in view on touch) |
@@ -89,7 +89,7 @@ Below 1024px it's a normal responsive layout with a 16px base; phone rules
 | Buttons, badges, cards, frames, device frames, nav | `src/styles/components.css` |
 | Section layouts | `src/styles/sections.css` and `src/components/sections/*` |
 | Scroll choreography of the particles | `src/lib/sceneKeyframes.ts` |
-| Pinned intro timing (headline up, reel down, proof in) | intro timeline in `src/components/ScrollFx.tsx` |
+| Pinned intro timing (headline up, dashboard down, proof in) | intro timeline in `src/components/ScrollFx.tsx` |
 | Design → code sequence | `src/components/craft/*` |
 | Code highlighting (build time, no runtime library) | `src/lib/highlight.ts` |
 | Bento illustrations | `src/components/bento/Arts.tsx` + `src/styles/bento.css` |
