@@ -1,7 +1,7 @@
 /* ==========================================================================
    Skills bento (section #capabilities)
    Cards: dark glass, hairline border, bright top edge. On hover (or while in
-   view on touch screens) a card lifts, a mint spotlight follows the mouse,
+   view on touch screens) a card lifts, an accent spotlight follows the mouse,
    and its illustration plays. Shorthand used below:
      .bento-card:is(:hover, .is-active)  = "active"
    ========================================================================== */

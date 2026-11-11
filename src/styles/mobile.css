@@ -78,7 +78,7 @@
   }
 
   /* Neutral frosted glass once the page has scrolled (matches the desktop nav),
-     with the same faint green breath in the middle. */
+     with the same faint accent breath in the middle. */
   .site-header.is-scrolled {
     border-bottom-color: rgba(255, 255, 255, 0.1);
     background:

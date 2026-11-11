@@ -26,7 +26,7 @@
   position: relative;
 }
 
-/* Soft green glow at the top of the hero, behind the nav and headline. */
+/* Soft accent glow at the top of the hero, behind the nav and headline. */
 .hero-gradient {
   position: absolute;
   top: 0;
