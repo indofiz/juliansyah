@@ -1,7 +1,7 @@
 /* ==========================================================================
    Skills bento (section #capabilities)
    Cards: dark glass, hairline border, bright top edge. On hover (or while in
-   view on touch screens) a card lifts, a mint spotlight follows the mouse,
+   view on touch screens) a card lifts, an accent spotlight follows the mouse,
    and its illustration plays. Shorthand used below:
      .bento-card:is(:hover, .is-active)  = "active"
    ========================================================================== */
@@ -56,9 +56,9 @@
   overflow: hidden;
   isolation: isolate;
   background:
-    radial-gradient(120% 60% at 50% 0%, rgba(47, 227, 154, 0.06), transparent 60%),
+    radial-gradient(120% 60% at 50% 0%, rgb(var(--accent-rgb) / 0.06), transparent 60%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0) 45%),
-    #060908;
+    #090706;
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.07),
     0 1.5rem 3rem rgba(0, 0, 0, 0.35);
@@ -76,7 +76,7 @@
   left: 14%;
   right: 14%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(102, 255, 196, 0.7), transparent);
+  background: linear-gradient(90deg, transparent, rgb(var(--accent-300-rgb) / 0.7), transparent);
   opacity: 0.35;
   transition: opacity 0.5s, left 0.5s, right 0.5s;
 }
@@ -86,7 +86,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: radial-gradient(24rem circle at var(--mx) var(--my), rgba(47, 227, 154, 0.11), transparent 60%);
+  background: radial-gradient(24rem circle at var(--mx) var(--my), rgb(var(--accent-rgb) / 0.11), transparent 60%);
   opacity: 0;
   transition: opacity 0.5s;
 }
@@ -98,7 +98,7 @@
   z-index: 3;
   padding: 1px;
   border-radius: inherit;
-  background: radial-gradient(18rem circle at var(--mx) var(--my), rgba(102, 255, 196, 0.85), transparent 60%);
+  background: radial-gradient(18rem circle at var(--mx) var(--my), rgb(var(--accent-300-rgb) / 0.85), transparent 60%);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
@@ -110,9 +110,9 @@
 .bento-card:is(:hover, .is-active) {
   translate: 0 -0.3rem;
   box-shadow:
-    inset 0 0 0 1px rgba(47, 227, 154, 0.2),
+    inset 0 0 0 1px rgb(var(--accent-rgb) / 0.2),
     0 2rem 4rem rgba(0, 0, 0, 0.5),
-    0 0 3.5rem -1.5rem rgba(47, 227, 154, 0.45);
+    0 0 3.5rem -1.5rem rgb(var(--accent-rgb) / 0.45);
 }
 
 .bento-card:is(:hover, .is-active)::before {
@@ -145,7 +145,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(rgba(150, 255, 210, 0.16) 1px, transparent 1.4px);
+  background-image: radial-gradient(rgb(var(--accent-200-rgb) / 0.16) 1px, transparent 1.4px);
   background-size: 0.875rem 0.875rem;
   -webkit-mask-image: radial-gradient(60% 70% at 50% 45%, #000, transparent);
   mask-image: radial-gradient(60% 70% at 50% 45%, #000, transparent);
@@ -188,9 +188,9 @@
   display: grid;
   place-items: center;
   border-radius: 0.625rem;
-  color: #c9ffe8;
-  background: linear-gradient(160deg, #1c5a43, #0b241b);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 0 0 1px rgba(47, 227, 154, 0.2);
+  color: var(--accent-100);
+  background: linear-gradient(160deg, var(--accent-700), var(--accent-900));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 0 0 1px rgb(var(--accent-rgb) / 0.2);
 }
 
 .bento-copy h3 {
@@ -203,7 +203,7 @@
   margin-top: 0.625rem;
   font-size: 0.9375rem;
   line-height: 1.45;
-  color: #a9b2ae;
+  color: #b2aca9;
 }
 
 .bento-tags {
@@ -217,9 +217,9 @@
   padding: 0.25rem 0.625rem;
   border-radius: 999px;
   font-size: 0.75rem;
-  color: #bfe9d6;
-  background: rgba(47, 227, 154, 0.06);
-  box-shadow: inset 0 0 0 1px rgba(47, 227, 154, 0.16);
+  color: var(--accent-100);
+  background: rgb(var(--accent-rgb) / 0.06);
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.16);
 }
 
 /* Wide cards: copy beside the illustration (UI/UX copy left, front-end right). */
@@ -299,7 +299,7 @@
   width: 20rem;
   height: 20rem;
   border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(47, 227, 154, 0.2), transparent);
+  background: radial-gradient(closest-side, rgb(var(--accent-rgb) / 0.2), transparent);
   transform: translate(-50%, -50%);
   opacity: 0.6;
   transition: opacity 0.6s, transform 0.8s;
@@ -314,10 +314,10 @@
   position: absolute;
   padding: 0.45rem;
   border-radius: 2.1rem;
-  background: linear-gradient(160deg, #2c3330, #0b0e0d 40%, #171c1a);
+  background: linear-gradient(160deg, #332e2c, #0e0c0b 40%, #1c1917);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.14),
-    inset 0 0 0 0.22rem #050706,
+    inset 0 0 0 0.22rem #070605,
     0 2rem 3rem rgba(0, 0, 0, 0.55);
 }
 
@@ -361,12 +361,12 @@
 .fl-ghost i {
   height: 2.75rem;
   border-radius: 0.6rem;
-  background: #161d1a;
+  background: #1d1816;
 }
 
 .fl-ghost i:first-child {
   height: 5rem;
-  background: linear-gradient(160deg, #1f8a5b, #0b3d2a);
+  background: linear-gradient(160deg, var(--accent-600), var(--accent-800));
 }
 
 .fl-notch {
@@ -387,7 +387,7 @@
   height: 100%;
   overflow: hidden;
   border-radius: 1.7rem;
-  background: #0b0f0e;
+  background: #0f0c0b;
 }
 
 .fl-status {
@@ -400,7 +400,7 @@
   justify-content: space-between;
   font-size: 0.5rem;
   font-weight: 600;
-  color: #e9efec;
+  color: #efebe9;
 }
 
 .fl-status-icons {
@@ -413,7 +413,7 @@
   width: 0.6rem;
   height: 0.35rem;
   border-radius: 0.1rem;
-  background: #e9efec;
+  background: #efebe9;
 }
 
 .fl-status-icons i:first-child {
@@ -446,7 +446,7 @@
   gap: 0.55rem;
   padding: 1.9rem 0.75rem 3.4rem;
   font-size: 0.5625rem;
-  color: #dfe7e3;
+  color: #e7e2df;
 }
 
 .fl-appbar {
@@ -458,7 +458,7 @@
 .fl-appbar small {
   display: block;
   font-size: 0.5rem;
-  color: #7f8a86;
+  color: #8a837f;
 }
 
 .fl-appbar b {
@@ -482,8 +482,8 @@
   padding: 0 0.65rem;
   border-radius: 999px;
   font-size: 0.5rem;
-  color: #76817d;
-  background: #151b19;
+  color: #817a76;
+  background: #1b1715;
 }
 
 .fl-hero {
@@ -521,14 +521,14 @@
   padding: 0.25rem 0.55rem;
   border-radius: 999px;
   font-size: 0.5rem;
-  color: #9aa59f;
-  background: #151b19;
+  color: #a59e9a;
+  background: #1b1715;
 }
 
 .fl-cats span.on {
   font-weight: 600;
-  color: #04140d;
-  background: #2fe39a;
+  color: var(--accent-950);
+  background: var(--accent);
 }
 
 .fl-tile {
@@ -537,7 +537,7 @@
   gap: 0.5rem;
   padding: 0.45rem;
   border-radius: 0.75rem;
-  background: #121816;
+  background: #181412;
 }
 
 .fl-thumb {
@@ -556,7 +556,7 @@
 
 .fl-tile small {
   font-size: 0.5rem;
-  color: #7f8a86;
+  color: #8a837f;
 }
 
 .fl-fav {
@@ -575,8 +575,8 @@
   align-items: center;
   justify-content: space-around;
   border-radius: 1.2rem;
-  color: #76817d;
-  background: rgba(21, 27, 25, 0.94);
+  color: #817a76;
+  background: rgba(27, 23, 21, 0.94);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
@@ -589,8 +589,8 @@
 .fl-nav span.on {
   padding: 0.3rem 0.9rem;
   border-radius: 999px;
-  color: #66ffc4;
-  background: rgba(47, 227, 154, 0.18);
+  color: var(--accent-300);
+  background: rgb(var(--accent-rgb) / 0.18);
 }
 
 .fl-screen--detail {
@@ -635,7 +635,7 @@
   margin-top: -1rem;
   padding: 0.8rem 0.85rem;
   border-radius: 1rem 1rem 0 0;
-  background: #0b0f0e;
+  background: #0f0c0b;
 }
 
 .fl-detail-body > b {
@@ -648,7 +648,7 @@
   align-items: center;
   gap: 0.2rem;
   font-size: 0.5rem;
-  color: #7f8a86;
+  color: #8a837f;
 }
 
 .fl-rating {
@@ -657,14 +657,14 @@
 }
 
 .fl-rating span {
-  color: #9aa59f;
+  color: #a59e9a;
 }
 
 .fl-detail-body > i {
   display: block;
   height: 0.3rem;
   border-radius: 0.2rem;
-  background: #1c2421;
+  background: #241f1c;
 }
 
 .fl-row {
@@ -677,7 +677,7 @@
 .fl-price small {
   display: block;
   font-size: 0.45rem;
-  color: #7f8a86;
+  color: #8a837f;
 }
 
 .fl-price b {
@@ -689,9 +689,9 @@
   border-radius: 999px;
   font-size: 0.5625rem;
   font-weight: 700;
-  color: #04140d;
-  background: #2fe39a;
-  box-shadow: 0 0 0.8rem rgba(47, 227, 154, 0.5);
+  color: var(--accent-950);
+  background: var(--accent);
+  box-shadow: 0 0 0.8rem rgb(var(--accent-rgb) / 0.5);
 }
 
 .fl-toast {
@@ -707,9 +707,9 @@
   white-space: nowrap;
   font-size: 0.5rem;
   font-weight: 700;
-  color: #04140d;
-  background: #b9f5dc;
-  box-shadow: 0 0 1rem rgba(47, 227, 154, 0.55);
+  color: var(--accent-950);
+  background: var(--accent-100);
+  box-shadow: 0 0 1rem rgb(var(--accent-rgb) / 0.55);
   opacity: 0;
   transform: translate(-50%, -1rem);
   transition: opacity 0.35s, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -739,8 +739,8 @@
   border-radius: 999px;
   font-size: 0.6875rem;
   font-weight: 500;
-  color: #8d9692;
-  background: rgba(10, 14, 13, 0.85);
+  color: #96908d;
+  background: rgba(14, 11, 10, 0.85);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   transition: color 0.35s, box-shadow 0.35s, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -750,20 +750,20 @@
   width: 0.4rem;
   height: 0.4rem;
   border-radius: 50%;
-  background: #3a423f;
+  background: #423d3a;
   transition: background 0.35s, box-shadow 0.35s;
 }
 
 .bento-card:is(:hover, .is-active) .fl-chips span {
-  color: #eafff5;
-  box-shadow: inset 0 0 0 1px rgba(47, 227, 154, 0.35);
+  color: var(--accent-50);
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.35);
   transform: translateX(0.35rem);
   transition-delay: calc(0.3s + var(--k) * 0.12s);
 }
 
 .bento-card:is(:hover, .is-active) .fl-chips span::before {
-  background: #2fe39a;
-  box-shadow: 0 0 0.5rem #2fe39a;
+  background: var(--accent);
+  box-shadow: 0 0 0.5rem var(--accent);
   transition-delay: calc(0.3s + var(--k) * 0.12s);
 }
 
@@ -778,7 +778,7 @@
   align-items: center;
   gap: 0.3rem;
   font-size: 0.625rem;
-  color: #7f8a86;
+  color: #8a837f;
 }
 
 .ux-frame {
@@ -792,7 +792,7 @@
   gap: 0.55rem;
   padding: 0.8rem;
   border-radius: 0.5rem;
-  background: #0d1211;
+  background: #120f0d;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   transition: background 0.6s 0.45s;
 }
@@ -808,7 +808,7 @@
   width: 2.4rem;
   height: 0.45rem;
   border-radius: 0.2rem;
-  background: #232a28;
+  background: #2a2523;
   transition: background 0.5s 0.55s;
 }
 
@@ -827,7 +827,7 @@
   background:
     linear-gradient(to top right, transparent calc(50% - 0.5px), rgba(255, 255, 255, 0.12) 50%, transparent calc(50% + 0.5px)),
     linear-gradient(to bottom right, transparent calc(50% - 0.5px), rgba(255, 255, 255, 0.12) 50%, transparent calc(50% + 0.5px)),
-    #1a201e;
+    #201c1a;
 }
 
 .ux-img-hi {
@@ -843,7 +843,7 @@
   height: 0.4rem;
   margin-top: 0.35rem;
   border-radius: 0.2rem;
-  background: #232a28;
+  background: #2a2523;
   transition: background 0.5s 0.6s;
 }
 
@@ -868,8 +868,8 @@
   border-radius: 999px;
   font-size: 0.5625rem;
   font-weight: 600;
-  color: #6f7a76;
-  border: 1px dashed #3a423f;
+  color: #7a736f;
+  border: 1px dashed #423d3a;
   transition: color 0.5s 0.7s, background 0.5s 0.7s, border-color 0.5s 0.7s, box-shadow 0.5s 0.7s;
 }
 
@@ -922,7 +922,7 @@
   top: 2rem;
   width: 13rem;
   height: 11.5rem;
-  border: 1.5px solid #2fe39a;
+  border: 1.5px solid var(--accent);
   border-radius: 0.5rem;
   opacity: 0;
   transform: scale(1.04);
@@ -934,7 +934,7 @@
   position: absolute;
   width: 0.45rem;
   height: 0.45rem;
-  border: 1.5px solid #2fe39a;
+  border: 1.5px solid var(--accent);
   border-radius: 1px;
   background: #fff;
 }
@@ -968,8 +968,8 @@
   white-space: nowrap;
   font-size: 0.5rem;
   font-weight: 700;
-  color: #04140d;
-  background: #2fe39a;
+  color: var(--accent-950);
+  background: var(--accent);
   transform: translateX(-50%);
 }
 
@@ -988,17 +988,17 @@
   border-radius: 0.3rem;
   font-size: 0.5rem;
   font-weight: 700;
-  color: #04140d;
+  color: var(--accent-950);
 }
 
 .ux-cur--you {
   left: 20.5rem;
   top: 3rem;
-  color: #2fe39a;
+  color: var(--accent);
 }
 
 .ux-cur--you span {
-  background: #2fe39a;
+  background: var(--accent);
 }
 
 .ux-cur--client {
@@ -1037,7 +1037,7 @@
   gap: 0.15rem;
   padding: 0.25rem;
   border-radius: 0.7rem;
-  background: #0d1211;
+  background: #120f0d;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   transform: translateY(-50%);
 }
@@ -1048,13 +1048,13 @@
   display: grid;
   place-items: center;
   border-radius: 0.45rem;
-  color: #8d9692;
+  color: #96908d;
   transition: background 0.3s, color 0.3s;
 }
 
 .ux-tools span.on {
-  color: #04140d;
-  background: #2fe39a;
+  color: var(--accent-950);
+  background: var(--accent);
 }
 
 /* Active sequence: cursor glides to the frame → selection → fill-in → comment */
@@ -1074,7 +1074,7 @@
 }
 
 .bento-card:is(:hover, .is-active) .ux-frame {
-  background: #101816;
+  background: #181310;
 }
 
 .bento-card:is(:hover, .is-active) .ux-img-hi {
@@ -1082,22 +1082,22 @@
 }
 
 .bento-card:is(:hover, .is-active) .ux-bar i:first-child {
-  background: #2fe39a;
+  background: var(--accent);
 }
 
 .bento-card:is(:hover, .is-active) .ux-lines i:nth-child(1) {
-  background: #e9efec;
+  background: #efebe9;
 }
 
 .bento-card:is(:hover, .is-active) .ux-lines i:nth-child(n + 2) {
-  background: #56605c;
+  background: #605956;
 }
 
 .bento-card:is(:hover, .is-active) .ux-btn {
-  color: #04140d;
-  background: #2fe39a;
+  color: var(--accent-950);
+  background: var(--accent);
   border-color: transparent;
-  box-shadow: 0 0 1rem rgba(47, 227, 154, 0.45);
+  box-shadow: 0 0 1rem rgb(var(--accent-rgb) / 0.45);
 }
 
 .bento-card:is(:hover, .is-active) .ux-guide {
@@ -1122,7 +1122,7 @@
   height: 14rem;
   overflow: hidden;
   border-radius: 0.75rem;
-  background: #0a0d0d;
+  background: #0d0b0a;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 1.5rem 3rem rgba(0, 0, 0, 0.45);
 }
 
@@ -1132,10 +1132,10 @@
   align-items: center;
   gap: 0.3rem;
   padding: 0 0.6rem;
-  background: #0e1312;
+  background: #13100e;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   font-size: 0.5625rem;
-  color: #7f8a86;
+  color: #8a837f;
 }
 
 .fe-tabs {
@@ -1156,7 +1156,7 @@
   width: 0.42rem;
   height: 0.42rem;
   border-radius: 50%;
-  background: #2a302e;
+  background: #302c2a;
 }
 
 .fe-tab {
@@ -1165,7 +1165,7 @@
 }
 
 .fe-tab.on {
-  color: #e9efec;
+  color: #efebe9;
   background: rgba(255, 255, 255, 0.05);
 }
 
@@ -1175,7 +1175,7 @@
   font-size: 0.5625rem;
   line-height: 1.15rem;
   white-space: pre;
-  color: #c9d1cd;
+  color: #d1ccc9;
 }
 
 .fe-line {
@@ -1187,7 +1187,7 @@
   flex: none;
   padding-right: 0.65rem;
   text-align: right;
-  color: #3a4441;
+  color: #443d3a;
 }
 
 .fe-txt .k {
@@ -1203,7 +1203,7 @@
 }
 
 .fe-txt .t {
-  color: #66ffc4;
+  color: var(--accent-300);
 }
 
 .fe-txt .a {
@@ -1211,11 +1211,11 @@
 }
 
 .fe-txt .v {
-  color: #f78c6c;
+  color: #c792ea;
 }
 
 .fe-txt .p {
-  color: #a6b0ac;
+  color: #b0a9a6;
 }
 
 .fe-line:last-child .fe-txt::after {
@@ -1225,7 +1225,7 @@
   height: 0.75rem;
   margin-left: 0.1rem;
   vertical-align: middle;
-  background: #66ffc4;
+  background: var(--accent-300);
   opacity: 0;
 }
 
@@ -1237,7 +1237,7 @@
   height: 9rem;
   overflow: hidden;
   border-radius: 0.75rem;
-  background: #0d1211;
+  background: #120f0d;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 1.5rem 3rem rgba(0, 0, 0, 0.6);
 }
 
@@ -1271,7 +1271,7 @@
   width: 6.5rem;
   height: 0.4rem;
   border-radius: 0.2rem;
-  background: #1c2421;
+  background: #241f1c;
 }
 
 .fe-skel i:last-child {
@@ -1288,9 +1288,9 @@
   border-radius: 999px;
   font-size: 0.625rem;
   font-weight: 600;
-  color: #d9f7ea;
-  background: rgba(47, 227, 154, 0.12);
-  box-shadow: inset 0 0 0 1px rgba(47, 227, 154, 0.3);
+  color: var(--accent-100);
+  background: rgb(var(--accent-rgb) / 0.12);
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.3);
 }
 
 .fe-btn > span {
@@ -1395,9 +1395,9 @@
 
 @keyframes fe-btn {
   to {
-    color: #04140d;
-    background: #2fe39a;
-    box-shadow: 0 0 1.2rem rgba(47, 227, 154, 0.6);
+    color: var(--accent-950);
+    background: var(--accent);
+    box-shadow: 0 0 1.2rem rgb(var(--accent-rgb) / 0.6);
   }
 }
 
@@ -1457,7 +1457,7 @@
 }
 
 .ds-swatches span.light {
-  color: rgba(4, 20, 13, 0.75);
+  color: rgb(var(--accent-950-rgb) / 0.75);
 }
 
 .bento-card:is(:hover, .is-active) .ds-swatches span {
@@ -1491,7 +1491,7 @@
 .ds-type small {
   white-space: nowrap;
   font-size: 0.5rem;
-  color: #7f8a86;
+  color: #8a837f;
 }
 
 .ds-panel {
@@ -1501,8 +1501,8 @@
   gap: 0.5rem;
   padding: 0.7rem;
   border-radius: 0.8rem;
-  color: #e9efec;
-  background: #0f1413;
+  color: #efebe9;
+  background: #14110f;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   transition: background 0.5s 0.25s, box-shadow 0.5s 0.25s, color 0.5s 0.25s;
 }
@@ -1511,7 +1511,7 @@
   display: flex;
   justify-content: space-between;
   font-size: 0.5rem;
-  color: #7f8a86;
+  color: #8a837f;
   transition: color 0.5s 0.25s;
 }
 
@@ -1538,8 +1538,8 @@
   border-radius: 999px;
   font-size: 0.5625rem;
   font-weight: 700;
-  color: #04140d;
-  background: #2fe39a;
+  color: var(--accent-950);
+  background: var(--accent);
 }
 
 .ds-row {
@@ -1553,7 +1553,7 @@
   width: 1.9rem;
   height: 1.1rem;
   border-radius: 999px;
-  background: #2a302e;
+  background: #302c2a;
   transition: background 0.4s 0.35s;
 }
 
@@ -1564,7 +1564,7 @@
   width: 0.8rem;
   height: 0.8rem;
   border-radius: 50%;
-  background: #cfd6d3;
+  background: #d6d1cf;
   transition: transform 0.45s cubic-bezier(0.3, 1.6, 0.5, 1) 0.35s, background 0.4s 0.35s;
 }
 
@@ -1572,8 +1572,8 @@
   padding: 0.2rem 0.5rem;
   border-radius: 999px;
   font-size: 0.5rem;
-  color: #bfe9d6;
-  box-shadow: inset 0 0 0 1px rgba(47, 227, 154, 0.3);
+  color: var(--accent-100);
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.3);
   transition: color 0.5s 0.25s;
 }
 
@@ -1583,18 +1583,18 @@
   display: grid;
   place-items: center;
   border-radius: 0.3rem;
-  color: #04140d;
-  background: #2fe39a;
+  color: var(--accent-950);
+  background: var(--accent);
 }
 
 .bento-card:is(:hover, .is-active) .ds-panel {
-  color: #0b100e;
-  background: #eef4f1;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08), 0 0 2rem rgba(185, 245, 220, 0.25);
+  color: #100d0b;
+  background: #f4f0ee;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08), 0 0 2rem rgb(var(--accent-100-rgb) / 0.25);
 }
 
 .bento-card:is(:hover, .is-active) .ds-mode {
-  color: #5f6865;
+  color: #68625f;
 }
 
 .bento-card:is(:hover, .is-active) .ds-mode-val .dark {
@@ -1606,7 +1606,7 @@
 }
 
 .bento-card:is(:hover, .is-active) .ds-toggle {
-  background: #1fc584;
+  background: var(--accent-500);
 }
 
 .bento-card:is(:hover, .is-active) .ds-toggle i {
@@ -1615,7 +1615,7 @@
 }
 
 .bento-card:is(:hover, .is-active) .ds-chip {
-  color: #146e4a;
+  color: var(--accent-700);
 }
 
 /* ==========================================================================
@@ -1660,11 +1660,11 @@
 
 .mo-curve {
   fill: none;
-  stroke: #2fe39a;
+  stroke: var(--accent);
   stroke-width: 2;
   stroke-linecap: round;
   vector-effect: non-scaling-stroke;
-  filter: drop-shadow(0 0 0.25rem rgba(47, 227, 154, 0.7));
+  filter: drop-shadow(0 0 0.25rem rgb(var(--accent-rgb) / 0.7));
 }
 
 /* x moves linearly (time); the dot inside moves up with the curve's easing,
@@ -1685,14 +1685,14 @@
   height: 0.75rem;
   margin: 0 0 -0.375rem -0.375rem;
   border-radius: 50%;
-  background: #e9fff6;
-  box-shadow: 0 0 0.6rem #2fe39a, 0 0 1.2rem rgba(47, 227, 154, 0.6);
+  background: var(--accent-50);
+  box-shadow: 0 0 0.6rem var(--accent), 0 0 1.2rem rgb(var(--accent-rgb) / 0.6);
 }
 
 .mo-graph small {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.5rem;
-  color: #7f8a86;
+  color: #8a837f;
 }
 
 .mo-ui {
@@ -1708,8 +1708,8 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  color: #7f8a86;
-  background: #111716;
+  color: #8a837f;
+  background: #171311;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   transition: color 0.2s 0.45s, box-shadow 0.4s 0.45s;
 }
@@ -1732,7 +1732,7 @@
 }
 
 .mo-heart i:nth-child(even) {
-  background: #66ffc4;
+  background: var(--accent-300);
 }
 
 .mo-toggle {
@@ -1740,7 +1740,7 @@
   width: 2.75rem;
   height: 1.5rem;
   border-radius: 999px;
-  background: #2a302e;
+  background: #302c2a;
   transition: background 0.35s 0.75s;
 }
 
@@ -1751,7 +1751,7 @@
   width: 1.1rem;
   height: 1.1rem;
   border-radius: 50%;
-  background: #cfd6d3;
+  background: #d6d1cf;
   transition: transform 0.55s cubic-bezier(0.3, 1.7, 0.45, 1) 0.75s, background 0.3s 0.75s;
 }
 
@@ -1778,7 +1778,7 @@
 }
 
 .bento-card:is(:hover, .is-active) .mo-toggle {
-  background: #1fc584;
+  background: var(--accent-500);
 }
 
 .bento-card:is(:hover, .is-active) .mo-toggle i {
@@ -1870,13 +1870,13 @@
 }
 
 .pf-track {
-  stroke: rgba(47, 227, 154, 0.12);
+  stroke: rgb(var(--accent-rgb) / 0.12);
 }
 
 .pf-arc {
-  stroke: #2fe39a;
+  stroke: var(--accent);
   stroke-linecap: round;
-  filter: drop-shadow(0 0 0.2rem rgba(47, 227, 154, 0.7));
+  filter: drop-shadow(0 0 0.2rem rgb(var(--accent-rgb) / 0.7));
 }
 
 .pf-num {
@@ -1888,7 +1888,7 @@
   font-size: 1.125rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-  color: #e9fff6;
+  color: var(--accent-50);
   counter-reset: score var(--n);
 }
 
@@ -1901,7 +1901,7 @@
   line-height: 1.2;
   text-align: center;
   white-space: nowrap;
-  color: #9aa39f;
+  color: #a39d9a;
 }
 
 .bento-card:is(:hover, .is-active) .pf-arc {

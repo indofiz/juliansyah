@@ -5,9 +5,11 @@
 > `v1-legacy` and branch `legacy/v1`:
 > `git checkout v1-legacy` (or `git worktree add ../juliansyah-v1 legacy/v1`).
 > Its old URLs redirect to the matching section here (see `next.config.ts`).
+> This design first shipped with a mint-green accent; that version is at git
+> tag `v2-mint`.
 
 A Next.js portfolio landing page with a glowing particle globe that changes as
-you scroll, wrapped in a dark, mint-glow design system: gradient headings,
+you scroll, wrapped in a dark, orange-glow design system: gradient headings,
 glowing pill buttons, icon badges, glow-framed app screens, dotted textures and
 scroll-lit lists.
 
@@ -32,7 +34,7 @@ Open http://localhost:3000.
 | 7 | Process | `process` | Globe centre, steps with a track that fills on scroll |
 | 8 | Case study | `spotlight` | Sticky: scrolling switches the active feature and the framed screen |
 | 9 | Assistant | `assistant` | Purple orb, purple-framed chat with clickable suggestions |
-| 10 | Featured | `featured` | Statement, rose button pair, framed analytics screen |
+| 10 | Featured | `featured` | Statement, purple button pair, framed analytics screen |
 | 11 | Skills bento | `capabilities` | Six cards (Flutter, UI/UX, front-end, design systems, motion, performance). Each illustration is a small live UI that plays on hover, or while centred in view on touch screens |
 | – | Portal | `portal` | *Not rendered.* Framed client-portal UI bleeding off the right edge, working toggles |
 | 13 | CTA | `cta` | Panel whose glow slides from the corner to the bottom, rising particle bars |
@@ -84,6 +86,7 @@ second on hover.
 | --- | --- |
 | **All copy, numbers, projects, plans** | `src/content/site.ts` |
 | Colors, radii, fonts (design tokens) | `src/styles/tokens.css` |
+| Accent colour (whole site) | the `--accent-*` ramp in `tokens.css` + `src/lib/theme.ts` (WebGL) |
 | Buttons, badges, cards, glow frames, nav | `src/styles/components.css` |
 | Section layouts | `src/styles/sections.css` and `src/components/sections/*` |
 | Mock app screens inside frames | `src/components/mocks/*` and `src/styles/mocks.css` |

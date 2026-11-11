@@ -8,7 +8,7 @@ import { Icon } from "./ui/Icon";
 /**
  * Desktop nav pill (hidden on mobile, which uses MobileMenu).
  *
- *  - A green glow lives inside the frosted pill. Idle, it drifts slowly
+ *  - An accent glow lives inside the frosted pill. Idle, it drifts slowly
  *    around the centre and breathes; hovering an item slides it behind that
  *    item. Leaving the nav sends it back to drifting.
  *  - Big at the top of the page, a bit smaller once scrolled (.is-compact).

@@ -1,8 +1,9 @@
 /* ==========================================================================
    Design tokens + base styles
-   Dark "terminal" aesthetic: near-black canvas, mint glow accent, wide
-   grotesk type with gradient headings. Purple / gold / indigo / rose are
-   secondary accents used sparingly for single highlighted elements.
+   Dark "terminal" aesthetic: warm near-black canvas, orange glow accent
+   (the logo's #ff5029), wide grotesk type with gradient headings. Purple /
+   gold / indigo / rose are secondary accents used sparingly for single
+   highlighted elements; --positive / --red are status colours.
    ========================================================================== */
 
 /* ==========================================================================
@@ -37,25 +38,47 @@ html {
 :root {
   --font: "Instrument Sans Variable", "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  --bg: #030506;
-  --bg-2: #04070a;
-  --surface: #080b0b;
-  --surface-2: #0d1211;
-  --surface-3: #131817;
+  --bg: #060403;
+  --bg-2: #0a0604;
+  --surface: #0b0908;
+  --surface-2: #120f0d;
+  --surface-3: #181513;
   --border: rgba(255, 255, 255, 0.075);
   --border-strong: rgba(255, 255, 255, 0.14);
 
-  --text: #f3f6f5;
-  --muted: #9aa39f;
-  --dim: #5f6865;
+  --text: #f6f4f3;
+  --muted: #a39d9a;
+  --dim: #68625f;
 
-  --mint: #2fe39a;
-  --mint-2: #1fc584;
-  --mint-bright: #66ffc4;
-  --mint-pale: #c8f8e2;
-  --mint-ink: #04140d;
-  --glow: rgba(47, 227, 154, 0.55);
-  --glow-soft: rgba(47, 227, 154, 0.18);
+  /* Accent ramp. Every accent colour on the page (CSS) comes from these
+     triplets, so recolouring the site means editing only this block plus
+     src/lib/theme.ts (the WebGL scene can't read CSS variables).
+     Use `var(--accent-300)` for a solid colour and
+     `rgb(var(--accent-300-rgb) / 0.4)` for a translucent one.
+     400 is the main accent and is spelled `--accent` / `--accent-rgb`. */
+  --accent-50-rgb: 255 241 234; /* #fff1ea */
+  --accent-100-rgb: 255 214 196; /* #ffd6c4 */
+  --accent-200-rgb: 255 180 151; /* #ffb497 */
+  --accent-300-rgb: 255 138 92; /* #ff8a5c */
+  --accent-rgb: 255 80 41; /* #ff5029 */
+  --accent-500-rgb: 224 62 23; /* #e03e17 */
+  --accent-600-rgb: 168 52 15; /* #a8340f */
+  --accent-700-rgb: 110 36 16; /* #6e2410 */
+  --accent-800-rgb: 62 22 11; /* #3e160b */
+  --accent-900-rgb: 36 16 11; /* #24100b */
+  --accent-950-rgb: 21 7 4; /* #150704 */
+
+  --accent-50: rgb(var(--accent-50-rgb));
+  --accent-100: rgb(var(--accent-100-rgb));
+  --accent-200: rgb(var(--accent-200-rgb));
+  --accent-300: rgb(var(--accent-300-rgb));
+  --accent: rgb(var(--accent-rgb));
+  --accent-500: rgb(var(--accent-500-rgb));
+  --accent-600: rgb(var(--accent-600-rgb));
+  --accent-700: rgb(var(--accent-700-rgb));
+  --accent-800: rgb(var(--accent-800-rgb));
+  --accent-900: rgb(var(--accent-900-rgb));
+  --accent-950: rgb(var(--accent-950-rgb));
 
   --purple: #8b5cf6;
   --purple-bright: #a78bfa;
@@ -63,6 +86,9 @@ html {
   --indigo: #6366f1;
   --rose: #ff6a88;
   --red: #ff5a5f;
+  /* Status colour for good / rising numbers in the mock screens. Separate
+     from the accent so it stays readable next to --red. */
+  --positive: #2fe39a;
 
   --radius-sm: 0.625rem;
   --radius: 1rem;
@@ -118,7 +144,7 @@ svg {
 }
 
 ::selection {
-  background: rgba(47, 227, 154, 0.35);
+  background: rgb(var(--accent-rgb) / 0.35);
 }
 
 /* ---------- Typography ---------- */

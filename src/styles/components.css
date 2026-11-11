@@ -53,7 +53,7 @@
 }
 
 .logo-second {
-  color: var(--mint);
+  color: var(--accent);
 }
 
 .nav {
@@ -68,7 +68,7 @@
   padding: 0.5rem 0.75rem;
   border-radius: 1.375rem;
   /* Neutral frosted glass: a faint white frost over a blur. It picks up the
-     colour of whatever is behind it (green over the hero gradient). */
+     colour of whatever is behind it (orange over the hero gradient). */
   border: 1px solid rgba(255, 255, 255, 0.13);
   background-color: rgba(255, 255, 255, 0.025);
   background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.005));
@@ -120,8 +120,8 @@
   height: 5.5rem;
   margin: -2.75rem 0 0 -6.5rem;
   border-radius: 50%;
-  /* Faint and smooth: a soft green breath inside the glass. */
-  background: radial-gradient(closest-side, rgba(70, 200, 145, 0.3), rgba(47, 227, 154, 0.1) 50%, rgba(47, 227, 154, 0.03) 75%, transparent);
+  /* Faint and smooth: a soft accent breath inside the glass. */
+  background: radial-gradient(closest-side, rgb(var(--accent-500-rgb) / 0.3), rgb(var(--accent-rgb) / 0.1) 50%, rgb(var(--accent-rgb) / 0.03) 75%, transparent);
   pointer-events: none;
   will-change: transform, opacity;
 }
@@ -150,7 +150,7 @@
   border-radius: 0.75rem;
   font-size: 1.0625rem;
   font-weight: 500;
-  color: #cfd5d2;
+  color: #d5d1cf;
   transition: color 0.25s;
 }
 
@@ -180,7 +180,7 @@
   border: 1px solid rgba(255, 255, 255, 0.11);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0)),
-    #111312;
+    #131211;
   /* Solid: a blur here can't see the page (the pill is already a
      backdrop-filter root), so the card itself hides what's behind it. */
   box-shadow: 0 1.25rem 3.125rem rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
@@ -217,7 +217,7 @@
   border-radius: 0.75rem;
   font-size: 0.9375rem;
   font-weight: 500;
-  color: #c3cac7;
+  color: #cac5c3;
   transition: color 0.2s, background 0.2s;
 }
 
@@ -279,17 +279,17 @@
   width: 100%;
 }
 
-/* Primary: pale mint-to-white pill with a mint halo and a light sweep. */
+/* Primary: pale accent-to-white pill with an accent halo and a light sweep. */
 .btn-glow {
   overflow: hidden;
-  color: #0b100e;
-  background: linear-gradient(90deg, #bff5dc 0%, #eefaf4 30%, #f2f2f2 60%, #dcdedd 100%);
+  color: #100d0b;
+  background: linear-gradient(90deg, var(--accent-100) 0%, #faf2ee 30%, #f2f2f2 60%, #dedddc 100%);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.9),
     inset 0 -0.125rem 0.375rem rgba(0, 0, 0, 0.12),
-    0 0 0 1px rgba(95, 255, 192, 0.75),
-    0 0 0.375rem rgba(47, 227, 154, 0.9),
-    0 0 1.625rem rgba(47, 227, 154, 0.55);
+    0 0 0 1px rgb(var(--accent-300-rgb) / 0.75),
+    0 0 0.375rem rgb(var(--accent-rgb) / 0.9),
+    0 0 1.625rem rgb(var(--accent-rgb) / 0.55);
 }
 
 .btn-glow::after {
@@ -297,7 +297,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(100deg, transparent 20%, rgba(120, 255, 200, 0.55) 45%, rgba(255, 255, 255, 0.8) 50%, transparent 70%);
+  background: linear-gradient(100deg, transparent 20%, rgb(var(--accent-200-rgb) / 0.55) 45%, rgba(255, 255, 255, 0.8) 50%, transparent 70%);
   transform: translateX(-120%);
   animation: sweep 3.8s ease-in-out infinite;
 }
@@ -306,9 +306,9 @@
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.9),
     inset 0 -0.125rem 0.375rem rgba(0, 0, 0, 0.12),
-    0 0 0 1px rgba(95, 255, 192, 0.9),
-    0 0 0.625rem rgba(47, 227, 154, 1),
-    0 0 2.5rem rgba(47, 227, 154, 0.7);
+    0 0 0 1px rgb(var(--accent-300-rgb) / 0.9),
+    0 0 0.625rem rgb(var(--accent-rgb) / 1),
+    0 0 2.5rem rgb(var(--accent-rgb) / 0.7);
 }
 
 @keyframes sweep {
@@ -333,17 +333,17 @@
   background: rgba(255, 255, 255, 0.05);
 }
 
-/* Secondary with a mint wash on the right (used under primary buttons). */
-.btn-ghost-mint {
+/* Secondary with an accent wash on the right (used under primary buttons). */
+.btn-ghost-accent {
   color: var(--text);
-  background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(47, 227, 154, 0.08) 60%, rgba(47, 227, 154, 0.22) 100%);
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgb(var(--accent-rgb) / 0.08) 60%, rgb(var(--accent-rgb) / 0.22) 100%);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
 }
 
 /* Solid light pill (no glow). */
 .btn-light {
-  color: #0b100e;
-  background: linear-gradient(180deg, #f4fbf8, #d7ece2);
+  color: #100d0b;
+  background: linear-gradient(180deg, #fbf6f4, #ecded7);
   box-shadow: inset 0 1px 0 #fff;
 }
 
@@ -353,9 +353,9 @@
   padding: 0 1.125rem;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #e9fff5;
-  background: linear-gradient(180deg, rgba(47, 227, 154, 0.28), rgba(47, 227, 154, 0.14));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 0 0 1px rgba(47, 227, 154, 0.18);
+  color: var(--accent-50);
+  background: linear-gradient(180deg, rgb(var(--accent-rgb) / 0.28), rgb(var(--accent-rgb) / 0.14));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 0 0 1px rgb(var(--accent-rgb) / 0.18);
 }
 
 .btn-soft.tone-gold {
@@ -370,18 +370,19 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 0 0 1px rgba(129, 132, 255, 0.35);
 }
 
-/* Rose variant pair (used once, in the featured section). */
-.btn-rose {
-  color: #1a0a0e;
-  background: linear-gradient(90deg, #ffe3ea 0%, #fbf4f5 55%, #ececec 100%);
+/* Purple variant pair (used once, in the featured section). Purple rather
+   than another warm colour so it stands apart from the orange accent. */
+.btn-purple {
+  color: #120a1f;
+  background: linear-gradient(90deg, #ebe3ff 0%, #f6f3fb 55%, #ececec 100%);
   box-shadow:
     inset 0 1px 0 #fff,
-    0 0 0 1px rgba(255, 140, 165, 0.8),
-    0 0 0.5rem rgba(255, 90, 125, 0.7),
-    0 0 1.75rem rgba(255, 90, 125, 0.45);
+    0 0 0 1px rgba(184, 160, 255, 0.8),
+    0 0 0.5rem rgba(139, 92, 246, 0.7),
+    0 0 1.75rem rgba(139, 92, 246, 0.45);
 }
 
-.btn-rose .btn-icon-circle {
+.btn-purple .btn-icon-circle {
   width: 1.625rem;
   height: 1.625rem;
   margin-left: -0.625rem;
@@ -392,10 +393,10 @@
   color: #fff;
 }
 
-.btn-rose-ghost {
+.btn-purple-ghost {
   color: var(--text);
-  background: rgba(255, 60, 90, 0.06);
-  box-shadow: inset 0 0 0 1px rgba(255, 106, 136, 0.5);
+  background: rgba(139, 92, 246, 0.07);
+  box-shadow: inset 0 0 0 1px rgba(167, 139, 250, 0.5);
 }
 
 /* ---------- Badge ---------- */
@@ -408,13 +409,13 @@
   border-radius: 999px;
   font-size: 0.8125rem;
   font-weight: 500;
-  color: #eafff5;
-  background: linear-gradient(180deg, rgba(47, 227, 154, 0.12), rgba(47, 227, 154, 0.05));
-  box-shadow: inset 0 0 0 1px rgba(47, 227, 154, 0.25);
+  color: var(--accent-50);
+  background: linear-gradient(180deg, rgb(var(--accent-rgb) / 0.12), rgb(var(--accent-rgb) / 0.05));
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.25);
 }
 
 .badge svg {
-  color: var(--mint);
+  color: var(--accent);
 }
 
 .badge-plain {
@@ -469,21 +470,21 @@
   border-radius: var(--radius-lg);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.008) 45%, rgba(255, 255, 255, 0)),
-    #060808;
+    #080706;
   box-shadow: inset 0 0 0 1px var(--border);
 }
 
 /* ---------- Glow frame: thick bezel + bright top edge + halo ---------- */
 .frame {
-  --frame-line: #6dffc8;
-  --frame-glow: rgba(47, 227, 154, 0.5);
-  --frame-bezel-1: #0f3a2b;
-  --frame-bezel-2: #0a1d17;
+  --frame-line: var(--accent-300);
+  --frame-glow: rgb(var(--accent-rgb) / 0.5);
+  --frame-bezel-1: var(--accent-800);
+  --frame-bezel-2: var(--accent-900);
   position: relative;
   padding: 0.4375rem;
   border-radius: var(--radius-xl);
-  background: linear-gradient(180deg, var(--frame-bezel-1), var(--frame-bezel-2) 22%, #08100e 60%);
-  box-shadow: inset 0 0 0 1px rgba(47, 227, 154, 0.28), 0 2.5rem 5rem rgba(0, 0, 0, 0.55);
+  background: linear-gradient(180deg, var(--frame-bezel-1), var(--frame-bezel-2) 22%, #100b08 60%);
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.28), 0 2.5rem 5rem rgba(0, 0, 0, 0.55);
   isolation: isolate;
 }
 
@@ -495,7 +496,7 @@
   right: 7%;
   height: 0.1875rem;
   border-radius: 0.1875rem;
-  background: linear-gradient(90deg, transparent, var(--frame-line) 18%, #e9fff6 50%, var(--frame-line) 82%, transparent);
+  background: linear-gradient(90deg, transparent, var(--frame-line) 18%, var(--accent-50) 50%, var(--frame-line) 82%, transparent);
   box-shadow: 0 0 0.75rem var(--frame-line);
   z-index: 2;
 }
@@ -516,7 +517,7 @@
 .frame-inner {
   position: relative;
   border-radius: calc(var(--radius-xl) - 0.375rem);
-  background: #0a0d0d;
+  background: #0d0b0a;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
   overflow: hidden;
 }
@@ -540,7 +541,7 @@
 .dots {
   position: absolute;
   pointer-events: none;
-  background-image: radial-gradient(rgba(150, 255, 210, 0.42) 0.0688rem, transparent 0.1rem);
+  background-image: radial-gradient(rgb(var(--accent-200-rgb) / 0.42) 0.0688rem, transparent 0.1rem);
   background-size: 0.875rem 0.875rem;
 }
 
@@ -563,8 +564,8 @@
   width: 0.4375rem;
   height: 0.4375rem;
   border-radius: 999px;
-  background: var(--mint);
-  box-shadow: 0 0 0.5rem var(--mint);
+  background: var(--accent);
+  box-shadow: 0 0 0.5rem var(--accent);
 }
 
 /* ---------- Toggle ---------- */
@@ -574,7 +575,7 @@
   height: 1.375rem;
   flex: none;
   border-radius: 999px;
-  background: #2a2f2e;
+  background: #2f2c2a;
   transition: background 0.25s;
 }
 
@@ -586,17 +587,17 @@
   width: 1rem;
   height: 1rem;
   border-radius: 999px;
-  background: #cfd6d3;
+  background: #d6d1cf;
   transition: transform 0.25s;
 }
 
 .toggle[aria-checked="true"] {
-  background: var(--mint-2);
+  background: var(--accent-500);
 }
 
 .toggle[aria-checked="true"]::after {
   transform: translateX(1rem);
-  background: #e8fff5;
+  background: var(--accent-50);
 }
 
 /* ---------- Scroll reveal (progressive light-up lists) ---------- */
@@ -605,7 +606,7 @@
 }
 
 .status-muted::before {
-  background: #7d8783;
+  background: #87807d;
   box-shadow: none;
 }
 
@@ -618,7 +619,7 @@
   padding: 0.625rem 1rem;
   border-radius: 0.5rem;
   background: #fff;
-  color: #030506;
+  color: #060403;
   font-size: 0.875rem;
   font-weight: 600;
   transform: translateY(-200%);

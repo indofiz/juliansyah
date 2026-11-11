@@ -71,14 +71,14 @@ export const stats = {
 export const services = {
   title: "From Figma to Production, Under One Roof.",
   left: [
-    { icon: "code", title: "Frontend Engineering", text: "React, Next.js and TypeScript interfaces that are fast, accessible and pixel-perfect.", cta: "Start a project", tone: "green" },
-    { icon: "cube", title: "Motion & 3D", text: "GSAP and WebGL moments that make a product feel alive, like the scene on this page.", cta: "Let's talk", tone: "green" },
+    { icon: "code", title: "Frontend Engineering", text: "React, Next.js and TypeScript interfaces that are fast, accessible and pixel-perfect.", cta: "Start a project", tone: "accent" },
+    { icon: "cube", title: "Motion & 3D", text: "GSAP and WebGL moments that make a product feel alive, like the scene on this page.", cta: "Let's talk", tone: "accent" },
     { icon: "spark", title: "Design & Build Sprint", text: "From a Figma file to a live, production-ready page in one focused sprint.", cta: "Book a sprint", tone: "gold" },
   ],
   right: [
-    { icon: "pen", title: "UI / UX Design", text: "Wireframes, user flows and prototypes in Figma, designed around what users actually do.", cta: "Learn more", tone: "green" },
+    { icon: "pen", title: "UI / UX Design", text: "Wireframes, user flows and prototypes in Figma, designed around what users actually do.", cta: "Learn more", tone: "accent" },
     { icon: "layers", title: "Design Systems", text: "Tokens and components your whole team can build with, in Figma and in code.", cta: "Try it", tone: "indigo" },
-    { icon: "phone", title: "Flutter Mobile Apps", text: "Android and iOS from one Flutter codebase, on Clean Architecture and BLoC.", cta: "Build an app", tone: "green" },
+    { icon: "phone", title: "Flutter Mobile Apps", text: "Android and iOS from one Flutter codebase, on Clean Architecture and BLoC.", cta: "Build an app", tone: "accent" },
   ],
 };
 
@@ -88,13 +88,13 @@ export const work = {
   text: "Products I've designed and built across web, mobile and design systems.",
   note: "Presensi PKP is live in production. Entries marked Concept are demo builds; full case studies coming soon.",
   rows: [
-    { initials: "PK", color: "#2fe39a", name: "Presensi PKP", client: "Pemkot Pangkalpinang", year: "2025", metric: "7,000+ users", status: "Live", category: "Mobile", href: "#spotlight" },
+    { initials: "PK", color: "var(--accent)", name: "Presensi PKP", client: "Pemkot Pangkalpinang", year: "2025", metric: "7,000+ users", status: "Live", category: "Mobile", href: "#spotlight" },
     { initials: "EC", color: "#e0b53c", name: "E-Commerce Platform", client: "Storefront", year: "2024", metric: "Stripe checkout", status: "Concept", category: "Frontend" },
-    { initials: "TM", color: "#f08a3c", name: "Task Management App", client: "Collaboration", year: "2024", metric: "Real-time kanban", status: "Concept", category: "Frontend" },
+    { initials: "TM", color: "#2fe39a", name: "Task Management App", client: "Collaboration", year: "2024", metric: "Real-time kanban", status: "Concept", category: "Frontend" },
     { initials: "AD", color: "#33b9e0", name: "Analytics Dashboard", client: "Data visualisation", year: "2023", metric: "Custom widgets", status: "Concept", category: "UI/UX" },
     { initials: "MB", color: "#9b7bff", name: "Mobile Banking App", client: "Fintech", year: "2023", metric: "Biometric auth", status: "Concept", category: "Mobile" },
     { initials: "AI", color: "#e8e8e8", name: "AI Content Generator", client: "LLM tooling", year: "2023", metric: "Streaming UI", status: "Concept", category: "Frontend" },
-    { initials: "RE", color: "#66ffc4", name: "Real Estate Platform", client: "Property search", year: "2022", metric: "Map search", status: "Concept", category: "UI/UX" },
+    { initials: "RE", color: "var(--accent-300)", name: "Real Estate Platform", client: "Property search", year: "2022", metric: "Map search", status: "Concept", category: "UI/UX" },
     { initials: "HF", color: "#ff7aa8", name: "Habit & Fitness Tracker", client: "Health", year: "2022", metric: "Offline-first", status: "Concept", category: "Mobile" },
   ],
 };

@@ -5,6 +5,7 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import gsap from "gsap";
 import { sceneState } from "@/lib/sceneState";
+import { theme } from "@/lib/theme";
 import {
   buildGlobe,
   buildScatter,
@@ -31,7 +32,7 @@ type Props = {
   rimColor?: string;
 };
 
-export function ParticleMorph({ count, shape: shapeSource = { type: "default" }, color = "#2fe39a", rimColor = "#b6ffe0" }: Props) {
+export function ParticleMorph({ count, shape: shapeSource = { type: "default" }, color = theme.particle, rimColor = theme.particleRim }: Props) {
   const group = useRef<THREE.Group>(null);
   const [geometry, setGeometry] = useState<THREE.BufferGeometry | null>(null);
   // Per-shape values the frame loop copies into uniforms.
