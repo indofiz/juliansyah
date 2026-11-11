@@ -28,7 +28,7 @@ npm run build
 | 4 | Design → code | `design-to-code` | Can you do what I need? | **Pinned and scrubbed**: one component from sketch to wireframe, design, Flutter code and the running component |
 | 5 | What I do | `services` | Can you do what I need? | Bento of five outcome groups; illustrations play on hover (in view on touch) |
 | 6 | Playground | `playground` | Can you do what I need? | Experiments that load near the viewport and pause off screen |
-| 7 | About | `about` | Who are you, really? | The particle portrait forms beside the real photo; live Jakarta time and time-zone overlap |
+| 7 | About | `about` | Who are you, really? | Main's "Under One Roof" layout: three cards a side (who I am / what I care about) with the particle portrait forming in the empty middle column; the clock card shows live Jakarta time and the visitor's workday overlap. Phones: title, portrait, then a card carousel. Without WebGL the real photo fills the middle column |
 | 8 | Testimonials | `testimonials` | Can I trust you? | Short quotes, just before Contact |
 | 9 | Contact | `contact` | How do I reach you? | Email + copy, book a call, reply time, availability. The globe rises behind the frosted panel |
 | – | Footer | `footer` | | Socials, résumé, last updated (build date) |

@@ -32,10 +32,15 @@ function overlapHours(mine: number, theirs: number, start: number, end: number) 
   return Math.round(best / 30) / 2;
 }
 
+/** 1.5 → "1.5", 5 → "5" */
+const hours = (h: number) => String(Math.round(Math.abs(h) * 10) / 10);
+const fill = (template: string, h: number) => template.replace("{h}", hours(h));
+
 /**
- * Live Jakarta time and the overlap with each listed city. Computed in the
- * browser (it depends on today's date and daylight saving), so the server
- * renders the city names and the numbers fill in after load.
+ * Live Jakarta time, how far ahead or behind the visitor is, and how many
+ * hours our working days share. Everything depends on the visitor's clock
+ * and time zone, so the server renders placeholders and the numbers fill in
+ * after load (no hydration mismatch, no layout shift).
  */
 export function LocalTime() {
   const [now, setNow] = useState<Date | null>(null);
@@ -47,39 +52,38 @@ export function LocalTime() {
     return () => window.clearInterval(id);
   }, []);
 
-  const time = now
-    ? new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: site.timeZone }).format(now)
-    : "--:--";
-  const mine = now ? offsetMinutes(site.timeZone, now) : 0;
+  const { workday, you } = about;
+  let time = "--:--";
+  let relation = " ";
+  let overlap: number | null = null;
+
+  if (now) {
+    time = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: site.timeZone }).format(now);
+    const mine = offsetMinutes(site.timeZone, now);
+    const theirs = offsetMinutes(Intl.DateTimeFormat().resolvedOptions().timeZone, now);
+    const diff = (mine - theirs) / 60;
+    relation = diff === 0 ? you.same : fill(diff > 0 ? you.ahead : you.behind, diff);
+    overlap = overlapHours(mine, theirs, workday.start, workday.end);
+  }
 
   return (
     <div className="lt">
       <p className="lt-now">
-        <span>{about.location.localTime}</span>
+        <span className="sr-only">{about.location.localTime}</span>
         <time className="lt-time" dateTime={now?.toISOString()}>
           {time}
         </time>
-        <span className="lt-zone">
+        <span>
           {about.location.place} · {site.utcOffset}
         </span>
       </p>
-      <h3 className="lt-title">{about.overlapTitle}</h3>
-      <ul className="lt-list">
-        {about.zones.map((z) => {
-          const h = now ? overlapHours(mine, offsetMinutes(z.tz, now), about.workday.start, about.workday.end) : null;
-          return (
-            <li key={z.tz}>
-              <span>{z.city}</span>
-              <span className="lt-bar" aria-hidden="true">
-                <i style={{ width: `${h === null ? 0 : (h / (about.workday.end - about.workday.start)) * 100}%` }} />
-              </span>
-              <b>
-                {h === null ? "–" : h} {about.overlapUnit}
-              </b>
-            </li>
-          );
-        })}
-      </ul>
+      <div className="lt-you">
+        <p className="lt-rel">{relation}</p>
+        <span className="lt-bar" aria-hidden="true">
+          <i style={{ width: `${overlap === null ? 0 : (overlap / (workday.end - workday.start)) * 100}%` }} />
+        </span>
+        <b>{overlap === null ? "–" : fill(you.overlap, overlap)}</b>
+      </div>
     </div>
   );
 }

@@ -96,6 +96,21 @@ export type Capability = {
   tools: string[];
 };
 
+/**
+ * A card beside the particle portrait in About. `photo` swaps the icon tile
+ * for your real photo; `widget: "localTime"` adds the live clock under the
+ * title.
+ */
+export type AboutCard = {
+  id: string;
+  icon: IconName;
+  photo?: boolean;
+  title: string;
+  text?: string;
+  widget?: "localTime";
+  cta?: Link;
+};
+
 export type PlaygroundItem = {
   slug: string;
   title: string;

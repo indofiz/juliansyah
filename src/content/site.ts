@@ -6,7 +6,7 @@
  * with a dashed outline. List them with: grep -n "TODO:" src/content/site.ts
  */
 
-import type { Capability, ClientLogo, IconName, Link, LoopMedia, MockNavItem, Platform, PlaygroundItem, Project, ProofItem, Testimonial } from "./types";
+import type { AboutCard, Capability, ClientLogo, IconName, Link, LoopMedia, MockNavItem, Platform, PlaygroundItem, Project, ProofItem, Testimonial } from "./types";
 
 export const site = {
   name: "Juliansyah",
@@ -464,7 +464,9 @@ export const playground = {
 };
 
 /* ---------------------------------------------------------------------------
- * 7. About: who are you, really? The particle portrait forms beside it.
+ * 7. About: who are you, really? Three cards either side of the particle
+ * portrait, which forms in the empty middle column (main's "Under One Roof"
+ * layout). Left: who I am. Right: what I care about.
  * ------------------------------------------------------------------------- */
 export const about = {
   badge: "About",
@@ -475,31 +477,50 @@ export const about = {
     width: 1024,
     height: 1024,
   },
-  story: [
-    "I'm a Flutter developer, front-end developer and UI/UX designer in Jakarta. I design the screens, then build them myself, for phones and the web.",
-    "TODO: two or three sentences on how you got started and the problems you like solving.",
-  ],
-  careTitle: "What I care about",
-  // Drafted from the work on this site: confirm or rewrite them.
-  care: [
-    "Apps that keep working on weak networks and older phones.",
-    "Interfaces anyone can use: keyboard, screen reader or large text.",
-    "Code the next developer can read without me in the room.",
-  ],
-  location: { title: "Where and when", place: "Jakarta, Indonesia", localTime: "Local time" },
+  cards: {
+    left: [
+      {
+        id: "who",
+        icon: "user",
+        photo: true,
+        title: "Who I am",
+        text: "I'm a Flutter developer, front-end developer and UI/UX designer in Jakarta. I design the screens, then build them myself, for phones and the web.",
+      },
+      {
+        id: "start",
+        icon: "rocket",
+        title: "How I started",
+        text: "TODO: two or three sentences on how you got started and the problems you like solving.",
+      },
+      {
+        id: "when",
+        icon: "clock",
+        title: "Where and when",
+        widget: "localTime",
+        cta: { label: "Let's talk", href: "#contact" },
+      },
+    ],
+    // What I care about. Titles drafted from your lines: confirm or rewrite.
+    right: [
+      { id: "conditions", icon: "smartphone", title: "Built for real conditions", text: "Apps that keep working on weak networks and older phones." },
+      { id: "everyone", icon: "hand", title: "Usable by everyone", text: "Interfaces anyone can use: keyboard, screen reader or large text." },
+      { id: "handover", icon: "code", title: "Easy to hand over", text: "Code the next developer can read without me in the room." },
+    ],
+  } satisfies { left: AboutCard[]; right: AboutCard[] },
+  location: { place: "Jakarta, Indonesia", localTime: "Local time" },
   /** Working hours used for the overlap: 09:00–18:00 in both places. */
   workday: { start: 9, end: 18 },
-  overlapTitle: "Hours my working day overlaps with yours",
-  overlapUnit: "h overlap",
-  // Which markets to show is a choice: edit freely (IANA time-zone names).
-  zones: [
-    { city: "Singapore", tz: "Asia/Singapore" },
-    { city: "Tokyo", tz: "Asia/Tokyo" },
-    { city: "Sydney", tz: "Australia/Sydney" },
-    { city: "Dubai", tz: "Asia/Dubai" },
-    { city: "Amsterdam", tz: "Europe/Amsterdam" },
-    { city: "London", tz: "Europe/London" },
-  ],
+  /**
+   * The visitor's side of the clock card, from their browser's time zone.
+   * {h} is replaced with a number of hours.
+   */
+  you: {
+    same: "Same time zone as you",
+    ahead: "{h} h ahead of you",
+    behind: "{h} h behind you",
+    /** Hours our 09:00–18:00 working days share. */
+    overlap: "{h} h workday overlap",
+  },
 };
 
 /* ---------------------------------------------------------------------------
