@@ -90,7 +90,7 @@ export const work = {
   rows: [
     { initials: "PK", color: "var(--accent)", name: "Presensi PKP", client: "Pemkot Pangkalpinang", year: "2025", metric: "7,000+ users", status: "Live", category: "Mobile", href: "#spotlight" },
     { initials: "EC", color: "#e0b53c", name: "E-Commerce Platform", client: "Storefront", year: "2024", metric: "Stripe checkout", status: "Concept", category: "Frontend" },
-    { initials: "TM", color: "#f08a3c", name: "Task Management App", client: "Collaboration", year: "2024", metric: "Real-time kanban", status: "Concept", category: "Frontend" },
+    { initials: "TM", color: "#2fe39a", name: "Task Management App", client: "Collaboration", year: "2024", metric: "Real-time kanban", status: "Concept", category: "Frontend" },
     { initials: "AD", color: "#33b9e0", name: "Analytics Dashboard", client: "Data visualisation", year: "2023", metric: "Custom widgets", status: "Concept", category: "UI/UX" },
     { initials: "MB", color: "#9b7bff", name: "Mobile Banking App", client: "Fintech", year: "2023", metric: "Biometric auth", status: "Concept", category: "Mobile" },
     { initials: "AI", color: "#e8e8e8", name: "AI Content Generator", client: "LLM tooling", year: "2023", metric: "Streaming UI", status: "Concept", category: "Frontend" },

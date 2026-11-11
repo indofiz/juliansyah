@@ -85,6 +85,9 @@ html {
   --indigo: #6366f1;
   --rose: #ff6a88;
   --red: #ff5a5f;
+  /* Status colour for good / rising numbers in the mock screens. Separate
+     from the accent so it stays readable next to --red. */
+  --positive: #2fe39a;
 
   --radius-sm: 0.625rem;
   --radius: 1rem;
