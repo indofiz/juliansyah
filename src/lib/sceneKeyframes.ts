@@ -7,8 +7,8 @@ export type SceneKeyframe = SceneValues & {
    */
   via?: Partial<SceneValues> | Partial<SceneValues>[];
   /**
-   * Desktop only: run this transition over a custom scroll range instead of
-   * "while the section scrolls in". `endVh` is the length in screens.
+   * Run this transition over a custom scroll range instead of "while the
+   * section scrolls in". `endVh` is the length in screens.
    */
   scroll?: { trigger: string; start?: string; endVh?: number };
   /** Overrides used on screens ≤ 900px wide, where the layout stacks. */
@@ -29,7 +29,7 @@ const hidden = { x: 0, y: 0.6, scale: 0.7, globeSpin: 4.8, shapeSpin: 0.6, morph
 
 export const sceneKeyframes: Record<string, SceneKeyframe> = {
   // Big globe rising from the bottom of the hero, behind the dashboard frame.
-  hero: { x: 0, y: -0.8, scale: 1.12, globeSpin: -0.45, shapeSpin: -0.25, morph: 0, sink: 0, opacity: 1 },
+  hero: { x: 0, y: -0.8, scale: 1.12, globeSpin: -0.45, shapeSpin: -0.25, morph: 0, sink: 0, opacity: 1, mobile: { y: -0.26 } },
 
   // Pinned intro (desktop): during the first screen of scroll the globe rises
   // from the bottom to the centre while the headline and dashboard part ways.
@@ -43,7 +43,7 @@ export const sceneKeyframes: Record<string, SceneKeyframe> = {
     morph: 0,
     sink: 0,
     opacity: 1,
-    mobile: { y: -0.42, scale: 0.85 },
+    mobile: { y: -0.1, scale: 1 },
   },
 
   // As the intro releases: the globe swells and drops, dissolves onto the
@@ -61,7 +61,7 @@ export const sceneKeyframes: Record<string, SceneKeyframe> = {
     morph: 2,
     sink: 0,
     opacity: 1,
-    mobile: { scale: 1.25, y: -0.04 },
+    mobile: { scale: 1, y: 0.3 },
   },
 
   // Shape breaks apart and fades while the table scrolls in.
@@ -74,7 +74,7 @@ export const sceneKeyframes: Record<string, SceneKeyframe> = {
   estimator: { x: 0, y: -1.15, scale: 0.95, globeSpin: 3.6, shapeSpin: 0.7, morph: 0, sink: 0, opacity: 0.9 },
 
   // ...and rises into the centre of the steps section.
-  process: { x: 0, y: 0.02, scale: 0.86, globeSpin: 4.35, shapeSpin: 0.7, morph: 0, sink: 0, opacity: 1, mobile: { y: -0.45, scale: 0.85 } },
+  process: { x: 0, y: 0.02, scale: 0.86, globeSpin: 4.35, shapeSpin: 0.7, morph: 0, sink: 0, opacity: 1, mobile: { y: 0.12, scale: 0.95 } },
 
   // The rest of the page is DOM-only; the globe drifts up and fades out.
   spotlight: hidden,

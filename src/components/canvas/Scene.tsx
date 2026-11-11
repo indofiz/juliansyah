@@ -18,7 +18,8 @@ const SHAPE: ShapeSource = {
   url: "/portrait/portrait-map.png",
   height: 3.3,
   depth: 0.28,
-  brightness: 0.95, // lower = dimmer, subtler dots (try 0.6–1.3)
+  brightness: 1.1, // lower = dimmer, subtler dots (try 0.6–1.3)
+  dotSpacing: 0.0064, // gap between dots as a fraction of the height; bigger = coarser halftone
 };
 // const SHAPE: ShapeSource = { type: "model", url: "/models/bull.glb" };
 

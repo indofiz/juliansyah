@@ -26,6 +26,25 @@
   position: relative;
 }
 
+/* Soft green glow at the top of the hero, behind the nav and headline. */
+.hero-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 0;
+  height: 100vh;
+  pointer-events: none;
+  background: radial-gradient(
+    95% 85% at 50% 0%,
+    rgba(30, 66, 52, 0.8) 0%,
+    rgba(22, 50, 39, 0.62) 30%,
+    rgba(12, 28, 22, 0.4) 60%,
+    rgba(6, 13, 10, 0.16) 85%,
+    rgba(3, 5, 6, 0) 100%
+  );
+}
+
 .hero-copy {
   position: relative;
   z-index: 2;
@@ -86,23 +105,25 @@
   flex: none;
   width: var(--bar);
   height: 100%;
+  /* Frosting: blur plus a dark tint. Raise the tint's last number for more
+     solid glass, lower it (or the blur) to see more of the globe. */
+  background: rgba(8, 18, 14, 0.22);
   -webkit-backdrop-filter: blur(0.5rem);
   backdrop-filter: blur(0.5rem);
-  /* Very faint grid texture on the glass. */
-  background-image:
-    linear-gradient(rgba(170, 255, 220, 0.012) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(170, 255, 220, 0.012) 1px, transparent 1px);
-  background-size: 0.375rem 0.375rem;
   /* Fade the top edge so the glass doesn't cut a hard line across the shell. */
   -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%);
   mask-image: linear-gradient(180deg, transparent 0%, #000 30%);
-  transform-origin: bottom;
+  /* Hidden until ScrollFx fades them in (avoids a flash before JS runs). */
+  opacity: 0;
+  visibility: hidden;
+  will-change: opacity, transform;
 }
 
 /* Portrait: the globe is sized by width (see ParticleMorph). */
 @media (max-aspect-ratio: 1/1) {
   .hero-bars {
     --r: calc(0.366 * 90vw);
+    --cy: 63vh; /* mobile hero keyframe: y = -0.26 */
   }
 }
 
@@ -149,13 +170,14 @@
 
 .stats-list li {
   display: grid;
-  grid-template-columns: 1.625rem minmax(5.5rem, auto) 1fr;
+  grid-template-columns: 2.25rem minmax(5.5rem, auto) 1fr;
   align-items: baseline;
-  gap: 0.875rem;
+  gap: 1rem;
 }
 
 .stats-list svg {
   align-self: center;
+  justify-self: center;
   color: #fff;
 }
 
@@ -173,50 +195,50 @@
   color: var(--mint);
 }
 
-/* Desktop: pin the stage for two screens of scroll, layer hero over stats. */
-@media (min-width: 901px) {
-  .intro {
-    height: 300vh;
-  }
+/* Pin the stage for two screens of scroll and layer the hero over the stats
+   (all screen sizes; mobile positions are in mobile.css). */
+.intro {
+  height: 300vh;
+}
 
-  .intro-stage {
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    overflow: hidden;
-  }
+.intro-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+}
 
-  .hero-layer,
-  .stats-layer {
-    position: absolute;
-    inset: 0;
-  }
+.hero-layer,
+.stats-layer {
+  position: absolute;
+  inset: 0;
+}
 
-  .hero-frame-wrap {
-    position: absolute;
-    top: 74vh;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-  }
+.hero-frame-wrap {
+  position: absolute;
+  top: 74vh;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
 
-  .stats-layer {
-    display: flex;
-    align-items: center;
-    padding: 0;
-    pointer-events: none;
-  }
+.stats-layer {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  pointer-events: none;
+}
 
-  .stats-layer .btn {
-    pointer-events: auto;
-  }
+.stats-layer .btn {
+  pointer-events: auto;
+}
 
-  /* Hidden until the intro timeline fades them in (avoids a flash on load). */
-  .stats-copy .sh > *,
-  .stats-copy .btn-row,
-  .stat-row {
-    opacity: 0;
-  }
+/* Hidden until the intro timeline fades them in (avoids a flash on load). */
+.stats-copy .sh > *,
+.stats-copy .btn-row,
+.stat-row {
+  opacity: 0;
 }
 
 /* ---------- Services (cards around the morph shape) ---------- */
@@ -994,123 +1016,6 @@ a.table-row:hover {
   margin-top: 0.75rem;
 }
 
-/* ---------- Capabilities (bento) ---------- */
-.bento {
-  display: grid;
-  grid-template-columns: repeat(26, 1fr);
-  gap: 1rem;
-}
-
-.bento-card {
-  position: relative;
-  min-height: 20rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 1.625rem;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  background: #040706;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-  isolation: isolate;
-}
-
-.bento-1 {
-  grid-column: span 10;
-}
-
-.bento-2 {
-  grid-column: span 16;
-  justify-content: flex-start;
-}
-
-.bento-3,
-.bento-4 {
-  grid-column: span 13;
-}
-
-.bento-glow {
-  position: absolute;
-  z-index: -1;
-  width: 70%;
-  height: 90%;
-  border-radius: 999px;
-  background: radial-gradient(closest-side, rgba(120, 255, 240, 1), rgba(47, 227, 154, 0.85) 35%, rgba(18, 110, 75, 0.5) 65%, transparent);
-  filter: blur(1.875rem);
-  opacity: 1;
-}
-
-.bento-1 .bento-glow {
-  left: 35%;
-  top: 62%;
-  opacity: 0.6;
-}
-
-.bento-2 .bento-glow {
-  left: 2%;
-  top: 55%;
-  width: 45%;
-}
-
-.bento-3 .bento-glow {
-  left: 40%;
-  top: -35%;
-  width: 55%;
-}
-
-.bento-4 .bento-glow {
-  left: -12%;
-  top: -40%;
-  width: 55%;
-}
-
-.bento-dots {
-  inset: 0;
-  opacity: 0.4;
-  -webkit-mask-image: radial-gradient(40% 50% at 0% 0%, #000, transparent);
-  mask-image: radial-gradient(40% 50% at 0% 0%, #000, transparent);
-}
-
-.bento-4 .bento-dots {
-  -webkit-mask-image: radial-gradient(35% 50% at 100% 85%, #000, transparent);
-  mask-image: radial-gradient(35% 50% at 100% 85%, #000, transparent);
-}
-
-.bento-art {
-  position: absolute;
-  z-index: 0;
-  top: 1.125rem;
-  left: 50%;
-  width: min(20rem, 80%);
-  transform: translateX(-50%);
-}
-
-.bento-2 .bento-art {
-  top: auto;
-  bottom: 1.25rem;
-  left: auto;
-  right: 4%;
-  transform: none;
-  width: min(22.5rem, 50%);
-}
-
-.bento-copy {
-  position: relative;
-  z-index: 1;
-}
-
-.bento-copy h3 {
-  font-size: 1.5625rem;
-}
-
-.bento-copy p {
-  max-width: 25rem;
-  margin-top: 0.5rem;
-  font-size: 1rem;
-  line-height: 1.4;
-  color: #c3cbc7;
-}
-
 /* ---------- Portal ---------- */
 .portal {
   overflow: hidden;
@@ -1442,7 +1347,7 @@ a.table-row:hover {
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1023px) {
-  .site-header .btn-ghost {
+  .header-actions > .btn-ghost {
     display: none;
   }
   .stats-grid,
@@ -1458,100 +1363,5 @@ a.table-row:hover {
   }
   .services-gap {
     display: none;
-  }
-}
-
-@media (max-width: 900px) {
-  .nav {
-    top: auto;
-    bottom: 0.875rem;
-  }
-  .nav-menu {
-    top: auto;
-    bottom: calc(100% + 0.625rem);
-  }
-  .site-header .icon-btn {
-    display: none;
-  }
-  .stats-grid,
-  .process-grid,
-  .services-grid,
-  .plans,
-  .est-panel,
-  .portal-grid,
-  .spot-sticky,
-  .footer-top {
-    grid-template-columns: 1fr;
-  }
-  .process {
-    min-height: auto;
-  }
-  .stats-copy,
-  .process-copy {
-    padding-bottom: 50vh;
-  }
-  .hero-copy {
-    min-height: 100vh;
-    align-content: start;
-  }
-  .services-col:first-child {
-    padding-bottom: 60vh;
-  }
-  .table-row {
-    grid-template-columns: 1.8fr 1fr;
-  }
-  .table-row > :nth-child(2),
-  .table-row > :nth-child(4),
-  .table-row > :nth-child(5) {
-    display: none;
-  }
-  .table-row > :nth-child(3) {
-    text-align: right;
-  }
-  .tier-plus {
-    display: none;
-  }
-  .tier-row {
-    grid-template-columns: auto 1fr auto;
-  }
-  .est-stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .spot-sticky {
-    position: relative;
-    height: auto;
-    padding: 5rem var(--gutter);
-  }
-  .spotlight {
-    height: auto !important;
-  }
-  .spot-screen {
-    order: 2;
-  }
-  .bento-card {
-    grid-column: 1 / -1;
-  }
-  .bento-2 .bento-art {
-    position: relative;
-    right: auto;
-    bottom: auto;
-    width: 80%;
-    margin: 7.5rem auto 0;
-  }
-  .portal-grid {
-    padding: 0 var(--gutter);
-  }
-  .portal-frame {
-    margin-right: calc(-1 * var(--gutter));
-  }
-  .candles {
-    opacity: 0.35;
-    width: 60%;
-  }
-  .hero-frame-wrap {
-    margin-top: -18vh;
-  }
-  .intro .stats-layer {
-    padding-top: 2.5rem;
   }
 }

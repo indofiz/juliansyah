@@ -5,6 +5,8 @@ import "@/styles/tokens.css";
 import "@/styles/components.css";
 import "@/styles/mocks.css";
 import "@/styles/sections.css";
+import "@/styles/bento.css";
+import "@/styles/mobile.css";
 
 export const metadata: Metadata = {
   title: "Your Name — Creative Developer",

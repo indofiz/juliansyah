@@ -1,8 +1,13 @@
-import { nav } from "@/content/site";
 import { Icon } from "./ui/Icon";
 import { Button, Logo } from "./ui/primitives";
+import { MobileMenu } from "./MobileMenu";
+import { NavBar } from "./NavBar";
 
-/** Logo + actions scroll away with the hero; the nav pill stays fixed. */
+/**
+ * Desktop: logo + actions scroll away with the hero; the nav pill stays fixed.
+ * Mobile: the header is fixed (hides on scroll down, returns on scroll up)
+ * with a hamburger menu instead of the nav pill.
+ */
 export function SiteHeader() {
   return (
     <>
@@ -15,37 +20,14 @@ export function SiteHeader() {
           <Button variant="ghost" href="#">
             Résumé
           </Button>
-          <Button variant="glow" href="#cta">
+          <Button variant="glow" href="#cta" className="header-cta">
             Hire me
           </Button>
+          <MobileMenu />
         </div>
       </div>
 
-      <nav className="nav" aria-label="Main">
-        {nav.map((item) =>
-          "items" in item ? (
-            <div className="nav-item" key={item.label}>
-              <button className="nav-link" aria-haspopup="true">
-                {item.label}
-                <Icon name="chevronDown" size={15} />
-              </button>
-              <div className="nav-menu" role="menu">
-                {item.items.map((sub) => (
-                  <a key={sub.href} href={sub.href} role="menuitem">
-                    {sub.label}
-                  </a>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <div className="nav-item" key={item.label}>
-              <a className="nav-link" href={item.href}>
-                {item.label}
-              </a>
-            </div>
-          ),
-        )}
-      </nav>
+      <NavBar />
     </>
   );
 }

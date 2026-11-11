@@ -21,6 +21,7 @@ export function Intro() {
     <section id="hero" className="intro">
       <div className="intro-stage">
         <div className="hero-layer">
+          <span className="hero-gradient" aria-hidden="true" />
           {/* Four frosted-glass panels over the globe. The globe looks soft
               through the glass; the thin gaps between panels show the raw,
               sharp particles, which read as glowing dotted strips. */}
@@ -67,7 +68,7 @@ export function Intro() {
             <ul className="stats-list">
               {stats.items.map((s) => (
                 <li key={s.label} className="stat-row">
-                  <Icon name={s.icon} size={18} />
+                  <Icon name={s.icon} size={28} />
                   <strong>{s.value}</strong>
                   <span>{s.label}</span>
                 </li>

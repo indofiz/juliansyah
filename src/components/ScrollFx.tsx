@@ -6,33 +6,29 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const DESKTOP = "(min-width: 901px)";
-const MOBILE = "(max-width: 900px)";
-
 /**
  * DOM scroll effects (the particle globe is handled by ScrollScenes):
- *  - intro (desktop)  pinned hero → stats scene, see Intro.tsx
+ *  - intro            pinned hero → stats scene, see Intro.tsx
  *  - [data-reveal]    fade up once when it enters the viewport
  *  - [data-light]     brightens progressively while scrolling (table rows)
- *  - hero bars        frosted panels fade in on load, out as you leave the hero
+ *  - hero bars        frosted panels: in on load, out once you scroll, back in at the top
  *  - [data-steps]     progress track fills and the current step lights up
  *  - [data-cta]       corner glow slides to the bottom, particle bars rise
  */
 export function ScrollFx() {
   useGSAP(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const mm = gsap.matchMedia();
 
-    // ---- Intro: pinned hero → stats (desktop) --------------------------------
+    // ---- Intro: pinned hero → stats (all screen sizes) ----------------------
     // The intro section is 300vh with a sticky 100vh stage, so this timeline
     // spans two screens of scroll: 1 timeline unit = 1 screen.
-    mm.add(DESKTOP, () => {
+    {
       const tl = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom bottom", scrub: 0.8 },
       });
       // Screen 1: headline up, dashboard down (globe rises via ScrollScenes).
-      tl.to(".hero-bars", { autoAlpha: 0, duration: 0.3 }, 0)
+      tl.to(".hero-gradient", { opacity: 0, duration: 0.8 }, 0)
         .to(".hero-copy", { y: () => -window.innerHeight * 0.55, opacity: 0, duration: 0.75, ease: "power1.in" }, 0)
         .to(".hero-frame-wrap", { y: () => window.innerHeight * 0.8, duration: 0.9, ease: "power2.in" }, 0)
         // Screen 2: stats copy and rows fade in around the centred globe.
@@ -50,31 +46,48 @@ export function ScrollFx() {
         )
         // Hold before the stage releases.
         .to({}, { duration: 0.35 }, 1.65);
-    });
+    }
 
-    mm.add(MOBILE, () => {
-      if (reduce) return;
-      gsap.from(".hero-bar", { autoAlpha: 0, scaleY: 0.6, duration: 1.4, ease: "power3.out", stagger: { each: 0.12, from: "center" }, delay: 1 });
-      gsap.to(".hero-bars", {
-        opacity: 0,
-        ease: "none",
-        scrollTrigger: { trigger: "#hero", start: "top top", end: "+=35%", scrub: true },
+    // ---- Hero glass bars ------------------------------------------------------
+    // Not tied to scroll position: they fade in on load, fade out as soon as
+    // you start scrolling, and fade back in when you return to the very top.
+    const bars = gsap.utils.toArray<HTMLElement>(".hero-bar");
+    if (bars.length) {
+      const showBars = (delay = 0) =>
+        gsap.to(bars, {
+          autoAlpha: 1,
+          y: 0,
+          duration: reduce ? 0 : 0.9,
+          delay,
+          ease: "power2.out",
+          stagger: reduce ? 0 : { each: 0.08, from: "center" },
+          overwrite: true,
+        });
+      const hideBars = () =>
+        gsap.to(bars, {
+          autoAlpha: 0,
+          y: reduce ? 0 : "-1.5rem",
+          duration: reduce ? 0 : 0.45,
+          ease: "power2.in",
+          stagger: reduce ? 0 : { each: 0.05, from: "edges" },
+          overwrite: true,
+        });
+      gsap.set(bars, { autoAlpha: 0, y: "1.5rem" });
+      const atTop = ScrollTrigger.create({
+        start: 0,
+        end: () => Math.max(24, window.innerHeight * 0.04),
+        onLeave: hideBars,
+        onEnterBack: () => showBars(),
       });
-      gsap.utils.toArray<HTMLElement>(".stat-row").forEach((el) => {
-        gsap.fromTo(el, { opacity: 0.16 }, { opacity: 1, ease: "none", scrollTrigger: { trigger: el, start: "top 82%", end: "top 58%", scrub: true } });
-      });
-    });
+      // Landing at the top: show once the globe has started assembling.
+      if (window.scrollY <= atTop.end) showBars(0.5);
+    }
 
     if (reduce) {
       gsap.set("[data-light]", { opacity: 1 });
       gsap.set(".cta-glow-bottom", { opacity: 1 });
       return;
     }
-
-    // Glass bars appear once the globe has assembled (desktop: the intro timeline fades them out).
-    mm.add(DESKTOP, () => {
-      gsap.from(".hero-bar", { autoAlpha: 0, scaleY: 0.6, duration: 1.4, ease: "power3.out", stagger: { each: 0.12, from: "center" }, delay: 1 });
-    });
 
     gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((el) => {
       gsap.from(el, {

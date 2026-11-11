@@ -6,7 +6,7 @@ type Service = (typeof services.left)[number];
 
 function ServiceCard({ s }: { s: Service }) {
   return (
-    <article className={`card svc-card tone-${s.tone}`} data-reveal>
+    <article className={`card svc-card tone-${s.tone}`} data-reveal data-slide>
       <span className={`svc-icon tone-${s.tone}`}>
         <Icon name={s.icon} size={22} />
       </span>
@@ -29,7 +29,7 @@ export function Services() {
         <h2 className="h2 grad-text services-title" data-reveal>
           {services.title}
         </h2>
-        <div className="services-grid">
+        <div className="services-grid" data-carousel>
           <div className="services-col">
             {services.left.map((s) => (
               <ServiceCard key={s.title} s={s} />
@@ -41,6 +41,9 @@ export function Services() {
               <ServiceCard key={s.title} s={s} />
             ))}
           </div>
+        </div>
+        <div className="carousel-bar" data-carousel-nav aria-hidden="true">
+          <span />
         </div>
       </div>
     </section>
