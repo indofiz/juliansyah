@@ -7,7 +7,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Intro } from "@/components/sections/Intro";
 import { Services } from "@/components/sections/Services";
 import { Work } from "@/components/sections/Work";
-import { Process } from "@/components/sections/Process";
+import { DesignToCode } from "@/components/sections/DesignToCode";
 import { Assistant } from "@/components/sections/Assistant";
 import { Featured } from "@/components/sections/Featured";
 import { Capabilities } from "@/components/sections/Capabilities";
@@ -31,7 +31,7 @@ export default function Home() {
         <Intro />
         <Services />
         <Work />
-        <Process />
+        <DesignToCode />
         <Assistant />
         <Featured />
         <Capabilities />

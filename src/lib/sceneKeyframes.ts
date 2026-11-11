@@ -68,23 +68,8 @@ export const sceneKeyframes: Record<string, SceneKeyframe> = {
   // Shape breaks apart and fades while the table scrolls in.
   work: { x: 0, y: 0.1, scale: 0.9, globeSpin: 0.4, shapeSpin: 0.15, morph: 1, sink: 0, opacity: 0 },
 
-  // Quietly re-forms as a globe below the fold, peeks out, then rises into
-  // the centre of the steps section.
-  process: {
-    via: [
-      { y: -1.3, scale: 0.95, globeSpin: 3.2, shapeSpin: 0.7, morph: 0 },
-      { y: -1.15, globeSpin: 3.6, opacity: 0.9 },
-    ],
-    x: 0,
-    y: 0.02,
-    scale: 0.86,
-    globeSpin: 4.35,
-    shapeSpin: 0.7,
-    morph: 0,
-    sink: 0,
-    opacity: 1,
-    mobile: { y: 0.12, scale: 0.95 },
-  },
+  // Design → code is DOM only: the particles stay out of the way.
+  "design-to-code": hidden,
 
   // The rest of the page is DOM-only; the globe drifts up and fades out.
   assistant: hidden,

@@ -42,7 +42,7 @@ export const nav = [
     label: "Services",
     items: [
       { label: "What I do", href: "/#services" },
-      { label: "How I work", href: "/#process" },
+      { label: "Design → code", href: "/#design-to-code" },
     ],
   },
   {
@@ -243,15 +243,66 @@ export const caseStudyLabels = {
   ogEyebrow: "Case study",
 };
 
-export const process = {
-  badge: "How I work",
-  title: "Seamless from Call to Launch.",
-  text: "Clear milestones, regular demos and no surprises, whether I'm joining your team or building solo.",
-  steps: [
-    { title: "Discover", text: "A short call to understand your goals, your users and your timeline." },
-    { title: "Design & Build", text: "Figma first, then production code, with demos so you see real progress." },
-    { title: "Launch", text: "Testing on real devices, a smooth go-live and support after launch." },
+/* ---------------------------------------------------------------------------
+ * 4. Design → code: can you do what I need? (design and engineering, one person)
+ * Pinned and scroll-scrubbed; a static row with reduced motion.
+ * ------------------------------------------------------------------------- */
+export const designToCode = {
+  badge: "Design → code",
+  title: "I design it and I ship it.",
+  text: "One real component, five stages, one person. Scroll to watch a check-in card go from pencil sketch to running code.",
+  component: "Presensi PKP · check-in card",
+  note: "TODO: swap in the real sketch, wireframe, Figma frame and widget source from Presensi PKP",
+  stages: [
+    { id: "sketch", label: "Sketch", text: "Pencil first: what does someone in the field need to see before they tap?" },
+    { id: "wireframe", label: "Wireframe", text: "Layout and hierarchy in greyscale, before colour gets a vote." },
+    { id: "design", label: "Design", text: "Real type, colour and states, built on the design system's tokens." },
+    { id: "code", label: "Flutter widget", text: "The same card as a Flutter widget, reading the same tokens." },
+    { id: "running", label: "Running", text: "A web recreation of the Flutter widget, live on this page. Tap Check in." },
   ],
+  sketch: { title: "check-in card", notes: ["where am I?", "inside the fence?", "big tap target"] },
+  wireframe: { map: "Map + geofence", status: "Status line", button: "Check in" },
+  /** Sample content inside the card mock-ups (illustration, not real data). */
+  card: {
+    greeting: "Good morning",
+    time: "07:42",
+    officeLabel: "Your office",
+    office: "City Hall",
+    status: "Inside the geofence",
+    statusDone: "Attendance recorded",
+    button: "Check in",
+    buttonDone: "Checked in at",
+    reset: "Reset demo",
+  },
+  codeFile: "check_in_card.dart",
+  /** Highlighted at build time (src/lib/highlight.ts). Keep lines under ~50 characters. */
+  code: `// TODO: paste the real widget from Presensi PKP
+class CheckInCard extends StatelessWidget {
+  const CheckInCard({
+    super.key,
+    required this.state,
+    required this.onCheckIn,
+  });
+
+  final CheckInState state;
+  final VoidCallback onCheckIn;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = context.tokens;
+    return Card(
+      color: t.surface,
+      child: Column(children: [
+        OfficeMap(fence: state.geofence),
+        StatusChip(inside: state.inside),
+        FilledButton(
+          onPressed: state.inside ? onCheckIn : null,
+          child: Text(t.label.checkIn),
+        ),
+      ]),
+    );
+  }
+}`,
 };
 
 export const assistant = {
@@ -352,7 +403,7 @@ export const footer = {
       title: "Services",
       links: [
         { label: "What I do", href: "/#services" },
-        { label: "How I work", href: "/#process" },
+        { label: "Design → code", href: "/#design-to-code" },
       ],
     },
     {

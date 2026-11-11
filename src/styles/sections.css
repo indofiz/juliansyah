@@ -879,6 +879,590 @@
   transform: translateX(0.3rem);
 }
 
+/* ---------- Design → code (pinned, scroll-scrubbed) ---------- */
+/* The track is several screens tall and the stage sticks to the viewport;
+   DesignToCodeFx maps scroll progress to the stages. Reduced motion: a
+   static row (reduced-motion.css). */
+.d2c {
+  position: relative;
+}
+
+.d2c-track {
+  position: relative;
+  height: 480vh;
+}
+
+.d2c-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.d2c-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  align-items: center;
+  gap: clamp(2rem, calc(5 * var(--vw)), 5rem);
+}
+
+.d2c-copy .sh {
+  margin-bottom: 2.25rem;
+}
+
+.d2c-rail {
+  --p: 0;
+  position: relative;
+  display: grid;
+  gap: 1.375rem;
+  padding-left: 2.75rem;
+}
+
+.d2c-rail-track {
+  position: absolute;
+  left: 0.6875rem;
+  top: 0.375rem;
+  bottom: 0.375rem;
+  width: 0.125rem;
+  border-radius: 1px;
+  background: rgb(var(--accent-rgb) / 0.14);
+}
+
+.d2c-rail-fill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: calc(var(--p) * 100%);
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgb(var(--accent-rgb) / 0.3), var(--accent-bright));
+  box-shadow: 0 0 0.75rem rgb(var(--accent-rgb) / 0.7);
+}
+
+.d2c-step {
+  position: relative;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.d2c-step-n {
+  position: absolute;
+  left: -2.75rem;
+  top: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--muted);
+  background: #0d0b09;
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+  transition: color 0.3s, background 0.3s, box-shadow 0.3s;
+}
+
+.d2c-step-label {
+  font-size: 1.0625rem;
+  font-weight: 500;
+  color: #948f8a;
+  transition: color 0.3s;
+}
+
+.d2c-step-text {
+  max-width: 24rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: #8a847e;
+  transition: color 0.3s;
+}
+
+.d2c-step.is-on .d2c-step-n {
+  color: var(--accent-ink);
+  background: var(--accent);
+  box-shadow: 0 0 0.75rem rgb(var(--accent-rgb) / 0.7);
+}
+
+.d2c-step.is-on .d2c-step-label {
+  color: #fff;
+}
+
+.d2c-step.is-on .d2c-step-text {
+  color: #c7c3bf;
+}
+
+.d2c-view {
+  display: grid;
+  justify-items: center;
+  gap: 0.875rem;
+}
+
+.d2c-frame {
+  width: min(100%, 70vh);
+}
+
+.d2c-canvas {
+  position: relative;
+  aspect-ratio: 1 / 1;
+}
+
+/* Stacked layers; the first shows until the scroll timeline takes over. */
+.d2c-layer {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+}
+
+.d2c-layer:first-child {
+  opacity: 1;
+}
+
+.d2c-layer:not(.is-on) {
+  pointer-events: none;
+}
+
+/* Captions are for screen readers while pinned (the rail shows them), and
+   visible in the reduced-motion row. */
+.d2c-figcap {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.d2c-caption {
+  max-width: 40rem;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+/* Stage surface: a size container, so everything inside scales in cqw. */
+.st {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  container-type: size;
+}
+
+/* 1. Sketch */
+.st-sketch {
+  background:
+    repeating-linear-gradient(180deg, transparent 0 5.6cqh, rgba(255, 255, 255, 0.025) 5.6cqh calc(5.6cqh + 1px)),
+    #15120e;
+}
+
+.st-sketch svg {
+  width: 94cqw;
+  height: 94cqh;
+}
+
+.pencil path,
+.pencil circle {
+  fill: none;
+  stroke: #ddd5c9;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pencil .faint {
+  stroke-opacity: 0.45;
+  stroke-width: 1.4;
+}
+
+.pencil .dash {
+  stroke: var(--accent);
+  stroke-dasharray: 6 7;
+}
+
+.st-sketch .hand {
+  font-family: var(--font);
+  font-style: italic;
+  font-size: 20px;
+  font-weight: 500;
+  fill: #ddd5c9;
+}
+
+.st-sketch .hand.small {
+  font-size: 13px;
+  fill: #b8afa3;
+}
+
+/* 2. Wireframe (greyscale) */
+.st-wire {
+  background: #131210;
+}
+
+.wf-card {
+  width: 62cqw;
+  display: grid;
+  gap: 3cqw;
+  padding: 4.5cqw;
+  border: 0.4cqw dashed #5d5954;
+  border-radius: 3.5cqw;
+}
+
+.wf-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2cqw;
+}
+
+.wf-line {
+  display: block;
+  height: 2.2cqw;
+  border-radius: 1cqw;
+  background: #4a4743;
+}
+
+.wf-line--sm {
+  height: 1.6cqw;
+  background: #34322f;
+}
+
+.wf-map {
+  position: relative;
+  height: 26cqw;
+  border-radius: 2.5cqw;
+  background:
+    linear-gradient(to top right, transparent calc(50% - 0.2cqw), #4a4743 calc(50% - 0.2cqw) calc(50% + 0.2cqw), transparent calc(50% + 0.2cqw)),
+    linear-gradient(to top left, transparent calc(50% - 0.2cqw), #4a4743 calc(50% - 0.2cqw) calc(50% + 0.2cqw), transparent calc(50% + 0.2cqw)),
+    #22201d;
+}
+
+.wf-status {
+  justify-content: flex-start;
+}
+
+.wf-dot {
+  width: 2.6cqw;
+  height: 2.6cqw;
+  flex: none;
+  border-radius: 50%;
+  background: #5d5954;
+}
+
+.wf-btn {
+  position: relative;
+  height: 9.5cqw;
+  display: grid;
+  place-items: center;
+  border-radius: 99px;
+  border: 0.4cqw solid #8a8580;
+  font-size: 2.8cqw;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #b5b0aa;
+}
+
+.wf-tag {
+  position: absolute;
+  padding: 0.6cqw 1.6cqw;
+  border-radius: 99px;
+  font-size: 2.1cqw;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+  color: #071822;
+  background: var(--sky);
+}
+
+.wf-map .wf-tag {
+  left: 2cqw;
+  top: 2cqw;
+}
+
+.wf-status .wf-tag {
+  right: 0;
+}
+
+.wf-btn .wf-tag {
+  right: -2.5cqw;
+  top: -2.5cqw;
+}
+
+/* 3. Design + 5. Running: the check-in card (craft/CheckInCard.tsx) */
+.st-design {
+  background:
+    radial-gradient(70% 60% at 50% 50%, rgb(var(--accent-rgb) / 0.06), transparent 70%),
+    #100e0b;
+}
+
+.st-design-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 4cqw 4cqw;
+}
+
+.st-running {
+  background:
+    radial-gradient(55% 55% at 50% 55%, rgb(var(--accent-rgb) / 0.16), transparent 70%),
+    #0d0b09;
+}
+
+.ci-card {
+  position: relative;
+  width: 62cqw;
+  display: grid;
+  gap: 3cqw;
+  padding: 4.5cqw;
+  border-radius: 4cqw;
+  font-size: 2.8cqw;
+  color: var(--text);
+  background: linear-gradient(180deg, #1c1813, #110e0b);
+  box-shadow:
+    inset 0 0 0 0.25cqw rgba(255, 255, 255, 0.07),
+    0 4cqw 10cqw rgba(0, 0, 0, 0.5);
+}
+
+.ci-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.ci-greeting {
+  font-size: 3.8cqw;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.ci-time {
+  font-size: 3.2cqw;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.ci-office {
+  display: grid;
+  gap: 0.5cqw;
+}
+
+.ci-office small {
+  font-size: 2.2cqw;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.ci-office b {
+  font-size: 3cqw;
+  font-weight: 500;
+}
+
+.ci-map {
+  position: relative;
+  height: 26cqw;
+  border-radius: 2.8cqw;
+  overflow: hidden;
+  background:
+    linear-gradient(115deg, transparent 46%, rgba(255, 255, 255, 0.06) 46.5% 49%, transparent 49.5%),
+    linear-gradient(25deg, transparent 62%, rgba(255, 255, 255, 0.05) 62.5% 64.5%, transparent 65%),
+    linear-gradient(160deg, transparent 20%, rgba(255, 255, 255, 0.04) 20.5% 22%, transparent 22.5%),
+    radial-gradient(60% 80% at 25% 30%, rgba(120, 140, 90, 0.2), transparent 70%),
+    #1d1a16;
+}
+
+.ci-fence {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 20cqw;
+  height: 20cqw;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  border: 0.35cqw dashed rgb(var(--accent-rgb) / 0.85);
+  background: rgb(var(--accent-rgb) / 0.1);
+}
+
+.ci-pin {
+  position: absolute;
+  left: 54%;
+  top: 45%;
+  width: 2.6cqw;
+  height: 2.6cqw;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--accent);
+  box-shadow: 0 0 0 1cqw rgb(var(--accent-rgb) / 0.25), 0 0 3cqw var(--accent);
+}
+
+.ci-status {
+  display: flex;
+  align-items: center;
+  gap: 1.6cqw;
+  font-size: 2.8cqw;
+  color: #d8d3cd;
+}
+
+.ci-dot {
+  width: 2cqw;
+  height: 2cqw;
+  flex: none;
+  border-radius: 50%;
+  background: #7fd19b;
+  box-shadow: 0 0 1.5cqw #7fd19b;
+}
+
+.ci-btn {
+  width: 100%;
+  height: 9.5cqw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5cqw;
+  border-radius: 99px;
+  font-size: 3.2cqw;
+  font-weight: 600;
+  color: var(--accent-ink);
+  background: linear-gradient(180deg, var(--accent-bright), var(--accent));
+  box-shadow:
+    0 0 0 0.3cqw rgb(var(--accent-bright-rgb) / 0.6),
+    0 0 4cqw rgb(var(--accent-rgb) / 0.5);
+}
+
+button.ci-btn {
+  transition: transform 0.2s ease;
+}
+
+button.ci-btn:hover {
+  transform: translateY(-0.3cqw);
+}
+
+button.ci-btn:active {
+  transform: scale(0.98);
+}
+
+.ci-btn svg {
+  width: 3.4cqw !important;
+  height: 3.4cqw !important;
+}
+
+.ci-btn--done {
+  color: #c4f0d1;
+  background: rgba(127, 209, 155, 0.14);
+  box-shadow: inset 0 0 0 0.3cqw rgba(127, 209, 155, 0.5);
+}
+
+.ci-done {
+  display: grid;
+  justify-items: center;
+  gap: 1.5cqw;
+}
+
+.ci-reset {
+  font-size: 2.4cqw;
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 0.5cqw;
+}
+
+/* 4. Code */
+.st-code {
+  display: flex;
+  flex-direction: column;
+  place-items: initial;
+  background: #0b0a08;
+}
+
+.code-tabs {
+  display: flex;
+  align-items: flex-end;
+  height: 7cqw;
+  flex: none;
+  padding: 0 3cqw;
+  background: #100e0c;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.code-tab {
+  padding: 1.4cqw 2.4cqw;
+  border-radius: 1.2cqw 1.2cqw 0 0;
+  font: 500 2.2cqw/1 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color: var(--text);
+  background: #0b0a08;
+  box-shadow: inset 0 0.3cqw 0 var(--accent);
+}
+
+.code {
+  flex: 1;
+  margin: 0;
+  padding: 3cqw 3cqw 3cqw 0;
+  overflow: hidden;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 2.2cqw;
+  line-height: 1.5;
+  color: #e4ddd5;
+  tab-size: 2;
+}
+
+.code-line {
+  display: block;
+  white-space: pre;
+}
+
+.code-ln {
+  display: inline-block;
+  width: 7cqw;
+  padding-right: 2.4cqw;
+  text-align: right;
+  color: #5f5a55;
+  user-select: none;
+}
+
+.tk-keyword {
+  color: var(--accent);
+}
+
+.tk-type {
+  color: var(--accent-bright);
+}
+
+.tk-call {
+  color: #fff;
+}
+
+.tk-prop {
+  color: #d9c6ad;
+}
+
+.tk-string {
+  color: #a8d8a0;
+}
+
+.tk-number {
+  color: #ffb38a;
+}
+
+.tk-annotation {
+  color: #ffcf7a;
+}
+
+.tk-comment {
+  color: #8f8780;
+  font-style: italic;
+}
+
+.tk-punct {
+  color: #a69f99;
+}
+
 /* ---------- Pricing ---------- */
 .plans {
   display: grid;
@@ -1156,109 +1740,6 @@
 
 .est-cta {
   margin-bottom: 0.75rem;
-}
-
-/* ---------- Process ---------- */
-.process {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-}
-
-.process-grid {
-  display: grid;
-  grid-template-columns: minmax(20rem, 1fr) minmax(18.75rem, 1fr) minmax(20rem, 1fr);
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.process-copy .sh {
-  margin-bottom: 1.625rem;
-}
-
-.process-copy .sh-text {
-  max-width: 21.25rem;
-  font-size: 1rem;
-}
-
-.steps {
-  position: relative;
-  display: grid;
-  gap: clamp(3rem, 9vh, 5.625rem);
-  padding-left: 4.125rem;
-}
-
-.steps-track {
-  position: absolute;
-  left: 0.75rem;
-  top: 0;
-  bottom: 0;
-  width: 2rem;
-  border-radius: 999px;
-  background: linear-gradient(180deg, rgb(var(--accent-rgb) / 0.1), rgb(var(--accent-rgb) / 0.04));
-  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.12);
-  overflow: hidden;
-}
-
-.steps-fill {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 0%;
-  border-radius: 999px;
-  background: linear-gradient(180deg, rgb(var(--accent-rgb) / 0.12), rgb(var(--accent-rgb) / 0.5) 70%, var(--accent-200));
-  box-shadow: 0 0 1.375rem rgb(var(--accent-rgb) / 0.6);
-}
-
-.step {
-  position: relative;
-}
-
-.step-dot {
-  position: absolute;
-  left: -3.125rem;
-  top: 0;
-  width: 1.625rem;
-  height: 1.625rem;
-  display: grid;
-  place-items: center;
-  border-radius: 999px;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: #100e0b;
-  background: #f5f3f1;
-  box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.06);
-}
-
-.step-label {
-  font-size: 0.9375rem;
-  font-weight: 500;
-  color: var(--accent);
-}
-
-.step-title {
-  margin-top: 0.375rem;
-  font-size: 1.4375rem;
-  color: #928e8a;
-  transition: color 0.4s;
-}
-
-.step-text {
-  margin-top: 0.5rem;
-  max-width: 20rem;
-  font-size: 0.9375rem;
-  line-height: 1.45;
-  color: #6d6964;
-  transition: color 0.4s;
-}
-
-.step.on .step-title {
-  color: #fff;
-}
-
-.step.on .step-text {
-  color: #c1bdb9;
 }
 
 /* ---------- Assistant (purple) ---------- */
@@ -1673,15 +2154,13 @@
   .header-actions > .btn-ghost {
     display: none;
   }
-  .proof-grid,
-  .process-grid {
+  .proof-grid {
     grid-template-columns: 1fr 1fr;
   }
   .work-list {
     grid-template-columns: 1fr 1fr;
   }
-  .proof-globe-space,
-  .process-globe-space {
+  .proof-globe-space {
     display: none;
   }
   .services-grid {

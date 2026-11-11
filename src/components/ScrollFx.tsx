@@ -11,7 +11,6 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
  *  - intro            pinned hero → proof scene, see Intro.tsx
  *  - [data-reveal]    fade up once when it enters the viewport
  *  - hero bars        frosted panels: in on load, out once you scroll, back in at the top
- *  - [data-steps]     progress track fills and the current step lights up
  *  - [data-cta]       corner glow slides to the bottom, particle bars rise
  */
 export function ScrollFx() {
@@ -85,22 +84,6 @@ export function ScrollFx() {
         duration: 1.1,
         ease: "power3.out",
         scrollTrigger: { trigger: el, start: "top 88%" },
-      });
-    });
-
-    document.querySelectorAll<HTMLElement>("[data-steps]").forEach((list) => {
-      const fill = list.querySelector<HTMLElement>(".steps-fill");
-      const steps = Array.from(list.querySelectorAll<HTMLElement>(".step"));
-      ScrollTrigger.create({
-        trigger: list,
-        start: "top 75%",
-        end: "bottom 45%",
-        scrub: true,
-        onUpdate: (self) => {
-          if (fill) fill.style.height = `${Math.max(8, self.progress * 100)}%`;
-          const current = Math.min(steps.length - 1, Math.floor(self.progress * steps.length));
-          steps.forEach((s, i) => s.classList.toggle("on", i === current));
-        },
       });
     });
 

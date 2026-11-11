@@ -190,6 +190,7 @@ h4 {
 
 .h2 {
   font-size: clamp(2.125rem, calc(4.3 * var(--vw)), 3.625rem);
+  text-wrap: balance;
 }
 
 .muted {
