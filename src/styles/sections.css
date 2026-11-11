@@ -35,13 +35,15 @@
   z-index: 0;
   height: 100vh;
   pointer-events: none;
+  /* A brighter ember core that falls off to black. A flat dark-orange wash
+     reads as brown, so keep the mid-tones saturated and the edges dark. */
   background: radial-gradient(
     95% 85% at 50% 0%,
-    rgb(var(--accent-800-rgb) / 0.8) 0%,
-    rgb(var(--accent-800-rgb) / 0.62) 30%,
-    rgb(var(--accent-900-rgb) / 0.4) 60%,
-    rgba(13, 8, 6, 0.16) 85%,
-    rgba(6, 4, 3, 0) 100%
+    rgb(var(--accent-600-rgb) / 0.5) 0%,
+    rgb(var(--accent-700-rgb) / 0.42) 25%,
+    rgb(var(--accent-800-rgb) / 0.4) 50%,
+    rgb(var(--accent-900-rgb) / 0.3) 75%,
+    rgba(5, 5, 5, 0) 100%
   );
 }
 
@@ -74,7 +76,7 @@
   margin-top: 0.75rem;
   font-size: 1.0938rem;
   line-height: 1.45;
-  color: #ccc7c4;
+  color: #c8c8c8;
 }
 
 .hero-cta {
@@ -107,9 +109,10 @@
   height: 100%;
   /* Frosting: blur plus a dark tint. Raise the tint's last number for more
      solid glass, lower it (or the blur) to see more of the globe. */
-  background: rgba(18, 11, 8, 0.22);
-  -webkit-backdrop-filter: blur(0.5rem);
-  backdrop-filter: blur(0.5rem);
+  background: rgba(13, 13, 13, 0.22);
+  /* saturate keeps the frosted globe orange; dimmed orange alone reads brown. */
+  -webkit-backdrop-filter: blur(0.5rem) saturate(1.6);
+  backdrop-filter: blur(0.5rem) saturate(1.6);
   /* Fade the top edge so the glass doesn't cut a hard line across the shell. */
   -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%);
   mask-image: linear-gradient(180deg, transparent 0%, #000 30%);
@@ -319,7 +322,7 @@
   margin: 0.5rem 0 1rem;
   font-size: 0.9375rem;
   line-height: 1.45;
-  color: #bfbab7;
+  color: #bbbbbb;
 }
 
 /* ---------- Work table ---------- */
@@ -361,7 +364,7 @@
   padding: 0.375rem 1.375rem 0.625rem;
   background:
     linear-gradient(180deg, rgb(var(--accent-rgb) / 0.09), rgb(var(--accent-rgb) / 0.015) 30%, rgba(0, 0, 0, 0)),
-    #0a0807;
+    #090909;
 }
 
 .table-row {
@@ -434,7 +437,7 @@ a.table-row:hover {
   align-items: center;
   gap: 0.375rem;
   font-size: 0.875rem;
-  color: #cbc6c3;
+  color: #c7c7c7;
 }
 
 .table-note {
@@ -459,14 +462,14 @@ a.table-row:hover {
   border-radius: var(--radius-lg);
   background:
     radial-gradient(110% 55% at 50% 0%, rgb(var(--accent-rgb) / 0.12), transparent 65%),
-    linear-gradient(180deg, #0e0b0a, #050404);
+    linear-gradient(180deg, #0c0c0c, #050404);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
 }
 
 .plan.popular {
   background:
     radial-gradient(110% 60% at 50% 0%, rgb(var(--accent-rgb) / 0.22), transparent 65%),
-    linear-gradient(180deg, #120d0b, #050404);
+    linear-gradient(180deg, #0f0f0f, #050404);
   box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.45), 0 -0.625rem 2.5rem -1.125rem rgb(var(--accent-rgb) / 0.9);
 }
 
@@ -500,7 +503,7 @@ a.table-row:hover {
   min-height: 4.5rem;
   font-size: 1rem;
   line-height: 1.45;
-  color: #b2aca9;
+  color: #aeaeae;
 }
 
 .plan-actions {
@@ -514,7 +517,7 @@ a.table-row:hover {
   gap: 0.75rem;
   margin-top: 1.875rem;
   font-size: 0.9375rem;
-  color: #bab5b2;
+  color: #b6b6b6;
 }
 
 .plan-list li {
@@ -530,7 +533,7 @@ a.table-row:hover {
   width: 0.25rem;
   height: 0.25rem;
   border-radius: 999px;
-  background: #857e7b;
+  background: #808080;
 }
 
 .plan-list li:first-child {
@@ -550,7 +553,7 @@ a.table-row:hover {
   overflow: hidden;
   background:
     radial-gradient(60% 45% at 75% 0%, rgb(var(--accent-rgb) / 0.12), transparent 70%),
-    linear-gradient(180deg, #0b0807, #060504);
+    linear-gradient(180deg, #090909, #050505);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
@@ -584,7 +587,7 @@ a.table-row:hover {
 .est-heading {
   margin-bottom: 1.125rem;
   font-size: 1.375rem;
-  color: #dcd7d5;
+  color: #d9d9d9;
 }
 
 .tiers {
@@ -601,17 +604,17 @@ a.table-row:hover {
   padding: 0 1rem;
   border-radius: 0.75rem;
   text-align: left;
-  background: #141211;
+  background: #121212;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
   transition: background 0.25s, box-shadow 0.25s;
 }
 
 .tier-row:hover {
-  background: #1a1715;
+  background: #181818;
 }
 
 .tier-row.on {
-  background: linear-gradient(90deg, rgb(var(--accent-rgb) / 0.16), rgb(var(--accent-rgb) / 0.03) 60%, #141211);
+  background: linear-gradient(90deg, rgb(var(--accent-rgb) / 0.16), rgb(var(--accent-rgb) / 0.03) 60%, #121212);
   box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.25);
 }
 
@@ -633,19 +636,19 @@ a.table-row:hover {
 }
 
 .tier-row.last:not(.on) .tier-pill {
-  color: #c7c4c2;
-  background: #3e3b3a;
+  color: #c4c4c4;
+  background: #3c3c3c;
 }
 
 .tier-name {
   font-size: 0.9375rem;
-  color: #98928f;
+  color: #939393;
 }
 
 .tier-name em {
   margin-left: 0.375rem;
   font-style: normal;
-  color: #746e6b;
+  color: #707070;
 }
 
 .tier-row.on .tier-name,
@@ -658,8 +661,8 @@ a.table-row:hover {
   border-radius: 999px;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #e7e4e3;
-  background: #3d3b3a;
+  color: #e5e5e5;
+  background: #3c3c3c;
 }
 
 .tier-total {
@@ -689,7 +692,7 @@ a.table-row:hover {
   margin-top: 0.875rem;
   font-size: 0.8438rem;
   line-height: 1.5;
-  color: #a9a3a0;
+  color: #a4a4a4;
 }
 
 .est-stats {
@@ -791,8 +794,8 @@ a.table-row:hover {
   border-radius: 999px;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #100d0b;
-  background: #f5f2f1;
+  color: #0e0e0e;
+  background: #f3f3f3;
   box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.06);
 }
 
@@ -805,7 +808,7 @@ a.table-row:hover {
 .step-title {
   margin-top: 0.375rem;
   font-size: 1.4375rem;
-  color: #928d8a;
+  color: #8e8e8e;
   transition: color 0.4s;
 }
 
@@ -814,7 +817,7 @@ a.table-row:hover {
   max-width: 20rem;
   font-size: 0.9375rem;
   line-height: 1.45;
-  color: #6d6764;
+  color: #696969;
   transition: color 0.4s;
 }
 
@@ -823,7 +826,7 @@ a.table-row:hover {
 }
 
 .step.on .step-text {
-  color: #c1bcb9;
+  color: #bdbdbd;
 }
 
 /* ---------- Spotlight (sticky) ---------- */
@@ -917,7 +920,7 @@ a.table-row:hover {
 
 .spot-features h3 {
   font-size: 1.3125rem;
-  color: #898380;
+  color: #848484;
   transition: color 0.4s;
 }
 
@@ -926,7 +929,7 @@ a.table-row:hover {
   margin-top: 0.5rem;
   font-size: 1rem;
   line-height: 1.45;
-  color: #5c5754;
+  color: #585858;
   transition: color 0.4s;
 }
 
@@ -935,7 +938,7 @@ a.table-row:hover {
 }
 
 .spot-features li.on p {
-  color: #a39d9a;
+  color: #9f9f9f;
 }
 
 /* ---------- Assistant (purple) ---------- */
@@ -1047,7 +1050,7 @@ a.table-row:hover {
   padding: clamp(2.5rem, calc(6 * var(--vw)), 5rem) clamp(1.5rem, calc(5 * var(--vw)), 4rem);
   border-radius: 1.625rem;
   overflow: hidden;
-  background: #070504;
+  background: #060606;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
   isolation: isolate;
 }
@@ -1166,7 +1169,7 @@ a.table-row:hover {
   margin-top: 2.5rem;
   padding-top: 4.5rem;
   overflow: hidden;
-  background: linear-gradient(180deg, #110d0b 0%, #0f0c0a 100%);
+  background: linear-gradient(180deg, #0e0e0e 0%, #0d0d0d 100%);
 }
 
 .footer-top {
@@ -1205,7 +1208,7 @@ a.table-row:hover {
   display: flex;
   gap: 1.625rem;
   margin-top: 1.125rem;
-  color: #dbd7d5;
+  color: #d8d8d8;
 }
 
 .footer-social a:hover {
@@ -1227,7 +1230,7 @@ a.table-row:hover {
 
 .footer-col a {
   font-size: 0.9375rem;
-  color: #b0aaa7;
+  color: #acacac;
   transition: color 0.2s;
 }
 
@@ -1316,7 +1319,7 @@ a.table-row:hover {
   margin-top: 1.75rem;
   font-size: 0.8125rem;
   line-height: 1.55;
-  color: #88827f;
+  color: #848484;
 }
 
 .footer-small h4 {
@@ -1333,7 +1336,7 @@ a.table-row:hover {
   gap: 1rem;
   padding: 2.25rem 0 1.875rem;
   font-size: 0.875rem;
-  color: #938d8a;
+  color: #8f8f8f;
 }
 
 .footer-legal {

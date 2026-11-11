@@ -5,9 +5,9 @@
  */
 export const theme = {
   /** Globe / portrait particle colour (ramp 400). */
-  particle: "#ff5029",
+  particle: "#ff4400",
   /** Bright rim and highlight colour of the particles (ramp 100). */
-  particleRim: "#ffd6c4",
+  particleRim: "#ffd5c2",
   /** WebGL clear colour behind the particles. */
-  canvasBg: "#060302",
+  canvasBg: "#040404",
 } as const;

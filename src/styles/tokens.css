@@ -1,7 +1,7 @@
 /* ==========================================================================
    Design tokens + base styles
    Dark "terminal" aesthetic: warm near-black canvas, orange glow accent
-   (the logo's #ff5029), wide grotesk type with gradient headings. Purple /
+   (#ff4400), wide grotesk type with gradient headings. Purple /
    gold / indigo / rose are secondary accents used sparingly for single
    highlighted elements; --positive / --red are status colours.
    ========================================================================== */
@@ -38,17 +38,17 @@ html {
 :root {
   --font: "Instrument Sans Variable", "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  --bg: #060403;
-  --bg-2: #0a0604;
-  --surface: #0b0908;
-  --surface-2: #120f0d;
-  --surface-3: #181513;
+  --bg: #050505;
+  --bg-2: #070707;
+  --surface: #0a0a0a;
+  --surface-2: #101010;
+  --surface-3: #161616;
   --border: rgba(255, 255, 255, 0.075);
   --border-strong: rgba(255, 255, 255, 0.14);
 
-  --text: #f6f4f3;
-  --muted: #a39d9a;
-  --dim: #68625f;
+  --text: #f4f4f4;
+  --muted: #9f9f9f;
+  --dim: #646464;
 
   /* Accent ramp. Every accent colour on the page (CSS) comes from these
      triplets, so recolouring the site means editing only this block plus
@@ -56,17 +56,17 @@ html {
      Use `var(--accent-300)` for a solid colour and
      `rgb(var(--accent-300-rgb) / 0.4)` for a translucent one.
      400 is the main accent and is spelled `--accent` / `--accent-rgb`. */
-  --accent-50-rgb: 255 241 234; /* #fff1ea */
-  --accent-100-rgb: 255 214 196; /* #ffd6c4 */
-  --accent-200-rgb: 255 180 151; /* #ffb497 */
-  --accent-300-rgb: 255 138 92; /* #ff8a5c */
-  --accent-rgb: 255 80 41; /* #ff5029 */
-  --accent-500-rgb: 224 62 23; /* #e03e17 */
-  --accent-600-rgb: 168 52 15; /* #a8340f */
-  --accent-700-rgb: 110 36 16; /* #6e2410 */
-  --accent-800-rgb: 62 22 11; /* #3e160b */
-  --accent-900-rgb: 36 16 11; /* #24100b */
-  --accent-950-rgb: 21 7 4; /* #150704 */
+  --accent-50-rgb: 255 242 235; /* #fff2eb */
+  --accent-100-rgb: 255 213 194; /* #ffd5c2 */
+  --accent-200-rgb: 255 172 133; /* #ffac85 */
+  --accent-300-rgb: 255 122 69; /* #ff7a45 */
+  --accent-rgb: 255 68 0; /* #ff4400 */
+  --accent-500-rgb: 230 54 0; /* #e63600 */
+  --accent-600-rgb: 179 36 0; /* #b32400 */
+  --accent-700-rgb: 122 22 0; /* #7a1600 */
+  --accent-800-rgb: 68 11 0; /* #440b00 */
+  --accent-900-rgb: 38 6 0; /* #260600 */
+  --accent-950-rgb: 20 3 0; /* #140300 */
 
   --accent-50: rgb(var(--accent-50-rgb));
   --accent-100: rgb(var(--accent-100-rgb));
