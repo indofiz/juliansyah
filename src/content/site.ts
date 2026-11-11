@@ -335,7 +335,6 @@ class CheckInCard extends StatelessWidget {
  * are your expertise, grouped by what the client gets (tools underneath).
  * ------------------------------------------------------------------------- */
 export const about = {
-  badge: "About",
   title: "From Design to Production, Under One Roof.",
   photo: {
     src: "/image-me.png",

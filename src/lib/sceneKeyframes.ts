@@ -69,7 +69,7 @@ export const sceneKeyframes: Record<string, SceneKeyframe> = {
     morph: 2,
     sink: 0,
     opacity: 1,
-    mobile: { y: 0.13, scale: 1 },
+    mobile: { y: 0.18, scale: 1 },
   },
 
   // The portrait breaks apart where it formed and fades as the playground

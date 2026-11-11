@@ -1475,6 +1475,13 @@ button.ci-btn:active {
   min-height: 110vh;
 }
 
+/* Two lines: "From Design to Production," / "Under One Roof." In em, so it
+   holds at every font size. */
+.about .sh .h2 {
+  max-width: 13em;
+  text-wrap: balance;
+}
+
 .about-grid {
   display: grid;
   grid-template-columns: minmax(17.5rem, 23.75rem) minmax(0, 1fr) minmax(17.5rem, 23.75rem);

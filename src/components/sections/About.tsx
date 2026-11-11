@@ -50,7 +50,7 @@ export function About() {
   return (
     <section id="about" className="section about" aria-labelledby="about-title">
       <div className="container">
-        <SectionHeader id="about-title" badge={about.badge} badgeIcon="user" title={about.title} />
+        <SectionHeader id="about-title" title={about.title} />
         <div className="about-grid" data-carousel>
           <div className="about-col">
             {about.cards.left.map((c) => (
