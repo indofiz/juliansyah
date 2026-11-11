@@ -1,9 +1,8 @@
 /* ==========================================================================
    Design tokens + base styles
    Dark "terminal" aesthetic: warm near-black canvas, "Ember" amber glow
-   accent (#ffaf4f), wide grotesk type with gradient headings. Purple / sky /
-   indigo / rose are secondary accents used sparingly for single
-   highlighted elements; --red marks falling numbers in the mock screens.
+   accent (#ffaf4f), wide grotesk type with gradient headings. Sky is the
+   only secondary colour (wireframe annotations in design → code).
    ========================================================================== */
 
 /* ==========================================================================
@@ -48,7 +47,6 @@ html {
 
   --text: #f5f3f0;
   --muted: #a69f99;
-  --dim: #68625c;
 
   /* Accent. Every accent colour in the stylesheets comes from this block;
      colours set in code (WebGL, inline SVG, content) come from
@@ -89,13 +87,8 @@ html {
   --hero-4: rgba(15, 8, 3, 0.16);
   --bar-tint: rgba(20, 13, 6, 0.22);
 
-  --purple: #8b5cf6;
-  --purple-bright: #a78bfa;
+  /* Annotation colour in the design → code wireframe. */
   --sky: #6ecfff;
-  --sky-rgb: 110 207 255;
-  --indigo: #6366f1;
-  --rose: #ff6a88;
-  --red: #ff5a5f;
 
   --radius-sm: 0.625rem;
   --radius: 1rem;

@@ -24,16 +24,4 @@ export const theme = {
 
   /** Logo orb: radial gradient (light -> mid -> dark), orbit ring, highlight dot. */
   logo: { light: "#ffe2bd", mid: accent, dark: "#3a2205", ring: accentBright, dot: "#fff6ec" },
-
-  /** Design-system card swatches, darkest first. */
-  swatches: [
-    ["#4a2a05", "900"],
-    ["#a86206", "700"],
-    [accent2, "500"],
-    [accent, "400"],
-    [accentPale, "100"],
-  ] as const,
-
-  /** Colour of the flagship project in the work table. */
-  orbit: accent,
 } as const;

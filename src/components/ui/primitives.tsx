@@ -12,7 +12,7 @@ export function Badge({
 }: {
   icon?: IconName;
   children: ReactNode;
-  variant?: "plain" | "purple";
+  variant?: "plain";
   className?: string;
 }) {
   return (
@@ -23,7 +23,7 @@ export function Badge({
   );
 }
 
-type BtnVariant = "glow" | "ghost" | "ghost-accent" | "light" | "soft" | "purple" | "purple-ghost";
+type BtnVariant = "glow" | "ghost" | "ghost-accent" | "light";
 
 export function Button({
   href = "#",
@@ -90,17 +90,15 @@ export function SectionHeader({
 
 export function GlowFrame({
   children,
-  purple,
   className = "",
   innerClassName = "",
 }: {
   children: ReactNode;
-  purple?: boolean;
   className?: string;
   innerClassName?: string;
 }) {
   return (
-    <div className={`frame ${purple ? "purple" : ""} ${className}`}>
+    <div className={`frame ${className}`}>
       <div className={`frame-inner ${innerClassName}`}>{children}</div>
     </div>
   );

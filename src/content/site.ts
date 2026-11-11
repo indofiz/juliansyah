@@ -283,24 +283,6 @@ class CheckInCard extends StatelessWidget {
 }`,
 };
 
-export const assistant = {
-  badge: "Quick answers",
-  title: "Ask Me Anything",
-  text: ["The questions I get asked most,", "answered in one place."],
-  suggestions: [
-    { q: "What's your tech stack?", a: "React, Next.js and TypeScript on the web, Flutter with BLoC on mobile, Figma for design, and GSAP and Three.js for motion." },
-    { q: "Are you available?", a: "Yes. I'm open to freelance projects and full-time roles, remote or on-site in Bangka Belitung." },
-    { q: "Do you design too?", a: "Yes. I design the interfaces in Figma and write the production code myself, so nothing gets lost in the hand-off." },
-  ],
-};
-
-export const featured = {
-  title: "Built Fast. Measured, Not Guessed.",
-  text: "Performance budgets, Core Web Vitals and an accessible component system come standard, so the work holds up long after launch.",
-  primary: "Explore the case study",
-  secondary: "View my GitHub",
-};
-
 /* ---------------------------------------------------------------------------
  * 5. What I do: can you do what I need? Grouped by what the client gets.
  * Each card's illustration plays on hover (or while in view on touch screens):
@@ -395,9 +377,13 @@ export const bentoArt = {
     ] as [string, string][][],
   },
   motion: { curve: "ease-in-out · cubic-bezier(.65, 0, .35, 1)" },
-  /** Score rings. TODO: replace with this site's measured Lighthouse scores (mobile). */
+  /**
+   * Score rings: this site's homepage, measured with Lighthouse 13.6 (mobile
+   * profile) on 2026-11-11 against a local production build. Re-measure on the
+   * live site after deploying and update these.
+   */
   perf: [
-    { label: "Performance", score: 90 },
+    { label: "Performance", score: 80 },
     { label: "Accessibility", score: 100 },
     { label: "Best Practices", score: 100 },
     { label: "SEO", score: 100 },
@@ -545,55 +531,4 @@ export const footer = {
   lastUpdated: "Last updated",
   smallPrint: "Built with Next.js, React Three Fiber and GSAP. The particle portrait is generated from a photo of me.",
   rights: "All rights reserved.",
-};
-
-/* ---------------------------------------------------------------------------
- * Not rendered: these sections were removed from page.tsx (and their keys from
- * sceneKeyframes.ts). The copy below is still the design's placeholder text.
- * To bring one back, update the copy, re-add the component to page.tsx and its
- * keyframe in the same position.
- * ------------------------------------------------------------------------- */
-
-export const pricing = {
-  badge: "Plans that suit you",
-  title: "Choose How We Work",
-  plans: [
-    {
-      name: "SPRINT",
-      text: "A focused two-week build for a launch, campaign or single landing page.",
-      features: ["From $4,800", "1 page, fully responsive", "Motion & micro-interactions", "2 revision rounds", "Launch support"],
-    },
-    {
-      name: "STUDIO",
-      popular: true,
-      text: "Design and development for a complete marketing site with 3D moments.",
-      features: ["From $14,000", "Up to 8 pages", "Custom WebGL scene", "CMS of your choice", "30 days of support"],
-    },
-    {
-      name: "RETAINER",
-      text: "An ongoing creative-tech partner for teams that ship every month.",
-      features: ["From $6,500 / month", "Priority scheduling", "Unlimited requests", "Monthly strategy call"],
-    },
-  ],
-};
-
-export const estimator = {
-  heading: "Choose your scope",
-  title: "Project Estimator",
-  badge: "New",
-  text: "Pick a scope to see a typical timeline. Every project starts with a free 30-minute call to confirm the details.",
-  tiers: [
-    { tier: "Tier 1", name: "Landing page", base: "$ 4.8k", plus: "+ 3D", total: "2 weeks", stats: ["2 wk", "2", "1", "14d"] },
-    { tier: "Tier 2", name: "Marketing site", base: "$ 9k", plus: "+ 3D", total: "4 weeks", stats: ["4 wk", "3", "5", "30d"] },
-    { tier: "Tier 3", name: "Immersive site", base: "$ 14k", plus: "+ 3D", total: "6 weeks", stats: ["6 wk", "3", "8", "30d"] },
-    { tier: "Tier 4", name: "Web app", base: "$ 24k", plus: "+ 3D", total: "10 weeks", stats: ["10 wk", "4", "12+", "60d"] },
-  ],
-  statLabels: ["Timeline", "Revisions", "Pages", "Support"],
-  cta: "Book your slot & get started",
-};
-
-export const portal = {
-  badge: "Transparent process",
-  title: "Your Project, Live in One Place.",
-  text: "Every client gets a private portal with live previews, progress and a shareable link.",
 };
