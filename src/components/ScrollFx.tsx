@@ -8,7 +8,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 /**
  * DOM scroll effects (the particle globe is handled by ScrollScenes):
- *  - intro            pinned hero → stats scene, see Intro.tsx
+ *  - intro            pinned hero → proof scene, see Intro.tsx
  *  - [data-reveal]    fade up once when it enters the viewport
  *  - [data-light]     brightens progressively while scrolling (table rows)
  *  - hero bars        frosted panels: in on load, out once you scroll, back in at the top
@@ -19,31 +19,22 @@ export function ScrollFx() {
   useGSAP(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // ---- Intro: pinned hero → stats (all screen sizes) ----------------------
-    // The intro section is 300vh with a sticky 100vh stage, so this timeline
-    // spans two screens of scroll: 1 timeline unit = 1 screen.
-    {
+    // ---- Intro: pinned hero → proof (all screen sizes) -----------------------
+    // The intro wrapper is 300vh with a sticky 100vh stage, so this timeline
+    // spans two screens of scroll: 1 timeline unit = 1 screen. With reduced
+    // motion nothing pins (reduced-motion.css) and this is skipped.
+    if (!reduce) {
       const tl = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom bottom", scrub: 0.8 },
       });
-      // Screen 1: headline up, dashboard down (globe rises via ScrollScenes).
+      // Screen 1: headline up, work reel down (globe rises via ScrollScenes).
       tl.to(".hero-gradient", { opacity: 0, duration: 0.8 }, 0)
         .to(".hero-copy", { y: () => -window.innerHeight * 0.55, opacity: 0, duration: 0.75, ease: "power1.in" }, 0)
-        .to(".hero-frame-wrap", { y: () => window.innerHeight * 0.8, duration: 0.9, ease: "power2.in" }, 0)
-        // Screen 2: stats copy and rows fade in around the centred globe.
-        .fromTo(
-          ".stats-copy .sh > *, .stats-copy .btn-row",
-          { opacity: 0, y: 28 },
-          { opacity: 1, y: 0, duration: 0.3, stagger: 0.07, ease: "power2.out" },
-          0.95,
-        )
-        .fromTo(
-          ".stat-row",
-          { opacity: 0, x: 30 },
-          { opacity: 1, x: 0, duration: 0.28, stagger: 0.09, ease: "power2.out" },
-          1.05,
-        )
+        .to(".hero-reel-wrap", { y: () => window.innerHeight * 0.8, duration: 0.9, ease: "power2.in" }, 0)
+        // Screen 2: proof copy and rows fade in around the centred globe.
+        .fromTo(".proof-copy .sh > *", { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.3, stagger: 0.07, ease: "power2.out" }, 0.95)
+        .fromTo(".proof-row", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.28, stagger: 0.09, ease: "power2.out" }, 1.05)
         // Hold before the stage releases.
         .to({}, { duration: 0.35 }, 1.65);
     }

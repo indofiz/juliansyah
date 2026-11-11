@@ -1,20 +1,27 @@
 /**
  * All page copy lives here; the components only read from this file.
- * The previous site (v1) is preserved at git tag `v1-legacy`.
+ * Types: ./types.ts. The previous site (v1) is preserved at git tag `v1-legacy`.
+ *
+ * Placeholders: any string starting with "TODO:" is unconfirmed and renders
+ * with a dashed outline. List them with: grep -n "TODO:" src/content/site.ts
  */
 
 import { theme } from "@/lib/theme";
+import type { LoopMedia, ProofItem } from "./types";
 
 export const site = {
   name: "Juliansyah",
   wordmark: { first: "JULIAN", second: "SYAH" },
-  role: "Frontend Engineer",
+  role: "Flutter developer, front-end developer and UI/UX designer",
+  // TODO: confirm the domain. It's used for canonical URLs, the sitemap and Open Graph.
   url: "https://juliansyah.dev",
-  email: "hello@juliansyah.dev",
+  email: "juliansyah.ekt17@gmail.com",
   github: "https://github.com/indofiz",
-  location: "Bangka Belitung, Indonesia · Working remotely",
+  location: "Jakarta, Indonesia",
+  timeZone: "Asia/Jakarta",
+  utcOffset: "UTC+7",
   description:
-    "Frontend Engineer with a design edge. I design and build pixel-perfect, production-ready web interfaces and Flutter mobile apps.",
+    "Juliansyah designs and builds Flutter apps and web front-ends from Jakarta (UTC+7): UI/UX design, Flutter, React and Next.js, from first sketch to shipped release.",
 };
 
 /** Social icons in the footer. Add LinkedIn / X / Dribbble here when ready. */
@@ -41,33 +48,50 @@ export const nav = [
   },
   {
     label: "About",
-    items: [
-      { label: "Numbers", href: "#about" },
-      { label: "Quick answers", href: "#assistant" },
-    ],
+    items: [{ label: "Quick answers", href: "#assistant" }],
   },
-  { label: "Contact", href: "#cta" },
+  { label: "Contact", href: "#contact" },
 ] as const;
 
+/* ---------------------------------------------------------------------------
+ * 1. Hero: who are you?
+ * ------------------------------------------------------------------------- */
 export const hero = {
-  badge: "Available for freelance & full-time",
-  title: "Design Meets Code",
-  subtitle: "Frontend Engineer with a design edge",
-  text: "Most developers hand off to designers. I don't. I design the interfaces and write the production code myself, so there's less back-and-forth, faster delivery, and products that look intentional because they are.",
-  cta: "Start a project",
+  status: "Available for projects",
+  roles: "Flutter developer · Front-end developer · UI/UX designer",
+  title: "I design and build Flutter apps and web front-ends for teams that care how their product feels.",
+  text: "Design and code from one person, so nothing gets lost in the hand-off.",
+  primary: { label: "See my work", href: "#work" },
+  secondary: { label: "Contact", href: "#contact" },
+  /** The work reel under the headline: one browser frame, one phone frame. */
+  reel: [
+    {
+      frame: "browser",
+      label: "TODO: describe the web project in this loop",
+      caption: "TODO: web project",
+    },
+    {
+      frame: "phone",
+      label: "TODO: Presensi PKP check-in flow, screen recording",
+      caption: "Presensi PKP · Flutter",
+    },
+  ] satisfies LoopMedia[],
 };
 
-export const stats = {
-  badge: "Track record",
-  title: "Numbers from Shipped Work.",
-  text: "From production apps for government, education and enterprise clients, as of November 2026.",
+/* ---------------------------------------------------------------------------
+ * 2. Proof: can I trust you? (first signal). Real numbers only.
+ * ------------------------------------------------------------------------- */
+export const proof = {
+  badge: "Proof",
+  title: "Shipped work, not mockups.",
+  text: "Signals from apps and sites running in production.",
   items: [
-    { icon: "users", value: "7,000+", label: "Active app users" },
-    { icon: "shield", value: "99.9%", label: "Crash-free sessions" },
-    { icon: "award", value: "8", label: "Client organisations" },
-    { icon: "clock", value: "3+", label: "Years of experience" },
-    { icon: "layers", value: "3", label: "Web, UI/UX & mobile" },
-  ],
+    { icon: "building", value: "TODO: number of organisations", label: "Organisations I've shipped for" },
+    { icon: "star", value: "TODO: store rating", label: "Store rating, Presensi PKP" },
+    { icon: "download", value: "TODO: installs", label: "App installs" },
+    { icon: "github", value: "TODO: GitHub stars", label: "GitHub stars" },
+    { icon: "clock", value: "TODO: first year", label: "Shipping since" },
+  ] satisfies ProofItem[],
 };
 
 export const services = {
@@ -227,9 +251,8 @@ export const footer = {
     {
       title: "About",
       links: [
-        { label: "Numbers", href: "#about" },
         { label: "Quick answers", href: "#assistant" },
-        { label: "Contact", href: "#cta" },
+        { label: "Contact", href: "#contact" },
       ],
     },
   ],

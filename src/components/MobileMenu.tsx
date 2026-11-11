@@ -78,7 +78,7 @@ export function MobileMenu() {
             </div>
           ))}
           <div className="mm-footer">
-            <a href="#cta" className="btn btn-glow btn-block" onClick={close} tabIndex={open ? 0 : -1}>
+            <a href="#contact" className="btn btn-glow btn-block" onClick={close} tabIndex={open ? 0 : -1}>
               <Icon name="wand" size={16} /> Hire me
             </a>
             <a href={`mailto:${site.email}`} className="btn btn-ghost btn-block" onClick={close} tabIndex={open ? 0 : -1}>

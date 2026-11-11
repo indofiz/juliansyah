@@ -7,6 +7,7 @@ import "@/styles/mocks.css";
 import "@/styles/sections.css";
 import "@/styles/bento.css";
 import "@/styles/mobile.css";
+import "@/styles/reduced-motion.css";
 import { site } from "@/content/site";
 
 const title = `${site.name} | ${site.role}`;
@@ -16,15 +17,13 @@ export const metadata: Metadata = {
   title: { default: title, template: `%s | ${site.name}` },
   description: site.description,
   keywords: [
-    "Frontend Engineer",
+    "Flutter Developer",
+    "Front-end Developer",
+    "UI/UX Designer",
     "React Developer",
     "Next.js Developer",
-    "Flutter Developer",
-    "UI/UX Designer",
-    "Creative Developer",
-    "WebGL",
-    "TypeScript",
-    "Bangka Belitung",
+    "Design Systems",
+    "Jakarta",
     "Indonesia",
     site.name,
     "Portfolio",
@@ -55,10 +54,10 @@ const jsonLd = {
   url: site.url,
   jobTitle: site.role,
   worksFor: { "@type": "Organization", name: "Freelance" },
-  address: { "@type": "PostalAddress", addressLocality: "Bangka Belitung", addressCountry: "ID" },
+  address: { "@type": "PostalAddress", addressLocality: "Jakarta", addressCountry: "ID" },
   sameAs: [site.github],
   email: site.email,
-  knowsAbout: ["React", "Next.js", "TypeScript", "Flutter", "Figma", "GSAP", "Three.js", "WebGL"],
+  knowsAbout: ["Flutter", "Dart", "React", "Next.js", "TypeScript", "UI/UX design", "Figma", "Design systems"],
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

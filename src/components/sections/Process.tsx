@@ -9,7 +9,7 @@ export function Process() {
         <div className="process-copy">
           <SectionHeader align="left" badge={process.badge} title={process.title} text={process.text} />
           <div className="btn-row" data-reveal>
-            <Button href="#cta" icon="wand">
+            <Button href="#contact" icon="wand">
               Start a project
             </Button>
             <Button href="#work" variant="ghost">

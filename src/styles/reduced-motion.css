@@ -1,0 +1,55 @@
+/* ==========================================================================
+   Reduced motion. Loaded last so it wins over desktop and mobile rules.
+   No pinning, no scrubbing, no autoplay: pinned scenes become normal
+   sections and everything that would fade in is simply there.
+   (Videos stay on their poster: see LoopVideo. The globe cuts between
+   states instead of moving: see ScrollScenes.)
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  /* ---------- Intro: hero and proof as two normal sections ---------- */
+  .intro {
+    height: auto;
+  }
+
+  .intro-stage {
+    position: relative;
+    height: auto;
+    overflow: visible;
+  }
+
+  .hero-layer,
+  .proof-layer {
+    position: relative;
+    inset: auto;
+  }
+
+  .hero-layer {
+    padding-bottom: 3rem;
+  }
+
+  .hero-reel-wrap {
+    position: relative;
+    top: auto;
+    margin-top: 5rem;
+  }
+
+  .proof-layer {
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 5rem 0;
+    pointer-events: auto;
+  }
+
+  .proof-grid {
+    height: auto;
+  }
+
+  .proof-copy .sh > *,
+  .proof-row {
+    opacity: 1;
+  }
+
+  .status-live::before {
+    animation: none;
+  }
+}

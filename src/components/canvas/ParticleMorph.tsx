@@ -97,6 +97,17 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
     [particleMaterial, atmosphereMaterial],
   );
 
+  // Reduced motion: no fly-in, and the time-driven drift, spin and shine
+  // stand still (the shaders read a frozen clock).
+  const reduceMotion = useRef(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => (reduceMotion.current = mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
   // Build all particle targets once, off the render loop.
   useEffect(() => {
     let cancelled = false;
@@ -136,8 +147,10 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
       g.setAttribute("aKind", new THREE.BufferAttribute(globe.kinds, 1));
       setGeometry(g);
 
-      // Intro: particles fly in from the cloud and assemble the globe.
-      gsap.fromTo(sceneState, { intro: 0 }, { intro: 1, duration: 2.6, ease: "power3.out", delay: 0.15 });
+      // Intro: particles fly in from the cloud and assemble the globe
+      // (skipped with reduced motion: the globe is simply there).
+      if (reduceMotion.current) sceneState.intro = 1;
+      else gsap.fromTo(sceneState, { intro: 0 }, { intro: 1, duration: 2.6, ease: "power3.out", delay: 0.15 });
     })();
     return () => {
       cancelled = true;
@@ -160,7 +173,8 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
     const u = (points.current.material as THREE.ShaderMaterial).uniforms;
     const atmo = (atmosphere.current.material as THREE.ShaderMaterial).uniforms;
     const { size, viewport } = state;
-    u.uTime.value = state.clock.elapsedTime;
+    const time = reduceMotion.current ? 0 : state.clock.elapsedTime;
+    u.uTime.value = time;
     u.uPixelRatio.value = state.gl.getPixelRatio();
     u.uViewportScale.value = size.height / 900;
 
@@ -168,8 +182,8 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
     const introMorph = 1 - s.intro;
     u.uMorph.value = s.morph < 1 ? Math.max(s.morph, introMorph) : s.morph;
     u.uSink.value = s.sink;
-    u.uGlobeSpin.value = s.globeSpin + state.clock.elapsedTime * 0.025;
-    u.uShapeSpin.value = s.shapeSpin + Math.sin(state.clock.elapsedTime * 0.3) * 0.08;
+    u.uGlobeSpin.value = s.globeSpin + time * 0.025;
+    u.uShapeSpin.value = s.shapeSpin + Math.sin(time * 0.3) * 0.08;
     u.uOpacity.value = s.opacity;
     (u.uShapeY.value as THREE.Vector2).set(shapeMeta.current.minY, shapeMeta.current.maxY);
     u.uShapeBrightness.value = shapeMeta.current.brightness;

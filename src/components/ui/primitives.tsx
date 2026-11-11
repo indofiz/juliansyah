@@ -56,6 +56,7 @@ export function Button({
 }
 
 export function SectionHeader({
+  id,
   badge,
   badgeIcon,
   title,
@@ -64,6 +65,8 @@ export function SectionHeader({
   as: Tag = "h2",
   reveal = true,
 }: {
+  /** Id of the heading, for aria-labelledby on the section. */
+  id?: string;
   badge?: string;
   badgeIcon?: IconName;
   title: ReactNode;
@@ -76,7 +79,9 @@ export function SectionHeader({
   return (
     <header className={`sh ${align === "left" ? "left" : ""}`} data-reveal={reveal ? "" : undefined}>
       {badge && <Badge icon={badgeIcon}>{badge}</Badge>}
-      <Tag className="h2 grad-text">{title}</Tag>
+      <Tag id={id} className="h2 grad-text">
+        {title}
+      </Tag>
       {text && <p className="sh-text">{text}</p>}
     </header>
   );

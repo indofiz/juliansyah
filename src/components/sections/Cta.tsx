@@ -16,7 +16,7 @@ const candles = [
  *  texture, and dotted-particle bars on the right. */
 export function Cta() {
   return (
-    <section id="cta" className="section cta">
+    <section id="contact" className="section cta">
       <div className="container">
         <div className="cta-panel" data-cta>
           <span className="cta-glow-corner" />

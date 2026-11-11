@@ -22,13 +22,32 @@ function values(id: string, mobile: boolean): SceneValues {
  * B scrolls from the bottom of the viewport to the top, or over B's custom
  * `scroll` range. `scrub` ties progress to the scrollbar, so it
  * plays forwards and backwards. Timelines rebuild when crossing 900px.
+ *
+ * Reduced motion: no scrubbing. The scene cuts to each section's state when
+ * that section reaches the middle of the screen (and back when scrolling up).
  */
 export function ScrollScenes() {
   useGSAP(() => {
     const mm = gsap.matchMedia();
-    mm.add({ mobile: "(max-width: 900px)", desktop: "(min-width: 901px)" }, (ctx) => {
+    mm.add({ mobile: "(max-width: 900px)", desktop: "(min-width: 901px)", reduce: "(prefers-reduced-motion: reduce)" }, (ctx) => {
       const mobile = Boolean(ctx.conditions?.mobile);
       Object.assign(sceneState, values(sectionOrder[0], mobile));
+
+      if (ctx.conditions?.reduce) {
+        for (let i = 1; i < sectionOrder.length; i++) {
+          const el = document.getElementById(sectionOrder[i]);
+          if (!el) continue;
+          const from = values(sectionOrder[i - 1], mobile);
+          const to = values(sectionOrder[i], mobile);
+          ScrollTrigger.create({
+            trigger: el,
+            start: "top 55%",
+            onEnter: () => Object.assign(sceneState, to),
+            onLeaveBack: () => Object.assign(sceneState, from),
+          });
+        }
+        return;
+      }
 
       for (let i = 1; i < sectionOrder.length; i++) {
         const id = sectionOrder[i];

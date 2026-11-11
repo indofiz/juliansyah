@@ -21,7 +21,7 @@ export function SiteHeader() {
           <Button variant="ghost" href={`mailto:${site.email}`}>
             Email me
           </Button>
-          <Button variant="glow" href="#cta" className="header-cta">
+          <Button variant="glow" href="#contact" className="header-cta">
             Hire me
           </Button>
           <MobileMenu />
