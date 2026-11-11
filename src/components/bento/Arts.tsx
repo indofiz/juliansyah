@@ -24,7 +24,7 @@ const v = (vars: Record<string, string | number>) => vars as CSSProperties;
 function Cursor() {
   return (
     <svg viewBox="0 0 16 16" width="16" height="16" style={{ width: "1rem", height: "1rem" }} aria-hidden="true">
-      <path d="M2.2 1.6 13.6 8.2 8.4 9.4 6.2 14.3Z" fill="currentColor" stroke="#04140d" strokeWidth="1" strokeLinejoin="round" />
+      <path d="M2.2 1.6 13.6 8.2 8.4 9.4 6.2 14.3Z" fill="currentColor" style={{ stroke: "var(--accent-950)" }} strokeWidth="1" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -342,11 +342,11 @@ export function ArtFrontend() {
 
 /* ---------------------------------------------------------------- Design systems */
 const SWATCHES = [
-  ["#0b3d2a", "900"],
-  ["#146e4a", "700"],
-  ["#1fc584", "500"],
-  ["#2fe39a", "400"],
-  ["#b9f5dc", "100"],
+  ["var(--accent-900)", "900"],
+  ["var(--accent-700)", "700"],
+  ["var(--accent-500)", "500"],
+  ["var(--accent)", "400"],
+  ["var(--accent-100)", "100"],
 ];
 
 export function ArtSystem() {

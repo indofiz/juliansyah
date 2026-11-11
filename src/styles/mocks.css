@@ -78,7 +78,7 @@
 }
 
 .mock-nav.active svg {
-  color: var(--mint);
+  color: var(--accent);
 }
 
 .mock-nav.sub {
@@ -122,8 +122,8 @@
   gap: 0.5rem;
   padding: 0.5rem 0.625rem;
   border-radius: 0.625rem;
-  background: rgba(47, 227, 154, 0.07);
-  box-shadow: inset 0 0 0 1px rgba(47, 227, 154, 0.15);
+  background: rgb(var(--accent-rgb) / 0.07);
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.15);
   font-size: 0.6875rem;
 }
 
@@ -145,7 +145,7 @@
 
 .mock-switch span:first-child {
   color: #fff;
-  background: var(--mint-2);
+  background: var(--accent-500);
 }
 
 .mock-main {
@@ -187,7 +187,7 @@
   align-items: center;
   gap: 0.375rem;
   font-size: 0.7188rem;
-  color: var(--mint);
+  color: var(--accent);
 }
 
 .mock-live::before {
@@ -195,8 +195,8 @@
   width: 0.375rem;
   height: 0.375rem;
   border-radius: 999px;
-  background: var(--mint);
-  box-shadow: 0 0 0.375rem var(--mint);
+  background: var(--accent);
+  box-shadow: 0 0 0.375rem var(--accent);
 }
 
 .mock-chip {
@@ -291,8 +291,8 @@
 
 .mock-tabs span.on {
   color: #fff;
-  background: linear-gradient(180deg, #1f9d6a, #146e4a);
-  box-shadow: inset 0 0 0 1px rgba(95, 255, 192, 0.35);
+  background: linear-gradient(180deg, var(--accent-600), var(--accent-700));
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-300-rgb) / 0.35);
 }
 
 .mock-filters {
@@ -311,9 +311,9 @@
 }
 
 .mock-filters span.on {
-  color: #d9fff0;
-  background: rgba(47, 227, 154, 0.16);
-  box-shadow: inset 0 0 0 1px rgba(47, 227, 154, 0.3);
+  color: var(--accent-50);
+  background: rgb(var(--accent-rgb) / 0.16);
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.3);
 }
 
 .mock-search {
@@ -378,7 +378,7 @@
 .mock-delta {
   margin-top: 0.25rem;
   font-size: 0.75rem;
-  color: var(--mint);
+  color: var(--accent);
 }
 
 .mock-actions {
@@ -401,9 +401,9 @@
 }
 
 .mock-action.on {
-  color: #eafff6;
-  background: linear-gradient(180deg, #2a6e55, #1b4a3a);
-  box-shadow: inset 0 0 0 1px rgba(95, 255, 192, 0.35), 0 0 1rem rgba(47, 227, 154, 0.3);
+  color: var(--accent-50);
+  background: linear-gradient(180deg, var(--accent-700), var(--accent-800));
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-300-rgb) / 0.35), 0 0 1rem rgb(var(--accent-rgb) / 0.3);
 }
 
 .mock-tiles {
@@ -441,7 +441,7 @@
   padding: 0.75rem;
   display: grid;
   gap: 0.5rem;
-  background: linear-gradient(180deg, rgba(47, 227, 154, 0.06), rgba(255, 255, 255, 0.01));
+  background: linear-gradient(180deg, rgb(var(--accent-rgb) / 0.06), rgba(255, 255, 255, 0.01));
 }
 
 .mock-card-head {
@@ -499,7 +499,7 @@
 }
 
 .mock-kpis b.up {
-  color: var(--mint);
+  color: var(--accent);
 }
 
 .mock-card-foot {
@@ -541,7 +541,7 @@
 }
 
 .mock-tr .up {
-  color: var(--mint);
+  color: var(--accent);
 }
 
 .mock-tr .down {
@@ -559,7 +559,7 @@
 .mock-bars i {
   flex: 1;
   border-radius: 0.25rem 0.25rem 0 0;
-  background: linear-gradient(180deg, rgba(102, 255, 196, 0.9), rgba(47, 227, 154, 0.15));
+  background: linear-gradient(180deg, rgb(var(--accent-300-rgb) / 0.9), rgb(var(--accent-rgb) / 0.15));
 }
 
 /* Alerts (spotlight screen 3) */
@@ -601,8 +601,8 @@
 }
 
 .sev.low {
-  color: #7dffc8;
-  background: rgba(47, 227, 154, 0.13);
+  color: var(--accent-200);
+  background: rgb(var(--accent-rgb) / 0.13);
 }
 
 /* Analytics (featured) */
@@ -621,10 +621,10 @@
 }
 
 .mock-range span.on {
-  color: #04140d;
+  color: var(--accent-950);
   font-weight: 700;
-  background: #b9f5dc;
-  box-shadow: 0 0 0.625rem rgba(47, 227, 154, 0.55);
+  background: var(--accent-100);
+  box-shadow: 0 0 0.625rem rgb(var(--accent-rgb) / 0.55);
 }
 
 .mock-stats-grid {
@@ -661,7 +661,7 @@
 }
 
 .mock-metric b.up {
-  color: var(--mint);
+  color: var(--accent);
 }
 
 .mock-metric b.down {
@@ -678,7 +678,7 @@
 .mock-meter i {
   display: block;
   height: 100%;
-  background: var(--mint);
+  background: var(--accent);
 }
 
 .mock-meter.red i {
@@ -825,8 +825,8 @@
   padding: 1px 0.4375rem;
   border-radius: 0.375rem;
   font-size: 0.6562rem;
-  color: #7dffc8;
-  box-shadow: inset 0 0 0 1px rgba(47, 227, 154, 0.5);
+  color: var(--accent-200);
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.5);
 }
 
 .chat-new {

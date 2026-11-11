@@ -56,7 +56,7 @@
   overflow: hidden;
   isolation: isolate;
   background:
-    radial-gradient(120% 60% at 50% 0%, rgba(47, 227, 154, 0.06), transparent 60%),
+    radial-gradient(120% 60% at 50% 0%, rgb(var(--accent-rgb) / 0.06), transparent 60%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0) 45%),
     #060908;
   box-shadow:
@@ -76,7 +76,7 @@
   left: 14%;
   right: 14%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(102, 255, 196, 0.7), transparent);
+  background: linear-gradient(90deg, transparent, rgb(var(--accent-300-rgb) / 0.7), transparent);
   opacity: 0.35;
   transition: opacity 0.5s, left 0.5s, right 0.5s;
 }
@@ -86,7 +86,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: radial-gradient(24rem circle at var(--mx) var(--my), rgba(47, 227, 154, 0.11), transparent 60%);
+  background: radial-gradient(24rem circle at var(--mx) var(--my), rgb(var(--accent-rgb) / 0.11), transparent 60%);
   opacity: 0;
   transition: opacity 0.5s;
 }
@@ -98,7 +98,7 @@
   z-index: 3;
   padding: 1px;
   border-radius: inherit;
-  background: radial-gradient(18rem circle at var(--mx) var(--my), rgba(102, 255, 196, 0.85), transparent 60%);
+  background: radial-gradient(18rem circle at var(--mx) var(--my), rgb(var(--accent-300-rgb) / 0.85), transparent 60%);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
@@ -110,9 +110,9 @@
 .bento-card:is(:hover, .is-active) {
   translate: 0 -0.3rem;
   box-shadow:
-    inset 0 0 0 1px rgba(47, 227, 154, 0.2),
+    inset 0 0 0 1px rgb(var(--accent-rgb) / 0.2),
     0 2rem 4rem rgba(0, 0, 0, 0.5),
-    0 0 3.5rem -1.5rem rgba(47, 227, 154, 0.45);
+    0 0 3.5rem -1.5rem rgb(var(--accent-rgb) / 0.45);
 }
 
 .bento-card:is(:hover, .is-active)::before {
@@ -145,7 +145,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(rgba(150, 255, 210, 0.16) 1px, transparent 1.4px);
+  background-image: radial-gradient(rgb(var(--accent-200-rgb) / 0.16) 1px, transparent 1.4px);
   background-size: 0.875rem 0.875rem;
   -webkit-mask-image: radial-gradient(60% 70% at 50% 45%, #000, transparent);
   mask-image: radial-gradient(60% 70% at 50% 45%, #000, transparent);
@@ -188,9 +188,9 @@
   display: grid;
   place-items: center;
   border-radius: 0.625rem;
-  color: #c9ffe8;
-  background: linear-gradient(160deg, #1c5a43, #0b241b);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 0 0 1px rgba(47, 227, 154, 0.2);
+  color: var(--accent-100);
+  background: linear-gradient(160deg, var(--accent-700), var(--accent-900));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 0 0 1px rgb(var(--accent-rgb) / 0.2);
 }
 
 .bento-copy h3 {
@@ -217,9 +217,9 @@
   padding: 0.25rem 0.625rem;
   border-radius: 999px;
   font-size: 0.75rem;
-  color: #bfe9d6;
-  background: rgba(47, 227, 154, 0.06);
-  box-shadow: inset 0 0 0 1px rgba(47, 227, 154, 0.16);
+  color: var(--accent-100);
+  background: rgb(var(--accent-rgb) / 0.06);
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.16);
 }
 
 /* Wide cards: copy beside the illustration (UI/UX copy left, front-end right). */
@@ -299,7 +299,7 @@
   width: 20rem;
   height: 20rem;
   border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(47, 227, 154, 0.2), transparent);
+  background: radial-gradient(closest-side, rgb(var(--accent-rgb) / 0.2), transparent);
   transform: translate(-50%, -50%);
   opacity: 0.6;
   transition: opacity 0.6s, transform 0.8s;
@@ -366,7 +366,7 @@
 
 .fl-ghost i:first-child {
   height: 5rem;
-  background: linear-gradient(160deg, #1f8a5b, #0b3d2a);
+  background: linear-gradient(160deg, var(--accent-600), var(--accent-800));
 }
 
 .fl-notch {
@@ -527,8 +527,8 @@
 
 .fl-cats span.on {
   font-weight: 600;
-  color: #04140d;
-  background: #2fe39a;
+  color: var(--accent-950);
+  background: var(--accent);
 }
 
 .fl-tile {
@@ -589,8 +589,8 @@
 .fl-nav span.on {
   padding: 0.3rem 0.9rem;
   border-radius: 999px;
-  color: #66ffc4;
-  background: rgba(47, 227, 154, 0.18);
+  color: var(--accent-300);
+  background: rgb(var(--accent-rgb) / 0.18);
 }
 
 .fl-screen--detail {
@@ -689,9 +689,9 @@
   border-radius: 999px;
   font-size: 0.5625rem;
   font-weight: 700;
-  color: #04140d;
-  background: #2fe39a;
-  box-shadow: 0 0 0.8rem rgba(47, 227, 154, 0.5);
+  color: var(--accent-950);
+  background: var(--accent);
+  box-shadow: 0 0 0.8rem rgb(var(--accent-rgb) / 0.5);
 }
 
 .fl-toast {
@@ -707,9 +707,9 @@
   white-space: nowrap;
   font-size: 0.5rem;
   font-weight: 700;
-  color: #04140d;
-  background: #b9f5dc;
-  box-shadow: 0 0 1rem rgba(47, 227, 154, 0.55);
+  color: var(--accent-950);
+  background: var(--accent-100);
+  box-shadow: 0 0 1rem rgb(var(--accent-rgb) / 0.55);
   opacity: 0;
   transform: translate(-50%, -1rem);
   transition: opacity 0.35s, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -755,15 +755,15 @@
 }
 
 .bento-card:is(:hover, .is-active) .fl-chips span {
-  color: #eafff5;
-  box-shadow: inset 0 0 0 1px rgba(47, 227, 154, 0.35);
+  color: var(--accent-50);
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.35);
   transform: translateX(0.35rem);
   transition-delay: calc(0.3s + var(--k) * 0.12s);
 }
 
 .bento-card:is(:hover, .is-active) .fl-chips span::before {
-  background: #2fe39a;
-  box-shadow: 0 0 0.5rem #2fe39a;
+  background: var(--accent);
+  box-shadow: 0 0 0.5rem var(--accent);
   transition-delay: calc(0.3s + var(--k) * 0.12s);
 }
 
@@ -922,7 +922,7 @@
   top: 2rem;
   width: 13rem;
   height: 11.5rem;
-  border: 1.5px solid #2fe39a;
+  border: 1.5px solid var(--accent);
   border-radius: 0.5rem;
   opacity: 0;
   transform: scale(1.04);
@@ -934,7 +934,7 @@
   position: absolute;
   width: 0.45rem;
   height: 0.45rem;
-  border: 1.5px solid #2fe39a;
+  border: 1.5px solid var(--accent);
   border-radius: 1px;
   background: #fff;
 }
@@ -968,8 +968,8 @@
   white-space: nowrap;
   font-size: 0.5rem;
   font-weight: 700;
-  color: #04140d;
-  background: #2fe39a;
+  color: var(--accent-950);
+  background: var(--accent);
   transform: translateX(-50%);
 }
 
@@ -988,17 +988,17 @@
   border-radius: 0.3rem;
   font-size: 0.5rem;
   font-weight: 700;
-  color: #04140d;
+  color: var(--accent-950);
 }
 
 .ux-cur--you {
   left: 20.5rem;
   top: 3rem;
-  color: #2fe39a;
+  color: var(--accent);
 }
 
 .ux-cur--you span {
-  background: #2fe39a;
+  background: var(--accent);
 }
 
 .ux-cur--client {
@@ -1053,8 +1053,8 @@
 }
 
 .ux-tools span.on {
-  color: #04140d;
-  background: #2fe39a;
+  color: var(--accent-950);
+  background: var(--accent);
 }
 
 /* Active sequence: cursor glides to the frame → selection → fill-in → comment */
@@ -1082,7 +1082,7 @@
 }
 
 .bento-card:is(:hover, .is-active) .ux-bar i:first-child {
-  background: #2fe39a;
+  background: var(--accent);
 }
 
 .bento-card:is(:hover, .is-active) .ux-lines i:nth-child(1) {
@@ -1094,10 +1094,10 @@
 }
 
 .bento-card:is(:hover, .is-active) .ux-btn {
-  color: #04140d;
-  background: #2fe39a;
+  color: var(--accent-950);
+  background: var(--accent);
   border-color: transparent;
-  box-shadow: 0 0 1rem rgba(47, 227, 154, 0.45);
+  box-shadow: 0 0 1rem rgb(var(--accent-rgb) / 0.45);
 }
 
 .bento-card:is(:hover, .is-active) .ux-guide {
@@ -1203,7 +1203,7 @@
 }
 
 .fe-txt .t {
-  color: #66ffc4;
+  color: var(--accent-300);
 }
 
 .fe-txt .a {
@@ -1225,7 +1225,7 @@
   height: 0.75rem;
   margin-left: 0.1rem;
   vertical-align: middle;
-  background: #66ffc4;
+  background: var(--accent-300);
   opacity: 0;
 }
 
@@ -1288,9 +1288,9 @@
   border-radius: 999px;
   font-size: 0.625rem;
   font-weight: 600;
-  color: #d9f7ea;
-  background: rgba(47, 227, 154, 0.12);
-  box-shadow: inset 0 0 0 1px rgba(47, 227, 154, 0.3);
+  color: var(--accent-100);
+  background: rgb(var(--accent-rgb) / 0.12);
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.3);
 }
 
 .fe-btn > span {
@@ -1395,9 +1395,9 @@
 
 @keyframes fe-btn {
   to {
-    color: #04140d;
-    background: #2fe39a;
-    box-shadow: 0 0 1.2rem rgba(47, 227, 154, 0.6);
+    color: var(--accent-950);
+    background: var(--accent);
+    box-shadow: 0 0 1.2rem rgb(var(--accent-rgb) / 0.6);
   }
 }
 
@@ -1457,7 +1457,7 @@
 }
 
 .ds-swatches span.light {
-  color: rgba(4, 20, 13, 0.75);
+  color: rgb(var(--accent-950-rgb) / 0.75);
 }
 
 .bento-card:is(:hover, .is-active) .ds-swatches span {
@@ -1538,8 +1538,8 @@
   border-radius: 999px;
   font-size: 0.5625rem;
   font-weight: 700;
-  color: #04140d;
-  background: #2fe39a;
+  color: var(--accent-950);
+  background: var(--accent);
 }
 
 .ds-row {
@@ -1572,8 +1572,8 @@
   padding: 0.2rem 0.5rem;
   border-radius: 999px;
   font-size: 0.5rem;
-  color: #bfe9d6;
-  box-shadow: inset 0 0 0 1px rgba(47, 227, 154, 0.3);
+  color: var(--accent-100);
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.3);
   transition: color 0.5s 0.25s;
 }
 
@@ -1583,14 +1583,14 @@
   display: grid;
   place-items: center;
   border-radius: 0.3rem;
-  color: #04140d;
-  background: #2fe39a;
+  color: var(--accent-950);
+  background: var(--accent);
 }
 
 .bento-card:is(:hover, .is-active) .ds-panel {
   color: #0b100e;
   background: #eef4f1;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08), 0 0 2rem rgba(185, 245, 220, 0.25);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08), 0 0 2rem rgb(var(--accent-100-rgb) / 0.25);
 }
 
 .bento-card:is(:hover, .is-active) .ds-mode {
@@ -1606,7 +1606,7 @@
 }
 
 .bento-card:is(:hover, .is-active) .ds-toggle {
-  background: #1fc584;
+  background: var(--accent-500);
 }
 
 .bento-card:is(:hover, .is-active) .ds-toggle i {
@@ -1615,7 +1615,7 @@
 }
 
 .bento-card:is(:hover, .is-active) .ds-chip {
-  color: #146e4a;
+  color: var(--accent-700);
 }
 
 /* ==========================================================================
@@ -1660,11 +1660,11 @@
 
 .mo-curve {
   fill: none;
-  stroke: #2fe39a;
+  stroke: var(--accent);
   stroke-width: 2;
   stroke-linecap: round;
   vector-effect: non-scaling-stroke;
-  filter: drop-shadow(0 0 0.25rem rgba(47, 227, 154, 0.7));
+  filter: drop-shadow(0 0 0.25rem rgb(var(--accent-rgb) / 0.7));
 }
 
 /* x moves linearly (time); the dot inside moves up with the curve's easing,
@@ -1685,8 +1685,8 @@
   height: 0.75rem;
   margin: 0 0 -0.375rem -0.375rem;
   border-radius: 50%;
-  background: #e9fff6;
-  box-shadow: 0 0 0.6rem #2fe39a, 0 0 1.2rem rgba(47, 227, 154, 0.6);
+  background: var(--accent-50);
+  box-shadow: 0 0 0.6rem var(--accent), 0 0 1.2rem rgb(var(--accent-rgb) / 0.6);
 }
 
 .mo-graph small {
@@ -1732,7 +1732,7 @@
 }
 
 .mo-heart i:nth-child(even) {
-  background: #66ffc4;
+  background: var(--accent-300);
 }
 
 .mo-toggle {
@@ -1778,7 +1778,7 @@
 }
 
 .bento-card:is(:hover, .is-active) .mo-toggle {
-  background: #1fc584;
+  background: var(--accent-500);
 }
 
 .bento-card:is(:hover, .is-active) .mo-toggle i {
@@ -1870,13 +1870,13 @@
 }
 
 .pf-track {
-  stroke: rgba(47, 227, 154, 0.12);
+  stroke: rgb(var(--accent-rgb) / 0.12);
 }
 
 .pf-arc {
-  stroke: #2fe39a;
+  stroke: var(--accent);
   stroke-linecap: round;
-  filter: drop-shadow(0 0 0.2rem rgba(47, 227, 154, 0.7));
+  filter: drop-shadow(0 0 0.2rem rgb(var(--accent-rgb) / 0.7));
 }
 
 .pf-num {
@@ -1888,7 +1888,7 @@
   font-size: 1.125rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-  color: #e9fff6;
+  color: var(--accent-50);
   counter-reset: score var(--n);
 }
 

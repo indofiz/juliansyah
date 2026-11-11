@@ -106,14 +106,14 @@ export function Logo({ compact = false }: { compact?: boolean }) {
       <svg className="logo-mark" viewBox="0 0 32 32" aria-hidden="true">
         <defs>
           <radialGradient id="lm-g" cx="35%" cy="30%" r="75%">
-            <stop offset="0" stopColor="#b8ffe2" />
-            <stop offset="0.45" stopColor="#2fe39a" />
-            <stop offset="1" stopColor="#063a26" />
+            <stop offset="0" style={{ stopColor: "var(--accent-100)" }} />
+            <stop offset="0.45" style={{ stopColor: "var(--accent)" }} />
+            <stop offset="1" style={{ stopColor: "var(--accent-800)" }} />
           </radialGradient>
         </defs>
         <circle cx="16" cy="16" r="11" fill="url(#lm-g)" />
-        <ellipse cx="16" cy="16" rx="15" ry="5.5" fill="none" stroke="#66ffc4" strokeWidth="1.4" transform="rotate(-24 16 16)" opacity="0.85" />
-        <circle cx="25.5" cy="10" r="1.6" fill="#e9fff6" />
+        <ellipse cx="16" cy="16" rx="15" ry="5.5" fill="none" style={{ stroke: "var(--accent-300)" }} strokeWidth="1.4" transform="rotate(-24 16 16)" opacity="0.85" />
+        <circle cx="25.5" cy="10" r="1.6" style={{ fill: "var(--accent-50)" }} />
       </svg>
       {!compact && (
         <span>

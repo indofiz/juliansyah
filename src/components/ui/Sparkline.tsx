@@ -19,7 +19,7 @@ export function Sparkline({
   values,
   width = 160,
   height = 48,
-  color = "#2fe39a",
+  color = "var(--accent)",
   fill = true,
   strokeWidth = 1.6,
   className,
@@ -50,13 +50,13 @@ export function Sparkline({
       {fill && (
         <defs>
           <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor={color} stopOpacity="0.35" />
-            <stop offset="1" stopColor={color} stopOpacity="0" />
+            <stop offset="0" style={{ stopColor: color }} stopOpacity="0.35" />
+            <stop offset="1" style={{ stopColor: color }} stopOpacity="0" />
           </linearGradient>
         </defs>
       )}
       {fill && <path d={area} fill={`url(#${id})`} />}
-      <path d={line} fill="none" stroke={color} strokeWidth={strokeWidth} vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
+      <path d={line} fill="none" style={{ stroke: color }} strokeWidth={strokeWidth} vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
     </svg>
   );
 }

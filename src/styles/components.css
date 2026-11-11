@@ -53,7 +53,7 @@
 }
 
 .logo-second {
-  color: var(--mint);
+  color: var(--accent);
 }
 
 .nav {
@@ -121,7 +121,7 @@
   margin: -2.75rem 0 0 -6.5rem;
   border-radius: 50%;
   /* Faint and smooth: a soft green breath inside the glass. */
-  background: radial-gradient(closest-side, rgba(70, 200, 145, 0.3), rgba(47, 227, 154, 0.1) 50%, rgba(47, 227, 154, 0.03) 75%, transparent);
+  background: radial-gradient(closest-side, rgb(var(--accent-500-rgb) / 0.3), rgb(var(--accent-rgb) / 0.1) 50%, rgb(var(--accent-rgb) / 0.03) 75%, transparent);
   pointer-events: none;
   will-change: transform, opacity;
 }
@@ -283,13 +283,13 @@
 .btn-glow {
   overflow: hidden;
   color: #0b100e;
-  background: linear-gradient(90deg, #bff5dc 0%, #eefaf4 30%, #f2f2f2 60%, #dcdedd 100%);
+  background: linear-gradient(90deg, var(--accent-100) 0%, #eefaf4 30%, #f2f2f2 60%, #dcdedd 100%);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.9),
     inset 0 -0.125rem 0.375rem rgba(0, 0, 0, 0.12),
-    0 0 0 1px rgba(95, 255, 192, 0.75),
-    0 0 0.375rem rgba(47, 227, 154, 0.9),
-    0 0 1.625rem rgba(47, 227, 154, 0.55);
+    0 0 0 1px rgb(var(--accent-300-rgb) / 0.75),
+    0 0 0.375rem rgb(var(--accent-rgb) / 0.9),
+    0 0 1.625rem rgb(var(--accent-rgb) / 0.55);
 }
 
 .btn-glow::after {
@@ -297,7 +297,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(100deg, transparent 20%, rgba(120, 255, 200, 0.55) 45%, rgba(255, 255, 255, 0.8) 50%, transparent 70%);
+  background: linear-gradient(100deg, transparent 20%, rgb(var(--accent-200-rgb) / 0.55) 45%, rgba(255, 255, 255, 0.8) 50%, transparent 70%);
   transform: translateX(-120%);
   animation: sweep 3.8s ease-in-out infinite;
 }
@@ -306,9 +306,9 @@
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.9),
     inset 0 -0.125rem 0.375rem rgba(0, 0, 0, 0.12),
-    0 0 0 1px rgba(95, 255, 192, 0.9),
-    0 0 0.625rem rgba(47, 227, 154, 1),
-    0 0 2.5rem rgba(47, 227, 154, 0.7);
+    0 0 0 1px rgb(var(--accent-300-rgb) / 0.9),
+    0 0 0.625rem rgb(var(--accent-rgb) / 1),
+    0 0 2.5rem rgb(var(--accent-rgb) / 0.7);
 }
 
 @keyframes sweep {
@@ -336,7 +336,7 @@
 /* Secondary with a mint wash on the right (used under primary buttons). */
 .btn-ghost-mint {
   color: var(--text);
-  background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(47, 227, 154, 0.08) 60%, rgba(47, 227, 154, 0.22) 100%);
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgb(var(--accent-rgb) / 0.08) 60%, rgb(var(--accent-rgb) / 0.22) 100%);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
 }
 
@@ -353,9 +353,9 @@
   padding: 0 1.125rem;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #e9fff5;
-  background: linear-gradient(180deg, rgba(47, 227, 154, 0.28), rgba(47, 227, 154, 0.14));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 0 0 1px rgba(47, 227, 154, 0.18);
+  color: var(--accent-50);
+  background: linear-gradient(180deg, rgb(var(--accent-rgb) / 0.28), rgb(var(--accent-rgb) / 0.14));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 0 0 1px rgb(var(--accent-rgb) / 0.18);
 }
 
 .btn-soft.tone-gold {
@@ -408,13 +408,13 @@
   border-radius: 999px;
   font-size: 0.8125rem;
   font-weight: 500;
-  color: #eafff5;
-  background: linear-gradient(180deg, rgba(47, 227, 154, 0.12), rgba(47, 227, 154, 0.05));
-  box-shadow: inset 0 0 0 1px rgba(47, 227, 154, 0.25);
+  color: var(--accent-50);
+  background: linear-gradient(180deg, rgb(var(--accent-rgb) / 0.12), rgb(var(--accent-rgb) / 0.05));
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.25);
 }
 
 .badge svg {
-  color: var(--mint);
+  color: var(--accent);
 }
 
 .badge-plain {
@@ -475,15 +475,15 @@
 
 /* ---------- Glow frame: thick bezel + bright top edge + halo ---------- */
 .frame {
-  --frame-line: #6dffc8;
-  --frame-glow: rgba(47, 227, 154, 0.5);
-  --frame-bezel-1: #0f3a2b;
-  --frame-bezel-2: #0a1d17;
+  --frame-line: var(--accent-300);
+  --frame-glow: rgb(var(--accent-rgb) / 0.5);
+  --frame-bezel-1: var(--accent-800);
+  --frame-bezel-2: var(--accent-900);
   position: relative;
   padding: 0.4375rem;
   border-radius: var(--radius-xl);
   background: linear-gradient(180deg, var(--frame-bezel-1), var(--frame-bezel-2) 22%, #08100e 60%);
-  box-shadow: inset 0 0 0 1px rgba(47, 227, 154, 0.28), 0 2.5rem 5rem rgba(0, 0, 0, 0.55);
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.28), 0 2.5rem 5rem rgba(0, 0, 0, 0.55);
   isolation: isolate;
 }
 
@@ -495,7 +495,7 @@
   right: 7%;
   height: 0.1875rem;
   border-radius: 0.1875rem;
-  background: linear-gradient(90deg, transparent, var(--frame-line) 18%, #e9fff6 50%, var(--frame-line) 82%, transparent);
+  background: linear-gradient(90deg, transparent, var(--frame-line) 18%, var(--accent-50) 50%, var(--frame-line) 82%, transparent);
   box-shadow: 0 0 0.75rem var(--frame-line);
   z-index: 2;
 }
@@ -540,7 +540,7 @@
 .dots {
   position: absolute;
   pointer-events: none;
-  background-image: radial-gradient(rgba(150, 255, 210, 0.42) 0.0688rem, transparent 0.1rem);
+  background-image: radial-gradient(rgb(var(--accent-200-rgb) / 0.42) 0.0688rem, transparent 0.1rem);
   background-size: 0.875rem 0.875rem;
 }
 
@@ -563,8 +563,8 @@
   width: 0.4375rem;
   height: 0.4375rem;
   border-radius: 999px;
-  background: var(--mint);
-  box-shadow: 0 0 0.5rem var(--mint);
+  background: var(--accent);
+  box-shadow: 0 0 0.5rem var(--accent);
 }
 
 /* ---------- Toggle ---------- */
@@ -591,12 +591,12 @@
 }
 
 .toggle[aria-checked="true"] {
-  background: var(--mint-2);
+  background: var(--accent-500);
 }
 
 .toggle[aria-checked="true"]::after {
   transform: translateX(1rem);
-  background: #e8fff5;
+  background: var(--accent-50);
 }
 
 /* ---------- Scroll reveal (progressive light-up lists) ---------- */

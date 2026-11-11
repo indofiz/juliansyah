@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Bloom, EffectComposer, Vignette } from "@react-three/postprocessing";
+import { theme } from "@/lib/theme";
 import { ParticleMorph, type ShapeSource } from "./ParticleMorph";
 
 /**
@@ -37,7 +38,7 @@ export default function Scene() {
       eventSource={document.body}
       eventPrefix="client"
     >
-      <color attach="background" args={["#020604"]} />
+      <color attach="background" args={[theme.canvasBg]} />
       <ParticleMorph count={count} shape={SHAPE} />
       <EffectComposer multisampling={0}>
         <Bloom mipmapBlur intensity={1.15} luminanceThreshold={0.22} luminanceSmoothing={0.35} radius={0.75} />

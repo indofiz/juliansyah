@@ -49,13 +49,35 @@ html {
   --muted: #9aa39f;
   --dim: #5f6865;
 
-  --mint: #2fe39a;
-  --mint-2: #1fc584;
-  --mint-bright: #66ffc4;
-  --mint-pale: #c8f8e2;
-  --mint-ink: #04140d;
-  --glow: rgba(47, 227, 154, 0.55);
-  --glow-soft: rgba(47, 227, 154, 0.18);
+  /* Accent ramp. Every accent colour on the page (CSS) comes from these
+     triplets, so recolouring the site means editing only this block plus
+     src/lib/theme.ts (the WebGL scene can't read CSS variables).
+     Use `var(--accent-300)` for a solid colour and
+     `rgb(var(--accent-300-rgb) / 0.4)` for a translucent one.
+     400 is the main accent and is spelled `--accent` / `--accent-rgb`. */
+  --accent-50-rgb: 233 255 246;
+  --accent-100-rgb: 200 248 226;
+  --accent-200-rgb: 141 255 210;
+  --accent-300-rgb: 102 255 196;
+  --accent-rgb: 47 227 154;
+  --accent-500-rgb: 31 197 132;
+  --accent-600-rgb: 31 157 106;
+  --accent-700-rgb: 20 110 74;
+  --accent-800-rgb: 11 61 42;
+  --accent-900-rgb: 11 36 27;
+  --accent-950-rgb: 4 20 13;
+
+  --accent-50: rgb(var(--accent-50-rgb));
+  --accent-100: rgb(var(--accent-100-rgb));
+  --accent-200: rgb(var(--accent-200-rgb));
+  --accent-300: rgb(var(--accent-300-rgb));
+  --accent: rgb(var(--accent-rgb));
+  --accent-500: rgb(var(--accent-500-rgb));
+  --accent-600: rgb(var(--accent-600-rgb));
+  --accent-700: rgb(var(--accent-700-rgb));
+  --accent-800: rgb(var(--accent-800-rgb));
+  --accent-900: rgb(var(--accent-900-rgb));
+  --accent-950: rgb(var(--accent-950-rgb));
 
   --purple: #8b5cf6;
   --purple-bright: #a78bfa;
@@ -118,7 +140,7 @@ svg {
 }
 
 ::selection {
-  background: rgba(47, 227, 154, 0.35);
+  background: rgb(var(--accent-rgb) / 0.35);
 }
 
 /* ---------- Typography ---------- */
