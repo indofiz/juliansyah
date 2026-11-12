@@ -19,6 +19,13 @@ import {
 } from "@/lib/particleShapes";
 import { atmosphereFragment, atmosphereVertex, particleFragment, particleVertex } from "./shaders";
 
+/**
+ * The globe's own slow spin, in radians per second, on top of the scroll
+ * spin: one turn about every 80 s, west to east like the real Earth. The
+ * outer shell follows a third of it, so it drifts against the land.
+ */
+const GLOBE_SPIN_SPEED = 0.08;
+
 /** What the cloud morphs into in the about section. */
 export type ShapeSource =
   | { type: "portrait"; url: string; height?: number; depth?: number; dotSpacing?: number; brightness?: number }
@@ -162,6 +169,7 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
   useEffect(() => () => geometry?.dispose(), [geometry]);
 
   const tilt = useRef({ x: 0, y: 0 });
+  const clock = useRef(0);
   const points = useRef<THREE.Points>(null);
   const atmosphere = useRef<THREE.Mesh>(null);
 
@@ -173,7 +181,11 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
     const u = (points.current.material as THREE.ShaderMaterial).uniforms;
     const atmo = (atmosphere.current.material as THREE.ShaderMaterial).uniforms;
     const { size, viewport } = state;
-    const time = reduceMotion.current ? 0 : state.clock.elapsedTime;
+    // Our own clock: R3F's restarts at 0 whenever LoopGate resumes the loop,
+    // which would snap the spin, shine and shell back. A long frame advances
+    // it by at most 0.1 s, so motion never jumps.
+    if (!reduceMotion.current) clock.current += Math.min(delta, 0.1);
+    const time = reduceMotion.current ? 0 : clock.current;
     u.uTime.value = time;
     u.uPixelRatio.value = state.gl.getPixelRatio();
     u.uViewportScale.value = size.height / 900;
@@ -182,7 +194,7 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
     const introMorph = 1 - s.intro;
     u.uMorph.value = s.morph < 1 ? Math.max(s.morph, introMorph) : s.morph;
     u.uSink.value = s.sink;
-    u.uGlobeSpin.value = s.globeSpin + time * 0.025;
+    u.uGlobeSpin.value = s.globeSpin + time * GLOBE_SPIN_SPEED;
     u.uShapeSpin.value = s.shapeSpin + Math.sin(time * 0.3) * 0.08;
     u.uOpacity.value = s.opacity;
     (u.uShapeY.value as THREE.Vector2).set(shapeMeta.current.minY, shapeMeta.current.maxY);

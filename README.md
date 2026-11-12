@@ -193,9 +193,13 @@ ocean is dark.
 - The particle scene (three.js + post-processing, the largest script) starts
   on the first interaction, or 3 s after load, so it never competes with the
   headline (LCP) or hydration.
-- Particle budget (`Scene.tsx`): 42k on desktop, 16k on screens ≤ 768px, 8k
-  on low-end devices (≤ 4 cores, ≤ 4 GB or Save-Data), 6k and no bloom
-  when WebGL runs without a GPU. Pixel ratio is capped at 1.75.
+- Particle budget (`Scene.tsx`): 42k on desktop, 16k on screens ≤ 768px,
+  6k and no bloom when WebGL runs without a GPU. Pixel ratio starts at up to
+  1.75; `QualityGovernor` measures the real frame rate while the particles
+  are on screen and steps it down (1.5, 1.25, 1) below 48 fps, then turns
+  bloom off below 28 fps. It never steps back up during a visit.
+- The globe spins on its own, one turn about every 80 s
+  (`GLOBE_SPIN_SPEED` in `ParticleMorph.tsx`); still with reduced motion.
 - The render loop stops while the particles are faded out (most of the page).
 - Videos, iframes and playground items load only near the viewport.
 - Lighthouse 13.6, mobile profile, local production build (2026-11-11):

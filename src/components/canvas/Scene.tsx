@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Canvas, useThree } from "@react-three/fiber";
+import { useEffect, useRef, useState } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Bloom, EffectComposer, Vignette } from "@react-three/postprocessing";
 import gsap from "gsap";
 import { sceneState } from "@/lib/sceneState";
@@ -26,7 +26,14 @@ const SHAPE: ShapeSource = {
 };
 // const SHAPE: ShapeSource = { type: "model", url: "/models/bull.glb" };
 
-type Tier = { count: number; dpr: [number, number]; bloom: boolean };
+/** Resolution caps the scene steps down through if frames drop (bloom goes last). */
+const DPR_STEPS = [1.75, 1.5, 1.25, 1];
+
+type Tier = { count: number; steps: number[]; bloom: boolean };
+type Quality = { step: number; bloom: boolean };
+
+/** The pixel ratio a cap gives on this screen (never above the screen's own). */
+const effectiveDpr = (cap: number) => Math.min(Math.max(1, window.devicePixelRatio || 1), cap);
 
 /** True when WebGL runs on the CPU (no GPU acceleration): SwiftShader, llvmpipe… */
 function softwareWebGL(): boolean {
@@ -43,19 +50,62 @@ function softwareWebGL(): boolean {
 }
 
 /**
- * Particle budget per device:
- *  - no GPU (software WebGL): 6k, pixel ratio 1, no bloom pass
- *  - low-end (≤ 4 CPU cores, ≤ 4 GB memory, or Save-Data on): 8k, pixel ratio 1
- *  - small screens (≤ 768px): 16k
- *  - everything else: 42k
+ * Starting quality. Every device with a GPU starts high, with particles by
+ * screen size (42k, or 16k on screens ≤ 768px), pixel ratio up to 1.75 and
+ * bloom; QualityGovernor lowers it only if this device actually drops frames.
+ * CPU cores and memory aren't used: they say little about the GPU (a 4-thread
+ * laptop runs the full scene fine). Without a GPU (software WebGL) it's 6k
+ * particles at pixel ratio 1 and no bloom pass.
  */
 function pickTier(): Tier {
-  if (softwareWebGL()) return { count: 6000, dpr: [1, 1], bloom: false };
-  const nav = navigator as Navigator & { deviceMemory?: number; connection?: { saveData?: boolean } };
-  const lowEnd = (nav.hardwareConcurrency || 8) <= 4 || (nav.deviceMemory ?? 8) <= 4 || Boolean(nav.connection?.saveData);
-  if (lowEnd) return { count: 8000, dpr: [1, 1], bloom: true };
-  if (window.matchMedia("(max-width: 768px)").matches) return { count: 16000, dpr: [1, 1.75], bloom: true };
-  return { count: 42000, dpr: [1, 1.75], bloom: true };
+  if (softwareWebGL()) return { count: 6000, steps: [1], bloom: false };
+  const phone = window.matchMedia("(max-width: 768px)").matches;
+  return { count: phone ? 16000 : 42000, steps: DPR_STEPS, bloom: true };
+}
+
+/**
+ * Watches the real frame rate while the particles are on screen (after the
+ * fly-in) and lowers quality if the device can't keep up: resolution first
+ * (1.75× → 1.5× → 1.25× → 1×, below 48 fps), then the bloom pass (below
+ * 28 fps at 1×, so a 30 fps cap like iOS Low Power Mode keeps the glow). A
+ * step needs two slow 1.5 s windows in a row, so a one-off hitch doesn't
+ * count, and quality never goes back up during a visit, so the picture can't
+ * flicker between levels.
+ */
+function QualityGovernor({ steps, quality, onChange }: { steps: number[]; quality: Quality; onChange: (q: Quality) => void }) {
+  const win = useRef({ time: 0, frames: 0, slow: 0, settle: 0.5 });
+  useFrame((_, delta) => {
+    const w = win.current;
+    // Only measure what the visitor sees: particles shown and assembled.
+    // After a pause (LoopGate) or a step, wait a moment before measuring.
+    if (sceneState.opacity < 0.5 || sceneState.intro < 1) {
+      Object.assign(w, { time: 0, frames: 0, slow: 0, settle: 0.5 });
+      return;
+    }
+    if (w.settle > 0) {
+      w.settle -= delta;
+      return;
+    }
+    // A long frame counts, but only as 0.1 s, so one hitch can't trigger a step.
+    w.time += Math.min(delta, 0.1);
+    w.frames++;
+    if (w.time < 1.5) return;
+
+    const fps = w.frames / w.time;
+    w.time = 0;
+    w.frames = 0;
+    const dpr = effectiveDpr(steps[quality.step]);
+    const next = steps.findIndex((cap, i) => i > quality.step && effectiveDpr(cap) < dpr);
+    const slow = next !== -1 ? fps < 48 : quality.bloom && fps < 28;
+    w.slow = slow ? w.slow + 1 : 0;
+    if (w.slow < 2) return;
+
+    w.slow = 0;
+    w.settle = 1;
+    if (process.env.NODE_ENV !== "production") console.info(`[scene] ${fps.toFixed(0)} fps, lowering quality`);
+    onChange(next !== -1 ? { ...quality, step: next } : { ...quality, bloom: false });
+  });
+  return null;
 }
 
 /**
@@ -83,11 +133,18 @@ function LoopGate() {
 export default function Scene() {
   // This component only renders in the browser (see SceneCanvas), so window is safe here.
   const [tier] = useState(pickTier);
+  const [quality, setQuality] = useState<Quality>(() => ({ step: 0, bloom: tier.bloom }));
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production") return;
+    const dpr = effectiveDpr(tier.steps[quality.step]);
+    console.info(`[scene] ${tier.count / 1000}k particles, pixel ratio ${dpr}, bloom ${quality.bloom ? "on" : "off"}`);
+  }, [tier, quality]);
 
   return (
     <Canvas
       className="webgl"
-      dpr={tier.dpr}
+      dpr={[1, tier.steps[quality.step]]}
       camera={{ position: [0, 0, 4.2], fov: 40, near: 0.1, far: 50 }}
       gl={{ antialias: false, powerPreference: "high-performance" }}
       eventSource={document.body}
@@ -96,7 +153,8 @@ export default function Scene() {
       <color attach="background" args={[theme.canvasBg]} />
       <ParticleMorph count={tier.count} shape={SHAPE} />
       <LoopGate />
-      {tier.bloom && (
+      <QualityGovernor steps={tier.steps} quality={quality} onChange={setQuality} />
+      {quality.bloom && (
         <EffectComposer multisampling={0}>
           <Bloom mipmapBlur intensity={1.15} luminanceThreshold={0.22} luminanceSmoothing={0.35} radius={0.75} />
           <Vignette offset={0.25} darkness={0.75} />
