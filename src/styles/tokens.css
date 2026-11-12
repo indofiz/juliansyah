@@ -1,8 +1,7 @@
 /* ==========================================================================
    Design tokens + base styles
    Dark "terminal" aesthetic: warm near-black canvas, "Ember" amber glow
-   accent (#ffaf4f), wide grotesk type with gradient headings. Sky is the
-   only secondary colour (wireframe annotations in design → code).
+   accent (#ffaf4f), wide grotesk type with gradient headings.
    ========================================================================== */
 
 /* ==========================================================================
@@ -86,9 +85,6 @@ html {
   --hero-3: rgba(32, 19, 4, 0.4);
   --hero-4: rgba(15, 8, 3, 0.16);
   --bar-tint: rgba(20, 13, 6, 0.22);
-
-  /* Annotation colour in the design → code wireframe. */
-  --sky: #6ecfff;
 
   --radius-sm: 0.625rem;
   --radius: 1rem;

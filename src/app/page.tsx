@@ -6,7 +6,7 @@ import { Carousels } from "@/components/Carousels";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Intro } from "@/components/sections/Intro";
 import { Work } from "@/components/sections/Work";
-import { DesignToCode } from "@/components/sections/DesignToCode";
+import { Process } from "@/components/sections/Process";
 import { Playground } from "@/components/sections/Playground";
 import { About } from "@/components/sections/About";
 import { Testimonials } from "@/components/sections/Testimonials";
@@ -15,7 +15,7 @@ import { Footer } from "@/components/sections/Footer";
 import { jsonLdHtml, personJsonLd } from "@/lib/jsonLd";
 
 // Sections answer a visitor's questions in order: who are you (hero, proof),
-// can you do what I need (work, design → code, about: me and what I do,
+// can you do what I need (work, how I work, about: me and what I do,
 // playground), can I trust you (testimonials), how do I reach you (contact).
 // Section ids must match the keys in src/lib/sceneKeyframes.ts (same order).
 export default function Home() {
@@ -31,7 +31,7 @@ export default function Home() {
       <main id="main-content">
         <Intro />
         <Work />
-        <DesignToCode />
+        <Process />
         <About />
         <Playground />
         <Testimonials />

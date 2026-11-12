@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 function values(id: string, mobile: boolean): SceneValues {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { via, scroll, mobile: mobileOverrides, ...rest } = sceneKeyframes[id];
+  const { via, scroll, mobileScroll, mobile: mobileOverrides, ...rest } = sceneKeyframes[id];
   return mobile ? { ...rest, ...mobileOverrides } : rest;
 }
 
@@ -20,7 +20,7 @@ function values(id: string, mobile: boolean): SceneValues {
  * For each pair of neighbouring sections A → B, one timeline blends
  * sceneState from A's values to B's (through any `via` states) while section
  * B scrolls from the bottom of the viewport to the top, or over B's custom
- * `scroll` range. `scrub` ties progress to the scrollbar, so it
+ * `scroll` range (`mobileScroll` on phones). `scrub` ties progress to the scrollbar, so it
  * plays forwards and backwards. Timelines rebuild when crossing 900px.
  *
  * Reduced motion: no scrubbing. The scene cuts to each section's state when
@@ -57,22 +57,25 @@ export function ScrollScenes() {
           continue;
         }
 
-        const custom = kf.scroll;
+        const custom = (mobile && kf.mobileScroll) || kf.scroll;
         const scrollTrigger: ScrollTrigger.Vars = custom
           ? {
               trigger: custom.trigger,
               start: custom.start ?? "top top",
-              end: () => `+=${window.innerHeight * (custom.endVh ?? 1)}`,
+              ...(custom.endTrigger
+                ? { endTrigger: custom.endTrigger, end: custom.end ?? "top top" }
+                : { end: () => `+=${window.innerHeight * (custom.endVh ?? 1)}` }),
               scrub: 1,
               invalidateOnRefresh: true,
             }
           : { trigger: `#${id}`, start: "top bottom", end: "top top", scrub: 1 };
 
-        // from → via… → to, each via merged on top of the previous state.
+        // from → via… → to, each via merged on top of the previous state
+        // (with its own mobile overrides on phones).
         const from = values(sectionOrder[i - 1], mobile);
         const vias = kf.via ? (Array.isArray(kf.via) ? kf.via : [kf.via]) : [];
         const states: SceneValues[] = [from];
-        vias.forEach((v) => states.push({ ...states[states.length - 1], ...v }));
+        vias.forEach(({ mobile: viaMobile, ...v }) => states.push({ ...states[states.length - 1], ...v, ...(mobile ? viaMobile : undefined) }));
         states.push(values(id, mobile));
 
         const step = 1 / (states.length - 1);

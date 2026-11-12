@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "mask": "node scripts/generate-earth-mask.mjs",
-    "portrait": "python3 scripts/make-portrait.py"
+    "portrait": "python3 scripts/make-portrait.py",
+    "process-art": "node scripts/make-process-art.mjs"
   },
   "dependencies": {
     "@fontsource-variable/instrument-sans": "^5.3.0",

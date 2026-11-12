@@ -1,16 +1,24 @@
 import type { SceneValues } from "./sceneState";
 
+export type SceneScroll = { trigger: string; start?: string; endVh?: number; endTrigger?: string; end?: string };
+
+/** An in-between state; `mobile` overrides it on screens ≤ 900px wide. */
+export type SceneVia = Partial<SceneValues> & { mobile?: Partial<SceneValues> };
+
 export type SceneKeyframe = SceneValues & {
   /**
    * Optional in-between state(s). With one, it's reached halfway through the
    * transition; with several, they're spread evenly across it.
    */
-  via?: Partial<SceneValues> | Partial<SceneValues>[];
+  via?: SceneVia | SceneVia[];
   /**
    * Run this transition over a custom scroll range instead of "while the
-   * section scrolls in". `endVh` is the length in screens.
+   * section scrolls in". It ends `endVh` screens after the start, or where
+   * `end` ("top top" by default) is reached on `endTrigger`.
    */
-  scroll?: { trigger: string; start?: string; endVh?: number };
+  scroll?: SceneScroll;
+  /** A different scroll range on screens ≤ 900px wide. */
+  mobileScroll?: SceneScroll;
   /** Overrides used on screens ≤ 900px wide, where the layout stacks. */
   mobile?: Partial<SceneValues>;
 };
@@ -53,14 +61,39 @@ export const sceneKeyframes: Record<string, SceneKeyframe> = {
   // arrive, so the videos sit on a clean background.
   work: { x: 0, y: 0.1, scale: 0.9, globeSpin: 0.4, shapeSpin: 0.15, morph: 1, sink: 0, opacity: 0 },
 
-  // Design → code is DOM only.
-  "design-to-code": hidden,
+  // How I work: the globe re-forms out of sight and rises with the section
+  // into the right-hand column (desktop) or under the title (phones), then
+  // holds there while the stage is pinned. Its centre stays a fixed distance
+  // below the section's top (half a screen; 57.5% on phones, y -0.15) as the
+  // section scrolls in: each third of the transition is a third of a screen,
+  // so y moves 0.67 per via. The lens in Process.tsx sits on the globe's
+  // centre: if you change x, y or scale here, update --globe-x / --globe-r /
+  // --globe-cy on .process (sections.css, mobile.css).
+  process: {
+    via: [
+      { x: 0.64, y: -1.33, scale: 0.75, globeSpin: 3.2, shapeSpin: 0.7, morph: 0, opacity: 0, mobile: { x: 0, y: -1.48, scale: 1.05 } },
+      { y: -0.67, globeSpin: 3.6, opacity: 0.9, mobile: { y: -0.82 } },
+    ],
+    x: 0.64,
+    y: 0,
+    scale: 0.75,
+    globeSpin: 4.35,
+    shapeSpin: 0.7,
+    morph: 0,
+    sink: 0,
+    opacity: 1,
+    mobile: { x: 0, y: -0.15, scale: 1.05 },
+  },
 
-  // About: a cloud gathers on the glowing floor, then rises into the portrait
-  // (your face with the VR headset) in the empty middle column, framed by
-  // three cards a side. On phones it sits between the title and the cards.
+  // About: the globe glides to the centre as it dissolves onto the glowing
+  // floor, then the cloud rises into the portrait (your face with the VR
+  // headset) in the empty middle column, framed by three cards a side. On
+  // phones it sits between the title and the cards; there nothing pins in
+  // How I work, so the globe starts to dissolve (and dims) as soon as the
+  // steps scroll up over it.
   about: {
-    via: { y: -0.15, scale: 1, morph: 1, sink: 0.85, opacity: 0.85 },
+    via: { x: 0, y: -0.15, scale: 1, morph: 1, sink: 0.85, opacity: 0.85, mobile: { opacity: 0.4 } },
+    mobileScroll: { trigger: "#process", start: "top top", endTrigger: "#about" },
     x: 0,
     y: -0.3,
     scale: 0.72,

@@ -268,65 +268,45 @@ export const caseStudyLabels = {
 };
 
 /* ---------------------------------------------------------------------------
- * 4. Design → code: can you do what I need? (design and engineering, one person)
- * Pinned and scroll-scrubbed; a static row with reduced motion.
+ * 4. How I work (section id "process"): what's it like to work with you?
+ * Main's "Seamless from Call to Launch" layout: copy | steps | the globe,
+ * with each step's hand-drawn illustration on the globe while it's lit.
+ * Art: masks made by `npm run process-art` (scripts/make-process-art.mjs).
  * ------------------------------------------------------------------------- */
-export const designToCode = {
-  badge: "Design → code",
-  title: "I design it and I ship it.",
-  text: "One real component, five stages, one person. Scroll to watch a check-in card go from pencil sketch to running code.",
-  component: "Presensi PKP · check-in card",
-  note: "TODO: swap in the real sketch, wireframe, Figma frame and widget source from Presensi PKP",
-  stages: [
-    { id: "sketch", label: "Sketch", text: "Pencil first: what does someone in the field need to see before they tap?" },
-    { id: "wireframe", label: "Wireframe", text: "Layout and hierarchy in greyscale, before colour gets a vote." },
-    { id: "design", label: "Design", text: "Real type, colour and states, built on the design system's tokens." },
-    { id: "code", label: "Flutter widget", text: "The same card as a Flutter widget, reading the same tokens." },
-    { id: "running", label: "Running", text: "A web recreation of the Flutter widget, live on this page. Tap Check in." },
+export const howIWork = {
+  badge: "How I work",
+  title: "From First Sketch to Live App.",
+  text: "No hand-off between designer and developer: the person you brief is the person who ships it.",
+  primary: { label: "Start a project", href: "/#contact" },
+  secondary: { label: "See my work", href: "/#work" },
+  /** Shown as "Step 01", "Step 02"… above each title. */
+  stepLabel: "Step",
+  steps: [
+    {
+      id: "discover",
+      title: "Discover",
+      text: "A call about your users, your goals and your deadline. You get a written scope before any work starts.",
+      art: "/process/discover.webp",
+    },
+    {
+      id: "design",
+      title: "Design",
+      text: "Wireframes first, then Figma screens built on a design system, so you can click through the app before any code exists.",
+      art: "/process/design.webp",
+    },
+    {
+      id: "build",
+      title: "Build",
+      text: "Flutter for mobile, React and Next.js for the web, built from the same design tokens, with test builds along the way.",
+      art: "/process/build.webp",
+    },
+    {
+      id: "launch",
+      title: "Launch",
+      text: "Testing on real devices, release to the stores or the server, and support after go-live.",
+      art: "/process/launch.webp",
+    },
   ],
-  sketch: { title: "check-in card", notes: ["where am I?", "inside the fence?", "big tap target"] },
-  wireframe: { map: "Map + geofence", status: "Status line", button: "Check in" },
-  /** Sample content inside the card mock-ups (illustration, not real data). */
-  card: {
-    greeting: "Good morning",
-    time: "07:42",
-    officeLabel: "Your office",
-    office: "City Hall",
-    status: "Inside the geofence",
-    statusDone: "Attendance recorded",
-    button: "Check in",
-    buttonDone: "Checked in at",
-    reset: "Reset demo",
-  },
-  codeFile: "check_in_card.dart",
-  /** Highlighted at build time (src/lib/highlight.ts). Keep lines under ~50 characters. */
-  code: `// TODO: paste the real widget from Presensi PKP
-class CheckInCard extends StatelessWidget {
-  const CheckInCard({
-    super.key,
-    required this.state,
-    required this.onCheckIn,
-  });
-
-  final CheckInState state;
-  final VoidCallback onCheckIn;
-
-  @override
-  Widget build(BuildContext context) {
-    final t = context.tokens;
-    return Card(
-      color: t.surface,
-      child: Column(children: [
-        OfficeMap(fence: state.geofence),
-        StatusChip(inside: state.inside),
-        FilledButton(
-          onPressed: state.inside ? onCheckIn : null,
-          child: Text(t.label.checkIn),
-        ),
-      ]),
-    );
-  }
-}`,
 };
 
 /* ---------------------------------------------------------------------------
@@ -480,7 +460,7 @@ export const footer = {
       title: "Work",
       links: [
         { label: "Selected work", href: "/#work" },
-        { label: "Design → code", href: "/#design-to-code" },
+        { label: "How I work", href: "/#process" },
         { label: "Playground", href: "/#playground" },
       ],
     },

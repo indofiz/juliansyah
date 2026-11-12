@@ -515,98 +515,99 @@
     grid-template-columns: 1fr;
   }
 
-  /* ---------- Design → code ---------- */
-  .d2c-track {
-    height: 420vh;
+  /* ---------- How I work: title, globe, steps, buttons (nothing pinned) ---------- */
+  /* The globe (mobile "process" keyframe: x 0, y -0.15, scale 1.05) forms
+     under the title, its centre 57.5% of a screen below the section's top
+     (50% + 0.15 × 50%); its radius on screen is scale × width / 3.4
+     (ParticleMorph). The globe's space shares the first row with the title
+     and reaches just past the globe, so the steps start below it whatever
+     the title's height. */
+  .process {
+    --globe-r: calc(1.05 * 100vw / 3.4);
+    --globe-cy: 57.5vh;
+    --pad: 4.5rem;
+    padding: var(--pad) 0;
   }
 
-  .d2c-stage {
-    align-items: stretch;
+  .process-track {
+    height: auto;
   }
 
-  .d2c-grid {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 1rem;
-    height: 100%;
-    padding-top: 4.25rem;
-    padding-bottom: 1rem;
-  }
-
-  .d2c-copy .sh {
-    margin-bottom: 0.5rem;
-  }
-
-  .d2c-copy .sh-text {
-    max-width: 21rem;
-    font-size: 0.8125rem;
-  }
-
-  /* Rail: five labels in a row, the active step's text below. */
-  .d2c-rail {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 0.25rem;
-    padding: 0.875rem 0 2.75rem;
-  }
-
-  .d2c-rail-track {
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: auto;
-    width: auto;
-    height: 0.125rem;
-  }
-
-  .d2c-rail-fill {
-    height: 100%;
-    width: calc(var(--p) * 100%);
-  }
-
-  .d2c-step {
-    position: static;
-    justify-items: center;
-    text-align: center;
-  }
-
-  .d2c-step-n {
-    position: static;
-    width: 1.25rem;
-    height: 1.25rem;
-    font-size: 0.5625rem;
-  }
-
-  .d2c-step-label {
-    font-size: 0.6875rem;
-    line-height: 1.2;
-  }
-
-  .d2c-step-text {
-    display: none;
-  }
-
-  .d2c-step.is-on .d2c-step-text {
+  .process-stage {
+    position: relative;
+    height: auto;
     display: block;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    max-width: none;
-    font-size: 0.8125rem;
-    line-height: 1.35;
   }
 
-  .d2c-frame {
-    width: min(100%, 46vh);
+  .process-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "top" "steps" "actions";
+    align-items: start;
+    gap: 0;
   }
 
-  .d2c-caption {
+  /* Its header and buttons join the grid, so the buttons can go last. */
+  .process-copy {
+    display: contents;
+  }
+
+  .process-copy .sh {
+    grid-area: top;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 0;
+  }
+
+  .process-copy .sh-text {
+    max-width: 19rem;
+  }
+
+  .process-globe {
+    grid-area: top;
+    position: relative;
+    height: calc(var(--globe-cy) - var(--pad) + var(--globe-r) * 1.35);
+  }
+
+  .process-lens {
+    left: 50%;
+    top: calc(var(--globe-cy) - var(--pad));
+  }
+
+  .process-actions {
+    grid-area: actions;
+    margin-top: 2.5rem;
+  }
+
+  .steps {
+    padding-left: 3.5rem;
+  }
+
+  .steps-list {
+    gap: 2.25rem;
+  }
+
+  .steps-track {
+    left: 0.5rem;
+    width: 1.75rem;
+  }
+
+  .step-dot {
+    left: -2.75rem;
+    width: 1.375rem;
+    height: 1.375rem;
     font-size: 0.6875rem;
   }
 
-  .code {
-    font-size: 2.6cqw;
+  .step-label {
+    font-size: 0.8125rem;
+  }
+
+  .step-title {
+    font-size: 1.125rem;
+  }
+
+  .step-text {
+    font-size: 0.8125rem;
   }
 
   /* ---------- Playground: swipe row ---------- */
