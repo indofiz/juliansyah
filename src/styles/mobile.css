@@ -70,30 +70,49 @@
     position: fixed;
     height: 4rem;
     padding: 0.75rem var(--gutter);
-    background: transparent;
-    border-bottom: 1px solid transparent;
     transform: none;
-    transition: transform 0.35s ease, background 0.3s ease, border-color 0.3s ease;
+    transition: transform 0.35s ease;
   }
 
-  /* Neutral frosted glass once the page has scrolled (matches the desktop nav),
-     with the same faint accent breath in the middle. */
-  .site-header.is-scrolled {
-    border-bottom-color: rgba(255, 255, 255, 0.1);
-    background:
+  /* Frosted glass once the page has scrolled (same recipe as the desktop
+     pill), with a faint accent breath in the middle. It lives on ::before,
+     never on the header itself: a backdrop-filter on the header would make it
+     the containing block of the fixed .mobile-menu inside it, and the menu
+     would shrink to the header's strip instead of covering the screen.
+     Faded with opacity, since a blur can't be transitioned on and off. */
+  .site-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: var(--glass-tint);
+    background-image:
+      var(--glass-grain),
       radial-gradient(40% 120% at 50% 50%, rgb(var(--accent-2-rgb) / 0.1), transparent 75%),
-      rgba(17, 17, 17, 0.62);
-    -webkit-backdrop-filter: blur(1rem) saturate(1.5);
-    backdrop-filter: blur(1rem) saturate(1.5);
+      var(--glass-sheen);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .site-header.is-scrolled::before {
+    opacity: 1;
   }
 
   .site-header.is-hidden {
     transform: translateY(-110%);
   }
 
+  /* The menu has its own glass; the header's would double it up. */
   html.menu-open .site-header {
     transform: none;
-    background: transparent;
+  }
+
+  html.menu-open .site-header::before {
+    opacity: 0;
   }
 
   html.menu-open {
@@ -162,9 +181,11 @@
     display: block;
     overflow-y: auto;
     padding: 5.5rem var(--gutter) 2rem;
-    background: rgba(6, 5, 3, 0.95);
-    -webkit-backdrop-filter: blur(1.125rem);
-    backdrop-filter: blur(1.125rem);
+    /* Frosted: the page stays faintly visible, soft, behind the links. */
+    background-color: var(--glass-tint-menu);
+    background-image: var(--glass-grain);
+    -webkit-backdrop-filter: blur(1.75rem) saturate(1.5);
+    backdrop-filter: blur(1.75rem) saturate(1.5);
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s;

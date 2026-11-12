@@ -539,7 +539,7 @@
 /* ---------- Case study pages (/work/[slug]) ---------- */
 .cs {
   position: relative;
-  z-index: 1;
+  z-index: var(--z-page);
 }
 
 .cs-hero {
@@ -1675,7 +1675,7 @@
 /* ---------- Footer ---------- */
 .footer {
   position: relative;
-  z-index: 1;
+  z-index: var(--z-page);
   margin-top: 2.5rem;
   padding-top: 4.5rem;
   overflow: hidden;

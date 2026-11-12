@@ -7,7 +7,8 @@ import { nav } from "@/content/site";
 /**
  * Desktop nav pill (hidden on mobile, which uses MobileMenu).
  *
- *  - An accent glow lives inside the frosted pill. Idle, it drifts slowly
+ *  - The frost is a layer (.nav-glass: blur, tint, grain; see components.css)
+ *    and the glow lives inside it. Idle, the glow drifts slowly
  *    around the centre and breathes; hovering or focusing a link slides it
  *    behind that link. Leaving the nav sends it back to drifting.
  *  - Big at the top of the page, a bit smaller once scrolled (.is-compact).
@@ -104,7 +105,7 @@ export function NavBar() {
         if (!navRef.current?.contains(e.relatedTarget as Node)) release();
       }}
     >
-      <span className="nav-glow-clip" aria-hidden="true">
+      <span className="nav-glass" aria-hidden="true">
         <span className="nav-glow" ref={glowRef} />
       </span>
       {nav.links.map((item, i) => (
