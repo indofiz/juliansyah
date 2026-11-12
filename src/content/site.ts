@@ -113,8 +113,8 @@ export const hero = {
  * ------------------------------------------------------------------------- */
 export const proof = {
   badge: "Track record",
-  title: "Numbers from Shipped Work.",
-  text: "From production apps for government, education and enterprise clients, as of November 2026.",
+  title: "Proven in Production.",
+  text: "Apps I've built and shipped for government, education and enterprise teams, live with real users. Your project gets the same standard.",
   /** Desktop only (hidden on phones, as on the old site). */
   primary: { label: "View work", href: "/#work" },
   secondary: { label: "Learn more", href: "/#about" },
