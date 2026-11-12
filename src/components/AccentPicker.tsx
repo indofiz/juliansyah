@@ -9,9 +9,10 @@ import { Icon } from "./ui/Icon";
 /**
  * The palettes as a radio group: native radios, so arrow keys move between
  * them and only the chosen one is a tab stop. Each swatch shows its own
- * palette's accent. Used in the header popover and in the phone menu.
+ * palette's accent. The names are visible on desktop and read out (but
+ * hidden) on phones.
  */
-export function AccentOptions({ tabIndex }: { tabIndex?: number }) {
+export function AccentOptions() {
   const current = useAccentId();
   const name = useId();
   return (
@@ -25,7 +26,6 @@ export function AccentOptions({ tabIndex }: { tabIndex?: number }) {
             value={p.id}
             checked={current === p.id}
             onChange={() => setAccent(p.id)}
-            tabIndex={tabIndex}
           />
           <span className="accent-swatch" style={{ "--swatch": p.rgb.accent } as CSSProperties} aria-hidden="true" />
           <span className="accent-name">{p.label}</span>
@@ -37,15 +37,24 @@ export function AccentOptions({ tabIndex }: { tabIndex?: number }) {
 }
 
 /**
- * Desktop: a dot in the current accent opens a small frosted popover with
- * the palettes (hidden on phones, where the menu lists them). It stays open
- * while you try colours; Escape, a click outside or tabbing away closes it.
+ * An orb in the current accent, in the header. Desktop: it opens a small
+ * frosted popover listing the palettes by name, under the orb. Phones: a
+ * column of round swatches without text, on the right edge, centred
+ * vertically (the header stays in place while it's open: see mobile.css).
+ * It stays open while you try colours; Escape, a tap outside or tabbing
+ * away closes it.
  */
 export function AccentPicker() {
   const [open, setOpen] = useState(false);
   const root = useRef<HTMLDivElement>(null);
   const button = useRef<HTMLButtonElement>(null);
   const popId = useId();
+
+  // Phones: keeps the header (and the column inside it) from sliding away.
+  useEffect(() => {
+    document.documentElement.classList.toggle("accent-open", open);
+    return () => document.documentElement.classList.remove("accent-open");
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;

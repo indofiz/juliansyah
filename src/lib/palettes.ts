@@ -1,7 +1,7 @@
 /**
  * Accent palettes: the one place accent colours are defined.
  *
- * Visitors pick one with the swatch in the header (phones: in the menu). The
+ * Visitors pick one with the orb in the header (AccentPicker). The
  * first palette is the default. To add one:
  *   1. `npm run palette -- <id> "<Label>" <hue>` prints a palette with every
  *      colour moved to that OKLCH hue at ember's lightness, plus a contrast
@@ -98,10 +98,157 @@ export const palettes = [
     scene: { rim: "#ffe7ce", canvas: "#050301", bloom: 1.15 },
   },
   {
-    // `npm run palette -- violet "Violet" 293`, then accent, accent-2, 600
-    // and 700 taken a little darker so they read as violet, not lavender
-    // (at ember's lightness violet can't be saturated). Contrast: accent on
-    // the background 7.9:1, ink on accent 7.3:1.
+    // `npm run palette -- lime "Lime" 125`, accent, accent-2, 600 and 700 taken
+    // more saturated (the generator's lime is olive at ember's saturation).
+    // Accent on the background 12.6:1, ink on accent 11.6:1.
+    id: "lime",
+    label: "Lime",
+    rgb: {
+      accent: "#abdb37",
+      "accent-2": "#91bd19",
+      "accent-bright": "#d4e7b6",
+      "accent-pale": "#e5f1d3",
+      "accent-ink": "#0e1305",
+      "accent-50": "#f5faee",
+      "accent-200": "#dcecc4",
+      "accent-600": "#769c03",
+      "accent-700": "#5f7e01",
+      "accent-800": "#222d0b",
+      "accent-900": "#151c08",
+      glass: "#0b0d07",
+      "glass-menu": "#060704",
+    },
+    raw: {
+      "hero-1": "rgba(46, 59, 22, 0.8)",
+      "hero-2": "rgba(35, 45, 16, 0.62)",
+      "hero-3": "rgba(18, 25, 7, 0.4)",
+      "hero-4": "rgba(8, 11, 4, 0.16)",
+      "bar-tint": "rgba(13, 16, 7, 0.22)",
+      lens: "rgba(10, 12, 7, 0.5)",
+      "bezel-end": "#0c0e09",
+      sheen: "#f3f6ef",
+      "logo-light": "#deeec5",
+      "avatar-1": "#d9efb5",
+      "avatar-2": "#8bab4b",
+      "avatar-3": "#3e5015",
+    },
+    scene: { rim: "#e5f1d3", canvas: "#030401", bloom: 1 },
+  },
+  {
+    // `npm run palette -- emerald "Emerald" 160`, accent, accent-2, 600 and 700
+    // taken more saturated (the generator's is a soft mint). Accent on the
+    // background 12.2:1, ink on accent 11.2:1.
+    id: "emerald",
+    label: "Emerald",
+    rgb: {
+      accent: "#36e29a",
+      "accent-2": "#06c281",
+      "accent-bright": "#b8eecf",
+      "accent-pale": "#d5f4e2",
+      "accent-ink": "#04150c",
+      "accent-50": "#effbf4",
+      "accent-200": "#c6f1d8",
+      "accent-600": "#019f68",
+      "accent-700": "#078053",
+      "accent-800": "#08301f",
+      "accent-900": "#071f13",
+      glass: "#070e0a",
+      "glass-menu": "#040706",
+    },
+    raw: {
+      "hero-1": "rgba(19, 63, 42, 0.8)",
+      "hero-2": "rgba(14, 49, 32, 0.62)",
+      "hero-3": "rgba(6, 27, 17, 0.4)",
+      "hero-4": "rgba(4, 12, 7, 0.16)",
+      "bar-tint": "rgba(7, 17, 12, 0.22)",
+      lens: "rgba(7, 12, 9, 0.5)",
+      "bezel-end": "#090e0b",
+      sheen: "#f0f7f3",
+      "logo-light": "#c7f4da",
+      "avatar-1": "#b7f6d3",
+      "avatar-2": "#44b581",
+      "avatar-3": "#0a5638",
+    },
+    scene: { rim: "#d4f5e2", canvas: "#010402", bloom: 1.1 },
+  },
+  {
+    // `npm run palette -- aqua "Aqua" 205`, as generated. Accent on the
+    // background 12.0:1, ink on accent 11.1:1.
+    id: "aqua",
+    label: "Aqua",
+    rgb: {
+      accent: "#0bdbec",
+      "accent-2": "#0fbdcc",
+      "accent-bright": "#a8edf5",
+      "accent-pale": "#cdf4f8",
+      "accent-ink": "#001417",
+      "accent-50": "#ecfbfd",
+      "accent-200": "#baf0f6",
+      "accent-600": "#0da1ae",
+      "accent-700": "#0a8590",
+      "accent-800": "#002f33",
+      "accent-900": "#001e21",
+      glass: "#050e0f",
+      "glass-menu": "#040708",
+    },
+    raw: {
+      "hero-1": "rgba(1, 61, 67, 0.8)",
+      "hero-2": "rgba(0, 48, 52, 0.62)",
+      "hero-3": "rgba(0, 26, 29, 0.4)",
+      "hero-4": "rgba(2, 12, 13, 0.16)",
+      "bar-tint": "rgba(5, 17, 18, 0.22)",
+      lens: "rgba(6, 12, 13, 0.5)",
+      "bezel-end": "#080e0f",
+      sheen: "#eef7f8",
+      "logo-light": "#baf3f9",
+      "avatar-1": "#a4f5fe",
+      "avatar-2": "#0fb1c0",
+      "avatar-3": "#01535a",
+    },
+    scene: { rim: "#ccf4f9", canvas: "#010405", bloom: 1.11 },
+  },
+  {
+    // `npm run palette -- azure "Azure" 255`, accent, accent-2, 600 and 700
+    // taken darker so they read as blue, not pastel (like violet). Accent on the
+    // background 8.3:1, ink on accent 7.7:1.
+    id: "azure",
+    label: "Azure",
+    rgb: {
+      accent: "#60a7ff",
+      "accent-2": "#388cf0",
+      "accent-bright": "#cae1fe",
+      "accent-pale": "#dfedff",
+      "accent-ink": "#07111d",
+      "accent-50": "#f3f8ff",
+      "accent-200": "#d5e7fe",
+      "accent-600": "#1a73d5",
+      "accent-700": "#0e5caf",
+      "accent-800": "#142943",
+      "accent-900": "#0d1a2b",
+      glass: "#080c12",
+      "glass-menu": "#050709",
+    },
+    raw: {
+      "hero-1": "rgba(31, 54, 83, 0.8)",
+      "hero-2": "rgba(23, 42, 65, 0.62)",
+      "hero-3": "rgba(11, 23, 37, 0.4)",
+      "hero-4": "rgba(5, 10, 17, 0.16)",
+      "bar-tint": "rgba(9, 15, 23, 0.22)",
+      lens: "rgba(8, 11, 16, 0.5)",
+      "bezel-end": "#0a0d11",
+      sheen: "#f1f6fc",
+      "logo-light": "#d8e9fe",
+      "avatar-1": "#d5e7ff",
+      "avatar-2": "#63a0ec",
+      "avatar-3": "#254976",
+    },
+    scene: { rim: "#dfedff", canvas: "#020307", bloom: 1.36 },
+  },
+  {
+    // `npm run palette -- violet "Violet" 293`, then accent, accent-2, 600 and
+    // 700 taken a little darker so they read as violet, not lavender (at ember's
+    // lightness violet can't be saturated). Contrast: accent on the background
+    // 7.9:1, ink on accent 7.3:1.
     id: "violet",
     label: "Violet",
     rgb: {
@@ -134,6 +281,43 @@ export const palettes = [
       "avatar-3": "#4b3e72",
     },
     scene: { rim: "#ece8ff", canvas: "#030306", bloom: 1.4 },
+  },
+  {
+    // `npm run palette -- rose "Rose" 355`, accent, accent-2, 600 and 700 taken
+    // darker so they read as rose, not pastel. Accent on the background 8.8:1,
+    // ink on accent 8.2:1.
+    id: "rose",
+    label: "Rose",
+    rgb: {
+      accent: "#fe82b6",
+      "accent-2": "#ed5c9e",
+      "accent-bright": "#ffd0e1",
+      "accent-pale": "#fee3ec",
+      "accent-ink": "#1b0b11",
+      "accent-50": "#fef5f8",
+      "accent-200": "#ffd9e6",
+      "accent-600": "#cd4686",
+      "accent-700": "#ab366e",
+      "accent-800": "#3d1c29",
+      "accent-900": "#27111a",
+      glass: "#110a0c",
+      "glass-menu": "#090506",
+    },
+    raw: {
+      "hero-1": "rgba(77, 39, 55, 0.8)",
+      "hero-2": "rgba(60, 30, 42, 0.62)",
+      "hero-3": "rgba(34, 15, 23, 0.4)",
+      "hero-4": "rgba(16, 7, 10, 0.16)",
+      "bar-tint": "rgba(21, 11, 15, 0.22)",
+      lens: "rgba(15, 9, 11, 0.5)",
+      "bezel-end": "#110b0d",
+      sheen: "#fbf2f5",
+      "logo-light": "#fedde8",
+      "avatar-1": "#fedae6",
+      "avatar-2": "#db79a1",
+      "avatar-3": "#6c334b",
+    },
+    scene: { rim: "#fee3ec", canvas: "#060203", bloom: 1.31 },
   },
 ] as const satisfies readonly Palette[];
 

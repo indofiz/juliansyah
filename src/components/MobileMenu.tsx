@@ -3,13 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { nav, site } from "@/content/site";
 import { Icon } from "./ui/Icon";
-import { AccentOptions } from "./AccentPicker";
 
 /**
  * Mobile only (hidden above 900px): hamburger button + full-screen menu with
- * the same four links as the desktop pill and the accent colours, and the
- * header hides while scrolling down and comes back when scrolling up.
- * Escape closes the menu and returns focus to the button.
+ * the same four links as the desktop pill, and the header hides while
+ * scrolling down and comes back when scrolling up. Escape closes the menu
+ * and returns focus to the button. (The accent colours have their own orb
+ * in the header: AccentPicker.)
  */
 export function MobileMenu() {
   const [open, setOpen] = useState(false);
@@ -82,12 +82,6 @@ export function MobileMenu() {
               </li>
             ))}
           </ul>
-          <div className="mm-accent">
-            <p className="mm-accent-title" aria-hidden="true">
-              {nav.accent.label}
-            </p>
-            <AccentOptions tabIndex={open ? undefined : -1} />
-          </div>
           <div className="mm-footer">
             <a href={nav.hire.href} className="btn btn-glow btn-block" onClick={close} tabIndex={tab}>
               {nav.hire.label}

@@ -44,7 +44,7 @@ export const nav = {
   hire: { label: "Hire me", href: "/#contact" },
   email: "Email me",
   menu: { open: "Open menu", close: "Close menu", label: "Main" },
-  /** Palette picker: header on desktop, menu on phones. Palette names live in src/lib/palettes.ts. */
+  /** Palette picker (orb in the header). Palette names live in src/lib/palettes.ts. */
   accent: { label: "Accent color" },
 };
 
