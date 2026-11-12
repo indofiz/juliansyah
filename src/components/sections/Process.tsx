@@ -1,19 +1,19 @@
-import type { CSSProperties } from "react";
 import { howIWork as h } from "@/content/site";
+import { STEP_ART } from "../process/StepArt";
 import { Button, SectionHeader } from "../ui/primitives";
 
 /**
  * How I work: main's "Seamless from Call to Launch" layout, with the globe
  * moved to the right. Copy | steps | the particle globe (the "process"
  * keyframe), and on the globe a frosted lens showing the lit step's
- * illustration.
+ * illustration (process/StepArt.tsx), which draws itself in each time.
  *
  * Desktop: the track is taller than the screen and its stage sticks, so the
  * globe holds still while scrolling fills the step track and lights each
  * step in turn; the lens follows the lit step (ScrollFx, [data-steps]).
  * Phones: title, globe, steps, buttons, nothing pinned. Reduced motion:
- * nothing pinned, every step lit, the first illustration. Without WebGL the
- * lens sits on a soft glow instead of the globe (.no-webgl).
+ * nothing pinned, every step lit, the pictures swap without moving. Without
+ * WebGL the lens sits on a soft glow instead of the globe (.no-webgl).
  */
 export function Process() {
   return (
@@ -37,14 +37,14 @@ export function Process() {
             <div className="process-globe" aria-hidden="true">
               <div className="process-lens">
                 <div className="process-arts">
-                  {h.steps.map((s, i) => (
-                    <span
-                      key={s.id}
-                      className={`process-art ${i === 0 ? "on" : ""}`}
-                      data-step-art
-                      style={{ "--art": `url(${s.art})` } as CSSProperties}
-                    />
-                  ))}
+                  {h.steps.map((s, i) => {
+                    const Art = STEP_ART[s.id];
+                    return (
+                      <div key={s.id} className={`process-art ${i === 0 ? "on" : ""}`} data-step-art>
+                        <Art />
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>

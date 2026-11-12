@@ -6,7 +6,7 @@
  * with a dashed outline. List them with: grep -n "TODO:" src/content/site.ts
  */
 
-import type { AboutCard, ClientLogo, IconName, Link, LoopMedia, MockNavItem, Platform, PlaygroundItem, Project, ProofItem, Testimonial } from "./types";
+import type { AboutCard, ClientLogo, IconName, Link, LoopMedia, MockNavItem, Platform, PlaygroundItem, ProcessStep, Project, ProofItem, Testimonial } from "./types";
 
 export const site = {
   name: "Juliansyah",
@@ -270,8 +270,8 @@ export const caseStudyLabels = {
 /* ---------------------------------------------------------------------------
  * 4. How I work (section id "process"): what's it like to work with you?
  * Main's "Seamless from Call to Launch" layout: copy | steps | the globe,
- * with each step's hand-drawn illustration on the globe while it's lit.
- * Art: masks made by `npm run process-art` (scripts/make-process-art.mjs).
+ * with each step's illustration on the globe while it's lit. The pictures
+ * are SVG in components/process/StepArt.tsx, matched by step `id`.
  * ------------------------------------------------------------------------- */
 export const howIWork = {
   badge: "How I work",
@@ -286,27 +286,23 @@ export const howIWork = {
       id: "discover",
       title: "Discover",
       text: "A call about your users, your goals and your deadline. You get a written scope before any work starts.",
-      art: "/process/discover.webp",
     },
     {
       id: "design",
       title: "Design",
       text: "Wireframes first, then Figma screens built on a design system, so you can click through the app before any code exists.",
-      art: "/process/design.webp",
     },
     {
       id: "build",
       title: "Build",
       text: "Flutter for mobile, React and Next.js for the web, built from the same design tokens, with test builds along the way.",
-      art: "/process/build.webp",
     },
     {
       id: "launch",
       title: "Launch",
       text: "Testing on real devices, release to the stores or the server, and support after go-live.",
-      art: "/process/launch.webp",
     },
-  ],
+  ] satisfies ProcessStep[],
 };
 
 /* ---------------------------------------------------------------------------

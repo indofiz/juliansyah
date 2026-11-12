@@ -880,7 +880,7 @@
      top left and an amber bounce from the globe at the bottom. */
   background:
     radial-gradient(circle at 32% 24%, rgb(255 255 255 / 0.13), transparent 58%),
-    rgb(14 10 6 / 0.38);
+    rgb(14 10 6 / 0.5);
   -webkit-backdrop-filter: blur(0.5rem) saturate(1.6);
   backdrop-filter: blur(0.5rem) saturate(1.6);
   box-shadow:
@@ -896,33 +896,335 @@
   }
 }
 
-/* The glow is on this wrapper: a filter on a masked element gets masked too. */
+/* Step art (process/StepArt.tsx): one SVG per step, line art in the
+   accent tokens. Finished drawings by default; .played (ScrollFx) plays the
+   intro: strokes draw on, shapes pop and fill, at each shape's --t. Then one
+   small loop per picture. The glow is one filter on the wrapper. */
 .process-arts {
   position: absolute;
-  inset: 0;
-  filter: drop-shadow(0 0 0.5rem rgb(var(--accent-rgb) / 0.6));
+  inset: 11%;
+  color: var(--accent-200);
+  filter: drop-shadow(0 0 0.45rem rgb(var(--accent-rgb) / 0.55));
 }
 
-/* Each illustration is a mask (npm run process-art) painted in the accent. */
 .process-art {
   position: absolute;
-  inset: 21%;
-  background: var(--accent-200);
-  -webkit-mask: var(--art) center / contain no-repeat;
-  mask: var(--art) center / contain no-repeat;
+  inset: 0;
   opacity: 0;
-  scale: 0.82;
-  rotate: -8deg;
-  transition:
-    opacity 0.4s ease,
-    scale 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
-    rotate 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: opacity 0.35s ease;
 }
 
 .process-art.on {
   opacity: 1;
-  scale: 1;
-  rotate: 0deg;
+}
+
+.process-art svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.process-art .sa-thin {
+  stroke-width: 2;
+}
+
+.process-art .sa-bold {
+  stroke-width: 3.5;
+}
+
+.process-art .sa-hot {
+  stroke: var(--accent);
+}
+
+.process-art .sa-dim {
+  opacity: 0.5;
+}
+
+.process-art .sa-card {
+  fill: var(--surface);
+}
+
+.process-art .sa-soft {
+  fill: rgb(var(--accent-rgb) / 0.22);
+  stroke: none;
+}
+
+.process-art .sa-solid {
+  fill: var(--accent);
+  stroke: none;
+}
+
+.process-art .sa-cream {
+  fill: var(--accent-200);
+  stroke: none;
+}
+
+/* The dark check mark on an amber badge. */
+.process-art .sa-ink {
+  stroke: var(--bg);
+  stroke-width: 2.6;
+}
+
+.process-art .sa-ink.sa-thin {
+  stroke-width: 2.2;
+}
+
+/* Finished states of the shapes that leave or only show in a loop. */
+.process-art .sa-gone,
+.process-art .sa-ripple,
+.process-art .sa-beat,
+.process-art .sa-live {
+  opacity: 0;
+}
+
+.process-art .sa-flow {
+  stroke-dasharray: 2 3;
+}
+
+.process-art :is(.sa-pop, .sa-grow, .sa-rise, .sa-cursor, .sa-wave, .sa-tap, .sa-ripple, .sa-flame, .sa-bob, .sa-twinkle, .sa-live) {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.process-art .sa-grow {
+  transform-origin: left center;
+}
+
+.process-art .sa-tap {
+  transform-origin: 0 0; /* the cursor's tip */
+}
+
+.process-art .sa-flame {
+  transform-origin: 50% 0;
+}
+
+/* Intro. pathLength is 1, so a dash of 1 is the whole stroke; starting a
+   little past 1 keeps the round cap from showing as a dot. "both" holds
+   the start state until --t. */
+.played .sa-draw {
+  stroke-dasharray: 1 2;
+  animation: sa-draw 0.7s cubic-bezier(0.65, 0, 0.35, 1) var(--t, 0s) both;
+}
+
+.played .sa-fade {
+  animation: sa-fade 0.5s ease var(--t, 0s) both;
+}
+
+.played .sa-pop {
+  animation: sa-pop 0.45s cubic-bezier(0.3, 1.6, 0.5, 1) var(--t, 0s) both;
+}
+
+.played .sa-grow {
+  animation: sa-grow 0.9s cubic-bezier(0.4, 0, 0.2, 1) var(--t, 0s) both;
+}
+
+.played .sa-gone {
+  animation: sa-gone 0.4s ease var(--t, 0s) both;
+}
+
+.played .sa-rise {
+  animation: sa-rise 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) var(--t, 0s) both;
+}
+
+.played .sa-cursor {
+  animation: sa-cursor 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) var(--t, 0s) both;
+}
+
+/* Loops, after the intro: the call's waveform, the blinking caret, the
+   token flowing between platforms, the cursor tapping, the rocket. */
+.played .sa-wave {
+  animation: sa-wave 1.1s ease-in-out calc(1s + var(--i) * 0.12s) infinite;
+}
+
+.played .sa-caret {
+  animation: sa-blink 1s steps(1) 1.2s infinite;
+}
+
+.played .sa-flow {
+  animation: sa-flow 0.8s linear infinite;
+}
+
+.played .sa-tap {
+  animation: sa-tap 2.4s ease-in-out 2.2s infinite;
+}
+
+.played .sa-ripple {
+  animation: sa-ripple 2.4s ease-out 2.2s infinite;
+}
+
+.played .sa-flame {
+  animation: sa-flicker 0.18s ease-in-out infinite alternate;
+}
+
+.played .sa-bob {
+  animation: sa-bob 2.6s ease-in-out 1.8s infinite;
+}
+
+.played .sa-twinkle {
+  animation: sa-twinkle 2s ease-in-out calc(1.6s + var(--i) * 0.5s) infinite;
+}
+
+.played .sa-live {
+  animation: sa-live 1.6s ease-out 2s infinite;
+}
+
+.played .sa-beat {
+  stroke-dasharray: 0.12 1;
+  animation: sa-beat 1.8s linear 2.2s infinite;
+}
+
+/* Nothing runs while the section is off screen (.is-near, ScrollFx). */
+.process:not(.is-near) .process-lens,
+.process:not(.is-near) .process-art * {
+  animation-play-state: paused;
+}
+
+@keyframes sa-draw {
+  from {
+    stroke-dashoffset: 1.05;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes sa-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes sa-pop {
+  from {
+    transform: scale(0);
+  }
+}
+
+@keyframes sa-grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes sa-gone {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes sa-rise {
+  from {
+    opacity: 0;
+    transform: translateY(34px) scale(0.6);
+  }
+}
+
+@keyframes sa-cursor {
+  from {
+    opacity: 0;
+    transform: translate(26px, 20px);
+  }
+}
+
+@keyframes sa-wave {
+  50% {
+    transform: scaleY(0.45);
+  }
+}
+
+@keyframes sa-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes sa-flow {
+  to {
+    stroke-dashoffset: -5;
+  }
+}
+
+@keyframes sa-tap {
+  0%,
+  70%,
+  100% {
+    transform: none;
+  }
+  78% {
+    transform: scale(0.82);
+  }
+}
+
+@keyframes sa-ripple {
+  0%,
+  74% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  78% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+@keyframes sa-flicker {
+  from {
+    transform: scaleY(0.75);
+  }
+  to {
+    transform: scaleY(1.15);
+  }
+}
+
+@keyframes sa-bob {
+  50% {
+    transform: translateY(-2.5px);
+  }
+}
+
+@keyframes sa-twinkle {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(0.6);
+  }
+  50% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes sa-live {
+  from {
+    opacity: 0.9;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: scale(2.6);
+  }
+}
+
+@keyframes sa-beat {
+  from {
+    opacity: 1;
+    stroke-dashoffset: 0.12;
+  }
+  to {
+    opacity: 1;
+    stroke-dashoffset: -1;
+  }
 }
 
 /* No WebGL, no globe: the lens sits on a soft amber glow instead. */

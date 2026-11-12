@@ -568,9 +568,11 @@
     height: calc(var(--globe-cy) - var(--pad) + var(--globe-r) * 1.35);
   }
 
+  /* A bigger share of the globe than on desktop, so the drawings stay legible. */
   .process-lens {
     left: 50%;
     top: calc(var(--globe-cy) - var(--pad));
+    width: calc(var(--globe-r) * 1.2);
   }
 
   .process-actions {

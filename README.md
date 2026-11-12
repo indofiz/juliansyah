@@ -25,7 +25,7 @@ npm run build
 | 1 | Hero | `hero` | Who are you? | Greeting pill (name ✳ tagline), headline (the only h1), description, two CTAs, design-system dashboard whose stat card is real (12K+ users, moving strip of client logos in colour) inside sample chrome. **Pinned**: the copy slides up and the dashboard slides down while the globe rises |
 | 2 | Track record | `proof` | Can I trust you? | Second screen of the pinned intro: one-line stats (icon, white number, amber label) around the centred globe; View work / Learn more on desktop |
 | 3 | Selected work | `work` | Can you do what I need? | Flagship card with "Tap to try" (lazy Flutter web iframe), then project cards. Each opens `/work/[slug]` |
-| 4 | How I work | `process` | What's it like to work with you? | Main's "Seamless from Call to Launch" layout with the globe on the right: copy, four steps (Discover, Design, Build, Launch) on a track that fills as you scroll, and a frosted lens on the globe showing the lit step's hand-drawn illustration. **Pinned** on desktop; phones stack title, globe, steps, buttons |
+| 4 | How I work | `process` | What's it like to work with you? | Main's "Seamless from Call to Launch" layout with the globe on the right: copy, four steps (Discover, Design, Build, Launch) on a track that fills as you scroll, and a frosted lens on the globe where the lit step's SVG illustration draws itself in. **Pinned** on desktop; phones stack title, globe, steps, buttons |
 | 5 | About | `about` | Who are you, and can you do what I need? | Main's "Under One Roof" layout, titled "From Design to Production, Under One Roof.": three cards a side (Who I am, then five expertise cards with their tools) with the particle portrait forming in the empty middle column. Phones: title, portrait, then a card carousel. Without WebGL the real photo fills the middle column |
 | 6 | Playground | `playground` | Can you do what I need? | Experiments that load near the viewport and pause off screen |
 | 7 | Testimonials | `testimonials` | Can I trust you? | Short quotes, just before Contact |
@@ -89,7 +89,7 @@ Below 1024px it's a normal responsive layout with a 16px base; phone rules
 | Section layouts | `src/styles/sections.css` and `src/components/sections/*` |
 | Scroll choreography of the particles | `src/lib/sceneKeyframes.ts` |
 | Pinned intro timing (headline up, dashboard down, proof in) | intro timeline in `src/components/ScrollFx.tsx` |
-| How I work illustrations (one per step) | `npm run process-art`: `scripts/make-process-art.mjs` turns drawings from `public/what-i-like` into masks in `public/process` |
+| How I work illustrations (one SVG per step, drawn in and looped with CSS) | `src/components/process/StepArt.tsx`, styles under "Step art" in `sections.css` |
 | Particle look, count, bloom | `src/components/canvas/shaders.ts`, `Scene.tsx` |
 
 **Adding a section:** add a `<section id="my-section">` to `page.tsx` and a

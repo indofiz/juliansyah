@@ -13,8 +13,8 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
  *  - [data-reveal]    fade up once when it enters the viewport
  *  - hero bars        frosted panels: in on load, out once you scroll, back in at the top
  *  - [data-steps]     How I work: the track fills, the current step lights up
- *                     and the globe's illustration follows it
- *  - process lens     shown only while the globe under it is formed
+ *                     and its picture draws itself in on the globe's lens,
+ *                     which shows only while the globe under it is formed
  *  - [data-cta]       contact panel: corner glow slides to the bottom
  */
 export function ScrollFx() {
@@ -78,6 +78,85 @@ export function ScrollFx() {
       if (window.scrollY <= atTop.end) showBars(0.5);
     }
 
+    // ---- How I work: steps and the pictures on the globe ---------------------
+    // The track fills, the current step lights up and its picture shows on
+    // the globe's lens. Desktop: the track is pinned ([data-steps-pin], a
+    // tall track with a sticky stage), so this spans the pinned scroll while
+    // the globe holds still. Phones and reduced motion: nothing pins; it runs
+    // while the list scrolls past. With reduced motion every step stays lit
+    // and the track full (reduced-motion.css); only the picture swaps, still.
+    document.querySelectorAll<HTMLElement>("[data-steps]").forEach((list) => {
+      const section = list.closest("section");
+      const fill = list.querySelector<HTMLElement>(".steps-fill");
+      const steps = gsap.utils.toArray<HTMLElement>(".step", list);
+      const arts = section ? gsap.utils.toArray<HTMLElement>("[data-step-art]", section) : [];
+      const lens = section?.querySelector<HTMLElement>(".process-lens");
+      const pin = list.closest<HTMLElement>("[data-steps-pin]");
+      let current = 0;
+
+      // A picture draws itself in each time it's shown (.played, CSS) and
+      // resets once it has faded out, ready to draw in again.
+      const play = (art?: HTMLElement) => {
+        if (!art || reduce) return;
+        art.classList.remove("played");
+        void art.offsetWidth; // restarts the CSS animations
+        art.classList.add("played");
+      };
+      arts.forEach((a) =>
+        a.addEventListener("transitionend", (e) => {
+          if (e.target === a && !a.classList.contains("on")) a.classList.remove("played");
+        }),
+      );
+
+      const update = (progress: number) => {
+        if (fill && !reduce) fill.style.height = `${Math.max(8, progress * 100)}%`;
+        const i = Math.min(steps.length - 1, Math.floor(progress * steps.length));
+        if (i === current) return;
+        current = i;
+        steps.forEach((s, k) => s.classList.toggle("on", k === i));
+        arts.forEach((a, k) => a.classList.toggle("on", k === i));
+        play(arts[i]);
+      };
+      gsap.matchMedia().add({ desktop: "(min-width: 901px)", mobile: "(max-width: 900px)" }, (ctx) => {
+        const pinned = Boolean(ctx.conditions?.desktop && pin && !reduce);
+        ScrollTrigger.create({
+          trigger: pinned ? pin : list,
+          start: pinned ? "top top" : "top 75%",
+          end: pinned ? "bottom bottom" : "bottom 45%",
+          onUpdate: (self) => update(self.progress),
+          onRefresh: (self) => update(self.progress),
+        });
+      });
+
+      // The lens fades in as the globe forms under it and out as it
+      // dissolves, so it never floats over an empty background, and the lit
+      // step's picture draws itself in as the lens appears. Without WebGL
+      // there's no globe to follow: the lens just stays. All of this, and
+      // the pictures' animations (.is-near), only run near the section.
+      if (!section || !lens) return;
+      let shown = false;
+      const syncLens = () => {
+        const formed = document.documentElement.classList.contains("no-webgl")
+          ? 1
+          : sceneState.opacity * (1 - gsap.utils.clamp(0, 1, sceneState.morph / 0.5));
+        lens.style.opacity = formed.toFixed(3);
+        if (formed > 0.5 !== shown) {
+          shown = !shown;
+          if (shown) play(arts[current]);
+        }
+      };
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top bottom",
+        end: "bottom top",
+        onToggle: (self) => {
+          section.classList.toggle("is-near", self.isActive);
+          if (self.isActive) gsap.ticker.add(syncLens);
+          else gsap.ticker.remove(syncLens);
+        },
+      });
+    });
+
     if (reduce) {
       gsap.set(".cta-glow-bottom", { opacity: 1 });
       return;
@@ -92,62 +171,6 @@ export function ScrollFx() {
         scrollTrigger: { trigger: el, start: "top 88%" },
       });
     });
-
-    // ---- Steps: track fill, lit step and the illustration on the globe ------
-    // Desktop: the section's track is pinned ([data-steps-pin], a tall track
-    // with a sticky stage), so this spans the pinned scroll while the globe
-    // holds still. Phones: nothing pins; it runs while the list scrolls past.
-    // With reduced motion every step stays lit (reduced-motion.css).
-    document.querySelectorAll<HTMLElement>("[data-steps]").forEach((list) => {
-      const fill = list.querySelector<HTMLElement>(".steps-fill");
-      const steps = gsap.utils.toArray<HTMLElement>(".step", list);
-      const section = list.closest("section");
-      const arts = section ? gsap.utils.toArray<HTMLElement>("[data-step-art]", section) : [];
-      const pin = list.closest<HTMLElement>("[data-steps-pin]");
-      let current = 0;
-      const update = (progress: number) => {
-        if (fill) fill.style.height = `${Math.max(8, progress * 100)}%`;
-        const i = Math.min(steps.length - 1, Math.floor(progress * steps.length));
-        if (i === current) return;
-        current = i;
-        steps.forEach((s, k) => s.classList.toggle("on", k === i));
-        arts.forEach((a, k) => a.classList.toggle("on", k === i));
-      };
-      gsap.matchMedia().add({ desktop: "(min-width: 901px)", mobile: "(max-width: 900px)" }, (ctx) => {
-        const pinned = Boolean(ctx.conditions?.desktop && pin);
-        ScrollTrigger.create({
-          trigger: pinned ? pin : list,
-          start: pinned ? "top top" : "top 75%",
-          end: pinned ? "bottom bottom" : "bottom 45%",
-          onUpdate: (self) => update(self.progress),
-          onRefresh: (self) => update(self.progress),
-        });
-      });
-    });
-
-    // ---- The lens on the How I work globe ---------------------------------------
-    // Fades in as the globe forms under it and out as it dissolves, so it
-    // never floats over an empty background. Only runs near the section.
-    // Without WebGL there's no globe to follow: the lens just stays.
-    const lens = document.querySelector<HTMLElement>(".process-lens");
-    if (lens) {
-      const syncLens = () => {
-        const formed = document.documentElement.classList.contains("no-webgl")
-          ? 1
-          : sceneState.opacity * (1 - gsap.utils.clamp(0, 1, sceneState.morph / 0.5));
-        lens.style.opacity = formed.toFixed(3);
-      };
-      syncLens();
-      ScrollTrigger.create({
-        trigger: "#process",
-        start: "top bottom",
-        end: "bottom top",
-        onToggle: (self) => {
-          if (self.isActive) gsap.ticker.add(syncLens);
-          else gsap.ticker.remove(syncLens);
-        },
-      });
-    }
 
     document.querySelectorAll<HTMLElement>("[data-cta]").forEach((panel) => {
       const st = { trigger: panel, start: "top 85%", end: "center 45%", scrub: true };

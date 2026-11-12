@@ -105,7 +105,10 @@
     animation: none;
   }
 
-  .process-art {
-    transition: none;
+  /* Step art: finished drawings that swap with the steps, nothing moves. */
+  .process-art,
+  .process-art * {
+    transition: none !important;
+    animation: none !important;
   }
 }
