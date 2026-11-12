@@ -862,11 +862,11 @@
   font-size: 1rem;
 }
 
-/* Desktop: an empty column; the globe and its step icons are WebGL
-   (ParticleMorph). Without WebGL the lit step's icon shows instead, big and
-   still where the globe's centre would be, placed against the stage (a
-   share of the screen, not of the column). The icon spans 1.9 globe radii,
-   as the particle icons do. */
+/* Desktop: an empty column; the globe and its step pictures are WebGL
+   (ParticleMorph). Without WebGL the lit step's picture shows instead,
+   still, where the globe's centre would be, placed against the stage (a
+   share of the screen, not of the column). Its 100-unit-wide box spans 1.9
+   globe radii, as the particle pictures do (StepIcon pads it by 5 a side). */
 .process-globe {
   grid-area: globe;
 }
@@ -880,8 +880,8 @@
   position: absolute;
   left: var(--globe-x);
   top: 50%;
-  width: calc(var(--globe-r) * 1.9);
-  aspect-ratio: 1;
+  width: calc(var(--globe-r) * 1.9 * 1.1);
+  aspect-ratio: 110 / 135;
   translate: -50% -50%;
   color: var(--accent);
   filter: drop-shadow(0 0 1.25rem rgb(var(--accent-rgb) / 0.45));

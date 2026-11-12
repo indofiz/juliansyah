@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { MeshSurfaceSampler } from "three/examples/jsm/math/MeshSurfaceSampler.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import type { IconDef } from "./stepIcons";
+import { ART_H, ART_W, artPlacements, LAYERS, MOTION_CODE, type Layer, type StepArt } from "./stepIcons";
 
 /**
  * Every shape returns a Float32Array of `count * 3` positions. All shapes use
@@ -176,131 +176,236 @@ function hexGrid(W: number, H: number, g: number, keep: (x: number, y: number) =
   return pts;
 }
 
+/** Depth of each layer's front face and the thickness of its slab, in world units. */
+const LAYER_DEPTH: Record<Layer, { z: number; wall: number }> = {
+  back: { z: -0.35, wall: 0.06 },
+  middle: { z: -0.05, wall: 0.06 },
+  front: { z: 0.22, wall: 0.22 },
+  accent: { z: 0.3, wall: 0 },
+};
+
 /**
- * A How I work step icon (lib/stepIcons.ts) as a morph target: 4 floats per
- * particle, its position (x, y, z) and brightness (0 = hidden).
+ * A How I work step picture (lib/stepIcons.ts) as a morph target: 4 floats
+ * per particle, its position (x, y, z) and w = brightness + 2 × motion
+ * (MOTION_CODE; brightness 0 = hidden).
  *
- * The icon's paths are drawn on a canvas and the portrait's halftone dot
- * grid is laid over them, at the same dot spacing (`spacing`, world units),
- * so the icons are as bright as the portrait. The front face carries the
- * icon's shades; its outline repeats in layers behind it, `depth` deep and
- * dimmer (`wall`), so it reads as a solid slab when it turns. The icon is
- * centred and fits inside `width` × `height` world units. Leftover
- * particles: a little faint dust around it, the rest hidden on its dots.
+ * Each depth layer is drawn on its own canvas, and every part in front is
+ * cut out of the layers behind it with a `gap` (picture units) around it.
+ * The portrait's halftone dot grid is laid over each layer at the same dot
+ * spacing (`spacing`, world units), so the pictures are as bright as the
+ * portrait. Each layer sits at its own depth with its outline repeated
+ * behind it as a slab wall (dimmer: `wall`). The picture is centred and
+ * fits inside `width` × `height` world units.
+ *
+ * Only the first `usable` particles are used; the rest are the globe's
+ * outer shell, which the shader keeps around the picture. Leftovers among
+ * the usable ones park hidden on the picture's dots, a few as faint dust.
  */
-export function iconShape(
-  icon: IconDef,
+export function artShape(
+  art: StepArt,
   count: number,
   {
+    usable = count,
     // A little under the globe's diameter: at 16:10 and narrower there's
     // ~1.18 globe radii between its centre and the screen's right edge, and
     // when the sway and the mouse turn the right side toward the camera,
     // perspective makes it ~10% wider there.
     width = 1.9,
     height = 2.4,
-    depth = 0.22,
     spacing = 0.021,
     wall = 0.14,
-  }: { width?: number; height?: number; depth?: number; spacing?: number; wall?: number } = {},
+    gap = 2.5,
+  }: { usable?: number; width?: number; height?: number; spacing?: number; wall?: number; gap?: number } = {},
 ): Float32Array {
-  const R = 512;
-  const canvas = document.createElement("canvas");
-  canvas.width = R;
-  canvas.height = R;
-  const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
-  const { rotate = 0, scale = 1 } = icon;
-  ctx.scale(R / 100, R / 100);
-  ctx.translate(50, 50);
-  ctx.rotate((rotate * Math.PI) / 180);
-  ctx.scale(scale, scale);
-  ctx.translate(-50, -50);
-  ctx.lineCap = "round";
-  ctx.lineJoin = "round";
-  for (const { d, shade = 1, stroke } of icon.parts) {
-    const v = Math.round(shade * 255);
-    const color = `rgb(${v} ${v} ${v})`;
-    const path = new Path2D(d);
-    if (stroke) {
-      ctx.strokeStyle = color;
-      ctx.lineWidth = stroke;
+  // Canvas pixels per picture unit, and room around the box for figures
+  // that reach past it.
+  const PX = 4.4;
+  const MARGIN = 8;
+  const W = Math.ceil((ART_W + 2 * MARGIN) * PX);
+  const H = Math.ceil((ART_H + 2 * MARGIN) * PX);
+  const toCanvas = new DOMMatrix([PX, 0, 0, PX, MARGIN * PX, MARGIN * PX]);
+  const newCtx = () => {
+    const canvas = document.createElement("canvas");
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    return ctx;
+  };
+
+  // Every part with its layer, motion and transform (figure box → picture),
+  // and how many picture units one figure unit is.
+  const parts = artPlacements(art).flatMap((p) => {
+    const { rotate = 0, scale = 1 } = p.figure;
+    const m = new DOMMatrix()
+      .translate(p.x - p.size / 2, p.y - p.size / 2)
+      .scale(p.size / 100)
+      .translate(50, 50)
+      .rotate(rotate)
+      .scale(scale)
+      .translate(-50, -50);
+    const unit = (p.size / 100) * scale;
+    return p.figure.parts.map((part) => {
+      const motion = part.motion ?? p.motion;
+      return { part, p, m, unit, layer: part.layer ?? p.layer, code: motion ? MOTION_CODE[motion] : 0 };
+    });
+  });
+  type Part = (typeof parts)[number];
+  const shape = (ctx: CanvasRenderingContext2D, { part, m }: Part, extra = 0) => {
+    ctx.setTransform(toCanvas.multiply(m));
+    const path = new Path2D(part.d);
+    if (!part.stroke) ctx.fill(path, "evenodd");
+    if (part.stroke || extra) {
+      ctx.lineWidth = (part.stroke ?? 0) + extra;
       ctx.stroke(path);
-    } else {
-      ctx.fillStyle = color;
-      ctx.fill(path, "evenodd");
+    }
+  };
+
+  // Paint each layer (red = brightness, alpha = inside), with a mask per
+  // motion so a part's motion doesn't bleed into its neighbours' edges.
+  // Later parts paint over earlier ones, in the masks too.
+  const layers = LAYERS.map(() => ({ ctx: newCtx(), masks: new Map<number, CanvasRenderingContext2D>() }));
+  for (const item of parts) {
+    const { part, p, m, layer, code } = item;
+    const { ctx, masks } = layers[LAYERS.indexOf(layer)];
+    const k = p.shade ?? 1;
+    const color = (v: number) => {
+      const c = Math.round(Math.min(1, v * k) * 255);
+      return `rgb(${c} ${c} ${c})`;
+    };
+    if (Array.isArray(part.shade)) {
+      // Light from the top left of the figure's box, in picture space.
+      const inv = m.inverse();
+      const a = inv.transformPoint(new DOMPoint(p.x - p.size / 2, p.y - p.size / 2));
+      const b = inv.transformPoint(new DOMPoint(p.x + p.size / 2, p.y + p.size / 2));
+      const g = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
+      g.addColorStop(0, color(part.shade[0]));
+      g.addColorStop(1, color(part.shade[1]));
+      ctx.fillStyle = ctx.strokeStyle = g;
+    } else ctx.fillStyle = ctx.strokeStyle = color(part.shade ?? 1);
+    shape(ctx, item);
+
+    for (const [c, mask] of masks) {
+      if (c === code) continue;
+      mask.globalCompositeOperation = "destination-out";
+      shape(mask, item);
+      mask.globalCompositeOperation = "source-over";
+    }
+    if (code) {
+      if (!masks.has(code)) masks.set(code, newCtx());
+      shape(masks.get(code)!, item);
     }
   }
-  // Alpha says whether a pixel is inside the icon, red how bright it is.
-  const { data } = ctx.getImageData(0, 0, R, R);
-  const at = (x: number, y: number) => (Math.floor(y) * R + Math.floor(x)) * 4;
-  const inside = (x: number, y: number) => x >= 0 && y >= 0 && x < R && y < R && data[at(x, y) + 3] > 127;
 
-  let minX = R, maxX = 0, minY = R, maxY = 0;
-  for (let y = 0; y < R; y++) {
-    for (let x = 0; x < R; x++) {
-      if (data[(y * R + x) * 4 + 3] <= 127) continue;
-      minX = Math.min(minX, x);
-      maxX = Math.max(maxX, x);
-      minY = Math.min(minY, y);
-      maxY = Math.max(maxY, y);
+  // Cut everything in front out of the layers behind it, with a gap around it.
+  for (const item of parts) {
+    for (let i = 0; i < LAYERS.indexOf(item.layer); i++) {
+      const { ctx } = layers[i];
+      ctx.globalCompositeOperation = "destination-out";
+      shape(ctx, item, (2 * gap) / item.unit);
+      ctx.globalCompositeOperation = "source-over";
+    }
+  }
+
+  const images = layers.map(({ ctx, masks }) => ({
+    data: ctx.getImageData(0, 0, W, H).data,
+    masks: [...masks].map(([code, mask]) => ({ code, data: mask.getImageData(0, 0, W, H).data })),
+  }));
+  const at = (x: number, y: number) => (Math.floor(y) * W + Math.floor(x)) * 4;
+  const inside = (data: Uint8ClampedArray, x: number, y: number) => x >= 0 && y >= 0 && x < W && y < H && data[at(x, y) + 3] > 127;
+
+  let minX = W, maxX = 0, minY = H, maxY = 0;
+  for (const { data } of images) {
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < W; x++) {
+        if (data[(y * W + x) * 4 + 3] <= 127) continue;
+        minX = Math.min(minX, x);
+        maxX = Math.max(maxX, x);
+        minY = Math.min(minY, y);
+        maxY = Math.max(maxY, y);
+      }
     }
   }
   const s = Math.min(width / (maxX - minX + 1), height / (maxY - minY + 1)); // world units per pixel
   const cx = (minX + maxX + 1) / 2;
   const cy = (minY + maxY + 1) / 2;
 
-  // Front-face dots, and those on the outline (a neighbour on the grid is outside).
+  // Each layer's dots, and those on its outline (a neighbour on the grid is outside).
   const build = (g: number) => {
     const h = g * 0.866;
-    const face = hexGrid(R, R, g, (x, y) => (inside(x, y) ? 1 : 0));
-    const edge = face.filter(
-      ([x, y]) =>
-        !inside(x + g, y) ||
-        !inside(x - g, y) ||
-        !inside(x + g / 2, y + h) ||
-        !inside(x - g / 2, y + h) ||
-        !inside(x + g / 2, y - h) ||
-        !inside(x - g / 2, y - h),
-    );
-    return { face, edge };
+    return images.map(({ data }) => {
+      const face = hexGrid(W, H, g, (x, y) => (inside(data, x, y) ? 1 : 0));
+      const edge = face.filter(
+        ([x, y]) =>
+          !inside(data, x + g, y) ||
+          !inside(data, x - g, y) ||
+          !inside(data, x + g / 2, y + h) ||
+          !inside(data, x - g / 2, y + h) ||
+          !inside(data, x + g / 2, y - h) ||
+          !inside(data, x - g / 2, y - h),
+      );
+      return { face, edge };
+    });
   };
+  const wallsFor = (g: number) => LAYERS.map((l) => Math.round(LAYER_DEPTH[l].wall / (g * s)));
   let g = spacing / s;
-  let { face, edge } = build(g);
-  let layers = Math.max(1, Math.round(depth / spacing));
-  // Fewer particles than that (software WebGL): a coarser grid, fewer layers.
-  while (face.length + edge.length * layers > count * 0.9) {
+  let dots = build(g);
+  let walls = wallsFor(g);
+  const total = () => dots.reduce((sum, d, i) => sum + d.face.length + d.edge.length * walls[i], 0);
+  // Fewer particles than that (software WebGL): a coarser grid, fewer wall layers.
+  while (total() > usable * 0.9) {
     g *= 1.1;
-    ({ face, edge } = build(g));
-    layers = Math.max(1, Math.round(depth / (g * s)));
+    dots = build(g);
+    walls = wallsFor(g);
   }
 
   const out = new Float32Array(count * 4);
   let n = 0;
-  const put = (x: number, y: number, z: number, b: number) => {
-    out.set([x, y, z, b], n * 4);
+  const put = (x: number, y: number, z: number, w: number) => {
+    out.set([x, y, z, w], n * 4);
     n++;
   };
-  const front = depth / 2;
   const toX = (x: number) => (x - cx) * s;
   const toY = (y: number) => (cy - y) * s;
-  for (const [x, y] of face) put(toX(x), toY(y), front, data[at(x, y)] / 255);
-  for (let l = 1; l <= layers; l++) {
-    const z = front - (depth * l) / layers;
-    const b = wall * (1 - (0.5 * l) / layers);
-    for (const [x, y] of edge) put(toX(x), toY(y), z, (data[at(x, y)] / 255) * b);
-  }
+  LAYERS.forEach((layer, li) => {
+    const { z, wall: depth } = LAYER_DEPTH[layer];
+    const { data, masks } = images[li];
+    const { face, edge } = dots[li];
+    const read = (x: number, y: number) => {
+      const i = at(x, y);
+      const code = masks.find((mk) => mk.data[i + 3] > 127)?.code ?? 0;
+      return { b: data[i] / 255, code };
+    };
+    for (const [x, y] of face) {
+      const { b, code } = read(x, y);
+      put(toX(x), toY(y), z, b + 2 * code);
+    }
+    const L = walls[li];
+    for (let l = 1; l <= L; l++) {
+      const zl = z - (depth * l) / L;
+      const f = wall * (1 - (0.5 * l) / L);
+      for (const [x, y] of edge) {
+        const { b, code } = read(x, y);
+        put(toX(x), toY(y), zl, b * f + 2 * code);
+      }
+    }
+  });
 
-  // Leftovers: most park on the icon's dots, hidden; a few become faint
-  // dust just around it.
-  const dust = Math.round((count - n) * 0.03);
-  while (n < count - dust) {
-    const [x, y] = face[Math.floor(Math.random() * face.length)];
-    put(toX(x), toY(y), front, 0);
-  }
-  while (n < count) {
-    const [x, y] = face[Math.floor(Math.random() * face.length)];
+  // Leftovers: most park hidden on the picture's dots; a few become faint
+  // dust just around it. The particles from `usable` on stay zero: they're
+  // the globe's shell.
+  const visible = n;
+  const dust = Math.round((usable - visible) * 0.03);
+  while (n < usable) {
+    const j = Math.floor(Math.random() * visible) * 4;
+    if (n < usable - dust) {
+      put(out[j], out[j + 1], out[j + 2], 0);
+      continue;
+    }
     const ang = Math.random() * Math.PI * 2;
     const r = 0.03 + Math.pow(Math.random(), 2.2) * 0.3;
-    put(toX(x) + Math.cos(ang) * r, toY(y) + Math.sin(ang) * r, (Math.random() - 0.5) * depth * 2, 0.02 + Math.random() * 0.04);
+    put(out[j] + Math.cos(ang) * r, out[j + 1] + Math.sin(ang) * r, out[j + 2] + (Math.random() - 0.5) * 0.3, 0.02 + Math.random() * 0.04);
   }
   return out;
 }

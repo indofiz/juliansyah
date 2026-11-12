@@ -5,13 +5,14 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import gsap from "gsap";
 import { sceneState, showStepIcon } from "@/lib/sceneState";
-import { STEP_ICONS, STEP_IDS } from "@/lib/stepIcons";
+import { STEP_ART, STEP_IDS } from "@/lib/stepIcons";
 import {
+  artShape,
   buildGlobe,
   buildScatter,
   defaultShapeGeometry,
   geometryShape,
-  iconShape,
+  KIND_HALO,
   loadLandMask,
   loadModelGeometry,
   loadPortraitShape,
@@ -27,8 +28,18 @@ import { atmosphereFragment, atmosphereVertex, particleFragment, particleVertex 
  */
 const GLOBE_SPIN_SPEED = 0.08;
 
-/** Brightness of the How I work step icons (lower = dimmer dots). */
+/** Brightness of the How I work step pictures (lower = dimmer dots). */
 const ICON_BRIGHTNESS = 1;
+
+/**
+ * Direction of the pictures' "flow" motion (the rocket's exhaust), from the
+ * picture's y-down coordinates to world space.
+ */
+const FLOW_DIR = (() => {
+  const [x, y] = STEP_IDS.map((id) => STEP_ART[id].flow).find(Boolean) ?? [0, 1];
+  const len = Math.hypot(x, y) || 1;
+  return new THREE.Vector2(x / len, -y / len);
+})();
 
 /** Runs `fn` when the browser is idle (Safari has no requestIdleCallback). */
 const whenIdle = (fn: () => void) =>
@@ -80,6 +91,7 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
           uShapeBrightness: { value: 1 },
           uStepW: { value: new THREE.Vector4() },
           uIconBrightness: { value: ICON_BRIGHTNESS },
+          uFlowDir: { value: FLOW_DIR },
           uOpacity: { value: 1 },
           uColor: { value: new THREE.Color() },
           uRimColor: { value: new THREE.Color() },
@@ -211,12 +223,16 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
       if (reduceMotion.current) sceneState.intro = 1;
       else gsap.fromTo(sceneState, { intro: 0 }, { intro: 1, duration: 2.6, ease: "power3.out", delay: 0.15 });
 
-      // The How I work step icons: one per idle moment after the globe (a
-      // few ms each), so they never hold up the first frames.
+      // The How I work step pictures: one per idle moment after the globe
+      // (~10–20 ms each), so they never hold up the first frames. The
+      // shell's particles (the last ones) stay out of them: the shader keeps
+      // the shell around the pictures.
+      const shellStart = globe.kinds.indexOf(KIND_HALO);
+      const usable = shellStart === -1 ? count : shellStart;
       let k = 0;
       const nextIcon = () => {
         if (cancelled) return;
-        g.setAttribute(`aStep${k + 1}`, new THREE.BufferAttribute(iconShape(STEP_ICONS[STEP_IDS[k]], count), 4));
+        g.setAttribute(`aStep${k + 1}`, new THREE.BufferAttribute(artShape(STEP_ART[STEP_IDS[k]], count, { usable }), 4));
         if (++k < STEP_IDS.length) whenIdle(nextIcon);
         else iconsReady.current = true;
       };

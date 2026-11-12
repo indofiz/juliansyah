@@ -37,7 +37,7 @@ export function Process() {
             <div className="process-globe" aria-hidden="true">
               <div className="process-icons">
                 {h.steps.map((s, i) => (
-                  <StepIcon key={s.id} id={s.id} className={`process-icon ${i === 0 ? "on" : ""}`} data-step-icon />
+                  <StepIcon key={s.id} id={s.id} art className={`process-icon ${i === 0 ? "on" : ""}`} data-step-icon />
                 ))}
               </div>
             </div>

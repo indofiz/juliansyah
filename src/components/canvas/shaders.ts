@@ -72,9 +72,11 @@ const simplexNoise = /* glsl */ `
  * radius is pushed in and out by layered noise, split into three strands, so
  * the outer layer wobbles ("dances") like the reference.
  *
- * How I work: the globe can also become one of four step icons (aStep1…4,
- * lib/stepIcons.ts). uStepW says how much of each shows; the globe gets the
- * rest. The cloud, portrait and floor stages run on top of that "home".
+ * How I work: the globe can also become one of four step pictures (aStep1…4,
+ * lib/stepIcons.ts), each part with a small motion of its own. uStepW says
+ * how much of each shows; the globe gets the rest. The shell stays around
+ * the pictures. The cloud, portrait and floor stages run on top of that
+ * "home".
  */
 export const particleVertex = /* glsl */ `
   uniform float uTime;
@@ -91,8 +93,9 @@ export const particleVertex = /* glsl */ `
   uniform vec2 uShapeY;   // min / max y of the shape, for the shine sweep
   uniform vec2 uMouse;    // damped pointer → small yaw / pitch on the shape
   uniform float uShapeBrightness; // overall brightness of the shape (portrait)
-  uniform vec4 uStepW;            // how much of each step icon shows (Discover, Design, Build, Launch)
-  uniform float uIconBrightness;  // overall brightness of the step icons
+  uniform vec4 uStepW;            // how much of each step picture shows (Discover, Design, Build, Launch)
+  uniform float uIconBrightness;  // overall brightness of the step pictures
+  uniform vec2 uFlowDir;          // direction of the pictures' "flow" motion (the rocket's exhaust)
 
   attribute vec3 aGlobe;
   attribute vec3 aScatter;
@@ -100,7 +103,7 @@ export const particleVertex = /* glsl */ `
   attribute vec4 aRandom;
   attribute float aKind; // 0 land, 1 shell, 2 ocean
   attribute float aShade; // 0–1 brightness of the shape point (photo brightness for the portrait)
-  attribute vec4 aStep1;  // step icons: xyz = the particle's place, w = its brightness (0 = hidden)
+  attribute vec4 aStep1;  // step pictures: xyz = the particle's place, w = brightness (0 = hidden) + 2 × motion
   attribute vec4 aStep2;
   attribute vec4 aStep3;
   attribute vec4 aStep4;
@@ -123,6 +126,41 @@ export const particleVertex = /* glsl */ `
   float stage(float m, float start, float r) {
     float t = clamp((m - start - r * 0.35) / 0.65, 0.0, 1.0);
     return t * t * (3.0 - 2.0 * t);
+  }
+
+  // Shine: a band of light that sweeps up a shape (y 0 bottom → 1 top) as
+  // ph runs 0 → 1, leaving a short afterglow below it.
+  float shineBand(float y, float ph) {
+    float d = y - mix(-0.15, 1.15, ph);
+    float band = exp(-d * d / 0.0025) + 0.3 * exp(-max(-d, 0.0) / 0.07) * step(d, 0.0);
+    return band * smoothstep(0.0, 0.06, ph) * (1.0 - smoothstep(0.9, 1.0, ph));
+  }
+
+  // A step picture's point (aStep1…4) with its motion played (MOTION_CODE in
+  // lib/stepIcons.ts): xyz moved, w its brightness now. With reduced motion
+  // the clock stands still and so does every motion (the caret stays on).
+  vec4 stepPoint(vec4 a) {
+    float m = floor(a.w * 0.5);
+    float b = a.w - 2.0 * m;
+    vec3 p = a.xyz;
+    float ph = aRandom.z * 6.2831;
+    float hover = sin(uTime * 1.1) * 0.035;
+    if (m == 1.0) {
+      p.y += hover;                                                  // hover
+    } else if (m == 2.0) {
+      b *= 0.3 + 0.7 * (0.5 + 0.5 * sin(uTime * 2.4 + ph));          // twinkle
+    } else if (m == 3.0) {
+      b *= step(0.5, fract(uTime * 0.9 + 0.5));                      // blink
+    } else if (m == 4.0) {
+      p.y += hover;                                                  // flicker, with the hover
+      p.xy += vec2(sin(uTime * 17.0 + ph), cos(uTime * 13.0 + ph)) * 0.008;
+      b *= 0.65 + 0.35 * sin(uTime * 21.0 + ph);
+    } else if (m == 5.0) {
+      float f = fract(uTime * 0.5 + aRandom.w);                      // flow, fading in and out
+      p.xy += uFlowDir * (f - 0.5) * 0.4;
+      b *= sin(f * 3.1416);
+    }
+    return vec4(p, b);
   }
 
   void main() {
@@ -160,24 +198,31 @@ export const particleVertex = /* glsl */ `
     vec3 shape = rotateY(rotateX(aShape, uMouse.y), uShapeSpin + uMouse.x);
     vec3 cloud = rotateY(aScatter, uTime * 0.04);
 
-    // ---- Step icons -------------------------------------------------------
-    // iT: this particle's way from the globe to the icons, staggered like
-    // the other stages. Among themselves the icons blend by their shares,
-    // staggered too, so one icon turns straight into the next; halfway
-    // between two the particles bow out a little, so it reads as one
-    // dissolving into the other rather than collapsing. The share stagger is
-    // smaller (at most 0.19) than the smallest leading share (0.25 with four
-    // icons), so some icon always holds the particle. The icons face the
-    // camera with a slow sway (±12°) and a small turn toward the mouse.
+    // ---- Step pictures ----------------------------------------------------
+    // iT: this particle's way from the globe to the pictures, staggered like
+    // the other stages. Among themselves the pictures blend by their shares,
+    // staggered too, so one turns straight into the next; halfway between
+    // two the particles bow out a little, so it reads as one dissolving into
+    // the other rather than collapsing. The share stagger is smaller (at
+    // most 0.19) than the smallest leading share (0.25 with four pictures),
+    // so some picture always holds the particle. Each picture's motions play
+    // before blending. The pictures face the camera with a slow sway (±12°)
+    // and a small turn toward the mouse.
     float iconTotal = dot(uStepW, vec4(1.0));
     float iT = stage(iconTotal, 0.0, aRandom.x);
     vec4 share = uStepW / max(iconTotal, 0.0001);
     float rShare = aRandom.x * 0.55;
     vec4 sw = vec4(stage(share.x, 0.0, rShare), stage(share.y, 0.0, rShare), stage(share.z, 0.0, rShare), stage(share.w, 0.0, rShare));
     sw /= max(dot(sw, vec4(1.0)), 0.0001);
-    vec4 icon = aStep1 * sw.x + aStep2 * sw.y + aStep3 * sw.z + aStep4 * sw.w;
+    vec4 icon = stepPoint(aStep1) * sw.x + stepPoint(aStep2) * sw.y + stepPoint(aStep3) * sw.z + stepPoint(aStep4) * sw.w;
     float between = clamp(2.0 * (1.0 - dot(sw, sw)), 0.0, 1.0);
     vec3 iconP = rotateY(rotateX(icon.xyz + aScatter * 0.12 * between, uMouse.y), sin(uTime * 0.35) * 0.21 + uMouse.x);
+    // The globe's dancing outer shell stays around the pictures as tiny
+    // particles, a little taller (the pictures are taller than the globe),
+    // so it only stretches as the globe becomes a picture. No wider: its
+    // left edge would reach the step text.
+    iconP = mix(iconP, globe * vec3(1.0, 1.15, 1.0), isShell);
+    float iTs = iT * (1.0 - isShell); // the pictures themselves, without the shell
 
     vec3 home = mix(globe, iconP, iT);
     vec3 p = mix(home, cloud, t1);
@@ -218,32 +263,35 @@ export const particleVertex = /* glsl */ `
     float limb = pow(1.0 - abs(facing), 2.5);
     float shellAlpha = mix(0.1, 1.0, limb) * mix(0.45, 1.0, light);
     float alphaGlobe = mix(surfaceAlpha, shellAlpha, isShell);
-    float alphaHome = mix(alphaGlobe, icon.w * uIconBrightness, iT);
+    // Around a picture the shell is fainter across its face, so it doesn't
+    // speckle the picture; its edges stay as bright as the globe's.
+    float alphaHalo = mix(0.04, 1.0, limb) * mix(0.45, 1.0, light) * 0.85;
+    float alphaHome = mix(alphaGlobe, mix(icon.w * uIconBrightness, alphaHalo, isShell), iT);
 
     float alphaCloud = 0.35 + 0.5 * aRandom.w;
     float alphaShape = aShade * uShapeBrightness * mix(0.7, 1.0, smoothstep(-0.6, 0.5, shape.z));
 
-    // Shine: a band of light sweeps up the shape from bottom to top, leaving
-    // a short afterglow below it. One pass every ~5.5 s.
-    float ph = fract(uTime / 5.5);
-    float bandY = mix(-0.15, 1.15, ph);
-    float d = yN - bandY;
-    float band = exp(-d * d / 0.0025) + 0.3 * exp(-max(-d, 0.0) / 0.07) * step(d, 0.0);
-    band *= smoothstep(0.0, 0.06, ph) * (1.0 - smoothstep(0.9, 1.0, ph));
-    float shine = band * t2 * (1.0 - t1 * (1.0 - t2));
+    // Shine: one pass up the portrait every ~5.5 s, and across the step
+    // pictures on a diagonal (rising to the right).
+    float shine = shineBand(yN, fract(uTime / 5.5)) * t2 * (1.0 - t1 * (1.0 - t2));
+    float diag = clamp(0.5 + (icon.y + icon.x * 0.5) / 2.8, 0.0, 1.0);
+    float shineIcon = shineBand(diag, fract(uTime / 5.5 + 0.35)) * iTs * (1.0 - t1) * step(0.001, icon.w);
 
-    // Halftone look (even, crisper dots) for the portrait and the icons.
-    float halftone = max(t2, iT * (1.0 - t1));
+    // Halftone look (even, crisper dots) for the portrait and the pictures.
+    float halftone = max(t2, iTs * (1.0 - t1));
     vShape = halftone;
     vAlpha = mix(mix(alphaHome, alphaCloud, t1), alphaShape, t2);
     vAlpha += shine * step(0.001, aShade) * (0.06 + 0.3 * aShade) * uShapeBrightness;
+    vAlpha += shineIcon * (0.06 + 0.3 * icon.w) * uIconBrightness;
     vAlpha = mix(vAlpha, 0.55 + 0.45 * aRandom.w, s);
     float glowGlobe = mix(rim * 1.8, 0.2 + light * 0.25, isShell);
-    vGlow = (1.0 - t1) * mix(glowGlobe, 0.03 + icon.w * 0.05, iT) + t2 * 0.02 + s * 0.3 + shine * aShade * 0.35;
+    float glowHome = mix(glowGlobe, mix(0.03 + icon.w * 0.05, glowGlobe, isShell), iT);
+    vGlow = (1.0 - t1) * glowHome + t2 * 0.02 + s * 0.3 + shine * aShade * 0.35 + shineIcon * icon.w * 0.35;
 
     float sizeKind = isShell > 0.5 ? 0.8 : 1.0;
     // Shape dots are smaller and more even (halftone look); shine enlarges them.
-    float size = uSize * mix(mix(0.55, 1.25, aRandom.w), 1.08, halftone) * mix(sizeKind, 1.0, max(t1, iT)) * (1.0 + shine * 0.15);
+    float size = uSize * mix(mix(0.55, 1.25, aRandom.w), 1.08, halftone) * mix(sizeKind, 1.0, max(t1, iTs))
+      * (1.0 + (shine + shineIcon) * 0.15);
     gl_PointSize = size * uPixelRatio * uViewportScale / -mv.z;
 
     // Hidden particles (no dot in the icon or the portrait) go outside the
