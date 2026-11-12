@@ -4,12 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import gsap from "gsap";
-import { sceneState } from "@/lib/sceneState";
+import { sceneState, showStepIcon } from "@/lib/sceneState";
+import { STEP_ICONS, STEP_IDS } from "@/lib/stepIcons";
 import {
   buildGlobe,
   buildScatter,
   defaultShapeGeometry,
   geometryShape,
+  iconShape,
   loadLandMask,
   loadModelGeometry,
   loadPortraitShape,
@@ -24,6 +26,13 @@ import { atmosphereFragment, atmosphereVertex, particleFragment, particleVertex 
  * outer shell follows a third of it, so it drifts against the land.
  */
 const GLOBE_SPIN_SPEED = 0.08;
+
+/** Brightness of the How I work step icons (lower = dimmer dots). */
+const ICON_BRIGHTNESS = 1;
+
+/** Runs `fn` when the browser is idle (Safari has no requestIdleCallback). */
+const whenIdle = (fn: () => void) =>
+  typeof window.requestIdleCallback === "function" ? window.requestIdleCallback(fn, { timeout: 1500 }) : window.setTimeout(fn, 50);
 
 /** What the cloud morphs into in the about section. */
 export type ShapeSource =
@@ -69,6 +78,8 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
           uShapeY: { value: new THREE.Vector2(-1.3, 1.3) },
           uMouse: { value: new THREE.Vector2() },
           uShapeBrightness: { value: 1 },
+          uStepW: { value: new THREE.Vector4() },
+          uIconBrightness: { value: ICON_BRIGHTNESS },
           uOpacity: { value: 1 },
           uColor: { value: new THREE.Color() },
           uRimColor: { value: new THREE.Color() },
@@ -139,9 +150,26 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
     return () => mq.removeEventListener("change", update);
   }, []);
 
+  // Development: keys 0–4 show the globe or a step icon, to check the icons
+  // anywhere on the page (the next step that lights up takes over again).
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "development") return;
+    const onKey = (e: KeyboardEvent) => {
+      if (!/^[0-4]$/.test(e.key) || e.metaKey || e.ctrlKey || e.altKey) return;
+      if ((e.target as HTMLElement | null)?.closest?.("input, textarea, select, [contenteditable]")) return;
+      showStepIcon(e.key === "0" ? null : STEP_IDS[Number(e.key) - 1]);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  // True once all four step icons are built; until then the globe stays a globe.
+  const iconsReady = useRef(false);
+
   // Build all particle targets once, off the render loop.
   useEffect(() => {
     let cancelled = false;
+    iconsReady.current = false;
     (async () => {
       const mask = await loadLandMask("/textures/earth-mask.png");
       const globe = buildGlobe(count, mask);
@@ -182,6 +210,17 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
       // (skipped with reduced motion: the globe is simply there).
       if (reduceMotion.current) sceneState.intro = 1;
       else gsap.fromTo(sceneState, { intro: 0 }, { intro: 1, duration: 2.6, ease: "power3.out", delay: 0.15 });
+
+      // The How I work step icons: one per idle moment after the globe (a
+      // few ms each), so they never hold up the first frames.
+      let k = 0;
+      const nextIcon = () => {
+        if (cancelled) return;
+        g.setAttribute(`aStep${k + 1}`, new THREE.BufferAttribute(iconShape(STEP_ICONS[STEP_IDS[k]], count), 4));
+        if (++k < STEP_IDS.length) whenIdle(nextIcon);
+        else iconsReady.current = true;
+      };
+      whenIdle(nextIcon);
     })();
     return () => {
       cancelled = true;
@@ -223,9 +262,19 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
     u.uOpacity.value = s.opacity;
     (u.uShapeY.value as THREE.Vector2).set(shapeMeta.current.minY, shapeMeta.current.maxY);
     u.uShapeBrightness.value = shapeMeta.current.brightness;
+    const icons = iconsReady.current ? s.icons : null;
+    const iconTotal = icons ? STEP_IDS.reduce((sum, id) => sum + icons[id], 0) : 0;
+    (u.uStepW.value as THREE.Vector4).set(
+      icons?.[STEP_IDS[0]] ?? 0,
+      icons?.[STEP_IDS[1]] ?? 0,
+      icons?.[STEP_IDS[2]] ?? 0,
+      icons?.[STEP_IDS[3]] ?? 0,
+    );
 
+    // The glowing atmosphere belongs to the globe: it fades as the globe
+    // dissolves, sinks or becomes a step icon.
     atmo.uIntensity.value =
-      s.opacity * (1 - THREE.MathUtils.smoothstep(u.uMorph.value, 0, 0.45)) * (1 - s.sink);
+      s.opacity * (1 - THREE.MathUtils.smoothstep(u.uMorph.value, 0, 0.45)) * (1 - s.sink) * (1 - iconTotal);
 
     // Skip drawing entirely while the particles are faded out.
     points.current.visible = s.opacity > 0.003;
@@ -240,9 +289,10 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
     g.position.y = s.y * (viewport.height / 2);
     g.scale.setScalar(s.scale * fit);
 
-    // Subtle tilt toward the pointer. While the shape (portrait) is showing,
-    // the whole-scene tilt eases off and the head itself turns a few degrees.
-    const shapeMix = THREE.MathUtils.clamp(u.uMorph.value - 1, 0, 1);
+    // Subtle tilt toward the pointer. While the shape (portrait) or a step
+    // icon is showing, the whole-scene tilt eases off and the shape itself
+    // turns a few degrees.
+    const shapeMix = Math.max(THREE.MathUtils.clamp(u.uMorph.value - 1, 0, 1), iconTotal);
     const sceneTilt = 1 - 0.9 * shapeMix;
     tilt.current.x = THREE.MathUtils.damp(tilt.current.x, -state.pointer.y * 0.12 * sceneTilt, 3, delta);
     tilt.current.y = THREE.MathUtils.damp(tilt.current.y, state.pointer.x * 0.18 * sceneTilt, 3, delta);

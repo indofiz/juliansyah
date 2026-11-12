@@ -1,19 +1,19 @@
 import { howIWork as h } from "@/content/site";
-import { STEP_ART } from "../process/StepArt";
+import { StepIcon } from "../process/StepIcon";
 import { Button, SectionHeader } from "../ui/primitives";
 
 /**
  * How I work: main's "Seamless from Call to Launch" layout, with the globe
  * moved to the right. Copy | steps | the particle globe (the "process"
- * keyframe), and on the globe a frosted lens showing the lit step's
- * illustration (process/StepArt.tsx), which draws itself in each time.
+ * keyframe), which turns into the lit step's icon (lib/stepIcons.ts).
  *
  * Desktop: the track is taller than the screen and its stage sticks, so the
- * globe holds still while scrolling fills the step track and lights each
- * step in turn; the lens follows the lit step (ScrollFx, [data-steps]).
- * Phones: title, globe, steps, buttons, nothing pinned. Reduced motion:
- * nothing pinned, every step lit, the pictures swap without moving. Without
- * WebGL the lens sits on a soft glow instead of the globe (.no-webgl).
+ * globe holds still while scrolling fills the step track, lights each step
+ * in turn and turns the globe into its icon (ScrollFx, [data-steps]).
+ * Phones: title, globe, steps, buttons, nothing pinned; each step shows its
+ * icon beside it instead. Reduced motion: nothing pinned, every step lit,
+ * the icons swap without moving. Without WebGL the lit step's icon shows as
+ * SVG where the globe would be (.no-webgl).
  */
 export function Process() {
   return (
@@ -33,19 +33,12 @@ export function Process() {
               </div>
             </div>
 
-            {/* The globe itself is WebGL (SceneCanvas); this is its space and the lens on it. */}
+            {/* The globe itself is WebGL (SceneCanvas); this is its space. */}
             <div className="process-globe" aria-hidden="true">
-              <div className="process-lens">
-                <div className="process-arts">
-                  {h.steps.map((s, i) => {
-                    const Art = STEP_ART[s.id];
-                    return (
-                      <div key={s.id} className={`process-art ${i === 0 ? "on" : ""}`} data-step-art>
-                        <Art />
-                      </div>
-                    );
-                  })}
-                </div>
+              <div className="process-icons">
+                {h.steps.map((s, i) => (
+                  <StepIcon key={s.id} id={s.id} className={`process-icon ${i === 0 ? "on" : ""}`} data-step-icon />
+                ))}
               </div>
             </div>
 
@@ -55,10 +48,11 @@ export function Process() {
               </span>
               <ol className="steps-list">
                 {h.steps.map((s, i) => (
-                  <li className={`step ${i === 0 ? "on" : ""}`} key={s.id}>
+                  <li className={`step ${i === 0 ? "on" : ""}`} key={s.id} data-step={s.id}>
                     <span className="step-dot" aria-hidden="true">
                       {i + 1}
                     </span>
+                    <StepIcon id={s.id} className="step-icon" />
                     <span className="step-label">
                       {h.stepLabel} {String(i + 1).padStart(2, "0")}
                     </span>

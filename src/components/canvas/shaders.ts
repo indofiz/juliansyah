@@ -71,6 +71,10 @@ const simplexNoise = /* glsl */ `
  * Shell particles (aKind = 1) don't use a fixed radius: each frame their
  * radius is pushed in and out by layered noise, split into three strands, so
  * the outer layer wobbles ("dances") like the reference.
+ *
+ * How I work: the globe can also become one of four step icons (aStep1…4,
+ * lib/stepIcons.ts). uStepW says how much of each shows; the globe gets the
+ * rest. The cloud, portrait and floor stages run on top of that "home".
  */
 export const particleVertex = /* glsl */ `
   uniform float uTime;
@@ -87,6 +91,8 @@ export const particleVertex = /* glsl */ `
   uniform vec2 uShapeY;   // min / max y of the shape, for the shine sweep
   uniform vec2 uMouse;    // damped pointer → small yaw / pitch on the shape
   uniform float uShapeBrightness; // overall brightness of the shape (portrait)
+  uniform vec4 uStepW;            // how much of each step icon shows (Discover, Design, Build, Launch)
+  uniform float uIconBrightness;  // overall brightness of the step icons
 
   attribute vec3 aGlobe;
   attribute vec3 aScatter;
@@ -94,6 +100,10 @@ export const particleVertex = /* glsl */ `
   attribute vec4 aRandom;
   attribute float aKind; // 0 land, 1 shell, 2 ocean
   attribute float aShade; // 0–1 brightness of the shape point (photo brightness for the portrait)
+  attribute vec4 aStep1;  // step icons: xyz = the particle's place, w = its brightness (0 = hidden)
+  attribute vec4 aStep2;
+  attribute vec4 aStep3;
+  attribute vec4 aStep4;
 
   varying float vAlpha;
   varying float vGlow;
@@ -150,7 +160,27 @@ export const particleVertex = /* glsl */ `
     vec3 shape = rotateY(rotateX(aShape, uMouse.y), uShapeSpin + uMouse.x);
     vec3 cloud = rotateY(aScatter, uTime * 0.04);
 
-    vec3 p = mix(globe, cloud, t1);
+    // ---- Step icons -------------------------------------------------------
+    // iT: this particle's way from the globe to the icons, staggered like
+    // the other stages. Among themselves the icons blend by their shares,
+    // staggered too, so one icon turns straight into the next; halfway
+    // between two the particles bow out a little, so it reads as one
+    // dissolving into the other rather than collapsing. The share stagger is
+    // smaller (at most 0.19) than the smallest leading share (0.25 with four
+    // icons), so some icon always holds the particle. The icons face the
+    // camera with a slow sway (±12°) and a small turn toward the mouse.
+    float iconTotal = dot(uStepW, vec4(1.0));
+    float iT = stage(iconTotal, 0.0, aRandom.x);
+    vec4 share = uStepW / max(iconTotal, 0.0001);
+    float rShare = aRandom.x * 0.55;
+    vec4 sw = vec4(stage(share.x, 0.0, rShare), stage(share.y, 0.0, rShare), stage(share.z, 0.0, rShare), stage(share.w, 0.0, rShare));
+    sw /= max(dot(sw, vec4(1.0)), 0.0001);
+    vec4 icon = aStep1 * sw.x + aStep2 * sw.y + aStep3 * sw.z + aStep4 * sw.w;
+    float between = clamp(2.0 * (1.0 - dot(sw, sw)), 0.0, 1.0);
+    vec3 iconP = rotateY(rotateX(icon.xyz + aScatter * 0.12 * between, uMouse.y), sin(uTime * 0.35) * 0.21 + uMouse.x);
+
+    vec3 home = mix(globe, iconP, iT);
+    vec3 p = mix(home, cloud, t1);
     p = mix(p, shape, t2);
 
     // Gentle drift: tiny on the globe, larger while scattered as a cloud.
@@ -188,6 +218,7 @@ export const particleVertex = /* glsl */ `
     float limb = pow(1.0 - abs(facing), 2.5);
     float shellAlpha = mix(0.1, 1.0, limb) * mix(0.45, 1.0, light);
     float alphaGlobe = mix(surfaceAlpha, shellAlpha, isShell);
+    float alphaHome = mix(alphaGlobe, icon.w * uIconBrightness, iT);
 
     float alphaCloud = 0.35 + 0.5 * aRandom.w;
     float alphaShape = aShade * uShapeBrightness * mix(0.7, 1.0, smoothstep(-0.6, 0.5, shape.z));
@@ -201,16 +232,25 @@ export const particleVertex = /* glsl */ `
     band *= smoothstep(0.0, 0.06, ph) * (1.0 - smoothstep(0.9, 1.0, ph));
     float shine = band * t2 * (1.0 - t1 * (1.0 - t2));
 
-    vShape = t2;
-    vAlpha = mix(mix(alphaGlobe, alphaCloud, t1), alphaShape, t2);
+    // Halftone look (even, crisper dots) for the portrait and the icons.
+    float halftone = max(t2, iT * (1.0 - t1));
+    vShape = halftone;
+    vAlpha = mix(mix(alphaHome, alphaCloud, t1), alphaShape, t2);
     vAlpha += shine * step(0.001, aShade) * (0.06 + 0.3 * aShade) * uShapeBrightness;
     vAlpha = mix(vAlpha, 0.55 + 0.45 * aRandom.w, s);
-    vGlow = (1.0 - t1) * mix(rim * 1.8, 0.2 + light * 0.25, isShell) + t2 * 0.02 + s * 0.3 + shine * aShade * 0.35;
+    float glowGlobe = mix(rim * 1.8, 0.2 + light * 0.25, isShell);
+    vGlow = (1.0 - t1) * mix(glowGlobe, 0.03 + icon.w * 0.05, iT) + t2 * 0.02 + s * 0.3 + shine * aShade * 0.35;
 
     float sizeKind = isShell > 0.5 ? 0.8 : 1.0;
     // Shape dots are smaller and more even (halftone look); shine enlarges them.
-    float size = uSize * mix(mix(0.55, 1.25, aRandom.w), 1.08, t2) * mix(sizeKind, 1.0, t1) * (1.0 + shine * 0.15);
+    float size = uSize * mix(mix(0.55, 1.25, aRandom.w), 1.08, halftone) * mix(sizeKind, 1.0, max(t1, iT)) * (1.0 + shine * 0.15);
     gl_PointSize = size * uPixelRatio * uViewportScale / -mv.z;
+
+    // Hidden particles (no dot in the icon or the portrait) go outside the
+    // view once they've faded out, so the GPU skips them instead of drawing
+    // thousands of invisible dots. Nothing visible ever gets this low: the
+    // dimmest globe dots are about 0.005.
+    if (vAlpha < 0.002) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
   }
 `;
 

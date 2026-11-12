@@ -658,11 +658,14 @@
     height: calc(var(--globe-cy) - var(--pad) + var(--globe-r) * 1.35);
   }
 
-  /* A bigger share of the globe than on desktop, so the drawings stay legible. */
-  .process-lens {
-    left: 50%;
-    top: calc(var(--globe-cy) - var(--pad));
-    width: calc(var(--globe-r) * 1.2);
+  /* Without WebGL there's no globe: its space closes up, and the icons
+     beside the steps carry the pictures. */
+  .no-webgl .process-globe {
+    height: 0;
+  }
+
+  .no-webgl .process-icons {
+    display: none;
   }
 
   .process-actions {
@@ -696,6 +699,28 @@
 
   .step-title {
     font-size: 1.125rem;
+  }
+
+  /* Each step's icon, top right: the picture the globe turns into on
+     desktop (here the globe fades as the steps scroll over it). Dim like
+     the grey titles, lit with its step. */
+  .step-icon {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--accent);
+    opacity: 0.3;
+    transition:
+      opacity 0.4s,
+      filter 0.4s;
+  }
+
+  .step.on .step-icon {
+    opacity: 1;
+    filter: drop-shadow(0 0 0.5rem rgb(var(--accent-rgb) / 0.5));
   }
 
   .step-text {

@@ -50,11 +50,11 @@ html {
 
   /* Accent. The values live in src/lib/palettes.ts, one set per palette the
      visitor can pick; the layout prints them into <head> as --accent-rgb,
-     --hero-1, --lens… (on :root, and on :root[data-accent="<id>"]). Never
+     --hero-1, --bar-tint… (on :root, and on :root[data-accent="<id>"]). Never
      write an accent colour here or in another stylesheet: add a token to the
      palettes instead. Solid: var(--accent). Translucent:
      rgb(var(--accent-rgb) / 0.4). Also from the palettes, used as they are:
-     --hero-1…4 (hero glow), --bar-tint, --lens, --bezel-end, --sheen,
+     --hero-1…4 (hero glow), --bar-tint, --bezel-end, --sheen,
      --logo-light, --avatar-1…3. */
   --accent: rgb(var(--accent-rgb));
   --accent-2: rgb(var(--accent-2-rgb));

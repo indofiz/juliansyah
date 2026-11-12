@@ -80,8 +80,9 @@
     height: auto;
   }
 
-  /* Desktop: one screen, content centred, so the lens stays on the globe
-     (phones keep their own layout). */
+  /* Desktop: one screen, content centred, so the globe (or without WebGL
+     its icon) lines up with the right-hand column (phones keep their own
+     layout). */
   @media (min-width: 901px) {
     .process-stage {
       min-height: 100vh;
@@ -101,14 +102,14 @@
     color: #c1bdb9;
   }
 
-  .process-lens {
-    animation: none;
+  /* Step icons: all lit, like the steps; the no-WebGL icon swaps without
+     fading. */
+  .step .step-icon {
+    opacity: 1;
+    transition: none;
   }
 
-  /* Step art: finished drawings that swap with the steps, nothing moves. */
-  .process-art,
-  .process-art * {
-    transition: none !important;
-    animation: none !important;
+  .process-icon {
+    transition: none;
   }
 }

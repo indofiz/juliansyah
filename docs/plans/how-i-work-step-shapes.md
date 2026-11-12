@@ -1,10 +1,24 @@
 # Plan: the globe becomes each step's icon (How I work)
 
-Status: **plan only, nothing built yet.** v2, written 2026-11-12 on
-`feat/portfolio-home`. It replaces v1 (commit `32298cc`), which used detailed
-3D models (speech bubble with waveform, phone with wireframe, rocket with
-lathe body and fins). v2 uses four simple, bold icons to cut the risks.
-Waiting for "go" plus answers to the open decisions at the bottom.
+Status: **built** (2026-11-12, `feat/portfolio-home`), with the defaults for
+all four open decisions. v2 replaces v1 (commit `32298cc`), which used
+detailed 3D models (speech bubble with waveform, phone with wireframe, rocket
+with lathe body and fins). v2 uses four simple, bold icons to cut the risks.
+
+Changed while building:
+
+- Icons are **1.9** world units wide at most, not 2.2. At 16:10 and
+  narrower, 2.2 ran off the right edge of the screen. Even 2.0 could clip
+  when the sway and a pointer on the far left turned the icon's right side
+  toward the camera.
+- The sway is **±12°**, not ±15°, for the same reason.
+- The edge repeats in ~10 layers (one per dot spacing) at 14% brightness, so
+  the slab's side reads as a solid wall.
+
+Checked: lint, build, screenshots at 1440×900, 1024×768 and 390×844, the
+Violet and Lime palettes, no WebGL (desktop and phone), reduced motion, and
+software WebGL (6k particles). Not checked: frame rate on the 2017 MacBook,
+and Lighthouse.
 
 ## The idea
 
@@ -41,9 +55,9 @@ Rules for every icon:
 - **One silhouette**, filled or drawn with a thick stroke. No small parts.
 - **No line thinner than ~12% of the icon's height**: about 65 px on a
   1440×900 screen.
-- **Big**: up to ~2.4 world units tall and ~2.2 wide, about the size of the
-  globe with its outer ring (about 530 px tall on a 1440×900 screen, 59% of
-  the screen height). The width limit keeps it off the step text.
+- **Big**: up to ~2.4 world units tall and ~1.9 wide (planned 2.2, see
+  above), about the size of the globe (about 420 px on a 1440×900 screen).
+  The width limit keeps it off the step text and inside the screen.
 
 ## How the icons are made
 
@@ -58,7 +72,7 @@ Rules for every icon:
   by itself, as the portrait's does.
 - Depth: the front face plus its edge repeated 2–3 times behind it (about 0.2
   deep, dimmer), so it reads as a solid slab when it turns. The icons face
-  the camera with their own slow sway (±15°) and the existing mouse tilt, not
+  the camera with their own slow sway (±12°) and the existing mouse tilt, not
   the globe's spin.
 - No three.js geometry, no `MeshSurfaceSampler`, no downloads, no new
   libraries.

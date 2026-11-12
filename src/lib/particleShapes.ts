@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { MeshSurfaceSampler } from "three/examples/jsm/math/MeshSurfaceSampler.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
+import type { IconDef } from "./stepIcons";
 
 /**
  * Every shape returns a Float32Array of `count * 3` positions. All shapes use
@@ -159,6 +160,152 @@ export function geometryShape(geometry: THREE.BufferGeometry, count: number, siz
 }
 
 /**
+ * An even, staggered (hexagonal) dot grid over a W × H area with spacing
+ * `g`: the halftone look of the portrait and the step icons. `keep` gives
+ * each dot a 0–1 weight; dots at 0 are left out.
+ */
+function hexGrid(W: number, H: number, g: number, keep: (x: number, y: number) => number) {
+  const pts: [number, number, number][] = [];
+  const rowH = g * 0.866;
+  for (let r = 0, y = rowH / 2; y < H; r++, y += rowH) {
+    for (let x = r % 2 ? g : g / 2; x < W; x += g) {
+      const k = keep(x, y);
+      if (k > 0) pts.push([x, y, k]);
+    }
+  }
+  return pts;
+}
+
+/**
+ * A How I work step icon (lib/stepIcons.ts) as a morph target: 4 floats per
+ * particle, its position (x, y, z) and brightness (0 = hidden).
+ *
+ * The icon's paths are drawn on a canvas and the portrait's halftone dot
+ * grid is laid over them, at the same dot spacing (`spacing`, world units),
+ * so the icons are as bright as the portrait. The front face carries the
+ * icon's shades; its outline repeats in layers behind it, `depth` deep and
+ * dimmer (`wall`), so it reads as a solid slab when it turns. The icon is
+ * centred and fits inside `width` × `height` world units. Leftover
+ * particles: a little faint dust around it, the rest hidden on its dots.
+ */
+export function iconShape(
+  icon: IconDef,
+  count: number,
+  {
+    // A little under the globe's diameter: at 16:10 and narrower there's
+    // ~1.18 globe radii between its centre and the screen's right edge, and
+    // when the sway and the mouse turn the right side toward the camera,
+    // perspective makes it ~10% wider there.
+    width = 1.9,
+    height = 2.4,
+    depth = 0.22,
+    spacing = 0.021,
+    wall = 0.14,
+  }: { width?: number; height?: number; depth?: number; spacing?: number; wall?: number } = {},
+): Float32Array {
+  const R = 512;
+  const canvas = document.createElement("canvas");
+  canvas.width = R;
+  canvas.height = R;
+  const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
+  const { rotate = 0, scale = 1 } = icon;
+  ctx.scale(R / 100, R / 100);
+  ctx.translate(50, 50);
+  ctx.rotate((rotate * Math.PI) / 180);
+  ctx.scale(scale, scale);
+  ctx.translate(-50, -50);
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  for (const { d, shade = 1, stroke } of icon.parts) {
+    const v = Math.round(shade * 255);
+    const color = `rgb(${v} ${v} ${v})`;
+    const path = new Path2D(d);
+    if (stroke) {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = stroke;
+      ctx.stroke(path);
+    } else {
+      ctx.fillStyle = color;
+      ctx.fill(path, "evenodd");
+    }
+  }
+  // Alpha says whether a pixel is inside the icon, red how bright it is.
+  const { data } = ctx.getImageData(0, 0, R, R);
+  const at = (x: number, y: number) => (Math.floor(y) * R + Math.floor(x)) * 4;
+  const inside = (x: number, y: number) => x >= 0 && y >= 0 && x < R && y < R && data[at(x, y) + 3] > 127;
+
+  let minX = R, maxX = 0, minY = R, maxY = 0;
+  for (let y = 0; y < R; y++) {
+    for (let x = 0; x < R; x++) {
+      if (data[(y * R + x) * 4 + 3] <= 127) continue;
+      minX = Math.min(minX, x);
+      maxX = Math.max(maxX, x);
+      minY = Math.min(minY, y);
+      maxY = Math.max(maxY, y);
+    }
+  }
+  const s = Math.min(width / (maxX - minX + 1), height / (maxY - minY + 1)); // world units per pixel
+  const cx = (minX + maxX + 1) / 2;
+  const cy = (minY + maxY + 1) / 2;
+
+  // Front-face dots, and those on the outline (a neighbour on the grid is outside).
+  const build = (g: number) => {
+    const h = g * 0.866;
+    const face = hexGrid(R, R, g, (x, y) => (inside(x, y) ? 1 : 0));
+    const edge = face.filter(
+      ([x, y]) =>
+        !inside(x + g, y) ||
+        !inside(x - g, y) ||
+        !inside(x + g / 2, y + h) ||
+        !inside(x - g / 2, y + h) ||
+        !inside(x + g / 2, y - h) ||
+        !inside(x - g / 2, y - h),
+    );
+    return { face, edge };
+  };
+  let g = spacing / s;
+  let { face, edge } = build(g);
+  let layers = Math.max(1, Math.round(depth / spacing));
+  // Fewer particles than that (software WebGL): a coarser grid, fewer layers.
+  while (face.length + edge.length * layers > count * 0.9) {
+    g *= 1.1;
+    ({ face, edge } = build(g));
+    layers = Math.max(1, Math.round(depth / (g * s)));
+  }
+
+  const out = new Float32Array(count * 4);
+  let n = 0;
+  const put = (x: number, y: number, z: number, b: number) => {
+    out.set([x, y, z, b], n * 4);
+    n++;
+  };
+  const front = depth / 2;
+  const toX = (x: number) => (x - cx) * s;
+  const toY = (y: number) => (cy - y) * s;
+  for (const [x, y] of face) put(toX(x), toY(y), front, data[at(x, y)] / 255);
+  for (let l = 1; l <= layers; l++) {
+    const z = front - (depth * l) / layers;
+    const b = wall * (1 - (0.5 * l) / layers);
+    for (const [x, y] of edge) put(toX(x), toY(y), z, (data[at(x, y)] / 255) * b);
+  }
+
+  // Leftovers: most park on the icon's dots, hidden; a few become faint
+  // dust just around it.
+  const dust = Math.round((count - n) * 0.03);
+  while (n < count - dust) {
+    const [x, y] = face[Math.floor(Math.random() * face.length)];
+    put(toX(x), toY(y), front, 0);
+  }
+  while (n < count) {
+    const [x, y] = face[Math.floor(Math.random() * face.length)];
+    const ang = Math.random() * Math.PI * 2;
+    const r = 0.03 + Math.pow(Math.random(), 2.2) * 0.3;
+    put(toX(x) + Math.cos(ang) * r, toY(y) + Math.sin(ang) * r, (Math.random() - 0.5) * depth * 2, 0.02 + Math.random() * 0.04);
+  }
+  return out;
+}
+
+/**
  * Portrait morph target from a "portrait map" (see scripts/make-portrait.py):
  * R = brightness, G = depth, B = mask.
  *
@@ -202,17 +349,7 @@ export async function loadPortraitShape(
     const b = data[i] / 255;
     return Math.min(1, 0.4 + 0.95 * b) * (0.12 + 0.88 * fade(y / H));
   };
-  const grid = (g: number) => {
-    const pts: [number, number, number][] = [];
-    const rowH = g * 0.866;
-    for (let r = 0, y = rowH / 2; y < H; r++, y += rowH) {
-      for (let x = r % 2 ? g : g / 2; x < W; x += g) {
-        const k = keepProb(x, y);
-        if (k > 0) pts.push([x, y, k]);
-      }
-    }
-    return pts;
-  };
+  const grid = (g: number) => hexGrid(W, H, g, keepProb);
 
   // Fixed dot spacing (fraction of the image height) so the halftone looks the
   // same whatever the photo's framing; widened only if that would need more

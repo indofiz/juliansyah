@@ -43,7 +43,6 @@ type RawToken =
   | "hero-3"
   | "hero-4"
   | "bar-tint" // frosted glass bars over the globe
-  | "lens" // frosted lens over the globe in How I work
   | "bezel-end" // dark end of the phone and screen frame bezels
   | "sheen" // warm white in the primary button's light sweep
   | "logo-light" // logo orb highlight
@@ -87,7 +86,6 @@ export const palettes = [
       "hero-3": "rgba(32, 19, 4, 0.4)",
       "hero-4": "rgba(15, 8, 3, 0.16)",
       "bar-tint": "rgba(20, 13, 6, 0.22)",
-      lens: "rgba(14, 10, 6, 0.5)",
       "bezel-end": "#100c08",
       sheen: "#faf4ee",
       "logo-light": "#ffe2bd",
@@ -124,7 +122,6 @@ export const palettes = [
       "hero-3": "rgba(18, 25, 7, 0.4)",
       "hero-4": "rgba(8, 11, 4, 0.16)",
       "bar-tint": "rgba(13, 16, 7, 0.22)",
-      lens: "rgba(10, 12, 7, 0.5)",
       "bezel-end": "#0c0e09",
       sheen: "#f3f6ef",
       "logo-light": "#deeec5",
@@ -161,7 +158,6 @@ export const palettes = [
       "hero-3": "rgba(6, 27, 17, 0.4)",
       "hero-4": "rgba(4, 12, 7, 0.16)",
       "bar-tint": "rgba(7, 17, 12, 0.22)",
-      lens: "rgba(7, 12, 9, 0.5)",
       "bezel-end": "#090e0b",
       sheen: "#f0f7f3",
       "logo-light": "#c7f4da",
@@ -197,7 +193,6 @@ export const palettes = [
       "hero-3": "rgba(0, 26, 29, 0.4)",
       "hero-4": "rgba(2, 12, 13, 0.16)",
       "bar-tint": "rgba(5, 17, 18, 0.22)",
-      lens: "rgba(6, 12, 13, 0.5)",
       "bezel-end": "#080e0f",
       sheen: "#eef7f8",
       "logo-light": "#baf3f9",
@@ -234,7 +229,6 @@ export const palettes = [
       "hero-3": "rgba(11, 23, 37, 0.4)",
       "hero-4": "rgba(5, 10, 17, 0.16)",
       "bar-tint": "rgba(9, 15, 23, 0.22)",
-      lens: "rgba(8, 11, 16, 0.5)",
       "bezel-end": "#0a0d11",
       sheen: "#f1f6fc",
       "logo-light": "#d8e9fe",
@@ -272,7 +266,6 @@ export const palettes = [
       "hero-3": "rgba(23, 19, 36, 0.4)",
       "hero-4": "rgba(10, 8, 17, 0.16)",
       "bar-tint": "rgba(15, 13, 22, 0.22)",
-      lens: "rgba(11, 10, 15, 0.5)",
       "bezel-end": "#0d0c11",
       sheen: "#f5f4fc",
       "logo-light": "#e7e3ff",
@@ -309,7 +302,6 @@ export const palettes = [
       "hero-3": "rgba(34, 15, 23, 0.4)",
       "hero-4": "rgba(16, 7, 10, 0.16)",
       "bar-tint": "rgba(21, 11, 15, 0.22)",
-      lens: "rgba(15, 9, 11, 0.5)",
       "bezel-end": "#110b0d",
       sheen: "#fbf2f5",
       "logo-light": "#fedde8",

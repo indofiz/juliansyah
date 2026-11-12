@@ -63,12 +63,14 @@ export const sceneKeyframes: Record<string, SceneKeyframe> = {
 
   // How I work: the globe re-forms out of sight and rises with the section
   // into the right-hand column (desktop) or under the title (phones), then
-  // holds there while the stage is pinned. Its centre stays a fixed distance
-  // below the section's top (half a screen; 57.5% on phones, y -0.15) as the
+  // holds there while the stage is pinned, turning into each step's icon
+  // (ScrollFx, lib/stepIcons.ts). Its centre stays a fixed distance below
+  // the section's top (half a screen; 57.5% on phones, y -0.15) as the
   // section scrolls in: each third of the transition is a third of a screen,
-  // so y moves 0.67 per via. The lens in Process.tsx sits on the globe's
-  // centre: if you change x, y or scale here, update --globe-x / --globe-r /
-  // --globe-cy on .process (sections.css, mobile.css).
+  // so y moves 0.67 per via. The no-WebGL icon and the phones' globe space
+  // in Process.tsx follow the globe's centre and size: if you change x, y or
+  // scale here, update --globe-x / --globe-r / --globe-cy on .process
+  // (sections.css, mobile.css).
   process: {
     via: [
       { x: 0.64, y: -1.33, scale: 0.75, globeSpin: 3.2, shapeSpin: 0.7, morph: 0, opacity: 0, mobile: { x: 0, y: -1.48, scale: 1.05 } },
