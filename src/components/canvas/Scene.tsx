@@ -5,7 +5,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Bloom, EffectComposer, Vignette } from "@react-three/postprocessing";
 import gsap from "gsap";
 import { sceneState } from "@/lib/sceneState";
-import { theme } from "@/lib/theme";
+import { useAccent } from "@/lib/accent";
 import { ParticleMorph, type ShapeSource } from "./ParticleMorph";
 
 /**
@@ -130,10 +130,25 @@ function LoopGate() {
   return null;
 }
 
+/**
+ * While LoopGate has the loop stopped, the canvas keeps its last frame, so a
+ * palette switch wouldn't reach the background colour (the page background
+ * behind every section) until the particles return: draw one frame.
+ */
+function RepaintOnPalette({ id }: { id: string }) {
+  const get = useThree((s) => s.get);
+  const advance = useThree((s) => s.advance);
+  useEffect(() => {
+    if (get().frameloop === "never") advance(performance.now());
+  }, [id, get, advance]);
+  return null;
+}
+
 export default function Scene() {
   // This component only renders in the browser (see SceneCanvas), so window is safe here.
   const [tier] = useState(pickTier);
   const [quality, setQuality] = useState<Quality>(() => ({ step: 0, bloom: tier.bloom }));
+  const palette = useAccent();
 
   useEffect(() => {
     if (process.env.NODE_ENV === "production") return;
@@ -150,13 +165,14 @@ export default function Scene() {
       eventSource={document.body}
       eventPrefix="client"
     >
-      <color attach="background" args={[theme.canvasBg]} />
-      <ParticleMorph count={tier.count} shape={SHAPE} />
+      <color attach="background" args={[palette.scene.canvas]} />
+      <ParticleMorph count={tier.count} shape={SHAPE} color={palette.rgb.accent} rimColor={palette.scene.rim} />
+      <RepaintOnPalette id={palette.id} />
       <LoopGate />
       <QualityGovernor steps={tier.steps} quality={quality} onChange={setQuality} />
       {quality.bloom && (
         <EffectComposer multisampling={0}>
-          <Bloom mipmapBlur intensity={1.15} luminanceThreshold={0.22} luminanceSmoothing={0.35} radius={0.75} />
+          <Bloom mipmapBlur intensity={palette.scene.bloom} luminanceThreshold={0.22} luminanceSmoothing={0.35} radius={0.75} />
           <Vignette offset={0.25} darkness={0.75} />
         </EffectComposer>
       )}

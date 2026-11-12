@@ -5,7 +5,6 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import gsap from "gsap";
 import { sceneState } from "@/lib/sceneState";
-import { theme } from "@/lib/theme";
 import {
   buildGlobe,
   buildScatter,
@@ -35,11 +34,13 @@ export type ShapeSource =
 type Props = {
   count: number;
   shape?: ShapeSource;
-  color?: string;
-  rimColor?: string;
+  /** Particle and glow colour (the palette's accent). */
+  color: string;
+  /** Bright rim and highlight colour of the particles. */
+  rimColor: string;
 };
 
-export function ParticleMorph({ count, shape: shapeSource = { type: "default" }, color = theme.particle, rimColor = theme.particleRim }: Props) {
+export function ParticleMorph({ count, shape: shapeSource = { type: "default" }, color, rimColor }: Props) {
   const group = useRef<THREE.Group>(null);
   const [geometry, setGeometry] = useState<THREE.BufferGeometry | null>(null);
   // Per-shape values the frame loop copies into uniforms.
@@ -90,10 +91,33 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
       }),
   );
 
+  // Palette colours. The first ones are set at once; switching palette fades
+  // the particles to the new colours (at once with reduced motion). A switch
+  // mid-fade starts from wherever the colours are.
+  const colorsSet = useRef(false);
   useEffect(() => {
-    particleMaterial.uniforms.uColor.value.set(color);
-    particleMaterial.uniforms.uRimColor.value.set(rimColor);
-    atmosphereMaterial.uniforms.uColor.value.set(color);
+    const targets: [THREE.Color, string][] = [
+      [particleMaterial.uniforms.uColor.value, color],
+      [particleMaterial.uniforms.uRimColor.value, rimColor],
+      [atmosphereMaterial.uniforms.uColor.value, color],
+    ];
+    if (!colorsSet.current || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      colorsSet.current = true;
+      for (const [current, next] of targets) current.set(next);
+      return;
+    }
+    const from = targets.map(([current]) => current.clone());
+    const to = targets.map(([, next]) => new THREE.Color(next));
+    const fade = { t: 0 };
+    const tween = gsap.to(fade, {
+      t: 1,
+      duration: 0.6,
+      ease: "power2.inOut",
+      onUpdate: () => targets.forEach(([current], i) => current.lerpColors(from[i], to[i], fade.t)),
+    });
+    return () => {
+      tween.kill();
+    };
   }, [color, rimColor, particleMaterial, atmosphereMaterial]);
 
   useEffect(

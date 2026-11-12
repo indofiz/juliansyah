@@ -8,6 +8,7 @@ import "@/styles/sections.css";
 import "@/styles/mobile.css";
 import "@/styles/reduced-motion.css";
 import { site } from "@/content/site";
+import { paletteCss, paletteScript } from "@/lib/palettes";
 
 const title = `${site.name} | ${site.role}`;
 
@@ -48,7 +49,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en">
+    // suppressHydrationWarning: the script below sets data-accent on <html>
+    // before React hydrates, so the server HTML and the DOM differ on purpose.
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Accent palettes (src/lib/palettes.ts) and, before the first paint,
+            the visitor's saved choice. */}
+        <style dangerouslySetInnerHTML={{ __html: paletteCss }} />
+        <script dangerouslySetInnerHTML={{ __html: paletteScript }} />
+      </head>
       <body>
         <a href="#main-content" className="skip-link">
           Skip to main content

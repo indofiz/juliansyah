@@ -880,7 +880,7 @@
      top left and an amber bounce from the globe at the bottom. */
   background:
     radial-gradient(circle at 32% 24%, rgb(255 255 255 / 0.13), transparent 58%),
-    rgb(14 10 6 / 0.5);
+    var(--lens);
   -webkit-backdrop-filter: blur(0.5rem) saturate(1.6);
   backdrop-filter: blur(0.5rem) saturate(1.6);
   box-shadow:

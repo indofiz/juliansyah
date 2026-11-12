@@ -2,7 +2,6 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { Icon, type IconName } from "./Icon";
 import { site } from "@/content/site";
-import { theme } from "@/lib/theme";
 
 export function Badge({
   icon = "shield",
@@ -127,14 +126,14 @@ export function Logo({
       <svg className="logo-mark" viewBox="0 0 32 32" aria-hidden="true">
         <defs>
           <radialGradient id={gradientId} cx="35%" cy="30%" r="75%">
-            <stop offset="0" style={{ stopColor: theme.logo.light }} />
-            <stop offset="0.45" style={{ stopColor: theme.logo.mid }} />
-            <stop offset="1" style={{ stopColor: theme.logo.dark }} />
+            <stop offset="0" style={{ stopColor: "var(--logo-light)" }} />
+            <stop offset="0.45" style={{ stopColor: "var(--accent)" }} />
+            <stop offset="1" style={{ stopColor: "var(--accent-800)" }} />
           </radialGradient>
         </defs>
         <circle cx="16" cy="16" r="11" fill={`url(#${gradientId})`} />
-        <ellipse cx="16" cy="16" rx="15" ry="5.5" fill="none" style={{ stroke: theme.logo.ring }} strokeWidth="1.4" transform="rotate(-24 16 16)" opacity="0.85" />
-        <circle cx="25.5" cy="10" r="1.6" style={{ fill: theme.logo.dot }} />
+        <ellipse cx="16" cy="16" rx="15" ry="5.5" fill="none" style={{ stroke: "var(--accent-bright)" }} strokeWidth="1.4" transform="rotate(-24 16 16)" opacity="0.85" />
+        <circle cx="25.5" cy="10" r="1.6" style={{ fill: "var(--accent-50)" }} />
       </svg>
       {!compact && (
         <span>

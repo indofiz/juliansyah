@@ -1,6 +1,7 @@
 import { nav, site } from "@/content/site";
 import { Icon } from "./ui/Icon";
 import { Button, Logo } from "./ui/primitives";
+import { AccentPicker } from "./AccentPicker";
 import { MobileMenu } from "./MobileMenu";
 import { NavBar } from "./NavBar";
 
@@ -15,6 +16,7 @@ export function SiteHeader() {
       <div className="site-header">
         <Logo />
         <div className="header-actions">
+          <AccentPicker />
           <a className="icon-btn" href={site.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
             <Icon name="github" size={19} />
           </a>

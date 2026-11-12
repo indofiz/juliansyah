@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { hero } from "@/content/site";
-import { theme } from "@/lib/theme";
 import { Icon } from "../ui/Icon";
 import { Logo } from "../ui/primitives";
 import { Sparkline, series } from "../ui/Sparkline";
@@ -9,9 +8,9 @@ const d = hero.dashboard;
 
 /** One sparkline per tile. Seeded, so the server and the client draw the same line. */
 const sparks = [
-  { seed: 3, trend: 0.9, noise: 0.35, color: theme.accent },
-  { seed: 8, trend: -0.2, noise: 0.5, color: theme.accentBright },
-  { seed: 12, trend: 0.5, noise: 0.25, color: theme.accent },
+  { seed: 3, trend: 0.9, noise: 0.35, color: "var(--accent)" },
+  { seed: 8, trend: -0.2, noise: 0.5, color: "var(--accent-bright)" },
+  { seed: 12, trend: 0.5, noise: 0.25, color: "var(--accent)" },
 ];
 
 /**

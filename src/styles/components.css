@@ -36,6 +36,129 @@
   background: rgba(255, 255, 255, 0.06);
 }
 
+/* ---------- Accent picker (AccentPicker.tsx; phones: in the menu) ---------- */
+.accent-picker {
+  position: relative;
+}
+
+/* The button: a small orb in the current accent. */
+.accent-dot {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 999px;
+  background: radial-gradient(circle at 35% 30%, var(--accent-pale), var(--accent) 50%, var(--accent-700));
+  box-shadow:
+    0 0 0 0.1875rem rgb(var(--accent-rgb) / 0.16),
+    0 0 0.75rem rgb(var(--accent-rgb) / 0.45);
+  transition: transform 0.2s;
+}
+
+.accent-btn:hover .accent-dot,
+.accent-btn[aria-expanded="true"] .accent-dot {
+  transform: scale(1.12);
+}
+
+/* The popover: same frost as the nav pill, a little more tint for legibility. */
+.accent-pop {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  min-width: 11rem;
+  padding: 0.375rem;
+  border-radius: var(--radius);
+  background-color: rgb(var(--glass-rgb) / 0.72);
+  background-image: var(--glass-grain), var(--glass-sheen);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  box-shadow:
+    inset 0 0 0 1px var(--border-strong),
+    0 1rem 2.5rem rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-0.25rem);
+  transition:
+    opacity 0.18s,
+    transform 0.18s,
+    visibility 0.18s;
+}
+
+.accent-pop.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.accent-pop-title {
+  padding: 0.375rem 0.625rem 0.5rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.accent-options {
+  display: grid;
+  gap: 0.125rem;
+}
+
+.accent-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem 0.625rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.accent-option:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.accent-option:has(:checked) {
+  color: var(--text);
+}
+
+.accent-option:has(:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* Each swatch shows its own palette (--swatch is set inline). */
+.accent-swatch {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 999px;
+  background: var(--swatch);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+}
+
+.accent-option:has(:checked) .accent-swatch {
+  box-shadow:
+    0 0 0 0.125rem var(--surface-2),
+    0 0 0 0.25rem var(--swatch);
+}
+
+.accent-name {
+  flex: 1;
+}
+
+.accent-check {
+  opacity: 0;
+  color: var(--accent);
+}
+
+.accent-option:has(:checked) .accent-check {
+  opacity: 1;
+}
+
 .logo {
   display: inline-flex;
   align-items: center;
@@ -237,7 +360,7 @@
 .btn-glow {
   overflow: hidden;
   color: #100e0b;
-  background: linear-gradient(90deg, var(--accent-pale) 0%, #faf4ee 30%, #f2f2f2 60%, #dedddc 100%);
+  background: linear-gradient(90deg, var(--accent-pale) 0%, var(--sheen) 30%, #f2f2f2 60%, #dedddc 100%);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.9),
     inset 0 -0.125rem 0.375rem rgba(0, 0, 0, 0.12),
@@ -391,7 +514,7 @@
   position: relative;
   padding: 0.4375rem;
   border-radius: var(--radius-xl);
-  background: linear-gradient(180deg, var(--frame-bezel-1), var(--frame-bezel-2) 22%, #100c08 60%);
+  background: linear-gradient(180deg, var(--frame-bezel-1), var(--frame-bezel-2) 22%, var(--bezel-end) 60%);
   box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.28), 0 2.5rem 5rem rgba(0, 0, 0, 0.55);
   isolation: isolate;
 }
@@ -590,7 +713,7 @@
   position: relative;
   padding: 0.4375rem;
   border-radius: 2.25rem;
-  background: linear-gradient(180deg, var(--accent-800), var(--accent-900) 20%, #100c08 60%);
+  background: linear-gradient(180deg, var(--accent-800), var(--accent-900) 20%, var(--bezel-end) 60%);
   box-shadow:
     inset 0 0 0 1px rgb(var(--accent-rgb) / 0.3),
     0 0 0 1px rgba(0, 0, 0, 0.6),
