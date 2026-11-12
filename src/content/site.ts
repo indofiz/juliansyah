@@ -123,9 +123,10 @@ export const proof = {
     { icon: "users", value: "12K+", label: "App users" },
     // UNCONFIRMED: placeholder figure kept at the user's request (2026-11-11); replace with the real one.
     { icon: "shield", value: "99.9%", label: "Crash-free sessions" },
-    { icon: "award", value: "8", label: "Client organisations" },
-    // UNCONFIRMED: placeholder figure kept at the user's request (2026-11-11); replace with the real one.
-    { icon: "clock", value: "3+", label: "Years of experience" },
+    // Same organisations as the logo strip in the hero, so the two never disagree.
+    { icon: "award", value: String(hero.dashboard.clients.logos.length), label: "Client organisations" },
+    // Working since 2020 (user, 2026-11-12). Counted at build time, so a rebuild keeps it current.
+    { icon: "clock", value: `${new Date().getFullYear() - 2020}+`, label: "Years of experience" },
     { icon: "layers", value: "3", label: "Web, UI/UX & mobile" },
   ] satisfies ProofItem[],
 };
