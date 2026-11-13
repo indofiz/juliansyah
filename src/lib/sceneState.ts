@@ -2,8 +2,8 @@ import gsap from "gsap";
 import { STEP_IDS, type StepId } from "./stepScenes";
 
 /**
- * One plain object shared by the DOM (GSAP ScrollTrigger writes to it) and
- * the WebGL scene (useFrame reads from it every frame). Keeping it outside
+ * One plain object shared by the DOM (ScrollScenes writes the scroll values,
+ * and nothing else does) and the WebGL scene (useFrame reads from it every frame). Keeping it outside
  * React state means scrolling never triggers a React re-render.
  */
 export type SceneValues = {

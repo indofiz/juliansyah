@@ -110,15 +110,24 @@ function QualityGovernor({ steps, quality, onChange }: { steps: number[]; qualit
 
 /**
  * Stops rendering while the particles are faded out (most of the page), and
- * starts again as soon as a section brings them back. The last frame, an
- * empty background, stays on the canvas.
+ * starts again as soon as a section brings them back. The last frame stays
+ * on the canvas, so the loop stops only once a frame has been drawn with the
+ * particles hidden: after a jump (a reduced-motion cut, a value that skips
+ * its fade) the frame before would be a visible globe, frozen on screen
+ * while the page scrolls.
  */
 function LoopGate() {
   const setFrameloop = useThree((s) => s.setFrameloop);
+  // The particles' opacity in the last frame drawn (1 during the fly-in).
+  const drawn = useRef(1);
+  useFrame(() => {
+    drawn.current = sceneState.intro < 1 ? 1 : sceneState.opacity;
+  });
   useEffect(() => {
     let running = true;
     const check = () => {
-      const visible = sceneState.opacity > 0.003 || sceneState.intro < 1;
+      const hidden = sceneState.opacity <= 0.003 && sceneState.intro >= 1;
+      const visible = !hidden || drawn.current > 0.003;
       if (visible !== running) {
         running = visible;
         setFrameloop(visible ? "always" : "never");

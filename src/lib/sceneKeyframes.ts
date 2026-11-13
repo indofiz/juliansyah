@@ -28,7 +28,12 @@ export type SceneKeyframe = SceneValues & {
  *
  * Each key is the `id` of a <section> on the page, in scroll order. The values
  * are what the particles look like once that section reaches the top of the
- * viewport; between sections the values blend as you scroll.
+ * viewport; between sections the values blend as you scroll
+ * (ScrollScenes.tsx). Where a section is shorter than the screen, its
+ * transition and the next one would run over the same scroll: they meet in
+ * the middle instead. A section whose values match the one before
+ * (`scattered` twice) has no transition. The last values are reached at the
+ * bottom of the page, even if the footer's top never gets to the top.
  *
  * `pictures` says where How I work's step pictures may show (1) instead of
  * the earth (0). Change it only where the particles can't be seen (opacity
@@ -144,7 +149,8 @@ export const sceneKeyframes: Record<string, SceneKeyframe> = {
     mobile: { y: -0.5, scale: 1 },
   },
 
-  // The globe drifts up and fades as the footer comes in.
+  // The globe drifts up and fades as the footer comes in, gone at the very
+  // bottom of the page.
   footer: hidden,
 };
 
