@@ -6,6 +6,7 @@
  * with a dashed outline. List them with: grep -n "TODO:" src/content/site.ts
  */
 
+import { presensiStills } from "./mockups";
 import type { AboutCard, ClientLogo, IconName, Link, LoopMedia, MockNavItem, Platform, PlaygroundItem, ProcessStep, Project, ProofItem, Testimonial } from "./types";
 
 export const site = {
@@ -150,6 +151,10 @@ export const work = {
     tryDemo: "Tap to try",
     closeDemo: "Close demo",
     noDemo: "TODO: add a Flutter web build in /public/demos/<slug>/ to enable Tap to try",
+    /** Names the slideshow of app screens, after the project name. */
+    screens: "app screens",
+    pauseScreens: "Pause the screens",
+    playScreens: "Play the screens",
     role: "Role",
     platform: "Platform",
     year: "Year",
@@ -193,11 +198,20 @@ export const projects: Project[] = [
     platforms: ["Flutter"],
     year: "2025",
     status: "Live in production",
-    metric: { value: "TODO: confirm 7,000+", label: "active employees" },
+    // Confirmed by the user, 2026-11-13.
+    metric: { value: "7,000+", label: "active employees" },
     media: {
       frame: "phone",
       label: "TODO: Presensi PKP check-in flow, screen recording",
       caption: "Presensi PKP · Flutter",
+      // From the app's screenshot tool (presensi-mobile/tool/screenshots), which renders fake data.
+      screens: [
+        { src: "/projects/presensi-pkp/screens/home.webp", alt: "Home screen: today's clock, the check-in window and upcoming events", width: 1290, height: 2796 },
+        { src: "/projects/presensi-pkp/screens/history.webp", alt: "Attendance history: the month's totals and each day's check-in and check-out times", width: 1290, height: 2796 },
+        { src: "/projects/presensi-pkp/screens/login.webp", alt: "Sign-in screen: employee ID (NIK or NIP) and password", width: 1290, height: 2796 },
+        { src: "/projects/presensi-pkp/screens/language.webp", alt: "First launch: choosing Bahasa Indonesia or English", width: 1290, height: 2796 },
+      ],
+      stills: { card: presensiStills.threeQuarter, page: presensiStills.front },
     },
     flagship: true,
     caseStudy: {
@@ -244,7 +258,7 @@ export const projects: Project[] = [
       result: {
         text: "TODO: what changed for the city after launch.",
         metrics: [
-          { value: "TODO: confirm 7,000+", label: "active employees" },
+          { value: "7,000+", label: "active employees" },
           { value: "TODO: confirm 99.9%", label: "crash-free sessions" },
           { value: "2", label: "platforms from one codebase, Android and iOS" },
         ],

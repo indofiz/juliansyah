@@ -4,12 +4,15 @@ import { useEffect, useRef, useState } from "react";
 import type { Project } from "@/content/types";
 import { work } from "@/content/site";
 import { PhoneFrame } from "../media/DeviceFrame";
+import { PhoneScreens } from "../media/DeviceStill";
 import { LoopVideo } from "../media/LoopVideo";
 import { Icon } from "../ui/Icon";
 import { Placeholder } from "../ui/Placeholder";
 
 /**
- * Flagship phone: plays the project's loop until someone taps "Tap to try",
+ * Flagship phone: the studio phone with the real screens when the project
+ * has them (media.stills + media.screens), else the project's loop, until
+ * someone taps "Tap to try",
  * then swaps in the real Flutter web build from /public/demos/<slug>/. The
  * iframe (and its several MB of Flutter runtime) is created only after the
  * click. Without a build it simply shows the video.
@@ -20,6 +23,7 @@ import { Placeholder } from "../ui/Placeholder";
  */
 export function TryDemo({ project }: { project: Project }) {
   const { demo, media } = project;
+  const still = media.stills && media.screens?.length ? { still: media.stills.card, screens: media.screens } : null;
   const [open, setOpen] = useState(false);
   const frameRef = useRef<HTMLIFrameElement>(null);
   const tryRef = useRef<HTMLButtonElement>(null);
@@ -44,13 +48,24 @@ export function TryDemo({ project }: { project: Project }) {
           {work.labels.closeDemo}
         </button>
       )}
-      <PhoneFrame>
-        {demo && open ? (
-          <iframe ref={frameRef} className="try-frame" src={demo.src} title={demo.title} />
-        ) : (
-          <LoopVideo media={media} />
-        )}
-      </PhoneFrame>
+      {still && !(demo && open) ? (
+        <PhoneScreens
+          still={still.still}
+          screens={still.screens}
+          label={`${project.name}: ${work.labels.screens}`}
+          sizes="(max-width: 900px) 160px, 250px"
+          screenSizes="(max-width: 900px) 170px, 260px"
+          className="try-still"
+        />
+      ) : (
+        <PhoneFrame>
+          {demo && open ? (
+            <iframe ref={frameRef} className="try-frame" src={demo.src} title={demo.title} />
+          ) : (
+            <LoopVideo media={media} />
+          )}
+        </PhoneFrame>
+      )}
       {demo ? (
         !open && (
           <button ref={tryRef} type="button" className="btn btn-glow try-btn" onClick={() => setOpen(true)} aria-label={`${work.labels.tryDemo}: ${demo.title}`}>

@@ -8,6 +8,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { Footer } from "@/components/sections/Footer";
 import { BrowserFrame, PhoneFrame } from "@/components/media/DeviceFrame";
+import { PhoneScreens } from "@/components/media/DeviceStill";
 import { LoopVideo } from "@/components/media/LoopVideo";
 import { Icon } from "@/components/ui/Icon";
 import { Placeholder, isTodo } from "@/components/ui/Placeholder";
@@ -92,7 +93,16 @@ export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]"
               </dl>
             </div>
             <figure className={`cs-media cs-media--${p.media.frame}`}>
-              {p.media.frame === "phone" ? (
+              {p.media.stills && p.media.screens?.length ? (
+                <PhoneScreens
+                  still={p.media.stills.page}
+                  screens={p.media.screens}
+                  label={`${p.name}: ${work.labels.screens}`}
+                  sizes="(max-width: 900px) 220px, 290px"
+                  screenSizes="(max-width: 900px) 210px, 280px"
+                  className="cs-still"
+                />
+              ) : p.media.frame === "phone" ? (
                 <PhoneFrame>
                   <LoopVideo media={p.media} />
                 </PhoneFrame>

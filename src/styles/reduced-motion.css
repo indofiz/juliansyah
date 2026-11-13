@@ -112,4 +112,14 @@
   .process-icon {
     transition: none;
   }
+
+  /* Studio phone: no float, screens cut instead of fading (they only
+     change when the visitor presses play). */
+  .device-still.is-near .device-float {
+    animation: none;
+  }
+
+  .device-slide {
+    transition: none;
+  }
 }

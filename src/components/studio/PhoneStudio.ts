@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { BufferTarget, CanvasSource, Mp4OutputFormat, Output, QUALITY_VERY_HIGH, WebMOutputFormat, canEncodeVideo, getFirstEncodableVideoCodec } from "mediabunny";
 import { CANVAS_ASPECT, angleById, angleQuaternion, frameCamera, type Lens, type Pose } from "./angles";
-import { cssMatrix3d, squareToQuad, type Pt, type Quad } from "./homography";
+import { cssMatrix3d, squareToQuad, type Pt, type Quad } from "@/lib/homography";
 import { applyColourway, buildPhone, createMaterials, disposeMaterials, setGlare, type PhoneMaterials, type PhoneModel } from "./phone/buildPhone";
 import { COLOURWAYS, FRONTS, type ColourwayId, type FrontId } from "./phone/spec";
 import { VIDEO_SIZES, presetById, type PresetContext, type VideoPreset, type VideoSize } from "./presets";
@@ -242,8 +242,11 @@ export class PhoneStudio {
    * The mockup-library version of the current still (same format as the
    * Codex library): the phone with a transparent screen, the screen mask, a
    * glare layer, and the screen's exact corners for warping content in.
+   * Also an alpha version of the mask (white, alpha = screen), which is what
+   * CSS `mask-image` needs. With `crop`, every file is cut to the phone's
+   * outline and the corners move with it (for the website).
    */
-  async renderLibrary(width: number, height: number, supersample = 2) {
+  async renderLibrary(width: number, height: number, supersample = 2, crop = false) {
     return this.offscreen(width, height, supersample, async () => {
       const camera = this.stillCamera(width / height);
       const { screen, glass } = this.phone;
@@ -289,8 +292,43 @@ export class PhoneStudio {
         glare.ctx.putImageData(g, 0, 0);
         restore();
 
-        const meta = this.screenMeta(camera, width, height);
-        return { master: await toPng(master.canvas), mask: await toPng(mask.canvas), glare: await toPng(glare.canvas), meta };
+        const maskAlpha = canvas2d(width, height);
+        const ma = mask.ctx.getImageData(0, 0, width, height);
+        for (let i = 0; i < ma.data.length; i += 4) {
+          ma.data[i + 3] = ma.data[i];
+          ma.data[i] = ma.data[i + 1] = ma.data[i + 2] = 255;
+        }
+        maskAlpha.ctx.putImageData(ma, 0, 0);
+
+        let meta = this.screenMeta(camera, width, height);
+        let layers = { master, mask, maskAlpha, glare };
+        let size = { width, height };
+        if (crop) {
+          const box = alphaBox(master.ctx, width, height, 2);
+          const cut = (c: { canvas: HTMLCanvasElement }) => {
+            const out = canvas2d(box.w, box.h);
+            out.ctx.drawImage(c.canvas, -box.x, -box.y);
+            return out;
+          };
+          layers = { master: cut(master), mask: cut(mask), maskAlpha: cut(maskAlpha), glare: cut(glare) };
+          size = { width: box.w, height: box.h };
+          meta = {
+            ...meta,
+            screens: meta.screens.map((sc) => {
+              const q = sc.quadPx;
+              const shift = (p: Pt): Pt => [+(p[0] - box.x).toFixed(3), +(p[1] - box.y).toFixed(3)];
+              return { ...sc, ...this.describeQuad({ tl: shift(q.tl), tr: shift(q.tr), br: shift(q.br), bl: shift(q.bl) }, box.w, box.h) };
+            }),
+          };
+        }
+        return {
+          master: await toPng(layers.master.canvas),
+          mask: await toPng(layers.mask.canvas),
+          maskAlpha: await toPng(layers.maskAlpha.canvas),
+          glare: await toPng(layers.glare.canvas),
+          meta,
+          size,
+        };
       } finally {
         restore();
       }
@@ -523,6 +561,15 @@ export class PhoneStudio {
     const facing = normal.dot(toCamera) > 0;
     if (!facing) return { screens: [], displayFacesCamera: false };
 
+    const [aw, ah] = FRONTS[this.state.front].aspect;
+    return {
+      displayFacesCamera: true,
+      screens: [{ index: 1, label: "phone", aspectTarget: `${aw}:${ah}`, hasCutout: true, mask: "", ...this.describeQuad(quadPx, width, height) }],
+    };
+  }
+
+  /** Everything about a screen that follows from its corners in a `width × height` picture. */
+  private describeQuad(quadPx: Quad, width: number, height: number) {
     const norm = (p: Pt): Pt => [+(p[0] / width).toFixed(6), +(p[1] / height).toFixed(6)];
     const xs = [quadPx.tl[0], quadPx.tr[0], quadPx.br[0], quadPx.bl[0]];
     const ys = [quadPx.tl[1], quadPx.tr[1], quadPx.br[1], quadPx.bl[1]];
@@ -533,23 +580,13 @@ export class PhoneStudio {
     const [aw, ah] = FRONTS[this.state.front].aspect;
     const content = { width: SCREEN_WIDTH, height: Math.round((SCREEN_WIDTH * ah) / aw) };
     return {
-      displayFacesCamera: true,
-      screens: [
-        {
-          index: 1,
-          label: "phone",
-          top: +top.toFixed(2) % 360, // 359.999 rounds to 360, which is 0
-          aspectTarget: `${aw}:${ah}`,
-          contentSize: content,
-          quadPx,
-          quadNorm: { tl: norm(quadPx.tl), tr: norm(quadPx.tr), br: norm(quadPx.br), bl: norm(quadPx.bl) },
-          bboxPx: [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)].map((n) => +n.toFixed(3)) as [number, number, number, number],
-          homography: H.map((row) => row.map((n) => +n.toPrecision(12))),
-          cssMatrix3d: cssMatrix3d(H, content.width, content.height),
-          hasCutout: true,
-          mask: "",
-        },
-      ],
+      top: +top.toFixed(2) % 360, // 359.999 rounds to 360, which is 0
+      contentSize: content,
+      quadPx,
+      quadNorm: { tl: norm(quadPx.tl), tr: norm(quadPx.tr), br: norm(quadPx.br), bl: norm(quadPx.bl) },
+      bboxPx: [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)].map((n) => +n.toFixed(3)) as [number, number, number, number],
+      homography: H.map((row) => row.map((n) => +n.toPrecision(12))),
+      cssMatrix3d: cssMatrix3d(H, content.width, content.height),
     };
   }
 
@@ -637,6 +674,28 @@ function silhouette(src: CanvasImageSource, w: number, h: number) {
   ctx.fillRect(0, 0, w, h);
   ctx.globalCompositeOperation = "source-over";
   return canvas;
+}
+
+/** The box round every pixel with alpha, plus `pad` px, inside the canvas. */
+function alphaBox(ctx: CanvasRenderingContext2D, width: number, height: number, pad: number) {
+  const d = ctx.getImageData(0, 0, width, height).data;
+  let x0 = width;
+  let y0 = height;
+  let x1 = -1;
+  let y1 = -1;
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      if (d[(y * width + x) * 4 + 3] === 0) continue;
+      if (x < x0) x0 = x;
+      if (x > x1) x1 = x;
+      if (y < y0) y0 = y;
+      if (y > y1) y1 = y;
+    }
+  }
+  if (x1 < 0) return { x: 0, y: 0, w: width, h: height };
+  const x = Math.max(0, x0 - pad);
+  const y = Math.max(0, y0 - pad);
+  return { x, y, w: Math.min(width, x1 + pad + 1) - x, h: Math.min(height, y1 + pad + 1) - y };
 }
 
 const toPng = (c: HTMLCanvasElement) =>

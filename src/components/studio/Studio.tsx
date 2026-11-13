@@ -16,7 +16,7 @@ type StudioApi = {
   state(): StudioState;
   /** PNG data URL, `longEdge` px on the long side. */
   still(longEdge: number, supersample?: number): Promise<string>;
-  library(longEdge: number, supersample?: number): Promise<{ id: string; master: string; mask: string; glare: string; meta: unknown }>;
+  library(longEdge: number, supersample?: number, crop?: boolean): Promise<{ id: string; master: string; mask: string; maskAlpha: string; glare: string; meta: unknown }>;
   /** Records and downloads a video; resolves with what was made. */
   video(settings: Partial<VideoSettings>): Promise<{ name: string; codec: string; frames: number; bytes: number; ms: number }>;
   play(preset: string, size: VideoSize): void;
@@ -53,7 +53,7 @@ function download(blob: Blob, name: string) {
 const stillId = (s: StudioState) => `phone-${s.front}-${s.colourway}-${s.angle}`;
 
 /** The library JSON, in the same shape as the Codex mockup library's meta files. */
-function libraryJson(id: string, s: StudioState, size: { width: number; height: number }, supersample: number, files: LibraryFiles) {
+function libraryJson(id: string, s: StudioState, supersample: number, files: LibraryFiles) {
   return {
     id,
     device: "phone",
@@ -61,10 +61,10 @@ function libraryJson(id: string, s: StudioState, size: { width: number; height: 
     front: s.front,
     colourway: s.colourway,
     angle: s.angle,
-    canvas: size,
+    canvas: files.size,
     displayFacesCamera: files.meta.displayFacesCamera,
     screens: files.meta.screens.map((sc) => ({ ...sc, mask: `${id}.mask.png` })),
-    files: { master: `${id}.png`, mask: `${id}.mask.png`, glare: `${id}.glare.png` },
+    files: { master: `${id}.png`, mask: `${id}.mask.png`, maskAlpha: `${id}.mask-alpha.png`, glare: `${id}.glare.png` },
     generation: { supersample, glare: s.glare, rendered: new Date().toISOString() },
   };
 }
@@ -81,6 +81,7 @@ export function Studio() {
   const [state, setState] = useState<StudioState>(DEFAULT_STATE);
   const [thumbs, setThumbs] = useState<Thumb[]>([]);
   const [longEdge, setLongEdge] = useState(2400);
+  const [crop, setCrop] = useState(true);
   const [video, setVideo] = useState<VideoSettings>(DEFAULT_VIDEO);
   const [previewing, setPreviewing] = useState(false);
   const [progress, setProgress] = useState<number | null>(null);
@@ -116,16 +117,17 @@ export function Studio() {
         const { width, height } = studio.exportSize(edge);
         return blobToDataUrl(await studio.renderStill(width, height, ss));
       },
-      library: async (edge, ss = 2) => {
+      library: async (edge, ss = 2, crop = false) => {
         const { width, height } = studio.exportSize(edge);
-        const files = await studio.renderLibrary(width, height, ss);
+        const files = await studio.renderLibrary(width, height, ss, crop);
         const id = stillId(studio.current);
         return {
           id,
           master: await blobToDataUrl(files.master),
           mask: await blobToDataUrl(files.mask),
+          maskAlpha: await blobToDataUrl(files.maskAlpha),
           glare: await blobToDataUrl(files.glare),
-          meta: libraryJson(id, studio.current, { width, height }, ss, files),
+          meta: libraryJson(id, studio.current, ss, files),
         };
       },
       video: async (settings) => recordVideo(studio, { ...DEFAULT_VIDEO, ...settings }),
@@ -200,12 +202,13 @@ export function Studio() {
   const exportLibrary = () =>
     run("Rendering library files…", async (studio) => {
       const { width, height } = studio.exportSize(longEdge);
-      const files = await studio.renderLibrary(width, height);
+      const files = await studio.renderLibrary(width, height, 2, crop);
       const id = stillId(state);
-      const json = new Blob([JSON.stringify(libraryJson(id, state, { width, height }, 2, files), null, 2)], { type: "application/json" });
+      const json = new Blob([JSON.stringify(libraryJson(id, state, 2, files), null, 2)], { type: "application/json" });
       const out: [string, Blob][] = [
         [`${id}.png`, files.master],
         [`${id}.mask.png`, files.mask],
+        [`${id}.mask-alpha.png`, files.maskAlpha],
         [`${id}.glare.png`, files.glare],
         [`${id}.json`, json],
       ];
@@ -307,6 +310,10 @@ export function Studio() {
             options={[...ANGLES.map((a): [string, string] => [a.id, a.label]), [FREE_ANGLE, "Free · drag to orbit"]]}
           />
           <Select label="Size (long edge)" value={String(longEdge)} onChange={(v) => setLongEdge(Number(v))} options={EXPORT_SIZES.map((n) => [String(n), `${n} px`])} />
+          <label style={{ ...styles.field, display: "flex", gap: "0.5rem", alignItems: "center" }}>
+            <input type="checkbox" checked={crop} onChange={(e) => setCrop(e.target.checked)} />
+            <span>Library files: crop to the phone</span>
+          </label>
           <div style={styles.row}>
             <button type="button" className="btn btn-glow btn-sm" onClick={() => void exportStill()}>
               Export PNG

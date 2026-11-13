@@ -40,6 +40,31 @@ export type LoopMedia = {
   mp4?: string;
   /** WebVTT captions, only if the loop shows text a screen reader would miss. */
   captions?: string;
+  /** Real app screens, shown in the studio phone as a slideshow while there's no recording. */
+  screens?: ImageRef[];
+  /** Studio stills of the phone (content/mockups.ts): `card` on the homepage, `page` on the case study. */
+  stills?: { card: DeviceStill; page: DeviceStill };
+};
+
+/**
+ * A still of a device whose screen is see-through, exported from /studio
+ * ("Library files", cropped to the phone). Content is warped into the screen
+ * with the corners below: see media/DeviceStill.tsx.
+ */
+export type DeviceStill = {
+  /** The frame, with a transparent screen. */
+  src: string;
+  /** The screen as an alpha mask (white where the screen is), for CSS mask-image. */
+  mask: string;
+  /** The glass sheen, white with alpha, laid over the screen. */
+  glare?: string;
+  /** Size of the three images, in pixels. */
+  width: number;
+  height: number;
+  /** Screen corners in those pixels, as the content is held: top-left, top-right, bottom-right, bottom-left. */
+  quad: [[number, number], [number, number], [number, number], [number, number]];
+  /** The CSS size content is laid out at before it's warped in (the phone's size in points). */
+  screen: { width: number; height: number };
 };
 
 export type ProofItem = { icon: IconName; value: string; label: string };
