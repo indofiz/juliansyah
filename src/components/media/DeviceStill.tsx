@@ -23,6 +23,7 @@ export function DeviceStill({
   still,
   sizes,
   className = "",
+  eager = false,
   onNearChange,
   overlay,
   children,
@@ -31,6 +32,8 @@ export function DeviceStill({
   /** `sizes` for the frame images, i.e. how wide the box is shown. */
   sizes: string;
   className?: string;
+  /** Load at once with high priority: for a still above the fold (it may be the LCP). */
+  eager?: boolean;
   onNearChange?: (near: boolean) => void;
   /** Controls drawn over the box, unwarped (e.g. a pause button). */
   overlay?: ReactNode;
@@ -74,8 +77,19 @@ export function DeviceStill({
               {children}
             </div>
           </div>
-          <Image className="device-layer" src={still.src} alt="" width={still.width} height={still.height} sizes={sizes} />
-          {still.glare && <Image className="device-layer" src={still.glare} alt="" width={still.width} height={still.height} sizes={sizes} />}
+          <Image
+            className="device-layer"
+            src={still.src}
+            alt=""
+            width={still.width}
+            height={still.height}
+            sizes={sizes}
+            loading={eager ? "eager" : undefined}
+            fetchPriority={eager ? "high" : undefined}
+          />
+          {still.glare && (
+            <Image className="device-layer" src={still.glare} alt="" width={still.width} height={still.height} sizes={sizes} loading={eager ? "eager" : undefined} />
+          )}
         </div>
       </div>
       {overlay}
@@ -115,6 +129,7 @@ export function PhoneScreens({
   sizes,
   screenSizes,
   className,
+  eager = false,
 }: {
   still: Still;
   screens: ImageRef[];
@@ -123,6 +138,8 @@ export function PhoneScreens({
   sizes: string;
   screenSizes: string;
   className?: string;
+  /** Above the fold: the frame and the first screen load at once (see DeviceStill). */
+  eager?: boolean;
 }) {
   const auto = useAutoMotion();
   const [near, setNear] = useState(false);
@@ -159,7 +176,7 @@ export function PhoneScreens({
   );
 
   return (
-    <DeviceStill still={still} sizes={sizes} className={className} onNearChange={setNear} overlay={toggle}>
+    <DeviceStill still={still} sizes={sizes} className={className} eager={eager} onNearChange={setNear} overlay={toggle}>
       <div className="device-slides" role="group" aria-roledescription="slideshow" aria-label={label}>
         {screens.map((s, i) =>
           i === 0 || (near && i <= slide.seen + 1) ? (
@@ -170,6 +187,8 @@ export function PhoneScreens({
               alt={s.alt}
               fill
               sizes={screenSizes}
+              loading={eager && i === 0 ? "eager" : undefined}
+              fetchPriority={eager && i === 0 ? "high" : undefined}
               aria-hidden={i !== slide.index}
             />
           ) : null,

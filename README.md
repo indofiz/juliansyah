@@ -24,7 +24,7 @@ npm run build
 | --- | --- | --- | --- | --- |
 | 1 | Hero | `hero` | Who are you? | Greeting pill (name ✳ tagline), headline (the only h1), description, two CTAs, design-system dashboard whose stat card is real (12K+ users, moving strip of client logos in colour) inside sample chrome. **Pinned**: the copy slides up and the dashboard slides down while the globe rises |
 | 2 | Track record | `proof` | Can I trust you? | Second screen of the pinned intro: one-line stats (icon, white number, amber label) around the centred globe; View work / Learn more on desktop |
-| 3 | Selected work | `work` | Can you do what I need? | Flagship card with "Tap to try" (lazy Flutter web iframe), then project cards. Each opens `/work/[slug]` |
+| 3 | Selected work | `work` | Can you do what I need? | Flagship card with the studio phone showing the app's real screens, then project cards. Each opens `/work/[slug]` |
 | 4 | How I work | `process` | What's it like to work with you? | Main's "Seamless from Call to Launch" layout: copy, the particles in the middle, four steps (Discover, Design, Build, Launch) on a track that fills as you scroll, and the particles forming the lit step's 3D picture (telescope, a UI/UX design window, code window and gear, rocket) in a meshy haze of particles. The section opens on the telescope, never the earth. **Pinned** on desktop; phones stack title, telescope, steps (each with its icon), buttons |
 | 5 | About | `about` | Who are you, and can you do what I need? | Main's "Under One Roof" layout, titled "From Design to Production, Under One Roof.": three cards a side (Who I am, then five expertise cards with their tools) with the particle portrait forming in the empty middle column. Phones: title, portrait, then a card carousel. Without WebGL the real photo fills the middle column |
 | 6 | Playground | `playground` | Can you do what I need? | Experiments that load near the viewport and pause off screen |
@@ -54,10 +54,10 @@ muted, inline and looped, load only near the viewport, pause off screen and
 never autoplay with reduced motion or Save-Data. Until then a wireframe
 placeholder is shown.
 
-**"Tap to try"**: build the Flutter app for the web with
-`flutter build web --base-href /demos/<slug>/`, copy `build/web` to
-`public/demos/<slug>/`, and set `demo: { src: "/demos/<slug>/", title }` on
-the project. The iframe is created only after the click.
+**Studio phone**: a project with `media.stills` and `media.screens` (Presensi)
+shows its real screens inside the 3D phone rendered in `/studio` (dev only),
+on the flagship card and its case study. Re-export the stills from the studio
+if the phone changes: see `docs/plans/phone-3d-on-site.md`.
 
 ## Fits every screen size
 
@@ -74,8 +74,7 @@ Below 1024px it's a normal responsive layout with a 16px base; phone rules
   instead of moving and its drift stands still, and How I work shows every
   step lit.
 - Visible focus ring everywhere (`:focus-visible` in `tokens.css`); the
-  mobile menu moves focus in and returns it on Escape; "Tap to try" moves
-  focus into the demo and back.
+  mobile menu moves focus in and returns it on Escape.
 - One h1 per page; every section is labelled by its heading.
 
 ## Where to edit

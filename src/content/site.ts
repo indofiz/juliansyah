@@ -148,9 +148,6 @@ export const work = {
   text: "Mobile apps, web apps and UI/UX projects. Open any card for the full story: the problem, my role, the decisions and the result.",
   labels: {
     caseStudy: "Read the case study",
-    tryDemo: "Tap to try",
-    closeDemo: "Close demo",
-    noDemo: "TODO: add a Flutter web build in /public/demos/<slug>/ to enable Tap to try",
     /** Names the slideshow of app screens, after the project name. */
     screens: "app screens",
     pauseScreens: "Pause the screens",
@@ -185,7 +182,7 @@ function dummyProject(slug: string, platform: Platform, frame: LoopMedia["frame"
   };
 }
 
-/** In display order. The first flagship gets the big card with "Tap to try". */
+/** In display order. The first flagship gets the big card. */
 export const projects: Project[] = [
   {
     slug: "presensi-pkp",

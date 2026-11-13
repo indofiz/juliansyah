@@ -5,7 +5,8 @@ Status (2026-11-13): BUILT with approach A and all defaults, uncommitted.
 Changes while building:
 - **Sheen:** drawn in CSS (`.device-screen::after`) instead of the glare PNG, which saves ~33 KB.
 - **Loading:** each screen loads just before its turn.
-- **Demo state:** still the CSS frame. Moving it to the front view waits for a real demo build to test with.
+- **Demo state:** none. The user dropped "Tap to try" on 2026-11-13 (TryDemo, the `demo` field and its labels are removed). The flagship phone is `FlagshipPhone` in ProjectCard.tsx.
+- **Safari:** checked by the user, works.
 
 Measured:
 - **Bytes when the card comes near:** ~92 KB (frame 15 + mask 3 + 2 screens 73). Before scrolling, mobile Lighthouse already loads ~44 KB of it: Chrome's lazy-load distance is large on slow connections, and CSS masks always load.

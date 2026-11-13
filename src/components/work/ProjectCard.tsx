@@ -5,7 +5,7 @@ import { LoopVideo } from "../media/LoopVideo";
 import { Icon } from "../ui/Icon";
 import { Placeholder } from "../ui/Placeholder";
 import { Button } from "../ui/primitives";
-import { TryDemo } from "./TryDemo";
+import { PhoneScreens } from "../media/DeviceStill";
 
 const href = (p: Project) => `/work/${p.slug}`;
 
@@ -46,13 +46,39 @@ function MetricLine({ p }: { p: Project }) {
   );
 }
 
-/** Big card: "Tap to try" phone on the left, the story on the right. */
+/**
+ * The flagship's phone: the studio phone with the project's real screens
+ * when it has them (media.stills + media.screens), else the CSS phone with
+ * its loop.
+ */
+function FlagshipPhone({ p }: { p: Project }) {
+  const { media } = p;
+  if (media.stills && media.screens?.length) {
+    return (
+      <PhoneScreens
+        still={media.stills.card}
+        screens={media.screens}
+        label={`${p.name}: ${work.labels.screens}`}
+        sizes="(max-width: 900px) 160px, 250px"
+        screenSizes="(max-width: 900px) 170px, 260px"
+        className="flagship-still"
+      />
+    );
+  }
+  return (
+    <PhoneFrame>
+      <LoopVideo media={media} />
+    </PhoneFrame>
+  );
+}
+
+/** Big card: the phone on the left, the story on the right. */
 export function FlagshipCard({ p }: { p: Project }) {
   return (
     <article className="work-flagship" data-reveal aria-labelledby={`work-${p.slug}`}>
       <span className="work-flagship-glow" aria-hidden="true" />
       <div className="work-flagship-media">
-        <TryDemo project={p} />
+        <FlagshipPhone p={p} />
       </div>
       <div className="work-flagship-body">
         {p.status && <span className="status status-live">{p.status}</span>}

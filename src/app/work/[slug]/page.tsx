@@ -34,6 +34,16 @@ export async function generateMetadata({ params }: PageProps<"/work/[slug]">): P
   };
 }
 
+/**
+ * Navigations into a case study may wait for the server, on purpose. Next's
+ * instant-navigation check wants `params` read inside <Suspense>, but that
+ * streams the page before the slug is checked, so an unknown slug would
+ * answer 200 (and be indexable) instead of 404; `dynamicParams` can't stop
+ * that under Cache Components. Every case study is prerendered, so the wait
+ * is one small static file, and the "Next project" link prefetches it.
+ */
+export const instant = false;
+
 /** Case study: problem → my role → process → key decisions → result → next project. */
 export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]">) {
   const { slug } = await params;
@@ -101,6 +111,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]"
                   sizes="(max-width: 900px) 220px, 290px"
                   screenSizes="(max-width: 900px) 210px, 280px"
                   className="cs-still"
+                  eager
                 />
               ) : p.media.frame === "phone" ? (
                 <PhoneFrame>
@@ -237,7 +248,8 @@ export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]"
           </section>
 
           <nav className="cs-next" aria-label={L.next}>
-            <Link href={`/work/${next.slug}`} className="cs-next-link">
+            {/* prefetch: the next case study (static) is loaded before the click. */}
+            <Link href={`/work/${next.slug}`} className="cs-next-link" prefetch>
               <span className="cs-next-label">{L.next}</span>
               <span className="cs-next-title">
                 <Placeholder text={next.title} />

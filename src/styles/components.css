@@ -869,6 +869,11 @@
   pointer-events: none;
 }
 
+.device-slides {
+  position: absolute;
+  inset: 0;
+}
+
 .device-slide {
   object-fit: cover;
   object-position: top;
@@ -901,7 +906,7 @@
 }
 
 /* Sizes: the old CSS phone's height, plus 4%. */
-.try-still {
+.flagship-still {
   height: 36rem;
 }
 
@@ -910,7 +915,7 @@
 }
 
 @media (max-width: 900px) {
-  .try-still {
+  .flagship-still {
     height: 23.75rem;
   }
 

@@ -331,29 +331,14 @@
   pointer-events: none;
 }
 
-.try {
+.work-flagship-media {
   display: grid;
   justify-items: center;
-  gap: 1.125rem;
   width: 100%;
 }
 
-.try .phone {
+.work-flagship-media .phone {
   width: min(16.5rem, 100%);
-}
-
-.try-frame {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  background: #000;
-}
-
-.try-note {
-  max-width: 19rem;
-  text-align: center;
 }
 
 .work-flagship-body {

@@ -102,13 +102,7 @@ export type Project = {
   /** The one result shown on the card. */
   metric: Metric;
   media: LoopMedia;
-  /**
-   * A Flutter web build in /public/demos/<slug>/, built with
-   * `flutter build web --base-href /demos/<slug>/`. Set this only once the
-   * build exists; without it the card shows the video.
-   */
-  demo?: { src: string; title: string };
-  /** The flagship gets the large card with "Tap to try". */
+  /** The flagship gets the large card. */
   flagship?: boolean;
   /** Dummy entries hold a slot until a real project replaces them. */
   dummy?: boolean;
