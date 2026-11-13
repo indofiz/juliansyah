@@ -185,6 +185,10 @@ export const particleVertex = /* glsl */ `
       // drift: a haze speck wanders on its own (gWander) and glimmers.
       p.xy += gWander;
       b *= 0.6 + 0.4 * sin(uTime * (1.1 + aRandom.y) + ph);
+    } else if (m == 8.0) {
+      // float: an object bobs at its own pace. The phase changes slowly
+      // with position, so objects apart differ but one doesn't bend.
+      p.y += sin(uTime * 1.0 + dot(a.xy, vec2(0.9, 0.6))) * 0.022;
     }
     return vec4(p, b);
   }

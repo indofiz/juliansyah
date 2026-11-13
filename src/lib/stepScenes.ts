@@ -1,7 +1,6 @@
 import type { ProcessStep } from "@/content/types";
 import {
   box,
-  circle2,
   cone,
   cut,
   cylinder,
@@ -15,12 +14,11 @@ import {
   revolve,
   sampleDots,
   smooth,
-  smooth2,
   sphere,
   star2,
   stroke2,
+  union2,
   subtract,
-  subtract2,
   torus,
   transformDir,
   transformPoint,
@@ -29,14 +27,16 @@ import {
   type Material,
   type Part,
   type Shape,
+  type Shape2,
   type Vec2,
   type Vec3,
 } from "./sdf.ts";
 
 /**
  * The How I work step pictures as small 3D scenes: a telescope (Discover),
- * a painter's palette and brush (Design), a code window with </> and a gear
- * (Build) and a rocket lifting off (Launch). Built from round shapes
+ * a UI/UX design window with type, image and text-tool tiles and a pen
+ * (Design), a code window with </> and a gear (Build) and a rocket lifting
+ * off (Launch). Built from round shapes
  * (lib/sdf.ts), so they read as solid objects lit from the top left.
  *
  * The particle globe turns into the lit step's picture (ParticleMorph builds
@@ -64,10 +64,11 @@ export const STEP_IDS = ["discover", "design", "build", "launch"] as const satis
  * Small loops the particle shader plays on a part: hover (bobs up and
  * down), twinkle (a star: pulses and floats), dab (moves along `dab`, the
  * brush), flicker (a flame), flow (dots stream along `flow` and fade), spin
- * (turns around `spin`, the gear) and drift (the haze: each speck wanders
- * on its own and glimmers).
+ * (turns around `spin`, the gear), drift (the haze: each speck wanders on
+ * its own and glimmers) and float (an object bobs at its own pace: the
+ * floating tiles).
  */
-export const MOTION = { hover: 1, twinkle: 2, dab: 3, flicker: 4, flow: 5, spin: 6, drift: 7 } as const;
+export const MOTION = { hover: 1, twinkle: 2, dab: 3, flicker: 4, flow: 5, spin: 6, drift: 7, float: 8 } as const;
 
 export type StepScene = {
   parts: Part[];
@@ -128,47 +129,111 @@ function telescope(): StepScene {
   };
 }
 
-// ---- Design: a painter's palette and a brush --------------------------------
+// ---- Design: a UI/UX design window --------------------------------------------
 
-function paletteAndBrush(): StepScene {
-  // The palette in its own plane (face toward +z), then tipped back.
-  const outline = subtract2(
-    subtract2(
-      smooth2(0.35, circle2(0.6, [0, 0]), circle2(0.5, [-0.42, -0.2]), circle2(0.44, [0.42, -0.16]), circle2(0.42, [0.04, 0.36])),
-      circle2(0.12, [0.42, 0.26]), // thumb hole
-    ),
-    circle2(0.22, [0.9, -0.12]), // notch
-  );
-  const T = 0.075; // half thickness
-  const paint = (x: number, y: number, value: number) => part(ellipsoid(0.16, 0.16, 0.075, [x, y, T - 0.01]), { value, tint: true, gloss: 1 });
-  const palette = placeParts(
+/**
+ * Bold sans letters as strokes, in a box one unit tall (baseline 0, cap
+ * height 1), centred on x. `w` is the distance between the outer strokes'
+ * centres.
+ */
+const GLYPHS: Record<string, { w: number; strokes: Vec2[][] }> = {
+  U: {
+    w: 0.56,
+    strokes: [
+      [
+        [-0.28, 1],
+        [-0.28, 0.28],
+        ...Array.from({ length: 9 }, (_, k): Vec2 => {
+          const a = Math.PI + (k / 8) * Math.PI;
+          return [0.28 * Math.cos(a), 0.28 + 0.28 * Math.sin(a)];
+        }),
+        [0.28, 1],
+      ],
+    ],
+  },
+  I: { w: 0, strokes: [[[0, 1], [0, 0]]] },
+  // Narrower than its box, so it doesn't crowd the letters either side.
+  "/": { w: 0.44, strokes: [[[-0.13, 0], [0.13, 1]]] },
+  X: { w: 0.56, strokes: [[[-0.28, 1], [0.28, 0]], [[0.28, 1], [-0.28, 0]]] },
+  A: { w: 0.68, strokes: [[[-0.34, 0], [0, 1], [0.34, 0]], [[-0.18, 0.36], [0.18, 0.36]]] },
+  T: { w: 0.66, strokes: [[[-0.33, 1], [0.33, 1]], [[0, 1], [0, 0]]] },
+};
+
+/** A word in bold letters, `height` tall, centred on the origin; `weight` is the stroke's half width (share of the height). */
+function text2(word: string, height: number, weight = 0.14, gap = 0.12): Shape2 {
+  const glyphs = [...word].map((ch) => GLYPHS[ch]);
+  const advance = (w: number) => w + 2 * weight + gap;
+  let x = -(glyphs.reduce((sum, g) => sum + advance(g.w), 0) - gap) / 2;
+  const strokes: Shape2[] = [];
+  for (const g of glyphs) {
+    const cx = x + weight + g.w / 2;
+    for (const line of g.strokes) strokes.push(stroke2(line.map(([px, py]): Vec2 => [(cx + px) * height, (py - 0.5) * height]), weight * height));
+    x += advance(g.w);
+  }
+  return union2(...strokes);
+}
+
+/** Raised letters: a word made thick, its edges rounded. */
+const letters = (word: string, height: number, weight?: number) => extrude(text2(word, height, weight), 0.032, 0.03);
+
+function designWindow(): StepScene {
+  // The window turns a little, as do the tiles around it (each its own way).
+  const tilt: Vec3 = [-4, 8, 0];
+  const window = placeParts(
     [
-      part(extrude(outline, T, 0.07), { value: 0.55 }),
-      paint(-0.06, 0.4, 1),
-      paint(-0.52, 0.06, 0.74),
-      paint(-0.34, -0.36, 0.84),
-      paint(0.18, -0.16, 0.92),
+      // A dark window behind, a bright title bar with three dots on top,
+      // and a bright panel in front with "UI/UX" raised on it.
+      part(place(box(0.56, 0.48, 0.08, 0.08), [0, -0.02, -0.18]), { value: 0.36 }),
+      part(place(box(0.6, 0.09, 0.07, 0.07), [0, 0.52, -0.06]), { value: 0.85 }),
+      ...[
+        [-0.46, 1],
+        [-0.33, 0.85],
+        [-0.2, 0.7],
+      ].map(([x, value]) => part(ellipsoid(0.052, 0.052, 0.034, [x, 0.52, 0.012]), { value, tint: true, gloss: 0.6 })),
+      part(place(box(0.47, 0.32, 0.06, 0.06), [0.01, -0.06, 0.02]), { value: 0.8 }),
+      part(place(letters("UI/UX", 0.22, 0.15), [0.01, -0.05, 0.09]), { value: 1, tint: true, gloss: 0.4 }),
     ],
-    [-0.22, -0.28, 0],
-    [-36, 8, -10],
+    [0.05, 0, 0],
+    tilt,
   );
 
-  // The brush, in front of the palette's right side, tip down.
-  const P1: Vec3 = [0.45, 0.95, 0.3]; // top of the handle
-  const P2: Vec3 = [0.7, 0.05, 0.45]; // handle meets the metal band
-  const dir = v3.norm(v3.sub(P2, P1));
-  const P3 = v3.add(P2, v3.scale(dir, 0.24)); // band meets the bristles
-  const tip = v3.add(P3, v3.scale(dir, 0.36));
-  return {
-    parts: [
-      ...palette,
-      part(cone(P1, P2, 0.12, 0.1), { value: 0.75, motion: MOTION.dab }),
-      part(cylinder(v3.add(P2, v3.scale(dir, -0.02)), P3, 0.124, 0.03), { value: 0.95, tint: true, gloss: 1, motion: MOTION.dab }),
-      part(smooth(0.08, sphere(0.12, v3.add(P3, v3.scale(dir, 0.07))), cone(P3, tip, 0.12, 0.035)), { value: 0.32, motion: MOTION.dab }),
-      part(sphere(0.06, tip), { value: 0.95, tint: true, gloss: 0.6, motion: MOTION.dab }),
-    ],
-    dab: [dir[0], dir[1]],
-  };
+  // Tiles floating around it: a type tile ("AX") and an image tile (a sun
+  // over mountains), each a dark rounded square.
+  const tile = (pos: Vec3, rot: Vec3, content: Part[]) =>
+    placeParts([part(box(0.2, 0.21, 0.06, 0.06), { value: 0.38, motion: MOTION.float }), ...content.map((c) => ({ ...c, motion: MOTION.float }))], pos, rot);
+  const typeTile = tile([-0.6, 0.3, 0.18], [0, 18, -10], [part(place(letters("AX", 0.17, 0.13), [0, 0, 0.065]), { value: 0.95, tint: true, gloss: 0.4 })]);
+  const mountains = polygon2([[-0.15, -0.13], [-0.06, 0.0], [-0.01, -0.06], [0.07, 0.07], [0.15, -0.13]]);
+  const imageTile = tile([0.6, 0.5, 0.16], [0, -18, 8], [
+    part(ellipsoid(0.045, 0.045, 0.03, [-0.09, 0.09, 0.065]), { value: 1, tint: true, gloss: 0.6 }),
+    part(place(extrude(mountains, 0.025, 0.02), [0, 0, 0.065]), { value: 0.95 }),
+  ]);
+
+  // The text tool: a "T" inside a selection frame with square handles.
+  const fw = 0.2, fh = 0.17;
+  const corners: Vec2[] = [[-fw, fh], [fw, fh], [fw, -fh], [-fw, -fh]];
+  const textTool = placeParts(
+    [
+      part(extrude(stroke2([...corners, corners[0]], 0.022), 0.02, 0.018), { value: 0.55 }),
+      ...corners.map(([x, y]) => part(place(box(0.05, 0.05, 0.04, 0.025), [x, y, 0.01]), { value: 0.95 })),
+      part(place(letters("T", 0.22, 0.15), [0, 0, 0.02]), { value: 1, tint: true, gloss: 0.4 }),
+    ].map((p) => ({ ...p, motion: MOTION.float })),
+    [-0.36, -0.55, 0.24],
+    [0, 12, -4],
+  );
+
+  // A pen, writing toward the window: dark body, a light cap end, a bright
+  // band and a light tip.
+  const A: Vec3 = [0.8, 0.02, 0.3]; // cap end
+  const B: Vec3 = [0.36, -0.52, 0.36]; // where the body meets the tip
+  const dir = v3.norm(v3.sub(B, A));
+  const pen = [
+    part(cylinder(v3.add(A, v3.scale(dir, 0.06)), B, 0.062, 0.03), { value: 0.42, gloss: 0.6, motion: MOTION.dab }),
+    part(cylinder(v3.sub(A, v3.scale(dir, 0.02)), v3.add(A, v3.scale(dir, 0.1)), 0.07, 0.035), { value: 0.95, tint: true, gloss: 0.5, motion: MOTION.dab }),
+    part(cylinder(v3.add(A, v3.scale(dir, 0.36)), v3.add(A, v3.scale(dir, 0.44)), 0.066, 0.02), { value: 0.95, motion: MOTION.dab }),
+    part(cone(v3.sub(B, v3.scale(dir, 0.01)), v3.add(B, v3.scale(dir, 0.2)), 0.06, 0.012), { value: 0.95, tint: true, gloss: 0.5, motion: MOTION.dab }),
+  ];
+
+  return { parts: [...window, ...typeTile, ...imageTile, ...textTool, ...pen], dab: [dir[0], dir[1]] };
 }
 
 // ---- Build: a code window, </> and a gear -----------------------------------
@@ -265,7 +330,7 @@ function rocket(): StepScene {
 
 export const STEP_SCENES: Record<StepId, () => StepScene> = {
   discover: telescope,
-  design: paletteAndBrush,
+  design: designWindow,
   build: codeAndGear,
   launch: rocket,
 };
