@@ -138,8 +138,13 @@ export const proof = {
  * ------------------------------------------------------------------------- */
 export const work = {
   badge: "Selected work",
-  title: "Apps and sites I designed and built.",
-  text: "Each card opens the full story: the problem, my role, the decisions and the result.",
+  /**
+   * Uses the cards' own word ("Read the case study") and says each card holds more than pictures.
+   * The non-breaking space keeps "Not Just" together, so phones break after the comma.
+   */
+  title: "Case Studies, Not\u00A0Just Screenshots.",
+  /** Opens with the kinds of project (the cards' Flutter / Web / Design labels), then what a card opens to. */
+  text: "Mobile apps, web apps and UI/UX projects. Open any card for the full story: the problem, my role, the decisions and the result.",
   labels: {
     caseStudy: "Read the case study",
     tryDemo: "Tap to try",
@@ -416,7 +421,10 @@ const quote = (n: number): Testimonial => ({
 
 export const testimonials = {
   badge: "Kind words",
-  title: "What it's like to work with me, in clients' words.",
+  /** Opens with the answer to "can I trust you?"; "teams" is the word Track record uses for clients. */
+  title: "Trusted by the Teams I've Built For.",
+  /** Where the quotes come from, so they read as real; it keeps the rule above (with permission). */
+  text: "Clients on what working together was like, quoted with their permission.",
   items: [quote(1), quote(2), quote(3)],
 };
 

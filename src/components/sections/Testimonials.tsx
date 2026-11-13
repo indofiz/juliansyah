@@ -50,7 +50,7 @@ export function Testimonials() {
   return (
     <section id="testimonials" className="section testimonials" aria-labelledby="testimonials-title">
       <div className="container">
-        <SectionHeader id="testimonials-title" badge={testimonials.badge} badgeIcon="message" title={testimonials.title} />
+        <SectionHeader id="testimonials-title" badge={testimonials.badge} badgeIcon="message" title={testimonials.title} text={testimonials.text} />
         <div className="quotes">
           {testimonials.items.map((t, i) => (
             <Quote key={i} t={t} />
