@@ -92,7 +92,7 @@ export function DashboardMock() {
           <div className="mock-top-right">
             <span className="mock-live">{d.tag}</span>
             <span className="mock-chip">
-              <Icon name="calendar" size={13} /> {d.range}
+              <Icon name="file" size={13} /> {d.docs}
             </span>
             <span className="mock-chip mock-bell">
               <Icon name="bell" size={13} />

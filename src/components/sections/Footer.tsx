@@ -57,7 +57,7 @@ export function Footer() {
               </span>
             </span>
           ) : (
-            <a href={footer.resume.href} className="footer-btn" download>
+            <a href={footer.resume.href} className="footer-btn" {...(/^https?:\/\//.test(footer.resume.href) ? external(footer.resume.href) : { download: true })}>
               <Icon name="fileDown" size={24} />
               <span>
                 <small>{footer.resume.hint}</small>

@@ -10,7 +10,7 @@ export function personJsonLd() {
     url: site.url,
     email: `mailto:${site.email}`,
     jobTitle: site.role,
-    address: { "@type": "PostalAddress", addressLocality: "Jakarta", addressCountry: "ID" },
+    address: { "@type": "PostalAddress", addressLocality: site.city, addressRegion: site.region, addressCountry: "ID" },
     sameAs: socials.filter((s) => /^https?:/.test(s.href)).map((s) => s.href),
     knowsAbout: ["Flutter", "Dart", "React", "Next.js", "TypeScript", "UI/UX design", "Figma", "Design systems"],
   };

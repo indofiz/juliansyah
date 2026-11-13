@@ -17,13 +17,16 @@ export const site = {
   url: "https://juliansyah.com",
   email: "juliansyah.ekt17@gmail.com",
   github: "https://github.com/indofiz",
-  linkedin: "TODO: LinkedIn URL",
-  dribbble: "TODO: Dribbble URL",
-  location: "Jakarta, Indonesia",
+  linkedin: "https://www.linkedin.com/in/julianui",
+  dribbble: "https://dribbble.com/indofiz",
+  city: "Pangkalpinang",
+  region: "Bangka Belitung",
+  location: "Pangkalpinang, Indonesia",
+  /** IANA zone for WIB (UTC+7), which covers Bangka Belitung. */
   timeZone: "Asia/Jakarta",
   utcOffset: "UTC+7",
   description:
-    "Juliansyah designs and builds Flutter apps and web front-ends from Jakarta (UTC+7): UI/UX design, Flutter, React and Next.js, from first sketch to shipped release.",
+    "Juliansyah designs and builds Flutter apps and web front-ends from Pangkalpinang, Indonesia (UTC+7): UI/UX design, Flutter, React and Next.js, from first sketch to shipped release.",
 };
 
 /** Social icons in the footer. A "TODO:" href renders as a dashed placeholder. */
@@ -64,10 +67,10 @@ export const hero = {
   /**
    * The dashboard under the buttons: a preview of the free design system.
    * The stat card is REAL (users, client logos). The sidebar, top
-   * bar and the three tiles below it are SAMPLE data; the `tag` says so.
+   * bar and the three tiles below it are SAMPLE data; the `tag` names the design system.
    */
   dashboard: {
-    tag: "Design system preview",
+    tag: "Moondance Design System",
     nav: [
       { icon: "grid", label: "Dashboard" },
       { icon: "folder", label: "Projects", tail: "chevron" },
@@ -83,7 +86,7 @@ export const hero = {
     tour: "Product tour · 2 min",
     themes: ["Dark", "Light"],
     crumb: "Dashboard",
-    range: "Last 30 days",
+    docs: "Documentation",
     alerts: "3",
     greet: "Good evening, visitor",
     /** People using apps I've built (user's figure, 2026-11-11). */
@@ -338,9 +341,10 @@ export const about = {
     height: 1024,
   },
   toolsLabel: "Tools",
+  socialsLabel: "Find me online",
   /**
-   * Desktop rows read across the portrait: Who I am | UI/UX, Flutter |
-   * Motion, Web | Performance. Phones swipe through left, then right.
+   * Desktop rows read across the portrait: Who I am | Web, Flutter |
+   * Motion, UI/UX | Performance. Phones swipe through left, then right.
    */
   cards: {
     left: [
@@ -349,30 +353,32 @@ export const about = {
         icon: "user",
         photo: true,
         title: "Who I am",
-        text: "I'm a Flutter developer, front-end developer and UI/UX designer in Jakarta. I design the screens, then build them myself, for phones and the web.",
+        place: `${site.city}, ${site.region}`,
+        text: "A designer who codes. I design apps, then build them myself, for mobile and the web.",
+        socials: true,
       },
       {
         id: "mobile",
-        icon: "smartphone",
-        title: "Mobile apps in Flutter",
+        icon: "flutter",
+        title: "Cross-platform mobile apps",
         text: "One codebase for Android and iOS, on an architecture your team can keep extending.",
         tools: ["Flutter", "Dart", "BLoC", "Riverpod", "Firebase"],
       },
-      {
-        id: "web",
-        icon: "code",
-        title: "Web front-ends",
-        text: "Fast, accessible sites and web apps, built straight from the design with no hand-off gap.",
-        tools: ["React", "Next.js", "TypeScript"],
-      },
-    ],
-    right: [
       {
         id: "design",
         icon: "pen",
         title: "UI/UX and design systems",
         text: "Flows, wireframes and prototypes, plus the tokens and components that keep design and code in sync.",
         tools: ["Figma", "Prototyping", "Design tokens", "Component libraries"],
+      },
+    ],
+    right: [
+      {
+        id: "web",
+        icon: "typescript",
+        title: "Type-safe web apps",
+        text: "Fast, accessible sites and web apps, built straight from the design with no hand-off gap.",
+        tools: ["React", "Next.js", "TypeScript"],
       },
       {
         id: "motion",
@@ -445,25 +451,55 @@ export const testimonials = {
 export const contact = {
   badge: "Contact",
   title: "Tell me what you're building.",
-  text: "One email is enough to start: what you're making, who it's for and when you need it.",
-  emailLabel: "Email",
+  text: "One message is enough to start: what you're making, who it's for and when you need it.",
   primary: "Email me",
-  copy: { label: "Copy email address", done: "Copied", fallback: "Press Ctrl+C or ⌘C to copy" },
-  call: { label: "Book a call", href: "TODO: booking URL (Cal.com or Calendly)" },
-  facts: [
-    { icon: "clock", label: "Typical reply", value: "TODO: e.g. within one working day" },
-    { icon: "calendar", label: "Availability", value: "TODO: e.g. taking new projects from January 2027" },
-    { icon: "mapPin", label: "Time zone", value: `${site.location} · ${site.utcOffset}` },
-  ] satisfies { icon: IconName; label: string; value: string }[],
-  form: {
-    title: "Or send a quick note",
-    name: "Your name",
-    email: "Your email",
-    message: "What are you building?",
-    submit: "Write the email",
-    note: "This opens your email app with the note filled in. Nothing is stored on this site.",
-    sent: "Your email app should open now. If it doesn't, write to",
-    subject: "Project enquiry from",
+  /**
+   * Every email link on the card opens with this filled in, so nobody starts
+   * from a blank page. The body asks the three questions from `text`.
+   */
+  mail: {
+    subject: "Project enquiry via your portfolio",
+    body: "Hi Juliansyah,\n\nWhat I'm building:\n\nWho it's for:\n\nWhen I need it:\n\n",
+  },
+  copy: {
+    /** Screen readers hear `label`; the button shows `idle`, then `done`. */
+    label: "Copy email address",
+    idle: "Copy",
+    done: "Copied",
+    announce: "Email address copied",
+    /** When the browser won't copy, the address is selected instead. */
+    failTouch: "Address selected. Copy it from the menu.",
+    failKeys: "Address selected. Press ⌘C or Ctrl+C.",
+  },
+  /**
+   * Second button: opens WhatsApp (app on phones, web elsewhere) with the same
+   * three questions as the email. Number in international format, digits only.
+   */
+  whatsapp: {
+    label: "WhatsApp me",
+    number: "6283175087363",
+    text: "Hi Juliansyah, I found you through your portfolio.\n\nWhat I'm building:\nWho it's for:\nWhen I need it:",
+  },
+  /** Quiet line for recruiters. Links: footer.resume.href and site.linkedin. */
+  hiring: { text: "Hiring for a role?", resume: "Résumé", linkedin: "LinkedIn" },
+  /** The card beside the buttons: who answers, when, and what happens after. */
+  card: {
+    sub: "You talk to me directly.",
+    availabilityLabel: "Availability",
+    /** User's words, 2026-11-13: "I can take any project now, open to remote work also". */
+    availability: "Taking new projects now · open to remote work",
+    nextTitle: "What happens next",
+    /** `{reply}` is replaced with `reply` below. */
+    steps: [
+      "You send a few lines by email or WhatsApp, in English or Bahasa Indonesia.",
+      "I reply with my questions {reply}.",
+      "A short call, then a written scope before any work starts.",
+    ],
+    /** Reads after "I reply with my questions…". */
+    /** Filled in by Claude at the user's request (2026-11-13), from the placeholder's own example. */
+    reply: "within one working day",
+    placeLabel: "Time zone",
+    place: `${site.location} · ${site.utcOffset}`,
   },
 };
 
@@ -490,7 +526,7 @@ export const footer = {
       ],
     },
   ] satisfies { title: string; links: Link[] }[],
-  resume: { label: "Download my résumé", hint: "PDF", href: "TODO: /resume.pdf" },
+  resume: { label: "View my résumé", hint: "PDF on Google Drive", href: "https://drive.google.com/file/d/18AtqPm4QkKI00OTa-VlHU7LN6ivJ7E9Y/view?usp=sharing" },
   github: { top: "View code on", bottom: "GitHub" },
   emailButton: { top: "Email me at" },
   lastUpdated: "Last updated",

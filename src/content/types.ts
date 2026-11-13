@@ -119,8 +119,12 @@ export type AboutCard = {
   icon: IconName;
   photo?: boolean;
   title: string;
+  /** Location line under the title, with a pin. */
+  place?: string;
   text: string;
   tools?: string[];
+  /** Show the social buttons (from `socials` in site.ts) under the text. */
+  socials?: boolean;
 };
 
 export type PlaygroundItem = {

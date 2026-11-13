@@ -1,13 +1,39 @@
 import Image from "next/image";
-import { about } from "@/content/site";
+import { about, socials } from "@/content/site";
 import type { AboutCard as Card } from "@/content/types";
-import { Icon } from "../ui/Icon";
-import { Placeholder } from "../ui/Placeholder";
+import { Icon, isColourLogo } from "../ui/Icon";
+import { Placeholder, isTodo } from "../ui/Placeholder";
 import { SectionHeader } from "../ui/primitives";
 
-function AboutCard({ c }: { c: Card }) {
+const external = (href: string) => (/^https?:\/\//.test(href) ? { target: "_blank", rel: "noopener noreferrer" } : {});
+
+/** Icon buttons for the "Who I am" card. A "TODO:" link shows as a dashed, unclickable tile. */
+function Socials() {
   return (
-    <article className="card about-card" data-reveal data-slide>
+    <ul className="about-socials" aria-label={about.socialsLabel}>
+      {socials.map((s) => (
+        <li key={s.label}>
+          {isTodo(s.href) ? (
+            <span className="about-social is-todo" title={s.href}>
+              <Icon name={s.icon} size={17} />
+              <span className="sr-only">{s.href}</span>
+            </span>
+          ) : (
+            <a className="about-social" href={s.href} aria-label={s.label} {...external(s.href)}>
+              <Icon name={s.icon} size={17} />
+            </a>
+          )}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function AboutCard({ c }: { c: Card }) {
+  // A stack logo (Flutter, TypeScript) tints its whole card in its brand colour.
+  const logo = isColourLogo(c.icon) ? c.icon : undefined;
+  return (
+    <article className="card about-card" data-logo={logo} data-reveal data-slide>
       {c.photo ? (
         <figure className="about-card-icon about-avatar">
           <Image src={about.photo.src} alt={about.photo.alt} width={about.photo.width} height={about.photo.height} sizes="3.25rem" />
@@ -19,6 +45,12 @@ function AboutCard({ c }: { c: Card }) {
       )}
       <div className="about-card-body">
         <h3>{c.title}</h3>
+        {c.place && (
+          <p className="about-place">
+            <Icon name="mapPin" size={14} />
+            {c.place}
+          </p>
+        )}
         <p>
           <Placeholder text={c.text} />
         </p>
@@ -29,6 +61,7 @@ function AboutCard({ c }: { c: Card }) {
             ))}
           </ul>
         )}
+        {c.socials && <Socials />}
       </div>
     </article>
   );

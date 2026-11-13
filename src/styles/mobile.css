@@ -356,8 +356,8 @@
     max-height: 30rem;
   }
 
-  /* Top bar: keep the "preview" tag (it says the data is sample data), drop
-     the breadcrumb and the date chip to make room. */
+  /* Top bar: keep the design-system tag, drop
+     the breadcrumb and the Documentation chip to make room. */
   .hero-frame .mock-crumb,
   .hero-frame .mock-top .mock-chip:not(.mock-bell) {
     display: none;
@@ -794,17 +794,34 @@
     font-size: 1rem;
   }
 
-  /* ---------- Contact: stacked ---------- */
+  /* ---------- Contact: one column, the card last ---------- */
   .cta-panel {
-    flex-direction: column;
-    align-items: stretch;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.75rem;
     min-height: 0;
-    padding: 2rem 1.25rem;
+    padding: 2rem 1.25rem 2.5rem;
     text-align: center;
   }
 
-  .cta-copy {
-    max-width: none;
+  /* The panel is tall here, so glows sized in % would sit behind the text.
+     Fixed sizes keep them in their corners: the top one lights the badge,
+     the bottom one rises behind the card. */
+  .cta-glow-corner {
+    top: -7rem;
+    left: -5rem;
+    width: 17rem;
+    height: 13rem;
+  }
+
+  .cta-glow-bottom {
+    left: 5%;
+    right: 5%;
+    bottom: -9rem;
+    height: 20rem;
+  }
+
+  .cta-dots {
+    height: 14rem;
   }
 
   .cta-title {
@@ -812,13 +829,8 @@
   }
 
   .cta-text {
-    margin: 0.75rem 0 1.25rem;
+    margin: 0.75rem auto 1.25rem;
     font-size: 0.875rem;
-  }
-
-  .contact-email {
-    justify-content: center;
-    font-size: 1.0625rem;
   }
 
   .cta .btn-row {
@@ -826,27 +838,37 @@
     gap: 0.625rem;
   }
 
+  /* 48px tall: thumbs, not cursors. */
   .cta .btn {
     width: 100%;
     height: auto;
-    min-height: 2.5rem;
+    min-height: 3rem;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     flex-wrap: wrap;
     white-space: normal;
   }
 
+  .contact-email {
+    justify-content: center;
+    gap: 0.5rem 0.75rem;
+    font-size: 1.0625rem;
+  }
+
   .cta .contact-email .btn {
     width: auto;
   }
 
-  .contact-facts {
-    justify-content: center;
-    gap: 1rem 1.5rem;
+  .contact-hint {
+    left: 50%;
+    translate: -50% 0;
   }
 
-  .contact-facts dt {
-    justify-content: center;
+  .cta-card {
+    justify-self: center;
+    width: 100%;
+    max-width: 30rem;
+    text-align: left;
   }
 
   /* ---------- Footer ---------- */
@@ -938,6 +960,13 @@
 
 /* One work card per row on phones. */
 @media (max-width: 640px) {
+  /* Contact: the address and Copy don't fit side by side, so they stack. */
+  .contact-email {
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 2rem;
+  }
+
   .work-list {
     grid-template-columns: 1fr;
   }
