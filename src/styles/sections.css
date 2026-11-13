@@ -843,7 +843,7 @@
 .process-grid {
   display: grid;
   /* Equal outer columns keep the middle one, and the picture (1.8 globe
-     radii wide, lib/stepScenes.ts PICTURE_BOX, plus its halo), on the
+     radii wide, lib/stepScenes.ts PICTURE_BOX, plus its haze), on the
      window's centre, clear of the copy and the step track. */
   grid-template-columns: minmax(16rem, 0.95fr) minmax(18rem, 1.1fr) minmax(16rem, 0.95fr);
   grid-template-areas: "copy globe steps";

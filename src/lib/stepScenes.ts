@@ -8,7 +8,7 @@ import {
   ellipsoid,
   extrude,
   gear2,
-  haloPoints,
+  hazePoints,
   place,
   placeParts,
   polygon2,
@@ -64,9 +64,10 @@ export const STEP_IDS = ["discover", "design", "build", "launch"] as const satis
  * Small loops the particle shader plays on a part: hover (bobs up and
  * down), twinkle (a star: pulses and floats), dab (moves along `dab`, the
  * brush), flicker (a flame), flow (dots stream along `flow` and fade), spin
- * (turns around `spin`, the gear) and orbit (the halo's dance).
+ * (turns around `spin`, the gear) and drift (the haze: each speck wanders
+ * on its own and glimmers).
  */
-export const MOTION = { hover: 1, twinkle: 2, dab: 3, flicker: 4, flow: 5, spin: 6, orbit: 7 } as const;
+export const MOTION = { hover: 1, twinkle: 2, dab: 3, flicker: 4, flow: 5, spin: 6, drift: 7 } as const;
 
 export type StepScene = {
   parts: Part[];
@@ -296,14 +297,15 @@ export type StepTarget = {
   spin?: { pivot: Vec3; axis: Vec3 };
 };
 
-/** At most this many particles in a picture's halo (fewer with fewer particles). */
-const HALO_DOTS = 1500;
+/** At most this many specks in a picture's haze (at most 12% of the particles, so fewer on phones). */
+const HAZE_DOTS = 2200;
 
 /**
  * Builds step `id` as a morph target for `count` particles. The first
  * `usable` make the picture (leftovers park hidden on its dots); the rest,
- * the globe's outer shell, become a thin halo around it (HALO_DOTS at most,
- * the others park hidden on the halo), so the shell only pulls in a little.
+ * the globe's outer shell, become a meshy haze around it, like the
+ * portrait's edges (HAZE_DOTS at most, the others park hidden in it), so the
+ * shell only pulls in a little.
  */
 export function stepTarget(
   id: StepId,
@@ -321,12 +323,11 @@ export function stepTarget(
     const j = Math.floor(Math.random() * dots.length);
     data.set([dots[j].x, dots[j].y, dots[j].z, 0], i * 4);
   }
-  const halo = haloPoints(dots, { count: Math.min(HALO_DOTS, Math.round(count * 0.12), count - usable), offsets: [0.1, 0.15] });
+  const haze = hazePoints(dots, { count: Math.min(HAZE_DOTS, Math.round(count * 0.12), count - usable) });
   for (let i = usable, k = 0; i < count; i++, k++) {
-    const [x, y] = halo[k < halo.length ? k : Math.floor(Math.random() * halo.length)] ?? [0, 0];
-    // Faint, a few brighter sparkles; the shader makes it dance (orbit).
-    const b = k >= halo.length ? 0 : Math.random() < 0.06 ? 0.75 : 0.26 + Math.random() * 0.12;
-    data.set([x, y, (Math.random() - 0.5) * 0.08, b + 2 * MOTION.orbit], i * 4);
+    const shown = k < haze.length;
+    const { x, y, z, b } = haze[shown ? k : Math.floor(Math.random() * haze.length)] ?? { x: 0, y: 0, z: 0, b: 0 };
+    data.set([x, y, z, (shown ? b : 0) + 2 * MOTION.drift], i * 4);
   }
   const toFit = (p: Vec3): Vec3 => [(p[0] - fit.cx) * fit.s, (p[1] - fit.cy) * fit.s, (p[2] - fit.cz) * fit.s * depth];
   return {

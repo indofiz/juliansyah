@@ -757,17 +757,31 @@ function distanceTransform(feature: Uint8Array, W: number, H: number): Float32Ar
   return out;
 }
 
+/** One speck of a picture's haze: position (world units) and brightness. */
+export type Speck = { x: number; y: number; z: number; b: number };
+
 /**
- * A thin halo around a picture's dots: strands that follow its outline at
- * `offsets` (world units) outside it. The outline is smoothed first (closed
- * by `smoothing`), so the halo wraps the overall form: around a tripod, not
- * between its legs. Strands have a few gaps; about `count` points in all.
- * Returns x, y pairs.
+ * A meshy haze around a picture's dots, like the portrait's edges in About:
+ * specks scattered at random around the outline, densest just outside it
+ * (from `start`) and thinning out with distance (`falloff`) up to `reach`
+ * (world units), brighter near the picture. The outline is closed first
+ * (`smoothing`), so narrow gaps like the space between a tripod's legs stay
+ * clear. Specks spread ±`depth` in z, so the haze reads as a cloud when the
+ * picture turns. Exactly `count` specks.
  */
-export function haloPoints(
+export function hazePoints(
   dots: { x: number; y: number }[],
-  { count = 1500, offsets = [0.11, 0.17], smoothing = 0.3, cell = 0.015, fill = 0.02 }: { count?: number; offsets?: number[]; smoothing?: number; cell?: number; fill?: number } = {},
-): Vec2[] {
+  {
+    count = 2200,
+    start = 0.012,
+    falloff = 0.07,
+    reach = 0.22,
+    depth = 0.12,
+    smoothing = 0.1,
+    cell = 0.012,
+    fill = 0.02,
+  }: { count?: number; start?: number; falloff?: number; reach?: number; depth?: number; smoothing?: number; cell?: number; fill?: number } = {},
+): Speck[] {
   if (!dots.length || count <= 0) return [];
   let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
   for (const { x, y } of dots) {
@@ -776,46 +790,63 @@ export function haloPoints(
     y0 = Math.min(y0, y);
     y1 = Math.max(y1, y);
   }
-  const margin = smoothing + Math.max(...offsets) + 4 * cell;
+  const margin = reach + smoothing + 4 * cell;
   x0 -= margin;
   y0 -= margin;
   const W = Math.ceil((x1 + margin - x0) / cell);
   const H = Math.ceil((y1 + margin - y0) / cell);
 
-  // The picture's silhouette, then closed: grown by `smoothing`, shrunk back.
+  // The picture's silhouette, and the distance from it.
   const inside = new Uint8Array(W * H);
-  const reach = Math.ceil(fill / cell);
+  const r = Math.ceil(fill / cell);
   for (const { x, y } of dots) {
     const cx = Math.floor((x - x0) / cell), cy = Math.floor((y - y0) / cell);
-    for (let j = -reach; j <= reach; j++) for (let i = -reach; i <= reach; i++) inside[(cy + j) * W + cx + i] = 1;
+    for (let j = -r; j <= r; j++) for (let i = -r; i <= r; i++) inside[(cy + j) * W + cx + i] = 1;
   }
   const toShape = distanceTransform(inside, W, H);
-  const outside = new Uint8Array(W * H);
-  for (let i = 0; i < W * H; i++) outside[i] = toShape[i] * cell > smoothing ? 1 : 0;
-  const toOutside = distanceTransform(outside, W, H);
+  // Distance from the closed silhouette (grown by `smoothing`, shrunk back):
+  // 0 in the narrow gaps the closing fills.
+  const grown = new Uint8Array(W * H);
+  for (let i = 0; i < W * H; i++) grown[i] = toShape[i] * cell > smoothing ? 1 : 0;
+  const toGrownEdge = distanceTransform(grown, W, H);
+  const distance = (i: number) => {
+    const d = toShape[i] * cell;
+    return d > smoothing ? d : Math.max(0, smoothing - toGrownEdge[i] * cell);
+  };
 
-  // Each strand: the edge of the closed shape grown by its offset.
-  const pts: Vec2[] = [];
-  offsets.forEach((offset, k) => {
-    const level = (smoothing - offset) / cell;
-    const inStrand = (i: number) => toOutside[i] > level;
-    for (let y = 1; y < H - 1; y++) {
-      for (let x = 1; x < W - 1; x++) {
-        const i = y * W + x;
-        if (!inStrand(i) || (inStrand(i - 1) && inStrand(i + 1) && inStrand(i - W) && inStrand(i + W))) continue;
-        const px = x0 + (x + Math.random()) * cell;
-        const py = y0 + (y + Math.random()) * cell;
-        // A few gaps along each strand, in different places per strand.
-        const a = Math.atan2(py, px);
-        if (Math.sin(3 * a + k * 1.9) + 0.6 * Math.sin(7 * a + 0.7 + k * 2.3) < -0.85) continue;
-        pts.push([px, py]);
-      }
-    }
-  });
-  // Thin evenly to `count`.
-  for (let i = pts.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [pts[i], pts[j]] = [pts[j], pts[i]];
+  // Each cell in the band, weighted by how dense the haze is there.
+  const cells: number[] = [];
+  const dist: number[] = [];
+  const cumulative: number[] = [];
+  let total = 0;
+  for (let i = 0; i < W * H; i++) {
+    const d = distance(i);
+    if (d <= start || d >= reach || toShape[i] * cell <= start) continue;
+    total += Math.exp(-(d - start) / falloff);
+    cells.push(i);
+    dist.push(d);
+    cumulative.push(total);
   }
-  return pts.slice(0, count);
+  if (!cells.length) return [];
+
+  const specks: Speck[] = [];
+  for (let n = 0; n < count; n++) {
+    // Pick a cell by weight (binary search on the running total).
+    const t = Math.random() * total;
+    let lo = 0, hi = cumulative.length - 1;
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1;
+      if (cumulative[mid] < t) lo = mid + 1;
+      else hi = mid;
+    }
+    const i = cells[lo];
+    const fade = Math.exp(-(dist[lo] - start) / (falloff * 1.3));
+    specks.push({
+      x: x0 + ((i % W) + Math.random()) * cell,
+      y: y0 + (Math.floor(i / W) + Math.random()) * cell,
+      z: (Math.random() * 2 - 1) * depth,
+      b: Math.random() < 0.03 ? 0.8 : (0.06 + 0.4 * fade) * (0.55 + 0.45 * Math.random()),
+    });
+  }
+  return specks;
 }

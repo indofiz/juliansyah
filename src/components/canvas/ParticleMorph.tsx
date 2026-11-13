@@ -234,7 +234,7 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
       // The How I work step pictures, built in a worker (a ray per dot,
       // ~0.1–0.5 s a picture), Discover first. Without workers, one per
       // idle moment on the main thread. The picture uses the globe's land
-      // and ocean particles; the shell's (the last ones) become its halo.
+      // and ocean particles; the shell's (the last ones) become its haze.
       const shellStart = globe.kinds.indexOf(KIND_HALO);
       const usable = shellStart === -1 ? count : shellStart;
       const u = particleMaterial.uniforms;

@@ -76,7 +76,7 @@ const simplexNoise = /* glsl */ `
  * lib/stepScenes.ts): small 3D scenes, each dot lit where it sits, some
  * parts in the palette's light rim colour and with a small motion of their
  * own. uStepW says how much of each shows; the globe gets the rest. The
- * shell becomes a thin halo around the pictures. The cloud, portrait and
+ * shell becomes a meshy haze around the pictures. The cloud, portrait and
  * floor stages run on top of that "home".
  */
 export const particleVertex = /* glsl */ `
@@ -145,6 +145,10 @@ export const particleVertex = /* glsl */ `
   // lib/stepScenes.ts): xyz moved, w its brightness now (above 1 = glow),
   // tint 1 for parts in the rim colour. With reduced motion the clock
   // stands still and so does every motion.
+  // This particle's own slow wander, for the haze (set in main before the
+  // pictures are read, so it's worked out once, not once per picture).
+  vec2 gWander;
+
   vec4 stepPoint(vec4 a, out float tint) {
     float code = floor(a.w * 0.5);
     float b = a.w - 2.0 * code;
@@ -178,11 +182,9 @@ export const particleVertex = /* glsl */ `
       float c = cos(ang), s = sin(ang);
       p = uSpinPivot + v * c + cross(uSpinAxis, v) * s + uSpinAxis * dot(uSpinAxis, v) * (1.0 - c);
     } else if (m == 7.0) {
-      // orbit: the halo moves in and out like the globe's shell, slowly,
-      // and its particles glimmer.
-      float n = snoise(vec3(p.xy * 1.6, uTime * 0.16));
-      p.xy += normalize(p.xy + vec2(0.0001)) * n * 0.045;
-      b *= 0.7 + 0.3 * sin(uTime * 1.9 + ph);
+      // drift: a haze speck wanders on its own (gWander) and glimmers.
+      p.xy += gWander;
+      b *= 0.6 + 0.4 * sin(uTime * (1.1 + aRandom.y) + ph);
     }
     return vec4(p, b);
   }
@@ -235,21 +237,32 @@ export const particleVertex = /* glsl */ `
     // toward the mouse.
     float iconTotal = dot(uStepW, vec4(1.0));
     float iT = stage(iconTotal, 0.0, aRandom.x);
-    vec4 share = uStepW / max(iconTotal, 0.0001);
-    float rShare = aRandom.x * 0.55;
-    vec4 sw = vec4(stage(share.x, 0.0, rShare), stage(share.y, 0.0, rShare), stage(share.z, 0.0, rShare), stage(share.w, 0.0, rShare));
-    sw /= max(dot(sw, vec4(1.0)), 0.0001);
-    float tn1, tn2, tn3, tn4;
-    vec4 icon = stepPoint(aStep1, tn1) * sw.x + stepPoint(aStep2, tn2) * sw.y + stepPoint(aStep3, tn3) * sw.z + stepPoint(aStep4, tn4) * sw.w;
-    float iconTint = dot(vec4(tn1, tn2, tn3, tn4), sw);
+    // No picture showing (most of the page): skip them all. uStepW is the
+    // same for every particle, so the GPU skips the whole block at once.
+    vec4 icon = vec4(0.0);
+    float iconTint = 0.0;
+    vec3 iconP = globe;
+    gWander = vec2(0.0);
+    if (iconTotal > 0.0) {
+      vec4 share = uStepW / iconTotal;
+      float rShare = aRandom.x * 0.55;
+      vec4 sw = vec4(stage(share.x, 0.0, rShare), stage(share.y, 0.0, rShare), stage(share.z, 0.0, rShare), stage(share.w, 0.0, rShare));
+      sw /= max(dot(sw, vec4(1.0)), 0.0001);
+      if (isShell > 0.5) {
+        gWander = vec2(snoise(vec3(aRandom.xy * 9.0, uTime * 0.12)), snoise(vec3(aRandom.zw * 9.0 + 4.0, uTime * 0.12))) * 0.03;
+      }
+      float tn1, tn2, tn3, tn4;
+      icon = stepPoint(aStep1, tn1) * sw.x + stepPoint(aStep2, tn2) * sw.y + stepPoint(aStep3, tn3) * sw.z + stepPoint(aStep4, tn4) * sw.w;
+      iconTint = dot(vec4(tn1, tn2, tn3, tn4), sw);
+      float between = clamp(2.0 * (1.0 - dot(sw, sw)), 0.0, 1.0);
+      iconP = rotateY(rotateX(icon.xyz + aScatter * 0.12 * between, uMouse.y), sin(uTime * 0.35) * 0.14 + uMouse.x);
+    }
     // Brightness up to 1 shows as brightness, the rest as glow.
     float iconA = min(icon.w, 1.0);
     float iconGlow = max(icon.w - 1.0, 0.0);
-    float between = clamp(2.0 * (1.0 - dot(sw, sw)), 0.0, 1.0);
-    vec3 iconP = rotateY(rotateX(icon.xyz + aScatter * 0.12 * between, uMouse.y), sin(uTime * 0.35) * 0.14 + uMouse.x);
-    // The globe's dancing outer shell becomes each picture's thin halo
-    // (lib/stepScenes.ts): tiny, soft particles, not halftone dots.
-    float iTs = iT * (1.0 - isShell); // the pictures themselves, without the halo
+    // The globe's dancing outer shell becomes each picture's meshy haze
+    // (lib/stepScenes.ts): tiny, soft specks, not halftone dots.
+    float iTs = iT * (1.0 - isShell); // the pictures themselves, without the haze
 
     vec3 home = mix(globe, iconP, iT);
     vec3 p = mix(home, cloud, t1);
@@ -309,7 +322,7 @@ export const particleVertex = /* glsl */ `
     vAlpha += shineIcon * (0.06 + 0.3 * iconA) * uIconBrightness;
     vAlpha = mix(vAlpha, 0.55 + 0.45 * aRandom.w, s);
     float glowGlobe = mix(rim * 1.8, 0.2 + light * 0.25, isShell);
-    float glowHome = mix(glowGlobe, mix(0.03 + iconA * 0.04 + iconGlow * 0.9, 0.3, isShell), iT);
+    float glowHome = mix(glowGlobe, mix(0.03 + iconA * 0.04 + iconGlow * 0.9, 0.2, isShell), iT);
     vGlow = (1.0 - t1) * glowHome + t2 * 0.02 + s * 0.3 + shine * aShade * 0.35 + shineIcon * iconA * 0.35;
     vTint = iconTint * iTs * (1.0 - t1) * (1.0 - s);
 
