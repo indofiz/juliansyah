@@ -30,16 +30,25 @@ export type SceneKeyframe = SceneValues & {
  * are what the particles look like once that section reaches the top of the
  * viewport; between sections the values blend as you scroll.
  *
+ * `pictures` says where How I work's step pictures may show (1) instead of
+ * the earth (0). Change it only where the particles can't be seen (opacity
+ * 0, or morph 1 or more, where the globe/picture is dissolved), or the
+ * switch plays on screen.
+ *
  * Note: the hero glass bars (.hero-bars in sections.css) are positioned to
  * match the hero values below. If you move the hero globe, update --cy / --r.
  */
-const hidden = { x: 0, y: 0.6, scale: 0.7, globeSpin: 4.8, shapeSpin: 0.6, morph: 0, sink: 0, opacity: 0 };
-/** The portrait scattered into a faded cloud (after about). */
-const scattered = { x: 0, y: 0.25, scale: 0.85, globeSpin: 4.8, shapeSpin: 0.3, morph: 1, sink: 0, opacity: 0, mobile: { y: 0.5 } };
+const hidden = { x: 0, y: 0.6, scale: 0.7, globeSpin: 4.8, shapeSpin: 0.6, morph: 0, sink: 0, opacity: 0, pictures: 0 };
+/**
+ * The portrait scattered into a faded cloud (after about). The step picture
+ * switches off here, unseen (morph 1 or more and fading out), so contact
+ * re-forms the earth.
+ */
+const scattered = { x: 0, y: 0.25, scale: 0.85, globeSpin: 4.8, shapeSpin: 0.3, morph: 1, sink: 0, opacity: 0, pictures: 0, mobile: { y: 0.5 } };
 
 export const sceneKeyframes: Record<string, SceneKeyframe> = {
   // Big globe rising from the bottom of the hero, behind the dashboard preview.
-  hero: { x: 0, y: -0.8, scale: 1.12, globeSpin: -0.45, shapeSpin: -0.25, morph: 0, sink: 0, opacity: 1, mobile: { y: -0.26 } },
+  hero: { x: 0, y: -0.8, scale: 1.12, globeSpin: -0.45, shapeSpin: -0.25, morph: 0, sink: 0, opacity: 1, pictures: 0, mobile: { y: -0.26 } },
 
   // Pinned intro: during the first screen of scroll the globe rises from the
   // bottom to the centre while the headline and dashboard part ways, then the
@@ -54,15 +63,17 @@ export const sceneKeyframes: Record<string, SceneKeyframe> = {
     morph: 0,
     sink: 0,
     opacity: 1,
+    pictures: 0,
     mobile: { y: -0.1, scale: 1 },
   },
 
   // The globe dissolves into a loose cloud and fades as the work cards
   // arrive, so the videos sit on a clean background.
-  work: { x: 0, y: 0.1, scale: 0.9, globeSpin: 0.4, shapeSpin: 0.15, morph: 1, sink: 0, opacity: 0 },
+  work: { x: 0, y: 0.1, scale: 0.9, globeSpin: 0.4, shapeSpin: 0.15, morph: 1, sink: 0, opacity: 0, pictures: 0 },
 
   // How I work: the particles re-form out of sight, straight into Discover's
-  // picture (never the earth), and rise with the section into the middle
+  // picture (never the earth: `pictures` turns on in the first third, while
+  // they're still faded out), and rise with the section into the middle
   // column between the copy and the steps, as main's globe does (desktop),
   // or under the title (phones), then hold there while the stage is pinned,
   // as each step's picture (ScrollFx, lib/stepScenes.ts). Its centre stays
@@ -74,7 +85,7 @@ export const sceneKeyframes: Record<string, SceneKeyframe> = {
   // --globe-cy on .process (sections.css, mobile.css).
   process: {
     via: [
-      { x: 0, y: -1.33, scale: 0.72, globeSpin: 3.2, shapeSpin: 0.7, morph: 0, opacity: 0, mobile: { y: -1.48, scale: 1.05 } },
+      { x: 0, y: -1.33, scale: 0.72, globeSpin: 3.2, shapeSpin: 0.7, morph: 0, opacity: 0, pictures: 1, mobile: { y: -1.48, scale: 1.05 } },
       { y: -0.67, globeSpin: 3.6, opacity: 0.9, mobile: { y: -0.82 } },
     ],
     x: 0,
@@ -85,6 +96,7 @@ export const sceneKeyframes: Record<string, SceneKeyframe> = {
     morph: 0,
     sink: 0,
     opacity: 1,
+    pictures: 1,
     mobile: { y: -0.15, scale: 1.05 },
   },
 
@@ -93,7 +105,8 @@ export const sceneKeyframes: Record<string, SceneKeyframe> = {
   // headset) in the empty middle column, framed by three cards a side. On
   // phones it sits between the title and the cards; there nothing pins in
   // How I work, so the globe starts to dissolve (and dims) as soon as the
-  // steps scroll up over it.
+  // steps scroll up over it. The step picture (the rocket after Launch on
+  // desktop, the telescope on phones) is what dissolves.
   about: {
     via: { x: 0, y: -0.15, scale: 1, morph: 1, sink: 0.85, opacity: 0.85, mobile: { opacity: 0.4 } },
     mobileScroll: { trigger: "#process", start: "top top", endTrigger: "#about" },
@@ -105,6 +118,7 @@ export const sceneKeyframes: Record<string, SceneKeyframe> = {
     morph: 2,
     sink: 0,
     opacity: 1,
+    pictures: 1,
     mobile: { y: 0.18, scale: 1 },
   },
 
@@ -114,7 +128,8 @@ export const sceneKeyframes: Record<string, SceneKeyframe> = {
   testimonials: scattered,
 
   // Contact bookends the page: the globe re-forms below the fold and rises
-  // behind the frosted contact panel, as it did behind the hero.
+  // behind the frosted contact panel, as it did behind the hero (the earth,
+  // not a step picture: `scattered` switched those off).
   contact: {
     via: { y: -1.3, scale: 1.05, morph: 0.4, opacity: 0.25 },
     x: 0,
@@ -125,6 +140,7 @@ export const sceneKeyframes: Record<string, SceneKeyframe> = {
     morph: 0,
     sink: 0,
     opacity: 1,
+    pictures: 0,
     mobile: { y: -0.5, scale: 1 },
   },
 

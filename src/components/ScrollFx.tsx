@@ -3,7 +3,7 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { showStepIcon } from "@/lib/sceneState";
+import { sceneState, showStepIcon } from "@/lib/sceneState";
 import type { StepId } from "@/lib/stepScenes";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -88,13 +88,16 @@ export function ScrollFx() {
     // every step stays lit and the track full (reduced-motion.css); the
     // pictures swap at once.
     //
-    // The section never shows the earth: Discover is set as soon as the
-    // section starts to come in (its top at the screen's bottom), while the
-    // particles are still faded out from Work, so they assemble straight into
-    // it. Above that point the globe comes back, still unseen, for the hero.
-    // Phones hold Discover under the title (their steps show their own
-    // icons). Without WebGL the lit step's picture shows as an image where
-    // the globe would be ([data-step-icon]).
+    // This only picks WHICH picture: the lit step's on desktop (Discover
+    // above the track), Discover on phones (their steps show their own
+    // icons). WHETHER a picture shows instead of the earth is `pictures` in
+    // lib/sceneKeyframes.ts, scrubbed with the rest of the scene: it turns on
+    // while the particles are still faded out from Work, so the section
+    // never shows the earth, and off once About's portrait has broken up, so
+    // contact and the hero always get the earth. The picture follows the
+    // track's own progress on every change (jumps and refreshes included),
+    // so it never waits on another trigger. Without WebGL the lit step's
+    // picture shows as an image where the globe would be ([data-step-icon]).
     document.querySelectorAll<HTMLElement>("[data-steps]").forEach((list) => {
       const section = list.closest<HTMLElement>("section") ?? list;
       const fill = list.querySelector<HTMLElement>(".steps-fill");
@@ -103,25 +106,17 @@ export function ScrollFx() {
       const fallbacks = gsap.utils.toArray<HTMLElement>("[data-step-icon]", section);
       const pin = list.closest<HTMLElement>("[data-steps-pin]");
       let current = 0;
-      let shown: StepId | null = null; // the picture on the globe (null = the globe)
 
-      const showIcon = (id: StepId | null) => {
-        if (id === shown) return;
-        shown = id;
-        showStepIcon(id, { instant: reduce });
+      // Compared with the scene's own target, so a picture picked elsewhere
+      // (the dev keys in ParticleMorph) is put right on the next change.
+      const showIcon = (id: StepId) => {
+        if (id !== sceneState.iconTarget) showStepIcon(id, { instant: reduce });
       };
 
       gsap.matchMedia().add({ desktop: "(min-width: 901px)", mobile: "(max-width: 900px)" }, (ctx) => {
         const desktop = Boolean(ctx.conditions?.desktop);
         const pinned = desktop && Boolean(pin) && !reduce;
-        let arrival: ScrollTrigger | null = null;
-        let track: ScrollTrigger | null = null;
 
-        const sync = () => {
-          if (!arrival || !track) return;
-          const y = arrival.scroll();
-          showIcon(y < arrival.start ? null : desktop && y >= track.start ? ids[current] : ids[0]);
-        };
         const update = (self: ScrollTrigger) => {
           if (fill && !reduce) fill.style.height = `${Math.max(8, self.progress * 100)}%`;
           const i = Math.min(steps.length - 1, Math.floor(self.progress * steps.length));
@@ -130,26 +125,19 @@ export function ScrollFx() {
             steps.forEach((s, k) => s.classList.toggle("on", k === i));
             fallbacks.forEach((a, k) => a.classList.toggle("on", k === i));
           }
-          sync();
+          showIcon(desktop ? ids[current] : ids[0]);
         };
 
-        arrival = ScrollTrigger.create({
-          trigger: section,
-          start: "top bottom",
-          end: () => ScrollTrigger.maxScroll(window),
-          onToggle: sync,
-          onRefresh: sync,
-        });
-        track = ScrollTrigger.create({
+        const track = ScrollTrigger.create({
           trigger: pinned ? pin : list,
           start: pinned ? "top top" : "top 75%",
           end: pinned ? "bottom bottom" : "bottom 45%",
           onUpdate: update,
           onRefresh: update,
         });
-        sync();
-        // Back to the globe when the layout changes.
-        return () => showIcon(null);
+        update(track);
+        // Back to Discover when the layout changes.
+        return () => showIcon(ids[0]);
       });
     });
 

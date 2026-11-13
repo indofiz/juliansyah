@@ -155,14 +155,18 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
     return () => mq.removeEventListener("change", update);
   }, []);
 
-  // Development: keys 0–4 show the globe or a step icon, to check the icons
-  // anywhere on the page (the next step that lights up takes over again).
+  // Development: keys 1–4 show a step picture anywhere on the page, even
+  // where the scroll keeps the earth (`pictures` 0); 0 hands back to the
+  // scroll (in How I work, the next scroll in the step track restores its
+  // picture).
+  const devPictures = useRef(false);
   useEffect(() => {
     if (process.env.NODE_ENV !== "development") return;
     const onKey = (e: KeyboardEvent) => {
       if (!/^[0-4]$/.test(e.key) || e.metaKey || e.ctrlKey || e.altKey) return;
       if ((e.target as HTMLElement | null)?.closest?.("input, textarea, select, [contenteditable]")) return;
-      showStepIcon(e.key === "0" ? null : STEP_IDS[Number(e.key) - 1]);
+      devPictures.current = e.key !== "0";
+      if (devPictures.current) showStepIcon(STEP_IDS[Number(e.key) - 1]);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -218,8 +222,9 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
 
       // Intro: particles fly in from the cloud and assemble the globe
       // (skipped with reduced motion: the globe is simply there). Landing
-      // in How I work (a reload there, a #process link), it waits for the
-      // picture shown there, so they assemble into it, not the earth.
+      // where a step picture shows (How I work, About: a reload there, a
+      // #process link), it waits for that picture, so they assemble into
+      // it, not the earth.
       let introStarted = false;
       const startIntro = () => {
         if (introStarted || cancelled) return;
@@ -227,7 +232,7 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
         if (reduceMotion.current) sceneState.intro = 1;
         else gsap.fromTo(sceneState, { intro: 0 }, { intro: 1, duration: 2.6, ease: "power3.out", delay: 0.15 });
       };
-      const waitFor = sceneState.iconTarget;
+      const waitFor = sceneState.pictures > 0.5 ? sceneState.iconTarget : null;
       if (waitFor) window.setTimeout(startIntro, 2500);
       else startIntro();
 
@@ -320,8 +325,10 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
     u.uOpacity.value = s.opacity;
     (u.uShapeY.value as THREE.Vector2).set(shapeMeta.current.minY, shapeMeta.current.maxY);
     u.uShapeBrightness.value = shapeMeta.current.brightness;
-    // A picture that isn't built yet shows as the globe.
-    const [w1, w2, w3, w4] = STEP_IDS.map((id) => s.icons[id] * ready.current[id]);
+    // A picture shows only where the scroll allows it (`pictures`); one that
+    // isn't built yet shows as the globe.
+    const allowed = devPictures.current ? 1 : THREE.MathUtils.clamp(s.pictures, 0, 1);
+    const [w1, w2, w3, w4] = STEP_IDS.map((id) => s.icons[id] * ready.current[id] * allowed);
     const iconTotal = w1 + w2 + w3 + w4;
     (u.uStepW.value as THREE.Vector4).set(w1, w2, w3, w4);
 
