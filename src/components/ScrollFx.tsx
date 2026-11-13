@@ -4,7 +4,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { showStepIcon } from "@/lib/sceneState";
-import type { StepId } from "@/lib/stepIcons";
+import type { StepId } from "@/lib/stepScenes";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -14,7 +14,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
  *  - [data-reveal]    fade up once when it enters the viewport
  *  - hero bars        frosted panels: in on load, out once you scroll, back in at the top
  *  - [data-steps]     How I work: the track fills, the current step lights up
- *                     and the globe turns into its icon (desktop)
+ *                     and the globe turns into its picture
  *  - [data-cta]       contact panel: corner glow slides to the bottom
  */
 export function ScrollFx() {
@@ -78,27 +78,32 @@ export function ScrollFx() {
       if (window.scrollY <= atTop.end) showBars(0.5);
     }
 
-    // ---- How I work: steps and the icons on the globe ------------------------
+    // ---- How I work: steps and the pictures on the globe ---------------------
     // The track fills, the current step lights up and the globe turns into
-    // its icon (lib/stepIcons.ts). Desktop: the track is pinned
+    // its picture (lib/stepScenes.ts). Desktop: the track is pinned
     // ([data-steps-pin], a tall track with a sticky stage), so this spans the
-    // pinned scroll while the globe holds still; above it the globe is a
-    // globe, and after Launch the rocket stays, to dissolve into About's
-    // portrait. Phones and reduced motion: nothing pins; it runs while the
-    // list scrolls past. Phones keep the globe (it fades as the steps scroll
-    // over it) and show the icons beside the steps instead. With reduced
-    // motion every step stays lit and the track full (reduced-motion.css);
-    // the icons swap at once. Without WebGL the lit step's icon shows as SVG
-    // where the globe would be ([data-step-icon]).
+    // pinned scroll while the picture holds still; after Launch the rocket
+    // stays, to dissolve into About's portrait. Phones and reduced motion:
+    // nothing pins; it runs while the list scrolls past. With reduced motion
+    // every step stays lit and the track full (reduced-motion.css); the
+    // pictures swap at once.
+    //
+    // The section never shows the earth: Discover is set as soon as the
+    // section starts to come in (its top at the screen's bottom), while the
+    // particles are still faded out from Work, so they assemble straight into
+    // it. Above that point the globe comes back, still unseen, for the hero.
+    // Phones hold Discover under the title (their steps show their own
+    // icons). Without WebGL the lit step's picture shows as an image where
+    // the globe would be ([data-step-icon]).
     document.querySelectorAll<HTMLElement>("[data-steps]").forEach((list) => {
-      const section = list.closest("section");
+      const section = list.closest<HTMLElement>("section") ?? list;
       const fill = list.querySelector<HTMLElement>(".steps-fill");
       const steps = gsap.utils.toArray<HTMLElement>(".step", list);
       const ids = steps.map((s) => s.dataset.step as StepId);
-      const fallbacks = section ? gsap.utils.toArray<HTMLElement>("[data-step-icon]", section) : [];
+      const fallbacks = gsap.utils.toArray<HTMLElement>("[data-step-icon]", section);
       const pin = list.closest<HTMLElement>("[data-steps-pin]");
       let current = 0;
-      let shown: StepId | null = null; // the icon on the globe (null = the globe)
+      let shown: StepId | null = null; // the picture on the globe (null = the globe)
 
       const showIcon = (id: StepId | null) => {
         if (id === shown) return;
@@ -106,25 +111,43 @@ export function ScrollFx() {
         showStepIcon(id, { instant: reduce });
       };
 
-      const update = (self: ScrollTrigger, globeIcons: boolean) => {
-        if (fill && !reduce) fill.style.height = `${Math.max(8, self.progress * 100)}%`;
-        const i = Math.min(steps.length - 1, Math.floor(self.progress * steps.length));
-        if (globeIcons) showIcon(self.scroll() >= self.start ? ids[i] : null);
-        if (i === current) return;
-        current = i;
-        steps.forEach((s, k) => s.classList.toggle("on", k === i));
-        fallbacks.forEach((a, k) => a.classList.toggle("on", k === i));
-      };
       gsap.matchMedia().add({ desktop: "(min-width: 901px)", mobile: "(max-width: 900px)" }, (ctx) => {
         const desktop = Boolean(ctx.conditions?.desktop);
         const pinned = desktop && Boolean(pin) && !reduce;
-        ScrollTrigger.create({
+        let arrival: ScrollTrigger | null = null;
+        let track: ScrollTrigger | null = null;
+
+        const sync = () => {
+          if (!arrival || !track) return;
+          const y = arrival.scroll();
+          showIcon(y < arrival.start ? null : desktop && y >= track.start ? ids[current] : ids[0]);
+        };
+        const update = (self: ScrollTrigger) => {
+          if (fill && !reduce) fill.style.height = `${Math.max(8, self.progress * 100)}%`;
+          const i = Math.min(steps.length - 1, Math.floor(self.progress * steps.length));
+          if (i !== current) {
+            current = i;
+            steps.forEach((s, k) => s.classList.toggle("on", k === i));
+            fallbacks.forEach((a, k) => a.classList.toggle("on", k === i));
+          }
+          sync();
+        };
+
+        arrival = ScrollTrigger.create({
+          trigger: section,
+          start: "top bottom",
+          end: () => ScrollTrigger.maxScroll(window),
+          onToggle: sync,
+          onRefresh: sync,
+        });
+        track = ScrollTrigger.create({
           trigger: pinned ? pin : list,
           start: pinned ? "top top" : "top 75%",
           end: pinned ? "bottom bottom" : "bottom 45%",
-          onUpdate: (self) => update(self, desktop),
-          onRefresh: (self) => update(self, desktop),
+          onUpdate: update,
+          onRefresh: update,
         });
+        sync();
         // Back to the globe when the layout changes.
         return () => showIcon(null);
       });

@@ -17,7 +17,7 @@ export type Platform = "Flutter" | "Web" | "Design";
 
 export type ImageRef = { src: string; alt: string; width: number; height: number };
 
-/** One step in How I work. `id` picks its icon (lib/stepIcons.ts). */
+/** One step in How I work. `id` picks its picture (lib/stepScenes.ts). */
 export type ProcessStep = { id: "discover" | "design" | "build" | "launch"; title: string; text: string };
 
 /** One number with its meaning, e.g. { value: "7,000+", label: "active users" }. */

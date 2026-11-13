@@ -865,8 +865,9 @@
 /* Desktop: an empty column; the globe and its step pictures are WebGL
    (ParticleMorph). Without WebGL the lit step's picture shows instead,
    still, where the globe's centre would be, placed against the stage (a
-   share of the screen, not of the column). Its 100-unit-wide box spans 1.9
-   globe radii, as the particle pictures do (StepIcon pads it by 5 a side). */
+   share of the screen, not of the column). Its box is 1.9 × 2.4 globe
+   radii, the picture placed in it as the particles place it (StepIcon
+   `art`, npm run step-art). */
 .process-globe {
   grid-area: globe;
 }
@@ -880,19 +881,15 @@
   position: absolute;
   left: var(--globe-x);
   top: 50%;
-  width: calc(var(--globe-r) * 1.9 * 1.1);
-  aspect-ratio: 110 / 135;
+  width: calc(var(--globe-r) * 1.9);
+  aspect-ratio: 19 / 24;
   translate: -50% -50%;
-  color: var(--accent);
   filter: drop-shadow(0 0 1.25rem rgb(var(--accent-rgb) / 0.45));
 }
 
 .process-icon {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
   opacity: 0;
   transition: opacity 0.4s ease;
 }
@@ -901,8 +898,27 @@
   opacity: 1;
 }
 
+/* A step picture as an image (StepIcon): its accent mask over the accent,
+   its light mask over the particles' rim colour. -webkit- first: Lightning
+   CSS keeps both that way round. */
+.step-picture::before,
+.step-picture::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  -webkit-mask: var(--mask) center / contain no-repeat;
+  mask: var(--mask) center / contain no-repeat;
+}
+
+.step-picture::after {
+  background: var(--scene-rim);
+  -webkit-mask-image: var(--mask-light);
+  mask-image: var(--mask-light);
+}
+
 /* Each step's own icon (StepIcon): phones only (mobile.css), where the
-   globe can't show it. */
+   globe shows only Discover. */
 .step-icon {
   display: none;
 }

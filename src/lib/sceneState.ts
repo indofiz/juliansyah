@@ -1,5 +1,5 @@
 import gsap from "gsap";
-import { STEP_IDS, type StepId } from "./stepIcons";
+import { STEP_IDS, type StepId } from "./stepScenes";
 
 /**
  * One plain object shared by the DOM (GSAP ScrollTrigger writes to it) and
@@ -25,7 +25,7 @@ export type SceneValues = {
   opacity: number;
 };
 
-export const sceneState: SceneValues & { intro: number; icons: Record<StepId, number> } = {
+export const sceneState: SceneValues & { intro: number; icons: Record<StepId, number>; iconTarget: StepId | null } = {
   x: 0,
   y: 0,
   scale: 1,
@@ -42,6 +42,8 @@ export const sceneState: SceneValues & { intro: number; icons: Record<StepId, nu
    * scenes never overwrite it; set it with showStepIcon.
    */
   icons: { discover: 0, design: 0, build: 0, launch: 0 },
+  /** The picture `icons` is heading to (null = the globe). */
+  iconTarget: null,
 };
 
 /**
@@ -50,6 +52,7 @@ export const sceneState: SceneValues & { intro: number; icons: Record<StepId, nu
  * into the globe with `null`.
  */
 export function showStepIcon(id: StepId | null, { instant = false } = {}) {
+  sceneState.iconTarget = id;
   const to = Object.fromEntries(STEP_IDS.map((k) => [k, k === id ? 1 : 0]));
   gsap.to(sceneState.icons, { ...to, duration: instant ? 0 : 1.1, ease: "power2.inOut", overwrite: true });
 }

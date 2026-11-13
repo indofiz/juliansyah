@@ -702,8 +702,8 @@
   }
 
   /* Each step's icon, top right: the picture the globe turns into on
-     desktop (here the globe fades as the steps scroll over it). Dim like
-     the grey titles, lit with its step. */
+     desktop (here the globe holds Discover and fades as the steps scroll
+     over it). Dim like the grey titles, lit with its step. */
   .step-icon {
     display: block;
     position: absolute;
@@ -711,7 +711,6 @@
     right: 0;
     width: 2.5rem;
     height: 2.5rem;
-    color: var(--accent);
     opacity: 0.3;
     transition:
       opacity 0.4s,

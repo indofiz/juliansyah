@@ -272,8 +272,8 @@ export const caseStudyLabels = {
 /* ---------------------------------------------------------------------------
  * 4. How I work (section id "process"): what's it like to work with you?
  * Main's "Seamless from Call to Launch" layout: copy | steps | the globe,
- * where the globe turns into the lit step's icon. The icons are SVG paths
- * in lib/stepIcons.ts, matched by step `id`.
+ * where the globe turns into the lit step's picture. The pictures are 3D
+ * scenes in lib/stepScenes.ts, matched by step `id`.
  * ------------------------------------------------------------------------- */
 export const howIWork = {
   badge: "How I work",

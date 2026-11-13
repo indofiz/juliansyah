@@ -5,9 +5,9 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import gsap from "gsap";
 import { sceneState, showStepIcon } from "@/lib/sceneState";
-import { STEP_ART, STEP_IDS } from "@/lib/stepIcons";
+import { STEP_IDS, stepTarget, type StepId } from "@/lib/stepScenes";
+import type { StepArtRequest, StepArtResult } from "./stepArt.worker";
 import {
-  artShape,
   buildGlobe,
   buildScatter,
   defaultShapeGeometry,
@@ -30,16 +30,6 @@ const GLOBE_SPIN_SPEED = 0.08;
 
 /** Brightness of the How I work step pictures (lower = dimmer dots). */
 const ICON_BRIGHTNESS = 1;
-
-/**
- * Direction of the pictures' "flow" motion (the rocket's exhaust), from the
- * picture's y-down coordinates to world space.
- */
-const FLOW_DIR = (() => {
-  const [x, y] = STEP_IDS.map((id) => STEP_ART[id].flow).find(Boolean) ?? [0, 1];
-  const len = Math.hypot(x, y) || 1;
-  return new THREE.Vector2(x / len, -y / len);
-})();
 
 /** Runs `fn` when the browser is idle (Safari has no requestIdleCallback). */
 const whenIdle = (fn: () => void) =>
@@ -91,7 +81,10 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
           uShapeBrightness: { value: 1 },
           uStepW: { value: new THREE.Vector4() },
           uIconBrightness: { value: ICON_BRIGHTNESS },
-          uFlowDir: { value: FLOW_DIR },
+          uFlowDir: { value: new THREE.Vector2(0, -1) },
+          uDabDir: { value: new THREE.Vector2(0, -1) },
+          uSpinPivot: { value: new THREE.Vector3() },
+          uSpinAxis: { value: new THREE.Vector3(0, 0, 1) },
           uOpacity: { value: 1 },
           uColor: { value: new THREE.Color() },
           uRimColor: { value: new THREE.Color() },
@@ -175,13 +168,18 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // True once all four step icons are built; until then the globe stays a globe.
-  const iconsReady = useRef(false);
+  // How far each step picture has faded in once built (0–1); until then the
+  // globe stands in for it.
+  const ready = useRef<Record<StepId, number>>({ discover: 0, design: 0, build: 0, launch: 0 });
 
   // Build all particle targets once, off the render loop.
   useEffect(() => {
     let cancelled = false;
-    iconsReady.current = false;
+    let worker: Worker | null = null;
+    const fades = ready.current;
+    const built = new Set<StepId>();
+    gsap.killTweensOf(fades);
+    for (const id of STEP_IDS) fades[id] = 0;
     (async () => {
       const mask = await loadLandMask("/textures/earth-mask.png");
       const globe = buildGlobe(count, mask);
@@ -219,27 +217,71 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
       setGeometry(g);
 
       // Intro: particles fly in from the cloud and assemble the globe
-      // (skipped with reduced motion: the globe is simply there).
-      if (reduceMotion.current) sceneState.intro = 1;
-      else gsap.fromTo(sceneState, { intro: 0 }, { intro: 1, duration: 2.6, ease: "power3.out", delay: 0.15 });
+      // (skipped with reduced motion: the globe is simply there). Landing
+      // in How I work (a reload there, a #process link), it waits for the
+      // picture shown there, so they assemble into it, not the earth.
+      let introStarted = false;
+      const startIntro = () => {
+        if (introStarted || cancelled) return;
+        introStarted = true;
+        if (reduceMotion.current) sceneState.intro = 1;
+        else gsap.fromTo(sceneState, { intro: 0 }, { intro: 1, duration: 2.6, ease: "power3.out", delay: 0.15 });
+      };
+      const waitFor = sceneState.iconTarget;
+      if (waitFor) window.setTimeout(startIntro, 2500);
+      else startIntro();
 
-      // The How I work step pictures: one per idle moment after the globe
-      // (~10–20 ms each), so they never hold up the first frames. The
-      // shell's particles (the last ones) stay out of them: the shader keeps
-      // the shell around the pictures.
+      // The How I work step pictures, built in a worker (a ray per dot,
+      // ~0.1–0.5 s a picture), Discover first. Without workers, one per
+      // idle moment on the main thread. The picture uses the globe's land
+      // and ocean particles; the shell's (the last ones) become its halo.
       const shellStart = globe.kinds.indexOf(KIND_HALO);
       const usable = shellStart === -1 ? count : shellStart;
-      let k = 0;
-      const nextIcon = () => {
+      const u = particleMaterial.uniforms;
+      const receive = ({ id, data, flow, dab, spin }: StepArtResult) => {
         if (cancelled) return;
-        g.setAttribute(`aStep${k + 1}`, new THREE.BufferAttribute(artShape(STEP_ART[STEP_IDS[k]], count, { usable }), 4));
-        if (++k < STEP_IDS.length) whenIdle(nextIcon);
-        else iconsReady.current = true;
+        built.add(id);
+        g.setAttribute(`aStep${STEP_IDS.indexOf(id) + 1}`, new THREE.BufferAttribute(data, 4));
+        if (flow) (u.uFlowDir.value as THREE.Vector2).set(...flow).normalize();
+        if (dab) (u.uDabDir.value as THREE.Vector2).set(...dab).normalize();
+        if (spin) {
+          (u.uSpinPivot.value as THREE.Vector3).set(...spin.pivot);
+          (u.uSpinAxis.value as THREE.Vector3).set(...spin.axis).normalize();
+        }
+        // Fade in, so a picture that's already wanted doesn't pop in over
+        // the globe; at once if the intro was waiting for it.
+        if (id === waitFor && !introStarted) {
+          fades[id] = 1;
+          startIntro();
+        } else {
+          gsap.to(fades, { [id]: 1, duration: reduceMotion.current ? 0 : 0.9, ease: "power2.inOut" });
+        }
       };
-      whenIdle(nextIcon);
+      const onMainThread = (order: StepId[]) => {
+        const [id, ...rest] = order;
+        if (!id || cancelled) return;
+        whenIdle(() => {
+          if (cancelled) return;
+          receive({ id, ...stepTarget(id, count, { usable }) });
+          onMainThread(rest);
+        });
+      };
+      try {
+        worker = new Worker(new URL("./stepArt.worker.ts", import.meta.url));
+        worker.onmessage = (e: MessageEvent<StepArtResult>) => receive(e.data);
+        worker.onerror = () => {
+          worker?.terminate();
+          onMainThread(STEP_IDS.filter((id) => !built.has(id)));
+        };
+        worker.postMessage({ count, usable, order: [...STEP_IDS] } satisfies StepArtRequest);
+      } catch {
+        onMainThread([...STEP_IDS]);
+      }
     })();
     return () => {
       cancelled = true;
+      worker?.terminate();
+      gsap.killTweensOf(fades);
     };
     // Re-run only when the shape source actually changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -278,14 +320,10 @@ export function ParticleMorph({ count, shape: shapeSource = { type: "default" },
     u.uOpacity.value = s.opacity;
     (u.uShapeY.value as THREE.Vector2).set(shapeMeta.current.minY, shapeMeta.current.maxY);
     u.uShapeBrightness.value = shapeMeta.current.brightness;
-    const icons = iconsReady.current ? s.icons : null;
-    const iconTotal = icons ? STEP_IDS.reduce((sum, id) => sum + icons[id], 0) : 0;
-    (u.uStepW.value as THREE.Vector4).set(
-      icons?.[STEP_IDS[0]] ?? 0,
-      icons?.[STEP_IDS[1]] ?? 0,
-      icons?.[STEP_IDS[2]] ?? 0,
-      icons?.[STEP_IDS[3]] ?? 0,
-    );
+    // A picture that isn't built yet shows as the globe.
+    const [w1, w2, w3, w4] = STEP_IDS.map((id) => s.icons[id] * ready.current[id]);
+    const iconTotal = w1 + w2 + w3 + w4;
+    (u.uStepW.value as THREE.Vector4).set(w1, w2, w3, w4);
 
     // The glowing atmosphere belongs to the globe: it fades as the globe
     // dissolves, sinks or becomes a step icon.

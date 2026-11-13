@@ -61,16 +61,16 @@ export const sceneKeyframes: Record<string, SceneKeyframe> = {
   // arrive, so the videos sit on a clean background.
   work: { x: 0, y: 0.1, scale: 0.9, globeSpin: 0.4, shapeSpin: 0.15, morph: 1, sink: 0, opacity: 0 },
 
-  // How I work: the globe re-forms out of sight and rises with the section
-  // into the right-hand column (desktop) or under the title (phones), then
-  // holds there while the stage is pinned, turning into each step's icon
-  // (ScrollFx, lib/stepIcons.ts). Its centre stays a fixed distance below
-  // the section's top (half a screen; 57.5% on phones, y -0.15) as the
-  // section scrolls in: each third of the transition is a third of a screen,
-  // so y moves 0.67 per via. The no-WebGL icon and the phones' globe space
-  // in Process.tsx follow the globe's centre and size: if you change x, y or
-  // scale here, update --globe-x / --globe-r / --globe-cy on .process
-  // (sections.css, mobile.css).
+  // How I work: the particles re-form out of sight, straight into Discover's
+  // picture (never the earth), and rise with the section into the right-hand
+  // column (desktop) or under the title (phones), then hold there while the
+  // stage is pinned, as each step's picture (ScrollFx, lib/stepScenes.ts).
+  // Its centre stays a fixed distance below the section's top (half a
+  // screen; 57.5% on phones, y -0.15) as the section scrolls in: each third
+  // of the transition is a third of a screen, so y moves 0.67 per via. The
+  // no-WebGL picture and the phones' globe space in Process.tsx follow the
+  // globe's centre and size: if you change x, y or scale here, update
+  // --globe-x / --globe-r / --globe-cy on .process (sections.css, mobile.css).
   process: {
     via: [
       { x: 0.64, y: -1.33, scale: 0.75, globeSpin: 3.2, shapeSpin: 0.7, morph: 0, opacity: 0, mobile: { x: 0, y: -1.48, scale: 1.05 } },

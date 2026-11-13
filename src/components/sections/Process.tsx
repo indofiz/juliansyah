@@ -4,16 +4,18 @@ import { Button, SectionHeader } from "../ui/primitives";
 
 /**
  * How I work: main's "Seamless from Call to Launch" layout, with the globe
- * moved to the right. Copy | steps | the particle globe (the "process"
- * keyframe), which turns into the lit step's icon (lib/stepIcons.ts).
+ * moved to the right. Copy | steps | the particles (the "process"
+ * keyframe), which form the lit step's 3D picture (lib/stepScenes.ts):
+ * Discover's telescope as the section comes in, never the earth.
  *
  * Desktop: the track is taller than the screen and its stage sticks, so the
- * globe holds still while scrolling fills the step track, lights each step
- * in turn and turns the globe into its icon (ScrollFx, [data-steps]).
- * Phones: title, globe, steps, buttons, nothing pinned; each step shows its
- * icon beside it instead. Reduced motion: nothing pinned, every step lit,
- * the icons swap without moving. Without WebGL the lit step's icon shows as
- * SVG where the globe would be (.no-webgl).
+ * picture holds still while scrolling fills the step track, lights each
+ * step in turn and turns the particles into its picture (ScrollFx,
+ * [data-steps]). Phones: title, the telescope, steps, buttons, nothing
+ * pinned; each step shows its own icon beside it. Reduced motion: nothing
+ * pinned, every step lit, the pictures swap without moving. Without WebGL
+ * the lit step's picture shows as an image where the particles would be
+ * (.no-webgl).
  */
 export function Process() {
   return (

@@ -335,6 +335,8 @@ const declarations = (p: Palette) =>
   [
     ...Object.entries(p.rgb).map(([name, hex]) => `--${name}-rgb:${hexToRgb(hex)}`),
     ...Object.entries(p.raw).map(([name, value]) => `--${name}:${value}`),
+    // The particles' rim colour, for the step pictures drawn in CSS (StepIcon).
+    `--scene-rim:${p.scene.rim}`,
   ].join(";");
 
 /** Every palette's custom properties, printed into <head> by the layout. */

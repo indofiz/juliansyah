@@ -25,7 +25,7 @@ npm run build
 | 1 | Hero | `hero` | Who are you? | Greeting pill (name ✳ tagline), headline (the only h1), description, two CTAs, design-system dashboard whose stat card is real (12K+ users, moving strip of client logos in colour) inside sample chrome. **Pinned**: the copy slides up and the dashboard slides down while the globe rises |
 | 2 | Track record | `proof` | Can I trust you? | Second screen of the pinned intro: one-line stats (icon, white number, amber label) around the centred globe; View work / Learn more on desktop |
 | 3 | Selected work | `work` | Can you do what I need? | Flagship card with "Tap to try" (lazy Flutter web iframe), then project cards. Each opens `/work/[slug]` |
-| 4 | How I work | `process` | What's it like to work with you? | Main's "Seamless from Call to Launch" layout with the globe on the right: copy, four steps (Discover, Design, Build, Launch) on a track that fills as you scroll, and a frosted lens on the globe where the lit step's SVG illustration draws itself in. **Pinned** on desktop; phones stack title, globe, steps, buttons |
+| 4 | How I work | `process` | What's it like to work with you? | Main's "Seamless from Call to Launch" layout with the particles on the right: copy, four steps (Discover, Design, Build, Launch) on a track that fills as you scroll, and the particles forming the lit step's 3D picture (telescope, palette and brush, code window and gear, rocket) with a thin halo. The section opens on the telescope, never the earth. **Pinned** on desktop; phones stack title, telescope, steps (each with its icon), buttons |
 | 5 | About | `about` | Who are you, and can you do what I need? | Main's "Under One Roof" layout, titled "From Design to Production, Under One Roof.": three cards a side (Who I am, then five expertise cards with their tools) with the particle portrait forming in the empty middle column. Phones: title, portrait, then a card carousel. Without WebGL the real photo fills the middle column |
 | 6 | Playground | `playground` | Can you do what I need? | Experiments that load near the viewport and pause off screen |
 | 7 | Testimonials | `testimonials` | Can I trust you? | Short quotes, just before Contact |
@@ -84,12 +84,12 @@ Below 1024px it's a normal responsive layout with a 16px base; phone rules
 | --- | --- |
 | **All copy, projects, case studies, numbers** | `src/content/site.ts` |
 | Colors, radii, fonts (design tokens) | `src/styles/tokens.css` |
-| Accent colour (whole site) | the `--accent-*` ramp in `tokens.css` + `src/lib/theme.ts` (WebGL) |
+| Accent colours (the visitor's palette picker, whole site and WebGL) | `src/lib/palettes.ts` (the only place they live; `npm run palette` derives a new one) |
 | Buttons, badges, cards, frames, device frames, nav | `src/styles/components.css` |
 | Section layouts | `src/styles/sections.css` and `src/components/sections/*` |
 | Scroll choreography of the particles | `src/lib/sceneKeyframes.ts` |
 | Pinned intro timing (headline up, dashboard down, proof in) | intro timeline in `src/components/ScrollFx.tsx` |
-| How I work illustrations (one SVG per step, drawn in and looped with CSS) | `src/components/process/StepArt.tsx`, styles under "Step art" in `sections.css` |
+| How I work step pictures (small 3D scenes the particles form) | `src/lib/stepScenes.ts` (scenes), `src/lib/sdf.ts` (shapes, light, dots, halo); run `npm run step-art` after a change to redraw the phone icons and no-WebGL images in `public/process/` |
 | Particle look, count, bloom | `src/components/canvas/shaders.ts`, `Scene.tsx` |
 
 **Adding a section:** add a `<section id="my-section">` to `page.tsx` and a
