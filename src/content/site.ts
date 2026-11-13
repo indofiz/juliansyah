@@ -12,8 +12,8 @@ export const site = {
   name: "Juliansyah",
   wordmark: { first: "JULIAN", second: "SYAH" },
   role: "Flutter developer, front-end developer and UI/UX designer",
-  // TODO: confirm the domain. It's used for canonical URLs, the sitemap and Open Graph.
-  url: "https://juliansyah.dev",
+  /** Confirmed by the user (2026-11-13). Used for canonical URLs, the sitemap, robots.txt, JSON-LD and Open Graph. */
+  url: "https://juliansyah.com",
   email: "juliansyah.ekt17@gmail.com",
   github: "https://github.com/indofiz",
   linkedin: "TODO: LinkedIn URL",
