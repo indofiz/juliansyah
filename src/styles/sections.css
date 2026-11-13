@@ -815,16 +815,17 @@
   transform: translateX(0.3rem);
 }
 
-/* ---------- How I work: copy | steps | globe (main's "Seamless from Call to Launch") ---------- */
-/* The track is taller than the screen and the stage sticks, so the globe
-   (the "process" keyframe in sceneKeyframes.ts) holds still in the right-hand
-   column while the steps fill. Without WebGL, its icon sits on the globe's centre:
-     --globe-x  50% + keyframe x × 50%       (x 0.64 → 82%)
+/* ---------- How I work: copy | picture | steps (main's "Seamless from Call to Launch") ---------- */
+/* The track is taller than the screen and the stage sticks, so the step
+   picture (the "process" keyframe in sceneKeyframes.ts) holds still in the
+   middle column, as main's globe does, while the steps fill. Without WebGL,
+   its image sits on the globe's centre:
+     --globe-x  50% + keyframe x × 50%       (x 0 → 50%)
      --globe-r  the globe's radius on screen: scale × min(100vh, 62.5vw) / 3.06
-                (ParticleMorph; scale 0.75 → 0.245) */
+                (ParticleMorph; scale 0.72 → 0.235) */
 .process {
-  --globe-x: 82%;
-  --globe-r: calc(0.245 * min(100vh, 62.5vw));
+  --globe-x: 50%;
+  --globe-r: calc(0.235 * min(100vh, 62.5vw));
 }
 
 .process-track {
@@ -841,10 +842,11 @@
 
 .process-grid {
   display: grid;
-  /* The globe's left edge sits at ~66% of the window: the step text has to
-     end before it, also at 1024px where the type stops shrinking (13px). */
-  grid-template-columns: minmax(17rem, 0.9fr) minmax(20rem, 1fr) minmax(14rem, 0.95fr);
-  grid-template-areas: "copy steps globe";
+  /* Equal outer columns keep the middle one, and the picture (1.8 globe
+     radii wide, lib/stepScenes.ts PICTURE_BOX, plus its halo), on the
+     window's centre, clear of the copy and the step track. */
+  grid-template-columns: minmax(16rem, 0.95fr) minmax(18rem, 1.1fr) minmax(16rem, 0.95fr);
+  grid-template-areas: "copy globe steps";
   align-items: center;
   gap: 1.5rem;
 }
@@ -1560,9 +1562,9 @@
     display: none;
   }
   /* Narrow desktop windows (16px type): tighter columns and smaller steps
-     so copy | steps | globe still fits one pinned screen. */
+     so copy | picture | steps still fits one pinned screen. */
   .process-grid {
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr) minmax(0, 1.1fr);
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.1fr) minmax(0, 0.95fr);
   }
   .process .h2 {
     font-size: 2.25rem;

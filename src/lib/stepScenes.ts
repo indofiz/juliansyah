@@ -271,9 +271,9 @@ export const STEP_SCENES: Record<StepId, () => StepScene> = {
 
 /**
  * The box a picture is fitted into, in world units (globe radii). A little
- * narrower than the globe: at 4:3 the space right of the globe's centre is
- * tight, and the sway and the pointer turn the picture's right side toward
- * the camera, which makes it wider. Height has room.
+ * narrower than the globe: it sits in the middle column between the copy
+ * and the steps, and the sway and the pointer turn one side toward the
+ * camera, which makes it wider. Height has room.
  */
 export const PICTURE_BOX = { width: 1.8, height: 2.4 } as const;
 

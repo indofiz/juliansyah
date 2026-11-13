@@ -3,9 +3,9 @@ import { StepIcon } from "../process/StepIcon";
 import { Button, SectionHeader } from "../ui/primitives";
 
 /**
- * How I work: main's "Seamless from Call to Launch" layout, with the globe
- * moved to the right. Copy | steps | the particles (the "process"
- * keyframe), which form the lit step's 3D picture (lib/stepScenes.ts):
+ * How I work: main's "Seamless from Call to Launch" layout. Copy | the
+ * particles in the middle (the "process" keyframe) | steps; the particles
+ * form the lit step's 3D picture (lib/stepScenes.ts):
  * Discover's telescope as the section comes in, never the earth.
  *
  * Desktop: the track is taller than the screen and its stage sticks, so the

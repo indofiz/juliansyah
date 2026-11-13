@@ -4,6 +4,12 @@ Status: **built** (2026-11-13, `feat/portfolio-home`), with the defaults for
 all five open decisions, after `4ef30fd` (v3: layered illustrations, see
 `how-i-work-step-illustrations.md`). The shapes were signed off at Step 0.
 
+Afterwards (same day): **the picture moved to the middle**, as main's
+globe in "Seamless from Call to Launch": copy | picture | steps (keyframe
+x 0, scale 0.72; columns 0.95fr / 1.1fr / 0.95fr so the picture and its
+halo clear the copy and the step track, also at 1024×768 with the pointer
+at either side). Pinned stage, Discover-first arrival and phones unchanged.
+
 Changed while building:
 
 - **Sway ±8°, not ±12°, and the dots sit at 65% of the real depth** (their
