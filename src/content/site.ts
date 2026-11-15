@@ -269,7 +269,94 @@ export const projects: Project[] = [
       ],
     },
   },
-  dummyProject("dummy-web-app", "Web", "browser"),
+  {
+    slug: "alindo-company-website",
+    name: "Alindo Company Website",
+    title: "Redesigned an IT company's website so visitors see what it does from the first screen.",
+    summary:
+      "A redesign of the company website for Alindo, an IT company offering six services and six products, from web and mobile apps to AI and cloud. I worked alone, from UX and visual design in Figma to the HTML, Tailwind and JavaScript build.",
+    // Confirmed by the user, 2026-11-15: solo, 2026, Figma + Claude, Tailwind, plain HTML,
+    // every page designed and built by them. It went live and has since been replaced.
+    // No links: neither the company's site nor any copy of the build is shown.
+    client: "PT Alnair Inovasi Solusindo (Alindo)",
+    role: "UI/UX designer and front-end developer",
+    platforms: ["Design", "Web"],
+    year: "2026",
+    // Waiting on the HTML folder: Lighthouse run locally.
+    metric: { value: "TODO: Lighthouse score", label: "TODO: what it measures (performance, accessibility…)" },
+    media: {
+      frame: "browser",
+      label: "Alindo company website, homepage",
+      caption: "Alindo · HTML and Tailwind",
+      // Screenshot by the user, 2026-11-15: 2880×1800, the scrollbar cropped off, scaled to 2560×1600.
+      screens: [
+        {
+          src: "/projects/alindo/screens/home.webp",
+          alt: "Alindo homepage: the headline “Engineering Digital Solutions for a Better Tomorrow” above four reasons to choose Alindo",
+          width: 2560,
+          height: 1600,
+        },
+      ],
+    },
+    // Noindex until the metric and result are in.
+    dummy: true,
+    caseStudy: {
+      problem: [
+        "Alindo offers six services and six products, from web and mobile apps to AI, cloud and cyber security. The website had to explain all of that to a first-time visitor, give every service and product its own page, show the clients and partners behind it, and lead to a project enquiry.",
+        "TODO: what wasn't working on the old page, or what Alindo asked for.",
+      ],
+      role: {
+        summary: "I worked alone, from UX and visual design in Figma to slicing the design and building it in HTML, CSS and JavaScript.",
+        did: [
+          "Site map and wireframes for every page",
+          "Visual design in Figma, in the brand's navy and orange",
+          "A page for each of the six services and six products, plus about, contact and the portfolio",
+          "Slicing the design into assets: logo, icons and illustrations",
+          "Responsive HTML with Tailwind CSS, from phone to desktop",
+          "A mega menu for the six products, a mobile menu and a navbar that changes on scroll, in plain JavaScript",
+          "Scroll animations with GSAP and ScrollTrigger",
+          "Labelled sections and menus for screen readers, and lazy-loaded images",
+        ],
+      },
+      process: [
+        {
+          title: "Structure",
+          text: "Mapped the site around Alindo's offer: a homepage that runs from why choose us through the six services, clients, partners and technology alliance to a call to start a project, then a page for each service and product.",
+        },
+        {
+          title: "Design",
+          text: "Designed every page in Figma in the brand's navy and orange, with the Outfit typeface.",
+        },
+        {
+          title: "Build",
+          text: "Sliced the design into HTML with Tailwind, wrote the interactions in plain JavaScript and the motion with GSAP, with Claude as an AI assistant.",
+        },
+      ],
+      decisions: [
+        {
+          title: "One message above the fold",
+          why: "The headline, both next steps (start a project, see the products) and four reasons to choose Alindo all fit on the first screen, so a visitor knows what the company does without scrolling.",
+        },
+        {
+          title: "Plain HTML and Tailwind, no framework",
+          why: "Static pages with no build step, so the site can be hosted anywhere and handed over as files.",
+          tradeoff: "Tailwind's CDN script builds the styles in the browser on every visit. A compiled CSS file would load faster.",
+        },
+        {
+          title: "One shared script for the site chrome",
+          why: "The navbar, mobile menu and mega menu live in one file that every page loads, while each page loads only its own animations.",
+        },
+        {
+          title: "Motion that follows the scroll",
+          why: "GSAP's ScrollTrigger brings each section in as it reaches the screen: the reasons to choose Alindo, a split reveal for About, a dark reveal for the services and a scatter for the client logos.",
+        },
+      ],
+      result: {
+        text: "TODO: client feedback, or what changed after it went live in 2026.",
+        metrics: [{ value: "TODO: Lighthouse scores", label: "TODO: from the HTML folder" }],
+      },
+    },
+  },
   dummyProject("dummy-flutter-app", "Flutter", "phone"),
   dummyProject("dummy-design", "Design", "browser"),
 ];

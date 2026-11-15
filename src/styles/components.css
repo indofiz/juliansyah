@@ -703,6 +703,12 @@
   overflow: hidden;
 }
 
+/* A real page screenshot in place of the loop (work/ProjectCard.tsx). */
+.browser-shot {
+  object-fit: cover;
+  object-position: top;
+}
+
 /* Softer version of .fade-bottom for frames that carry real content. */
 .fade-bottom-soft .frame-inner {
   -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent 100%);

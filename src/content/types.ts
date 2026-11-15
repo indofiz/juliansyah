@@ -40,7 +40,10 @@ export type LoopMedia = {
   mp4?: string;
   /** WebVTT captions, only if the loop shows text a screen reader would miss. */
   captions?: string;
-  /** Real app screens, shown in the studio phone as a slideshow while there's no recording. */
+  /**
+   * Real screens, shown while there's no recording: a slideshow in the studio
+   * phone, or the first one as a still in a browser frame without its toolbar.
+   */
   screens?: ImageRef[];
   /** Studio stills of the phone (content/mockups.ts): `card` on the homepage, `page` on the case study. */
   stills?: { card: DeviceStill; page: DeviceStill };

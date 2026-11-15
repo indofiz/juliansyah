@@ -7,7 +7,8 @@ import { caseStudyJsonLd, jsonLdHtml } from "@/lib/jsonLd";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { Footer } from "@/components/sections/Footer";
-import { BrowserFrame, PhoneFrame } from "@/components/media/DeviceFrame";
+import { BrowserMedia } from "@/components/media/BrowserMedia";
+import { PhoneFrame } from "@/components/media/DeviceFrame";
 import { PhoneScreens } from "@/components/media/DeviceStill";
 import { LoopVideo } from "@/components/media/LoopVideo";
 import { Icon } from "@/components/ui/Icon";
@@ -118,9 +119,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]"
                   <LoopVideo media={p.media} />
                 </PhoneFrame>
               ) : (
-                <BrowserFrame address={p.media.caption}>
-                  <LoopVideo media={p.media} />
-                </BrowserFrame>
+                <BrowserMedia media={p.media} sizes="(max-width: 1440px) 92vw, 1280px" eager />
               )}
             </figure>
           </div>

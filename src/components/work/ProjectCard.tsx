@@ -1,6 +1,7 @@
 import type { Project } from "@/content/types";
 import { work } from "@/content/site";
-import { BrowserFrame, PhoneFrame } from "../media/DeviceFrame";
+import { BrowserMedia } from "../media/BrowserMedia";
+import { PhoneFrame } from "../media/DeviceFrame";
 import { LoopVideo } from "../media/LoopVideo";
 import { Icon } from "../ui/Icon";
 import { Placeholder } from "../ui/Placeholder";
@@ -109,9 +110,7 @@ export function ProjectCard({ p }: { p: Project }) {
             <LoopVideo media={p.media} />
           </PhoneFrame>
         ) : (
-          <BrowserFrame address={p.media.caption}>
-            <LoopVideo media={p.media} />
-          </BrowserFrame>
+          <BrowserMedia media={p.media} sizes="(max-width: 640px) 90vw, (max-width: 1023px) 45vw, 370px" />
         )}
       </div>
       <div className="work-body">
