@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { sceneState, showStepIcon } from "@/lib/sceneState";
 import type { StepId } from "@/lib/stepScenes";
+import { gateSteps } from "@/lib/stepGate";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -136,8 +137,14 @@ export function ScrollFx() {
           onRefresh: update,
         });
         update(track);
+        // Pinned (desktop): one wheel gesture per step, each held until its
+        // picture has formed, however fast you scroll (lib/stepGate.ts).
+        const ungate = pinned ? gateSteps(track, ids) : undefined;
         // Back to Discover when the layout changes.
-        return () => showIcon(ids[0]);
+        return () => {
+          ungate?.();
+          showIcon(ids[0]);
+        };
       });
     });
 
