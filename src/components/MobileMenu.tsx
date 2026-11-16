@@ -2,16 +2,19 @@
 
 import { useEffect, useRef, useState } from "react";
 import { nav, site } from "@/content/site";
+import type { Locale } from "@/lib/locales";
+import { LanguageLinks } from "./LanguagePicker";
 import { Icon } from "./ui/Icon";
 
 /**
  * Mobile only (hidden above 900px): hamburger button + full-screen menu with
  * the same four links as the desktop pill, and the header hides while
  * scrolling down and comes back when scrolling up. Escape closes the menu
- * and returns focus to the button. (The accent colours have their own orb
- * in the header: AccentPicker.)
+ * and returns focus to the button. The language switch is a row above the
+ * buttons (desktop has a button in the header instead: LanguagePicker).
+ * (The accent colours have their own orb in the header: AccentPicker.)
  */
-export function MobileMenu() {
+export function MobileMenu({ locale }: { locale: Locale }) {
   const [open, setOpen] = useState(false);
   const burger = useRef<HTMLButtonElement>(null);
   const firstLink = useRef<HTMLAnchorElement>(null);
@@ -83,6 +86,9 @@ export function MobileMenu() {
             ))}
           </ul>
           <div className="mm-footer">
+            <div role="group" aria-label={nav.language.label}>
+              <LanguageLinks current={locale} className="mm-lang" tabIndex={tab} />
+            </div>
             <a href={nav.hire.href} className="btn btn-glow btn-block" onClick={close} tabIndex={tab}>
               {nav.hire.label}
             </a>

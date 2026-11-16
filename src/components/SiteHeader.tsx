@@ -1,7 +1,7 @@
-import { nav, site } from "@/content/site";
-import { Icon } from "./ui/Icon";
+import { nav } from "@/content/site";
 import { Button, Logo } from "./ui/primitives";
 import { AccentPicker } from "./AccentPicker";
+import { LanguagePicker } from "./LanguagePicker";
 import { MobileMenu } from "./MobileMenu";
 import { NavBar } from "./NavBar";
 
@@ -17,13 +17,11 @@ export function SiteHeader() {
         <Logo />
         <div className="header-actions">
           <AccentPicker />
-          <a className="icon-btn" href={site.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-            <Icon name="github" size={19} />
-          </a>
+          <LanguagePicker current="en" label={nav.language.label} />
           <Button variant="glow" href={nav.hire.href} className="header-cta">
             {nav.hire.label}
           </Button>
-          <MobileMenu />
+          <MobileMenu locale="en" />
         </div>
       </div>
 

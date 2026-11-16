@@ -1,8 +1,10 @@
 # Plan: language switcher (English / Bahasa Indonesia)
 
-Status: **plan only** (2026-11-16, `feat/portfolio-home`). Nothing built yet.
-Waiting for your answers to the decisions below. Step 0 (screenshots of the
-look) comes before any plumbing.
+Status: **step 0 built** (2026-11-16, `feat/portfolio-home`), with the
+default answers (A, menu row on phones). The GitHub button is replaced by the
+`EN` button and popover, and the phone menu has the language row. The links
+point to `/` and `/id`, and `/id` is a 404 until step 1. Waiting for your yes
+on the look before step 1.
 
 ## In one paragraph
 

@@ -50,6 +50,8 @@ export const nav = {
   menu: { open: "Open menu", close: "Close menu", label: "Main" },
   /** Palette picker (orb in the header). Palette names live in src/lib/palettes.ts. */
   accent: { label: "Accent color" },
+  /** Language button (header) and row (phone menu). Language names live in src/lib/locales.ts. */
+  language: { label: "Language" },
 };
 
 /* ---------------------------------------------------------------------------
