@@ -101,3 +101,12 @@ desktop context only). Measured headless at 1440×900:
 - One notch at a time: one step per notch.
 - Page Down: straight through (not gated).
 - 390 and 900 wide, and reduced motion: wheel scrolls freely, as before.
+
+## Faster (2026-11-16, user: "too slow")
+
+GLIDE 0.9 → 0.5s, FORMED 0.98 → 0.6 (move on once the picture is clearly
+visible), QUIET 200 → 150ms, plus SURGE: a fresh push during a trackpad's
+coasting tail (a delta 1.4× the one before) counts as a new gesture at once.
+Measured (in-page wheel events on a real clock, 1440×900): trackpad-like
+flicks every 700ms → a step every ~0.87s (was ~2.6s); hard mouse bursts
+→ ~1s per step; still in order, none skipped, leaving into About after step 4.

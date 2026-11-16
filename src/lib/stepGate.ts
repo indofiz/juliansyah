@@ -4,11 +4,16 @@ import { sceneState } from "./sceneState";
 import type { StepId } from "./stepScenes";
 
 /** Glide from one step to the next, in seconds. */
-const GLIDE = 0.9;
-/** The wheel must rest this long (ms) before a new gesture counts, so a trackpad's coasting tail isn't one. */
-const QUIET = 200;
-/** A picture counts as formed at this weight (sceneState.icons, 0–1). */
-const FORMED = 0.98;
+const GLIDE = 0.5;
+/**
+ * A new gesture is wheel input after this much rest (ms), or a fresh push
+ * during a trackpad's coasting tail: a delta SURGE times the one before
+ * (coasting only ever slows down).
+ */
+const QUIET = 150;
+const SURGE = 1.4;
+/** The next step can start once the picture is this far formed (sceneState.icons, 0–1): clearly visible, not finished. */
+const FORMED = 0.6;
 /** Never wait on a picture longer than this (ms) after a glide starts. */
 const MAX_WAIT = 3000;
 
@@ -18,7 +23,8 @@ const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2
  * How I work on desktop: one wheel gesture, one step. A flick from Work
  * stops at the first step (from About, the last); inside, each gesture
  * glides to the next step, and further wheel input is swallowed until the
- * glide has landed, the step's picture has formed and the wheel has rested.
+ * glide has landed, the step's picture is mostly formed and a new gesture
+ * starts (the wheel rested, or a fresh push while a trackpad coasts).
  * Scrolling on past the first or last step leaves normally. Only the wheel
  * is gated: keyboard, scrollbar, links and touch scroll as usual.
  *
@@ -30,6 +36,7 @@ export function gateSteps(track: ScrollTrigger, ids: StepId[]): () => void {
   let glideEnd = 0; // performance.now() when the current glide lands
   let glideStart = 0;
   let lastWheel = 0;
+  let lastDelta = 0;
   let target: StepId | null = null;
 
   const stops = () => ids.map((_, i) => track.start + ((i + 0.5) / ids.length) * (track.end - track.start));
@@ -39,8 +46,10 @@ export function gateSteps(track: ScrollTrigger, ids: StepId[]): () => void {
     if (event.type !== "wheel" || event.ctrlKey || !deltaY) return true;
 
     const now = performance.now();
-    const quiet = now - lastWheel > QUIET;
+    const size = Math.abs(deltaY);
+    const fresh = now - lastWheel > QUIET || size > lastDelta * SURGE;
     lastWheel = now;
+    lastDelta = size;
 
     const s = stops();
     const first = s[0];
@@ -55,7 +64,7 @@ export function gateSteps(track: ScrollTrigger, ids: StepId[]): () => void {
     const forming = target !== null && sceneState.icons[target] < FORMED && now - glideStart < MAX_WAIT;
     // Coming in from Work or About carries straight on to the first stop;
     // inside, a new gesture waits for the last one to finish.
-    const busy = entering ? gliding : gliding || forming || !quiet;
+    const busy = entering ? gliding : gliding || forming || !fresh;
 
     let goal: number | undefined;
     if (!busy) {
