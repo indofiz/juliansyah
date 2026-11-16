@@ -337,9 +337,9 @@
   }
 
   /* Glass bars: wider gaps (same total width) and more frosted than desktop.
-     --cy is the globe's centre: mobile hero keyframe y = -0.56 → 78vh. */
+     --cy is the globe's centre: mobile hero keyframe y = -0.64 → 82vh. */
   .hero-bars {
-    --cy: 78vh;
+    --cy: 82vh;
     --bar: calc(var(--r) * 0.62);
     --gap: calc(var(--r) * 0.12);
   }
@@ -354,7 +354,7 @@
      logo strip, cut just below it. The globe sits behind it (hero keyframe,
      mobile y). */
   .hero-frame-wrap {
-    --peek: 7.8125rem;
+    --peek: 5.6875rem;
   }
 
   .hero-frame .frame-inner {
@@ -370,9 +370,17 @@
     display: none;
   }
 
-  /* The strip runs the card's full width; its edges already fade. */
+  /* The strip sits straight on the dashboard: no panel border, fill,
+     padding or dot texture. Its edges already fade. */
   .hero-frame .mock-hero-card {
-    padding: 1rem 0;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  .hero-frame .mock-hero-card .dots {
+    display: none;
   }
 
   .media-ph-label .todo {

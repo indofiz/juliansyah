@@ -54,7 +54,7 @@ const scattered = { x: 0, y: 0.25, scale: 0.85, globeSpin: 4.8, shapeSpin: 0.3, 
 export const sceneKeyframes: Record<string, SceneKeyframe> = {
   // Big globe rising from the bottom of the hero, behind the dashboard preview
   // (on phones, the logo strip covers its lower part).
-  hero: { x: 0, y: -0.8, scale: 1.12, globeSpin: -0.45, shapeSpin: -0.25, morph: 0, sink: 0, opacity: 1, pictures: 0, mobile: { y: -0.56 } },
+  hero: { x: 0, y: -0.8, scale: 1.12, globeSpin: -0.45, shapeSpin: -0.25, morph: 0, sink: 0, opacity: 1, pictures: 0, mobile: { y: -0.64 } },
 
   // Pinned intro: during the first screen of scroll the globe rises from the
   // bottom to the centre while the headline and dashboard part ways, then the

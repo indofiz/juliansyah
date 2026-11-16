@@ -80,3 +80,13 @@ buttons today (top ≈ 348), and this puts it lower.
    card still reads as an app window.
 2. How much globe behind the card: **about a third (y ≈ −0.56)**, or half
    like now (centre on the card's top edge, y ≈ −0.68).
+
+## Follow-up (2026-11-16): logo strip without its panel
+
+The user asked to remove the strip's border, padding and background. The
+stat card's panel (fill, inset border, padding, radius, dot texture) is gone
+on mobile, so the logos sit straight on the dashboard. The strip is 48px
+tall, so `--peek` 7.8125rem → 5.6875rem (the tiles start right at the
+screen edge). The card's top edge drops ~32px, so the globe moves down the
+same amount to keep the same share behind it: hero `mobile.y` −0.56 → −0.64,
+`--cy` 78vh → 82vh. At 360×740 its top now clears the buttons (489 vs 480).
