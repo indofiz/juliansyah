@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import type { Project } from "@/content/types";
 import { work } from "@/content/site";
 import { BrowserMedia } from "../media/BrowserMedia";
@@ -7,6 +8,7 @@ import { Icon } from "../ui/Icon";
 import { Placeholder } from "../ui/Placeholder";
 import { Button } from "../ui/primitives";
 import { PhoneScreens } from "../media/DeviceStill";
+import { RatingLine } from "./StoreLinks";
 
 const href = (p: Project) => `/work/${p.slug}`;
 
@@ -31,6 +33,27 @@ function Meta({ p }: { p: Project }) {
         </dd>
       </div>
     </dl>
+  );
+}
+
+/** The store rating and the key technologies, in one row under the metric. */
+function Extras({ p }: { p: Project }) {
+  if (!p.rating && !p.keyTech?.length) return null;
+  return (
+    <div className="work-extras">
+      {p.rating && <RatingLine rating={p.rating} className="rating-chip" />}
+      {p.keyTech && p.keyTech.length > 0 && (
+        <p className="work-tech">
+          <span className="sr-only">{work.labels.keyTech}: </span>
+          {p.keyTech.map((t, i) => (
+            <Fragment key={t}>
+              {i > 0 && <span aria-hidden="true"> · </span>}
+              <strong>{t}</strong>
+            </Fragment>
+          ))}
+        </p>
+      )}
+    </div>
   );
 }
 
@@ -90,6 +113,7 @@ export function FlagshipCard({ p }: { p: Project }) {
           <Placeholder text={p.summary} />
         </p>
         <MetricLine p={p} />
+        <Extras p={p} />
         <Meta p={p} />
         <Button href={href(p)} icon="arrowRight">
           {work.labels.caseStudy}

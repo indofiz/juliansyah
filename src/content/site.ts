@@ -127,7 +127,8 @@ export const proof = {
   /** Keep labels short: they sit on one line next to the number. */
   items: [
     { icon: "users", value: "12K+", label: "App users" },
-    // UNCONFIRMED: placeholder figure kept at the user's request (2026-11-11); replace with the real one.
+    // Presensi PKP's Crashlytics: 99.89% crash-free sessions (Android 1.0.8, 30 days to 2026-11-02;
+    // presensi-mobile docs/bug-fixing/TOP_CRASHES_FIX_PLAN.md), rounded. Confirmed this way 2026-11-16.
     { icon: "shield", value: "99.9%", label: "Crash-free sessions" },
     // Same organisations as the logo strip in the hero, so the two never disagree.
     { icon: "award", value: String(hero.dashboard.clients.logos.length), label: "Client organisations" },
@@ -159,6 +160,11 @@ export const work = {
     role: "Role",
     platform: "Platform",
     year: "Year",
+    /** Screen-reader text for the key-technology line on the card. */
+    keyTech: "Built with",
+    /** "4.5 on Google Play": shown with a star; the count goes in `ratings`. */
+    ratingOn: "on",
+    ratings: "ratings",
   },
 };
 
@@ -191,16 +197,34 @@ export const projects: Project[] = [
   {
     slug: "presensi-pkp",
     name: "Presensi PKP",
-    title: "GPS-verified check-ins replaced fingerprint machines for a city government.",
+    // User, 2026-11-16: the app replaced PAPER sign-in sheets (not fingerprint machines),
+    // and lateness or absence now cuts the employee's bonus.
+    title: "GPS-verified check-ins replaced paper sign-in sheets for a city government.",
     summary:
-      "The official attendance app for the Pangkalpinang city government. Civil servants check in and out from the field, request leave and review their history, and every record is validated against the city's servers.",
+      "The official attendance app for the Pangkalpinang city government. Civil servants check in with GPS and a selfie, request leave and review their history. Every late minute is on record, and bonus cuts are based on it.",
     client: "Pemerintah Kota Pangkalpinang · Diskominfo",
     role: "Flutter developer",
     platforms: ["Flutter"],
+    // UNCONFIRMED (asked 2026-11-16): the app's repo starts in April 2026.
     year: "2025",
     status: "Live in production",
     // Confirmed by the user, 2026-11-13.
     metric: { value: "7,000+", label: "active employees" },
+    keyTech: ["Clean Architecture", "BLoC", "Firebase"],
+    // Links from the user, 2026-11-16. `name` is the app's name in both stores.
+    stores: {
+      name: "Presensi Kota Pangkalpinang",
+      appStore: "https://apps.apple.com/us/app/presensi-kota-pangkalpinang/id6805311056",
+      googlePlay: "https://play.google.com/store/apps/details?id=id.go.pangkalpinangkota.presensipkp",
+    },
+    // As the Play page showed it on `checked` (the App Store shows no rating yet). Update by hand.
+    rating: {
+      value: "4.5",
+      count: 28,
+      store: "Google Play",
+      href: "https://play.google.com/store/apps/details?id=id.go.pangkalpinangkota.presensipkp",
+      checked: "2026-11-16",
+    },
     media: {
       frame: "phone",
       label: "TODO: Presensi PKP check-in flow, screen recording",
@@ -216,27 +240,62 @@ export const projects: Project[] = [
       stills: { card: presensiStills.front, page: presensiStills.front },
     },
     flagship: true,
+    // Facts: the user (2026-11-16) and the presensi-mobile repo (code, docs/bug-fixing, release notes).
+    // Plan and sources: docs/plans/presensi-case-study.md.
     caseStudy: {
       problem: [
-        "The city replaced its fingerprint machines with a mobile app. Civil servants clock in and out from the field, request leave and check their history, and every record is validated against the city's servers in real time.",
-        "TODO: what wasn't working before, in the client's words.",
+        "Attendance used to be signed on paper. Someone who arrived late could still write down an on-time arrival, and some staff filled in the whole five-day week in one go.",
+        "The record matters more now: the bonus is cut by how late someone is and by every absence. BKPSDMD, the city's civil service agency, needed attendance it could trust.",
       ],
+      compare: {
+        beforeTitle: "Paper sheet",
+        afterTitle: "Presensi PKP",
+        rows: [
+          {
+            before: "The time is whatever the person writes down.",
+            after: "The time comes from the **server**, so changing the phone's clock does nothing.",
+          },
+          {
+            before: "A whole week can be filled in at one sitting.",
+            after: "Each check-in happens **on the day**, inside the office geofence, with a selfie. Fake GPS is refused.",
+          },
+          {
+            before: "Nobody can tell how late anyone really was.",
+            after: "Lateness is counted **to the minute**, and bonus cuts follow the record.",
+          },
+        ],
+      },
       role: {
-        summary: "I built the Android and iOS app in Flutter, from one codebase.",
+        summary: "I built the app in **Flutter** for Android, iPhone and iPad, from one codebase.",
         did: [
           "TODO: team size, and whether you also designed it",
+          "**Clean Architecture** with **BLoC**: data, domain and presentation in every feature",
+          "**Firebase**: **Crashlytics**, **Performance Monitoring**, **Analytics** and **Cloud Messaging**",
+          "Responsive layouts for **phones and tablets**, iPad included",
           "Check-in only inside the office geofence, shown on an OpenStreetMap view",
           "Fake-GPS and mock-location detection",
           "Photo capture at check-in as a second identity check",
           "Leave and permit requests with attachments",
           "Attendance history on a calendar",
-          "Push notifications through Firebase Cloud Messaging",
         ],
       },
       process: [
-        { title: "TODO: discovery", text: "TODO: how you learned what staff and admins needed." },
-        { title: "TODO: design", text: "TODO: flows, wireframes and testing with real users." },
-        { title: "TODO: build and release", text: "TODO: rollout, devices tested and release cadence." },
+        {
+          title: "Discovery: listening to BKPSDMD",
+          text: "I listened to BKPSDMD, the city's civil service agency, about what the paper sheets got wrong: late arrivals written down as on time, and whole weeks filled in at once.",
+        },
+        { title: "Design", text: "TODO: what you designed (check-in, leave and history flows), in which tool, and who reviewed it." },
+        {
+          title: "Development",
+          text: "**Flutter** with **Clean Architecture** and **BLoC**, and **Firebase Crashlytics**, **Performance Monitoring**, **Analytics** and **Cloud Messaging**, so problems in the field show up on a dashboard. Released on Google Play and the App Store; version 1.0.9 fixed the four crashes Crashlytics ranked highest.",
+        },
+      ],
+      stack: [
+        { group: "Architecture", items: ["Clean Architecture", "BLoC", "GetIt", "Dio", "GoRouter"] },
+        { group: "Firebase", items: ["Crashlytics", "Performance Monitoring", "Analytics", "Cloud Messaging"] },
+        { group: "Platforms", items: ["Android", "iOS", "iPadOS"] },
+        // presensi-mobile, 2026-11-16: 19 test files, 104 cases; codemagic.yaml.
+        { group: "Quality", items: ["104 tests", "bloc_test", "Codemagic CI"] },
       ],
       decisions: [
         {
@@ -248,27 +307,79 @@ export const projects: Project[] = [
           why: "Mock-location and spoofing attempts are detected and blocked, so a check-in means the person was really there.",
         },
         {
-          title: "Cache for weak networks",
-          why: "Hive caching keeps the app responsive on unreliable field connections.",
-          tradeoff: "TODO: what you gave up, or how sync conflicts are handled.",
+          // presensi-mobile docs/bug-fixing/TOP_CRASHES_FIX_PLAN.md: H1 = 282 events, up to 64 users on 1.0.8;
+          // M2 (Android 13 camera, 2 users) not in 1.0.9.
+          title: "Let Crashlytics set the priorities",
+          why: "**Crashlytics** ranks every crash by how many people it hits. The top one, a Retry button on the location dialog that did nothing, reached up to 64 users on version 1.0.8. Version 1.0.9 fixed the top four.",
+          tradeoff: "A rare camera crash on Android 13, seen by 2 users, waits for a later release.",
         },
         {
+          // Claude's wording from the code (the user's own reason is still open).
           title: "Clean Architecture with BLoC",
-          why: "TODO: why this structure (testability, team size, long-term maintenance?).",
+          why: "Each feature splits **data, domain and presentation**, and every call returns a result or a typed failure, so the attendance rules are tested without a device: **104 tests**, BLoCs included.",
+        },
+        {
+          // presensi-mobile: ResponsiveBody, breakpoints compact/regular/tablet, text scale clamped to 0.9–1.3 (lib/app.dart).
+          title: "A bounded layout on tablets",
+          why: "On an **iPad**, content stops at a readable width instead of stretching edge to edge, and system text size is capped at 1.3× so large fonts don't break the layout.",
+        },
+      ],
+      // presensi-mobile's screenshot tool (fake data), in check-in order. 1290×2796 WebP.
+      gallery: [
+        {
+          src: "/projects/presensi-pkp/screens/checkin.webp",
+          alt: "Check-in screen: the work unit, today's check-in time and the latest allowed time, and the button to take a photo and check in",
+          caption: "Today's schedule",
+          width: 1290,
+          height: 2796,
+        },
+        {
+          src: "/projects/presensi-pkp/screens/camera.webp",
+          alt: "Check-in camera with a frame to line up the face",
+          caption: "Selfie at check-in",
+          width: 1290,
+          height: 2796,
+        },
+        {
+          src: "/projects/presensi-pkp/screens/success.webp",
+          alt: "Check-in successful, with the recorded check-in time",
+          caption: "Recorded",
+          width: 1290,
+          height: 2796,
+        },
+        {
+          src: "/projects/presensi-pkp/screens/refused.webp",
+          alt: "Check-in refused: the phone is 248 metres outside the office radius",
+          caption: "Refused outside the radius",
+          width: 1290,
+          height: 2796,
+        },
+        {
+          src: "/projects/presensi-pkp/screens/detail.webp",
+          alt: "Attendance detail: check-in and check-out times, the photo taken at each, and where each was recorded",
+          caption: "Photos and places on record",
+          width: 1290,
+          height: 2796,
+        },
+        {
+          src: "/projects/presensi-pkp/screens/leave.webp",
+          alt: "Leave request form: leave type, dates, reason and a required supporting document",
+          caption: "Leave with a document",
+          width: 1290,
+          height: 2796,
         },
       ],
       result: {
-        text: "TODO: what changed for the city after launch.",
+        text: "Attendance is now recorded on the day, where people actually work, with lateness counted **to the minute**, and bonus cuts follow that record.",
         metrics: [
           { value: "7,000+", label: "active employees" },
-          { value: "TODO: confirm 99.9%", label: "crash-free sessions" },
-          { value: "2", label: "platforms from one codebase, Android and iOS" },
+          { value: "4.5★", label: "on Google Play, from 28 ratings" },
+          // Crashlytics, Android 1.0.8, 30 days to 2026-11-02 (presensi-mobile TOP_CRASHES_FIX_PLAN.md).
+          // The user said "99%"; the plan's default was the exact figure.
+          { value: "99.89%", label: "crash-free sessions on Android" },
+          { value: "3", label: "devices from one codebase: Android, iPhone and iPad" },
         ],
       },
-      links: [
-        { label: "Google Play", href: "TODO: Google Play URL" },
-        { label: "App Store", href: "TODO: App Store URL" },
-      ],
     },
   },
   {
@@ -367,7 +478,16 @@ export const projects: Project[] = [
 export const caseStudyLabels = {
   back: "All work",
   problem: "The problem",
+  compare: "Before and after",
   role: "My role",
+  stack: "Built with",
+  screens: "Screens",
+  /** Store badges: the link's accessible name is "<download> <app name> <on> <store>". */
+  getApp: "Get the app",
+  download: "Download",
+  on: "on",
+  appStore: "the App Store",
+  googlePlay: "Google Play",
   process: "Process",
   decisions: "Key decisions",
   tradeoff: "Trade-off",

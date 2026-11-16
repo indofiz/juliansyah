@@ -9,7 +9,9 @@ import { SmoothScroll } from "@/components/SmoothScroll";
 import { Footer } from "@/components/sections/Footer";
 import { BrowserMedia } from "@/components/media/BrowserMedia";
 import { PhoneFrame } from "@/components/media/DeviceFrame";
-import { PhoneScreens } from "@/components/media/DeviceStill";
+import Image from "next/image";
+import { DeviceStill, PhoneScreens } from "@/components/media/DeviceStill";
+import { RatingLine, StoreBadges } from "@/components/work/StoreLinks";
 import { LoopVideo } from "@/components/media/LoopVideo";
 import { Icon } from "@/components/ui/Icon";
 import { Placeholder, isTodo } from "@/components/ui/Placeholder";
@@ -102,6 +104,12 @@ export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]"
                   </dd>
                 </div>
               </dl>
+              {(p.rating || p.stores) && (
+                <div className="cs-get">
+                  {p.rating && <RatingLine rating={p.rating} />}
+                  {p.stores && <StoreBadges stores={p.stores} />}
+                </div>
+              )}
             </div>
             <figure className={`cs-media cs-media--${p.media.frame}`}>
               {p.media.stills && p.media.screens?.length ? (
@@ -138,6 +146,39 @@ export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]"
               ))}
             </div>
           </section>
+
+          {cs.compare && (
+            <section className="cs-block" aria-labelledby="cs-compare">
+              <h2 id="cs-compare" className="cs-h2">
+                {L.compare}
+              </h2>
+              <table className="cs-compare">
+                <thead>
+                  <tr>
+                    <th scope="col">{cs.compare.beforeTitle}</th>
+                    <th scope="col">{cs.compare.afterTitle}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cs.compare.rows.map((r) => (
+                    <tr key={r.before}>
+                      <td>
+                        <Placeholder text={r.before} />
+                      </td>
+                      <td>
+                        <div className="cs-compare-after">
+                          <Icon name="check" size={16} />
+                          <span>
+                            <Placeholder text={r.after} />
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </section>
+          )}
 
           <section className="cs-block" aria-labelledby="cs-role">
             <h2 id="cs-role" className="cs-h2">
@@ -181,6 +222,26 @@ export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]"
             </ol>
           </section>
 
+          {cs.stack && cs.stack.length > 0 && (
+            <section className="cs-block" aria-labelledby="cs-stack">
+              <h2 id="cs-stack" className="cs-h2">
+                {L.stack}
+              </h2>
+              <div className="cs-stack">
+                {cs.stack.map((g) => (
+                  <div key={g.group} className="cs-stack-group">
+                    <h3>{g.group}</h3>
+                    <ul className="tags">
+                      {g.items.map((t) => (
+                        <li key={t}>{t}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
           <section className="cs-block" aria-labelledby="cs-decisions">
             <h2 id="cs-decisions" className="cs-h2">
               {L.decisions}
@@ -204,6 +265,26 @@ export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]"
               ))}
             </div>
           </section>
+
+          {cs.gallery && cs.gallery.length > 0 && p.media.stills && (
+            <section className="cs-block" aria-labelledby="cs-screens">
+              <h2 id="cs-screens" className="cs-h2">
+                {L.screens}
+              </h2>
+              <ul className="cs-gallery">
+                {cs.gallery.map((s) => (
+                  <li key={s.src}>
+                    <figure>
+                      <DeviceStill still={p.media.stills!.page} sizes="(max-width: 900px) 170px, 200px" className="cs-shot">
+                        <Image className="device-shot" src={s.src} alt={s.alt} fill sizes="(max-width: 900px) 160px, 190px" />
+                      </DeviceStill>
+                      <figcaption>{s.caption}</figcaption>
+                    </figure>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           <section className="cs-block" aria-labelledby="cs-result">
             <h2 id="cs-result" className="cs-h2">

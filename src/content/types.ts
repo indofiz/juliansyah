@@ -45,8 +45,11 @@ export type LoopMedia = {
    * phone, or the first one as a still in a browser frame without its toolbar.
    */
   screens?: ImageRef[];
-  /** Studio stills of the phone (content/mockups.ts): `card` on the homepage, `page` on the case study. */
-  stills?: { card: DeviceStill; page: DeviceStill };
+  /**
+   * Studio stills (content/mockups.ts): `card` on the homepage, `page` on the
+   * case study, `tablet` for the case study's tablet screenshot.
+   */
+  stills?: { card: DeviceStill; page: DeviceStill; tablet?: DeviceStill };
 };
 
 /**
@@ -78,16 +81,35 @@ export type ClientLogo = { name: string; src: string; width: number; height: num
 /** Sidebar row of the hero dashboard mock; `tail` adds a chevron or a coloured pill. */
 export type MockNavItem = { icon: IconName; label: string; tail?: "chevron" | "hot" | "ai" | "new" };
 
+/*
+ * Bold: in case-study copy (role, process, decisions, result, before/after),
+ * wrap words in **double asterisks** to show them in bold. Not in a
+ * project's title or summary: those also go to meta tags and the OG image.
+ */
+
 export type CaseStudy = {
   /** The problem, in the client's words where possible. */
   problem: string[];
+  /** Old way vs new way, one pair per row. Shown right after the problem. */
+  compare?: { beforeTitle: string; afterTitle: string; rows: { before: string; after: string }[] };
   role: { summary: string; did: string[] };
   process: { title: string; text: string }[];
+  /** "Built with": the stack in named groups, shown as chips. */
+  stack?: { group: string; items: string[] }[];
   decisions: { title: string; why: string; tradeoff?: string }[];
+  /** More real screens, each in the studio phone (needs `media.stills`), with a short caption under it. */
+  gallery?: (ImageRef & { caption: string })[];
+  /** A tablet screenshot in the studio tablet, shown with the gallery (needs `media.stills.tablet`). */
+  tablet?: ImageRef;
   result: { text: string; metrics: Metric[] };
-  gallery?: ImageRef[];
   links?: Link[];
 };
+
+/** Where to get a live app. `name` is the app's name in the stores. */
+export type StoreLinks = { name: string; appStore?: string; googlePlay?: string };
+
+/** A store's star rating as the store showed it on `checked` (ISO date). Update it by hand. */
+export type StoreRating = { value: string; count: number; store: string; href: string; checked: string };
 
 export type Project = {
   slug: string;
@@ -104,6 +126,12 @@ export type Project = {
   status?: string;
   /** The one result shown on the card. */
   metric: Metric;
+  /** A few key technologies, shown in bold on the card, e.g. ["Clean Architecture", "BLoC", "Firebase"]. */
+  keyTech?: string[];
+  /** Store links: badges on the case study. */
+  stores?: StoreLinks;
+  /** Star rating: a chip on the card and a line on the case study. */
+  rating?: StoreRating;
   media: LoopMedia;
   /** The flagship gets the large card. */
   flagship?: boolean;

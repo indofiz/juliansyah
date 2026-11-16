@@ -545,6 +545,7 @@
   }
 
   .work-metric,
+  .work-extras,
   .work-flagship .work-meta {
     justify-content: center;
   }
@@ -603,6 +604,40 @@
 
   .cs-decisions {
     grid-template-columns: 1fr;
+  }
+
+  .cs-compare {
+    font-size: 0.875rem;
+  }
+
+  .cs-compare th,
+  .cs-compare td {
+    padding: 0.875rem 0.875rem;
+  }
+
+  .cs-compare-after svg {
+    display: none;
+  }
+
+  /* Screens: one swipeable row, edge to edge. */
+  .cs-gallery {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 10rem;
+    overflow-x: auto;
+    margin-inline: calc(-1 * var(--gutter));
+    padding: 0.25rem var(--gutter) 0.75rem;
+    scroll-padding-inline: var(--gutter);
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .cs-gallery::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cs-gallery li {
+    scroll-snap-align: start;
   }
 
   /* ---------- How I work: title, globe, steps, buttons (nothing pinned) ---------- */

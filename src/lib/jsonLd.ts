@@ -31,6 +31,17 @@ export function caseStudyJsonLd(p: Project) {
     keywords: p.platforms.join(", "),
     creator: { "@type": "Person", name: site.name, url: site.url },
     sourceOrganization: { "@type": "Organization", name: p.client },
+    // The live app itself. No aggregateRating: Google's review-snippet rules
+    // don't allow ratings taken from another site (the stores).
+    ...(p.stores && {
+      about: {
+        "@type": "MobileApplication",
+        name: p.stores.name,
+        operatingSystem: [p.stores.googlePlay && "Android", p.stores.appStore && "iOS"].filter(Boolean).join(", "),
+        applicationCategory: "BusinessApplication",
+        sameAs: [p.stores.appStore, p.stores.googlePlay].filter(Boolean),
+      },
+    }),
   };
 }
 

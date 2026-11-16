@@ -379,6 +379,24 @@
   color: var(--accent);
 }
 
+/* Rating chip + key technologies, one row under the metric. */
+.work-extras {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem 1rem;
+}
+
+.work-tech {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.work-tech strong {
+  font-weight: 600;
+  color: var(--text);
+}
+
 .work-meta {
   display: flex;
   flex-wrap: wrap;
@@ -620,6 +638,145 @@
 .cs-media--phone .phone {
   width: min(17rem, 100%);
   margin: 0 auto;
+}
+
+/* Rating and store badges under the facts. */
+.cs-get {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  margin-top: 0.5rem;
+}
+
+/* **Bold** words in the copy (Placeholder) read brighter than the text around them. */
+.cs-prose p strong,
+.cs-checks strong,
+.cs-steps p strong,
+.cs-decision p strong,
+.cs-compare strong {
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Before and after: the app's column carries the accent. */
+.cs-compare {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.015);
+  box-shadow: inset 0 0 0 1px var(--border);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.cs-compare th,
+.cs-compare td {
+  width: 50%;
+  padding: 1rem 1.25rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.cs-compare th {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #948f8a;
+}
+
+.cs-compare td {
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.cs-compare th:last-child,
+.cs-compare td:last-child {
+  background: rgb(var(--accent-rgb) / 0.06);
+  box-shadow: inset 1px 0 0 rgb(var(--accent-rgb) / 0.22);
+}
+
+.cs-compare th:last-child {
+  color: var(--accent);
+}
+
+.cs-compare td:last-child {
+  color: #e6e2de;
+}
+
+.cs-compare-after {
+  display: flex;
+  gap: 0.625rem;
+}
+
+.cs-compare-after svg {
+  margin-top: 0.25rem;
+  color: var(--accent);
+}
+
+/* Built with: named groups of chips. */
+.cs-stack {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 1.5rem 2rem;
+}
+
+.cs-stack-group {
+  display: grid;
+  align-content: start;
+  gap: 0.625rem;
+}
+
+.cs-stack-group h3 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.cs-stack .tags li {
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+/* Screens: each screen in the studio phone, with a caption. */
+.cs-gallery {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1.5rem 1.25rem;
+}
+
+.cs-gallery figure {
+  display: grid;
+  justify-items: center;
+  gap: 0.875rem;
+}
+
+.cs-gallery figcaption {
+  font-size: 0.875rem;
+  line-height: 1.35;
+  text-align: center;
+  color: var(--muted);
+}
+
+.cs-shot {
+  width: 100%;
+}
+
+/* Six phones side by side: no float, they'd look busy. */
+.cs-shot.is-near .device-float {
+  animation: none;
+}
+
+@media (max-width: 1100px) {
+  .cs-gallery {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .cs-shot {
+    max-width: 13rem;
+  }
 }
 
 .cs-body {
