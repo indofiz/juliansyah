@@ -203,7 +203,8 @@ export const projects: Project[] = [
     summary:
       "The official attendance app for the Pangkalpinang city government. Civil servants check in with GPS and a selfie, request leave and review their history. Every late minute is on record, and bonus cuts are based on it.",
     client: "Pemerintah Kota Pangkalpinang · Diskominfo",
-    role: "Flutter developer",
+    // User, 2026-11-16: team of six; they were the designer and the Flutter developer.
+    role: "UI/UX designer and Flutter developer",
     platforms: ["Flutter"],
     // UNCONFIRMED (asked 2026-11-16): the app's repo starts in April 2026.
     year: "2025",
@@ -266,9 +267,9 @@ export const projects: Project[] = [
         ],
       },
       role: {
-        summary: "I built the app in **Flutter** for Android, iPhone and iPad, from one codebase.",
+        summary: "I designed the app and built it in **Flutter** for Android, iPhone and iPad, from one codebase.",
         did: [
-          "TODO: team size, and whether you also designed it",
+          "A team of six: a project manager, two backend developers, two cyber security specialists, and me on **UI/UX design** and the **Flutter** app",
           "**Clean Architecture** with **BLoC**: data, domain and presentation in every feature",
           "**Firebase**: **Crashlytics**, **Performance Monitoring**, **Analytics** and **Cloud Messaging**",
           "Responsive layouts for **phones and tablets**, iPad included",
@@ -284,7 +285,11 @@ export const projects: Project[] = [
           title: "Discovery: listening to BKPSDMD",
           text: "I listened to BKPSDMD, the city's civil service agency, about what the paper sheets got wrong: late arrivals written down as on time, and whole weeks filled in at once.",
         },
-        { title: "Design", text: "TODO: what you designed (check-in, leave and history flows), in which tool, and who reviewed it." },
+        {
+          title: "Design",
+          // Tool and reviewers not given yet; add them here if you want them on the page.
+          text: "I designed the check-in, leave and history flows myself, so the screens went straight into the Flutter build with no hand-off.",
+        },
         {
           title: "Development",
           text: "**Flutter** with **Clean Architecture** and **BLoC**, and **Firebase Crashlytics**, **Performance Monitoring**, **Analytics** and **Cloud Messaging**, so problems in the field show up on a dashboard. Released on Google Play and the App Store; version 1.0.9 fixed the four crashes Crashlytics ranked highest.",
