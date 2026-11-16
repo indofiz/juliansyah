@@ -313,6 +313,7 @@
 
   .mm-lang .lang-option {
     justify-content: center;
+    gap: 0.5rem;
     height: 2.75rem;
     padding: 0 0.75rem;
     border-radius: 999px;

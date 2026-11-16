@@ -6,8 +6,8 @@
  * Kept import-free so src/proxy.ts can use it.
  */
 export const locales = [
-  { id: "en", label: "English", short: "EN", og: "en_US", date: "en-GB" },
-  { id: "id", label: "Bahasa Indonesia", short: "ID", og: "id_ID", date: "id-ID" },
+  { id: "en", label: "English", og: "en_US", date: "en-GB" },
+  { id: "id", label: "Bahasa Indonesia", og: "id_ID", date: "id-ID" },
 ] as const;
 
 export type Locale = (typeof locales)[number]["id"];

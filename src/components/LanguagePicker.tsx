@@ -4,6 +4,7 @@ import { useId, type MouseEvent } from "react";
 import { localeCookie, localeInfo, localHref, locales, type Locale } from "@/lib/locales";
 import { usePopover } from "@/lib/usePopover";
 import { useContent } from "./ContentProvider";
+import { Flag } from "./ui/Flag";
 import { Icon } from "./ui/Icon";
 
 /**
@@ -61,6 +62,7 @@ export function LanguageLinks({ path, className, tabIndex }: LinksProps) {
             tabIndex={tabIndex}
             onClick={(e) => switchTo(e, l.id, current)}
           >
+            <Flag locale={l.id} />
             <span className="lang-name">{l.label}</span>
             <Icon name="check" size={15} className="lang-check" />
           </a>
@@ -72,7 +74,7 @@ export function LanguageLinks({ path, className, tabIndex }: LinksProps) {
 
 /**
  * The language button in the desktop header (phones get a row in
- * MobileMenu instead). It shows the current language's code and opens the
+ * MobileMenu instead). It shows the current language's flag and opens the
  * same frosted popover as the accent orb next to it.
  */
 export function LanguagePicker({ path }: { path: string }) {
@@ -94,7 +96,7 @@ export function LanguagePicker({ path }: { path: string }) {
         aria-controls={popId}
         onClick={() => setOpen((v) => !v)}
       >
-        <span aria-hidden="true">{lang.short}</span>
+        <Flag locale={locale} />
       </button>
       <div id={popId} className={`lang-pop ${open ? "is-open" : ""}`}>
         <p className="lang-pop-title" aria-hidden="true">
