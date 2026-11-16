@@ -637,15 +637,16 @@
   }
 
   /* ---------- How I work: title, globe, steps, buttons (nothing pinned) ---------- */
-  /* The globe (mobile "process" keyframe: x 0, y -0.15, scale 1.05) forms
-     under the title, its centre 57.5% of a screen below the section's top
-     (50% + 0.15 × 50%); its radius on screen is scale × width / 3.4
-     (ParticleMorph). The globe's space shares the first row with the title
-     and reaches just past the globe, so the steps start below it whatever
-     the title's height. */
+  /* Phones too short to pin and reduced motion (pinned phones: the block at
+     the end of this file). The globe (mobile "process" keyframe: x 0,
+     y -0.07, scale 0.75) forms under the title, its centre 53.5% of a screen
+     below the section's top (50% + 0.07 × 50%); its radius on screen is
+     scale × width / 3.4 (ParticleMorph). The globe's space shares the first
+     row with the title and reaches just past the globe, so the steps start
+     below it whatever the title's height. */
   .process {
-    --globe-r: calc(1.05 * 100vw / 3.4);
-    --globe-cy: 57.5vh;
+    --globe-r: calc(0.75 * 100vw / 3.4);
+    --globe-cy: 53.5vh;
     --pad: 4.5rem;
     padding: var(--pad) 0;
   }
@@ -1015,5 +1016,139 @@
   .work-media,
   .work-body {
     padding-inline: 1rem;
+  }
+}
+
+/* ---------- How I work, pinned on phones ----------
+   Phones at least 600px tall (PHONE_PIN in lib/sceneKeyframes.ts) with
+   motion allowed: the stage sticks for 4 × 50vh of scroll, as on desktop,
+   and the picture changes with each step. One screen: the title, the
+   picture's space (whatever height is left; the particles sit at 53.5% of
+   the screen, mobile "process" keyframe), the lit step alone under a
+   progress bar, then the buttons. When a swipe ends, the page settles on a
+   step (ScrollFx snap). Shorter phones and reduced motion keep the list. */
+@media (max-width: 900px) and (min-height: 600px) and (prefers-reduced-motion: no-preference) {
+  .process {
+    padding: 0;
+  }
+
+  .process-track {
+    height: 300vh;
+  }
+
+  .process-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    display: flex;
+    align-items: stretch;
+  }
+
+  .process-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    min-height: 0;
+    padding-top: 4.75rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .process-copy .sh {
+    order: 1;
+    gap: 0.625rem;
+  }
+
+  .process-copy .sh-text {
+    max-width: 22rem;
+  }
+
+  .process-globe {
+    order: 2;
+    flex: 1;
+    min-height: 0;
+    height: auto;
+  }
+
+  .steps {
+    order: 3;
+    align-self: center;
+    width: min(100%, 28rem);
+    display: grid;
+    gap: 1rem;
+    padding-left: 0;
+    text-align: center;
+  }
+
+  .process-actions {
+    order: 4;
+    margin-top: 1.25rem;
+  }
+
+  /* The vertical track becomes a thin progress bar over the step. */
+  .steps-track {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: 0.25rem;
+  }
+
+  .steps-fill {
+    height: 100%;
+    width: var(--fill, 8%);
+    background: linear-gradient(90deg, rgb(var(--accent-rgb) / 0.12), rgb(var(--accent-rgb) / 0.5) 70%, var(--accent-200));
+    box-shadow: 0 0 0.75rem rgb(var(--accent-rgb) / 0.6);
+  }
+
+  /* The four steps share one spot (the tallest sets its height); only the
+     lit one shows. Screen readers still get all four. */
+  .steps-list {
+    display: grid;
+    gap: 0;
+  }
+
+  .step {
+    grid-area: 1 / 1;
+    opacity: 0;
+    translate: 0 0.5rem;
+    transition:
+      opacity 0.35s ease,
+      translate 0.35s ease;
+  }
+
+  .step.on {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  .step-dot,
+  .step-icon {
+    display: none;
+  }
+
+  .step-title {
+    margin-top: 0.25rem;
+  }
+
+  .step-text {
+    max-width: 22rem;
+    margin-inline: auto;
+  }
+
+  /* Without WebGL the lit step's picture shows in the picture's space. */
+  .no-webgl .process-globe {
+    height: auto;
+  }
+
+  .no-webgl .process-icons {
+    display: block;
+  }
+}
+
+/* Pinned, on phones under 700px tall (e.g. an iPhone with Safari's bars
+   showing): the badge goes, so the picture has room under the title. */
+@media (max-width: 900px) and (min-height: 600px) and (max-height: 699.98px) and (prefers-reduced-motion: no-preference) {
+  .process-copy .badge {
+    display: none;
   }
 }

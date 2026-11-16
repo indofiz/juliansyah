@@ -6,8 +6,20 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { sceneState, showStepIcon } from "@/lib/sceneState";
 import type { StepId } from "@/lib/stepScenes";
 import { gateSteps } from "@/lib/stepGate";
+import { PHONE_PIN } from "@/lib/sceneKeyframes";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+/**
+ * Snap for a pinned step track of `n` equal bands: from where the scroll
+ * would come to rest (`value`, 0–1) to the middle of a step, moving on in
+ * the scroll's direction once it's 30% of the way to the next step.
+ */
+const snapStep = (n: number) => (value: number, self?: ScrollTrigger) => {
+  const at = value * n - 0.5; // 0 … n-1 at the steps' middles
+  const step = self && self.direction < 0 ? Math.ceil(at - 0.7) : Math.floor(at + 0.7);
+  return (Math.min(n - 1, Math.max(0, step)) + 0.5) / n;
+};
 
 /**
  * DOM scroll effects (the particle globe's path is handled by ScrollScenes):
@@ -81,16 +93,16 @@ export function ScrollFx() {
 
     // ---- How I work: steps and the pictures on the globe ---------------------
     // The track fills, the current step lights up and the globe turns into
-    // its picture (lib/stepScenes.ts). Desktop: the track is pinned
-    // ([data-steps-pin], a tall track with a sticky stage), so this spans the
-    // pinned scroll while the picture holds still; after Launch the rocket
-    // stays, to dissolve into About's portrait. Phones and reduced motion:
-    // nothing pins; it runs while the list scrolls past. With reduced motion
-    // every step stays lit and the track full (reduced-motion.css); the
-    // pictures swap at once.
+    // its picture (lib/stepScenes.ts). Desktop, and phones tall enough
+    // (PHONE_PIN): the track is pinned ([data-steps-pin], a tall track with a
+    // sticky stage), so this spans the pinned scroll while the picture holds
+    // still; after Launch the rocket stays, to dissolve into About's
+    // portrait. Shorter phones and reduced motion: nothing pins; it runs
+    // while the list scrolls past. With reduced motion every step stays lit
+    // and the track full (reduced-motion.css); the pictures swap at once.
     //
-    // This only picks WHICH picture: the lit step's on desktop (Discover
-    // above the track), Discover on phones (their steps show their own
+    // This only picks WHICH picture: the lit step's (Discover above the
+    // track), but Discover on unpinned phones (their steps show their own
     // icons). WHETHER a picture shows instead of the earth is `pictures` in
     // lib/sceneKeyframes.ts, scrubbed with the rest of the scene: it turns on
     // while the particles are still faded out from Work, so the section
@@ -114,19 +126,21 @@ export function ScrollFx() {
         if (id !== sceneState.iconTarget) showStepIcon(id, { instant: reduce });
       };
 
-      gsap.matchMedia().add({ desktop: "(min-width: 901px)", mobile: "(max-width: 900px)" }, (ctx) => {
+      gsap.matchMedia().add({ desktop: "(min-width: 901px)", phonePin: PHONE_PIN }, (ctx) => {
         const desktop = Boolean(ctx.conditions?.desktop);
-        const pinned = desktop && Boolean(pin) && !reduce;
+        const phonePinned = !desktop && Boolean(ctx.conditions?.phonePin);
+        const pinned = (desktop || phonePinned) && Boolean(pin) && !reduce;
 
         const update = (self: ScrollTrigger) => {
-          if (fill && !reduce) fill.style.height = `${Math.max(8, self.progress * 100)}%`;
+          // Height of the fill on desktop, width on pinned phones (CSS).
+          if (fill && !reduce) fill.style.setProperty("--fill", `${Math.max(8, self.progress * 100)}%`);
           const i = Math.min(steps.length - 1, Math.floor(self.progress * steps.length));
           if (i !== current) {
             current = i;
             steps.forEach((s, k) => s.classList.toggle("on", k === i));
             fallbacks.forEach((a, k) => a.classList.toggle("on", k === i));
           }
-          showIcon(desktop ? ids[current] : ids[0]);
+          showIcon(desktop || pinned ? ids[current] : ids[0]);
         };
 
         const track = ScrollTrigger.create({
@@ -135,10 +149,17 @@ export function ScrollFx() {
           end: pinned ? "bottom bottom" : "bottom 45%",
           onUpdate: update,
           onRefresh: update,
+          // Pinned phones: touch scrolls natively, and when a swipe ends the
+          // page settles on a step's middle: the next one in the swipe's
+          // direction once it has gone 30% of the way there, else back. So
+          // a swipe that enters the section stops on the first step (from
+          // About, the last), and a nudge doesn't skip one.
+          snap: phonePinned && pinned ? { snapTo: snapStep(ids.length), duration: { min: 0.2, max: 0.6 }, delay: 0.1, ease: "power1.inOut" } : undefined,
         });
         update(track);
-        // Pinned (desktop): one wheel gesture per step, each held until its
-        // picture has formed, however fast you scroll (lib/stepGate.ts).
+        // Pinned: one wheel gesture per step, each held until its picture has
+        // formed, however fast you scroll (lib/stepGate.ts). Wheel only, so
+        // on phones it's for narrow desktop windows; touch passes through.
         const ungate = pinned ? gateSteps(track, ids) : undefined;
         // Back to Discover when the layout changes.
         return () => {

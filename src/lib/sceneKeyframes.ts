@@ -2,6 +2,14 @@ import type { SceneValues } from "./sceneState";
 
 export type SceneScroll = { trigger: string; start?: string; endVh?: number; endTrigger?: string; end?: string };
 
+/**
+ * Phones tall enough for How I work to pin (title, picture, one step,
+ * buttons in one screen): the picture then changes with each step, as on
+ * desktop. mobile.css uses the same query (plus motion allowed). Shorter
+ * phones, and phones in landscape, keep the stacked list.
+ */
+export const PHONE_PIN = "(max-width: 900px) and (min-height: 600px)";
+
 /** An in-between state; `mobile` overrides it on screens ≤ 900px wide. */
 export type SceneVia = Partial<SceneValues> & { mobile?: Partial<SceneValues> };
 
@@ -17,8 +25,8 @@ export type SceneKeyframe = SceneValues & {
    * `end` ("top top" by default) is reached on `endTrigger`.
    */
   scroll?: SceneScroll;
-  /** A different scroll range on screens ≤ 900px wide. */
-  mobileScroll?: SceneScroll;
+  /** A different scroll range on phones where How I work doesn't pin (see PHONE_PIN). */
+  listScroll?: SceneScroll;
   /** Overrides used on screens ≤ 900px wide, where the layout stacks. */
   mobile?: Partial<SceneValues>;
 };
@@ -81,18 +89,19 @@ export const sceneKeyframes: Record<string, SceneKeyframe> = {
   // picture (never the earth: `pictures` turns on in the first third, while
   // they're still faded out), and rise with the section into the middle
   // column between the copy and the steps, as main's globe does (desktop),
-  // or under the title (phones), then hold there while the stage is pinned,
-  // as each step's picture (ScrollFx, lib/stepScenes.ts). Its centre stays
-  // a fixed distance below the section's top (half a screen; 57.5% on
-  // phones, y -0.15) as the section scrolls in: each third of the transition
-  // is a third of a screen, so y moves 0.67 per via. The no-WebGL picture
-  // and the phones' globe space in Process.tsx follow the globe's centre and
-  // size: if you change x, y or scale here, update --globe-x / --globe-r /
-  // --globe-cy on .process (sections.css, mobile.css).
+  // or between the title and the lit step (phones), then hold there while
+  // the stage is pinned, as each step's picture (ScrollFx,
+  // lib/stepScenes.ts). Its centre stays a fixed distance below the
+  // section's top (half a screen; 53.5% on phones, y -0.07) as the section
+  // scrolls in: each third of the transition is a third of a screen, so y
+  // moves 0.67 per via. The no-WebGL picture and the phones' picture space
+  // in Process.tsx follow the globe's centre and size: if you change x, y or
+  // scale here, update --globe-x / --globe-r / --globe-cy on .process
+  // (sections.css, mobile.css).
   process: {
     via: [
-      { x: 0, y: -1.33, scale: 0.72, globeSpin: 3.2, shapeSpin: 0.7, morph: 0, opacity: 0, pictures: 1, mobile: { y: -1.48, scale: 1.05 } },
-      { y: -0.67, globeSpin: 3.6, opacity: 0.9, mobile: { y: -0.82 } },
+      { x: 0, y: -1.33, scale: 0.72, globeSpin: 3.2, shapeSpin: 0.7, morph: 0, opacity: 0, pictures: 1, mobile: { y: -1.4, scale: 0.75 } },
+      { y: -0.67, globeSpin: 3.6, opacity: 0.9, mobile: { y: -0.74 } },
     ],
     x: 0,
     y: 0,
@@ -103,19 +112,19 @@ export const sceneKeyframes: Record<string, SceneKeyframe> = {
     sink: 0,
     opacity: 1,
     pictures: 1,
-    mobile: { y: -0.15, scale: 1.05 },
+    mobile: { y: -0.07, scale: 0.75 },
   },
 
   // About: the globe glides to the centre as it dissolves onto the glowing
   // floor, then the cloud rises into the portrait (your face with the VR
   // headset) in the empty middle column, framed by three cards a side. On
-  // phones it sits between the title and the cards; there nothing pins in
-  // How I work, so the globe starts to dissolve (and dims) as soon as the
-  // steps scroll up over it. The step picture (the rocket after Launch on
-  // desktop, the telescope on phones) is what dissolves.
+  // phones it sits between the title and the cards. The rocket (after
+  // Launch) is what dissolves, once How I work's pin ends. On phones too
+  // short to pin (PHONE_PIN), How I work is a list: the telescope starts to
+  // dissolve (and dims) as soon as the steps scroll up over it.
   about: {
     via: { x: 0, y: -0.15, scale: 1, morph: 1, sink: 0.85, opacity: 0.85, mobile: { opacity: 0.4 } },
-    mobileScroll: { trigger: "#process", start: "top top", endTrigger: "#about" },
+    listScroll: { trigger: "#process", start: "top top", endTrigger: "#about" },
     x: 0,
     y: -0.3,
     scale: 0.72,

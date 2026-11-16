@@ -4,7 +4,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { sceneState, type SceneValues } from "@/lib/sceneState";
-import { sceneKeyframes, sectionOrder } from "@/lib/sceneKeyframes";
+import { PHONE_PIN, sceneKeyframes, sectionOrder } from "@/lib/sceneKeyframes";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -17,7 +17,7 @@ const FOLLOW_RATE = 10 * Math.LN2;
 
 function values(id: string, mobile: boolean): SceneValues {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { via, scroll, mobileScroll, mobile: mobileOverrides, ...rest } = sceneKeyframes[id];
+  const { via, scroll, listScroll, mobile: mobileOverrides, ...rest } = sceneKeyframes[id];
   return mobile ? { ...rest, ...mobileOverrides } : rest;
 }
 
@@ -45,16 +45,18 @@ type Transition = {
  * For each pair of neighbouring sections A → B, a transition blends A's
  * values into B's (through any `via` states) while section B scrolls from
  * the bottom of the viewport to the top, or over B's custom `scroll` range
- * (`mobileScroll` on phones). Each frame, one "scene scroll" value follows
- * the real scroll with a short lag (as `scrub: 1` did); the scene takes the
- * values of the transition it's in, or of the last one it passed. So a fast
- * fling plays the sections in page order, never two at once.
+ * (`listScroll` on phones where How I work doesn't pin). Each frame, one
+ * "scene scroll" value follows the real scroll with a short lag (as
+ * `scrub: 1` did); the scene takes the values of the transition it's in,
+ * or of the last one it passed. So a fast fling plays the sections in page
+ * order, never two at once.
  *
  * The ranges are settled after every ScrollTrigger refresh: a transition
  * that changes nothing is dropped (two `scattered` sections), two that
  * overlap (a section shorter than the screen) meet in the middle of the
  * overlap, and none ends below the bottom of the page, so the last
- * section's values are reached there. It all rebuilds when crossing 900px.
+ * section's values are reached there. It all rebuilds when crossing 900px
+ * or PHONE_PIN.
  *
  * Reduced motion: no blending and no lag. The scene cuts to each section's
  * values when that section's top passes 55% of the screen (and back when
@@ -63,8 +65,9 @@ type Transition = {
 export function ScrollScenes() {
   useGSAP(() => {
     const mm = gsap.matchMedia();
-    mm.add({ mobile: "(max-width: 900px)", desktop: "(min-width: 901px)", reduce: "(prefers-reduced-motion: reduce)" }, (ctx) => {
+    mm.add({ mobile: "(max-width: 900px)", desktop: "(min-width: 901px)", phonePin: PHONE_PIN, reduce: "(prefers-reduced-motion: reduce)" }, (ctx) => {
       const mobile = Boolean(ctx.conditions?.mobile);
+      const listPhone = mobile && !ctx.conditions?.phonePin;
       const reduce = Boolean(ctx.conditions?.reduce);
       Object.assign(sceneState, values(sectionOrder[0], mobile));
 
@@ -86,7 +89,7 @@ export function ScrollScenes() {
         states.push(values(id, mobile));
         if (states.every((s) => same(s, from))) continue;
 
-        const custom = (mobile && kf.mobileScroll) || kf.scroll;
+        const custom = (listPhone && kf.listScroll) || kf.scroll;
         const range: ScrollTrigger.Vars = reduce
           ? { trigger: `#${id}`, start: "top 55%" }
           : custom
