@@ -4,19 +4,27 @@
  * and no camera layout copied from a real model.
  */
 
-export type FrontId = "pill" | "punch";
+export type FrontId = "pill" | "punch" | "tablet";
 export type ColourwayId = "graphite" | "silver";
 
-/** Shared by both fronts. The body radius is the display radius plus the border, so the curves run parallel. */
-export const BODY = {
+export type Body = {
+  width: number;
+  depth: number;
+  /** Rounded edge where the metal frame meets the front and back. */
+  edge: number;
+  /** Black border round the display. */
+  bezel: number;
+  displayRadius: number;
+};
+
+/** The phone body, shared by the phone fronts. The body radius is the display radius plus the border, so the curves run parallel. */
+export const BODY: Body = {
   width: 72,
   depth: 8,
-  /** Rounded edge where the metal frame meets the front and back. */
   edge: 0.8,
-  /** Black border round the display. */
   bezel: 1.8,
   displayRadius: 8,
-} as const;
+};
 
 export type Cutout =
   | { kind: "pill"; width: number; height: number; centreFromTop: number }
@@ -27,7 +35,10 @@ export type Front = {
   label: string;
   /** Display width : height. */
   aspect: [number, number];
+  /** On the display, or in the border above it when `centreFromTop` is negative. */
   cutout: Cutout;
+  /** A different body (the tablet); missing values come from BODY. */
+  body?: Partial<Body>;
 };
 
 export const FRONTS: Record<FrontId, Front> = {
@@ -44,6 +55,16 @@ export const FRONTS: Record<FrontId, Front> = {
     label: "Punch-hole · 9:20",
     aspect: [9, 20],
     cutout: { kind: "hole", diameter: 3, centreFromTop: 4.6 },
+  },
+  // An 11-inch tablet in portrait, like 834×1194 pt (1668×2388 px)
+  // screenshots: even borders, square-ish display corners, and the front
+  // camera in the top border. Generic, like the phone.
+  tablet: {
+    id: "tablet",
+    label: "Tablet · 834:1194",
+    aspect: [834, 1194],
+    cutout: { kind: "hole", diameter: 2.2, centreFromTop: -3.4 },
+    body: { width: 178, depth: 6, bezel: 6.8, displayRadius: 3.8 },
   },
 };
 

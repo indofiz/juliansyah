@@ -155,3 +155,16 @@ Cheaper alternative: a CSS tablet frame (like `BrowserFrame`). It would look les
 7. Card: **rating chip + stack line** / title and summary only.
 8. Track record: **mark 99.9 % confirmed** from Presensi's data / leave it as is.
 9. presensi-mobile: **OK to add the tablet size to the screenshot tool on a local branch** / don't touch that repo.
+
+---
+
+## Status of step 5 (tablet) and checks, 2026-11-16
+
+- **presensi-mobile:** `SHOT_DEVICE=tablet` added to the screenshot tool (iPad Pro 11", 834×1194 pt at 2x, iPadOS status bar, output in `output/tablet/<lang>/`). Commit `c41f719` on the LOCAL branch `feature/portfolio-tablet-screenshots`, **not pushed**. All 45 English screens render.
+- **/studio:** third front `tablet` (178 mm body, 6.8 mm border, 3.8 mm display radius, camera in the top border; `Front.body` overrides `BODY`). Library export at 1600 px, cropped: `public/projects/presensi-pkp/tablet-front.png` (7 KB, palette PNG) + `tablet-front-mask.webp` (3 KB).
+- **Case study:** the Screens block opens with the tablet (home screen, 1668×2388 WebP, 84 KB) with the phone's home screen in front, captioned "The same home screen on a phone and a tablet, from one codebase", then the 6-phone gallery.
+- **Checks:**
+  - lint, type check and build pass;
+  - screenshots at 1440, 1024 and 390, in ember and azure, with reduced motion: no console errors, no sideways scroll, headings in order;
+  - Lighthouse 13.6 on the case study (production build): accessibility 100, SEO 100, best practices 96. The 96 is the hero phone frame flagged "low resolution", a false positive from the CSS-transform scaling that was there before today. Performance 50 is not valid: benchmark index 988, while a valid run on this Mac needs ~1,800 (the Mac was loaded, load average ~10).
+- **Homepage cost:** only the rating chip and the key-tech line (text and one icon); the badges, gallery and tablet are on the case study only, all lazy except the hero.

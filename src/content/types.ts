@@ -99,8 +99,11 @@ export type CaseStudy = {
   decisions: { title: string; why: string; tradeoff?: string }[];
   /** More real screens, each in the studio phone (needs `media.stills`), with a short caption under it. */
   gallery?: (ImageRef & { caption: string })[];
-  /** A tablet screenshot in the studio tablet, shown with the gallery (needs `media.stills.tablet`). */
-  tablet?: ImageRef;
+  /**
+   * A tablet screenshot in the studio tablet, with the phone's first screen
+   * in front of it, above the gallery (needs `media.stills.tablet`).
+   */
+  tablet?: ImageRef & { caption: string };
   result: { text: string; metrics: Metric[] };
   links?: Link[];
 };

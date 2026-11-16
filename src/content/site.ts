@@ -237,7 +237,7 @@ export const projects: Project[] = [
         { src: "/projects/presensi-pkp/screens/language.webp", alt: "First launch: choosing Bahasa Indonesia or English", width: 1290, height: 2796 },
       ],
       // Front on both (user, 2026-11-16: the card used three-quarter left before).
-      stills: { card: presensiStills.front, page: presensiStills.front },
+      stills: { card: presensiStills.front, page: presensiStills.front, tablet: presensiStills.tablet },
     },
     flagship: true,
     // Facts: the user (2026-11-16) and the presensi-mobile repo (code, docs/bug-fixing, release notes).
@@ -324,6 +324,15 @@ export const projects: Project[] = [
           why: "On an **iPad**, content stops at a readable width instead of stretching edge to edge, and system text size is capped at 1.3× so large fonts don't break the layout.",
         },
       ],
+      // presensi-mobile's screenshot tool with SHOT_DEVICE=tablet (fake data), 1668×2388 WebP.
+      // Shown on the studio tablet with the phone's home screen in front of it.
+      tablet: {
+        src: "/projects/presensi-pkp/screens/tablet-home.webp",
+        alt: "The home screen on a tablet: the same cards as on the phone, held to a readable width in the middle of the screen",
+        caption: "The same home screen on a phone and a tablet, from one codebase",
+        width: 1668,
+        height: 2388,
+      },
       // presensi-mobile's screenshot tool (fake data), in check-in order. 1290×2796 WebP.
       gallery: [
         {

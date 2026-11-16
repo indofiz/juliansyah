@@ -167,14 +167,15 @@ function fitUVs(geo: THREE.BufferGeometry, w: number, h: number) {
  * four sides.
  */
 export function buildPhone(front: Front, m: PhoneMaterials): PhoneModel {
-  const W = cm(BODY.width);
-  const D = cm(BODY.depth);
-  const e = cm(BODY.edge);
-  const border = cm(BODY.bezel);
+  const body = { ...BODY, ...front.body };
+  const W = cm(body.width);
+  const D = cm(body.depth);
+  const e = cm(body.edge);
+  const border = cm(body.bezel);
   const dw = W - 2 * border;
   const dh = (dw * front.aspect[1]) / front.aspect[0];
   const H = dh + 2 * border;
-  const dr = cm(BODY.displayRadius);
+  const dr = cm(body.displayRadius);
   const R = dr + border;
   const zFront = D / 2;
   const zBack = -D / 2;

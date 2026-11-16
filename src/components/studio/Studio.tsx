@@ -56,7 +56,7 @@ const stillId = (s: StudioState) => `phone-${s.front}-${s.colourway}-${s.angle}`
 function libraryJson(id: string, s: StudioState, supersample: number, files: LibraryFiles) {
   return {
     id,
-    device: "phone",
+    device: s.front === "tablet" ? "tablet" : "phone",
     source: "3d-studio",
     front: s.front,
     colourway: s.colourway,

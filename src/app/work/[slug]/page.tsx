@@ -266,23 +266,41 @@ export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]"
             </div>
           </section>
 
-          {cs.gallery && cs.gallery.length > 0 && p.media.stills && (
+          {(cs.gallery?.length || cs.tablet) && p.media.stills && (
             <section className="cs-block" aria-labelledby="cs-screens">
               <h2 id="cs-screens" className="cs-h2">
                 {L.screens}
               </h2>
-              <ul className="cs-gallery">
-                {cs.gallery.map((s) => (
-                  <li key={s.src}>
-                    <figure>
-                      <DeviceStill still={p.media.stills!.page} sizes="(max-width: 900px) 170px, 200px" className="cs-shot">
-                        <Image className="device-shot" src={s.src} alt={s.alt} fill sizes="(max-width: 900px) 160px, 190px" />
+              <div className="cs-screens">
+                {cs.tablet && p.media.stills.tablet && p.media.screens?.[0] && (
+                  <figure className="cs-devices">
+                    {/* The tablet, and the phone's first screen in front of it. */}
+                    <div className="cs-devices-pair">
+                      <DeviceStill still={p.media.stills.tablet} sizes="(max-width: 900px) 80vw, 450px" className="cs-tablet">
+                        <Image className="device-shot" src={cs.tablet.src} alt={cs.tablet.alt} fill sizes="(max-width: 900px) 76vw, 420px" />
                       </DeviceStill>
-                      <figcaption>{s.caption}</figcaption>
-                    </figure>
-                  </li>
-                ))}
-              </ul>
+                      <DeviceStill still={p.media.stills.page} sizes="(max-width: 900px) 28vw, 160px" className="cs-pair-phone">
+                        <Image className="device-shot" src={p.media.screens[0].src} alt={p.media.screens[0].alt} fill sizes="(max-width: 900px) 26vw, 150px" />
+                      </DeviceStill>
+                    </div>
+                    <figcaption>{cs.tablet.caption}</figcaption>
+                  </figure>
+                )}
+                {cs.gallery && cs.gallery.length > 0 && (
+                  <ul className="cs-gallery">
+                    {cs.gallery.map((s) => (
+                      <li key={s.src}>
+                        <figure>
+                          <DeviceStill still={p.media.stills!.page} sizes="(max-width: 900px) 170px, 200px" className="cs-shot">
+                            <Image className="device-shot" src={s.src} alt={s.alt} fill sizes="(max-width: 900px) 160px, 190px" />
+                          </DeviceStill>
+                          <figcaption>{s.caption}</figcaption>
+                        </figure>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             </section>
           )}
 

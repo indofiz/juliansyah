@@ -740,7 +740,46 @@
   font-weight: 500;
 }
 
-/* Screens: each screen in the studio phone, with a caption. */
+/* Screens: the phone-and-tablet picture, then each screen in the studio phone. */
+.cs-screens {
+  display: grid;
+  gap: 3rem;
+}
+
+.cs-devices {
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+}
+
+.cs-devices figcaption {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+/* The tablet on the left; the phone in front of its bottom-right corner. */
+.cs-devices-pair {
+  position: relative;
+  width: min(100%, 34rem);
+}
+
+.cs-tablet {
+  width: 82%;
+  margin-inline: 0;
+}
+
+.cs-pair-phone {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 28%;
+}
+
+/* The two float out of step. */
+.cs-pair-phone .device-float {
+  animation-delay: -3s;
+}
+
 .cs-gallery {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
