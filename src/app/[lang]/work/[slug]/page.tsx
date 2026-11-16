@@ -7,6 +7,7 @@ import { defaultLocale, languageAlternates, localHref } from "@/lib/locales";
 import { getProject, nextProject } from "@/lib/projects";
 import { caseStudyJsonLd, jsonLdHtml } from "@/lib/jsonLd";
 import { SiteHeader } from "@/components/SiteHeader";
+import { ChatButton } from "@/components/ChatButton";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { Footer } from "@/components/sections/Footer";
 import { BrowserMedia } from "@/components/media/BrowserMedia";
@@ -365,6 +366,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/[lang]/work/
         </div>
       </main>
       <Footer />
+      <ChatButton />
     </>
   );
 }

@@ -1208,3 +1208,126 @@
 .skip-link:focus {
   transform: none;
 }
+
+/* ---------- Round WhatsApp button (ChatButton.tsx) ----------
+   Fixed to the bottom-right corner on every size. Neutral grey with a dark
+   bubble, as in the user's reference: it doesn't follow the accent. Layer
+   --z-chat: above the page, under the header, so the phone menu and the
+   accent swatches cover it. Size and gap: --chat-size / --chat-gap
+   (tokens.css). The entrance only animates opacity and `scale`, with fill
+   "backwards", so it never holds a transform over hover and press. */
+@media (max-width: 640px) {
+  :root {
+    --chat-gap: 1rem;
+  }
+}
+
+.chat-fab {
+  --chat-bg: #d9d6d2;
+  --chat-ink: var(--surface-2);
+  position: fixed;
+  right: var(--chat-gap);
+  bottom: max(var(--chat-gap), env(safe-area-inset-bottom));
+  z-index: var(--z-chat);
+  width: var(--chat-size);
+  height: var(--chat-size);
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--chat-bg);
+  box-shadow:
+    0 0.5rem 1.5rem rgb(0 0 0 / 0.45),
+    0 0.125rem 0.375rem rgb(0 0 0 / 0.35);
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    translate 0.2s ease,
+    scale 0.15s ease,
+    background-color 0.2s ease;
+  animation: chat-fab-in 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.8s backwards;
+}
+
+@keyframes chat-fab-in {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+}
+
+.chat-fab:focus-visible {
+  border-radius: 999px;
+}
+
+.chat-fab:active {
+  scale: 0.94;
+}
+
+@media (hover: hover) {
+  .chat-fab:hover {
+    --chat-bg: #f5f3f0;
+    translate: 0 -0.125rem;
+  }
+}
+
+/* The bubble is about half the circle wide, as in the reference. */
+.chat-fab-icon {
+  width: 54%;
+  height: 54%;
+  overflow: visible;
+}
+
+.chat-fab-bubble {
+  fill: var(--chat-ink);
+}
+
+.chat-fab-smile {
+  fill: none;
+  stroke: var(--chat-bg);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  transition: stroke 0.2s ease;
+}
+
+/* Desktop: the label slides in to the left on hover or keyboard focus. It
+   ignores the pointer while hidden, so the empty space beside the button
+   isn't a link. */
+.chat-fab-label {
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 0.75rem);
+  padding: 0.5rem 0.875rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--surface-3);
+  box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 0.4);
+  color: var(--text);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  opacity: 0;
+  translate: 0.5rem -50%;
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease,
+    translate 0.2s ease;
+}
+
+.chat-fab:hover .chat-fab-label,
+.chat-fab:focus-visible .chat-fab-label {
+  opacity: 1;
+  translate: 0 -50%;
+  pointer-events: auto;
+}
+
+/* Touch screens and phones: icon only; the label stays for screen readers
+   (a tap would otherwise leave it stuck open under :hover). */
+@media (hover: none), (max-width: 900px) {
+  .chat-fab-label {
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+}

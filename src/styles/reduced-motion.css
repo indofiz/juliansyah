@@ -133,3 +133,19 @@
     transition: none;
   }
 }
+
+/* ---------- Round WhatsApp button: no entrance, no lift ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .chat-fab,
+  .chat-fab-label,
+  .chat-fab-smile {
+    animation: none;
+    transition: none;
+  }
+
+  .chat-fab:hover,
+  .chat-fab:active {
+    translate: none;
+    scale: none;
+  }
+}

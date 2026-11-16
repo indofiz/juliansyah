@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { getContent } from "@/content";
 import { mailto } from "@/lib/mailto";
+import { whatsappHref } from "@/lib/whatsapp";
 import { Icon } from "../ui/Icon";
 import { Placeholder, isTodo } from "../ui/Placeholder";
 import { Badge, Button } from "../ui/primitives";
@@ -48,7 +49,7 @@ export async function Contact() {
   const { about, contact, footer, site } = await getContent();
   const { card } = contact;
   const mailHref = mailto(site.email, contact.mail);
-  const whatsappHref = `https://wa.me/${contact.whatsapp.number}?text=${encodeURIComponent(contact.whatsapp.text)}`;
+  const chatHref = whatsappHref(contact.whatsapp.number, contact.whatsapp.text);
   return (
     <section id="contact" className="section cta" aria-labelledby="contact-title">
       <div className="container">
@@ -67,7 +68,7 @@ export async function Contact() {
               <Button href={mailHref} icon="send">
                 {contact.primary}
               </Button>
-              <Button href={whatsappHref} variant="ghost" icon="whatsapp">
+              <Button href={chatHref} variant="ghost" icon="whatsapp">
                 {contact.whatsapp.label}
               </Button>
             </div>

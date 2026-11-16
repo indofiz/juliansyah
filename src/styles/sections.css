@@ -1995,7 +1995,9 @@ a.about-social:focus-visible {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 1rem;
-  padding: 2.25rem 0 1.875rem;
+  /* The bottom clears the round WhatsApp button, so at the very end of the
+     page it never covers this line. */
+  padding: 2.25rem 0 calc(var(--chat-size) + var(--chat-gap) + 0.75rem);
   font-size: 0.875rem;
   color: #938f8a;
 }

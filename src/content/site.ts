@@ -707,6 +707,12 @@ export const contact = {
     number: "6283175087363",
     text: "Hi Juliansyah, I found you through your portfolio.\n\nWhat I'm building:\nWho it's for:\nWhen I need it:",
   },
+  /**
+   * The round button in the bottom-right corner of every page
+   * (ChatButton.tsx). Same number and first message as `whatsapp` above;
+   * `label` is its name (shown on hover on desktop).
+   */
+  chat: { label: "Chat on WhatsApp" },
   /** Quiet line for recruiters. Links: footer.resume.href and site.linkedin. */
   hiring: { text: "Hiring for a role?", resume: "Résumé", linkedin: "LinkedIn" },
   /** The card beside the buttons: who answers, when, and what happens after. */

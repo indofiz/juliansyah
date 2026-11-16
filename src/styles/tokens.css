@@ -80,11 +80,18 @@ html {
   --gutter: clamp(1.25rem, calc(4.4 * var(--vw)), 4rem);
   --container: 80rem;
 
+  /* Round WhatsApp button (ChatButton.tsx): its size and its distance from
+     the screen's right and bottom edges. The footer reads them too, to keep
+     its last line clear of the button. */
+  --chat-size: 3.5rem;
+  --chat-gap: 1.5rem;
+
   /* Layers, bottom to top. main and the footer are stacking contexts
      (positioned + z-index), so whatever z-index a section uses inside them,
      it can never rise above the header, the nav pill or the mobile menu. */
   --z-scene: 0; /* fixed WebGL canvas */
   --z-page: 1; /* main, footer */
+  --z-chat: 30; /* round WhatsApp button (under the header, so the phone menu covers it) */
   --z-header: 40; /* logo + actions; on phones the fixed header + menu */
   --z-nav: 50; /* desktop nav pill */
   --z-skip: 1000; /* skip link */

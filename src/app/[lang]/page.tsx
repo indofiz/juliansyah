@@ -4,6 +4,7 @@ import { ScrollScenes } from "@/components/ScrollScenes";
 import { ScrollFx } from "@/components/ScrollFx";
 import { Carousels } from "@/components/Carousels";
 import { SiteHeader } from "@/components/SiteHeader";
+import { ChatButton } from "@/components/ChatButton";
 import { Intro } from "@/components/sections/Intro";
 import { Work } from "@/components/sections/Work";
 import { Process } from "@/components/sections/Process";
@@ -40,6 +41,7 @@ export default async function Home() {
         <Contact />
       </main>
       <Footer />
+      <ChatButton />
     </>
   );
 }

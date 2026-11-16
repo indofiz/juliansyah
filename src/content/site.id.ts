@@ -312,6 +312,7 @@ export const id: Record<string, string> = {
   "Address selected. Copy it from the menu.": "Alamat sudah dipilih. Salin dari menu.",
   "Address selected. Press ⌘C or Ctrl+C.": "Alamat sudah dipilih. Tekan ⌘C atau Ctrl+C.",
   "WhatsApp me": "Chat via WhatsApp",
+  "Chat on WhatsApp": "Chat lewat WhatsApp",
   "Hi Juliansyah, I found you through your portfolio.\n\nWhat I'm building:\nWho it's for:\nWhen I need it:":
     "Halo Juliansyah, saya menemukan Anda lewat portofolio Anda.\n\nYang sedang saya bangun:\nUntuk siapa:\nKapan saya membutuhkannya:",
   "Hiring for a role?": "Sedang merekrut?",
