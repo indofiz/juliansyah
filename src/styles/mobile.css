@@ -1001,4 +1001,19 @@
   .work-list {
     grid-template-columns: 1fr;
   }
+
+  /* Wider cards: 12px from the screen edge whatever the gutter (the section
+     title keeps the gutter every section uses), with 16px inside. */
+  .work-grid {
+    margin-inline: calc(0.75rem - var(--gutter));
+  }
+
+  .work-flagship {
+    padding-inline: 1rem;
+  }
+
+  .work-media,
+  .work-body {
+    padding-inline: 1rem;
+  }
 }
