@@ -11,12 +11,8 @@ import { Button, SectionHeader } from "../ui/primitives";
  * Desktop: the track is taller than the screen and its stage sticks, so the
  * picture holds still while scrolling fills the step track, lights each
  * step in turn and turns the particles into its picture (ScrollFx,
- * [data-steps]). The wheel moves one step per gesture, held until the
- * picture has formed, so fast scrolling can't skip steps (lib/stepGate.ts).
- * Phones at least 600px tall pin too (PHONE_PIN): title, picture, the lit
- * step alone under a progress bar, buttons; a swipe settles on a step.
- * Shorter phones: title, the telescope, steps, buttons, nothing pinned;
- * each step shows its own icon beside it. Reduced motion: nothing
+ * [data-steps]). Phones: title, the telescope, steps, buttons, nothing
+ * pinned; each step shows its own icon beside it. Reduced motion: nothing
  * pinned, every step lit, the pictures swap without moving. Without WebGL
  * the lit step's picture shows as an image where the particles would be
  * (.no-webgl).
