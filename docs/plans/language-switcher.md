@@ -1,9 +1,10 @@
 # Plan: language switcher (English / Bahasa Indonesia)
 
-Status: **steps 0 and 1 built** (2026-11-16, `feat/portfolio-home`), with
-the default answers. The `/id` pages exist and the switch works; the
-Indonesian dictionary (`src/content/site.id.ts`) is still empty, so `/id`
-shows English. Next: step 2, the Indonesian copy.
+Status: **all steps built** (2026-11-16, `feat/portfolio-home`), with the
+default answers. `/id` is in Indonesian (Claude's draft in
+`src/content/site.id.ts`, waiting for your review); `npm run i18n:check`
+reports 292 of 292 lines covered. The fit check (step 3) found nothing to
+change at 1440 or 390. Open: the language icons (SVG) you asked for later.
 
 How step 1 came out, where it differs from the plan below:
 - Indonesian isn't a second copy of the content: `site.id.ts` is a
