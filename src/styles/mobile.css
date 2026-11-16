@@ -336,8 +336,10 @@
     margin-top: 1.25rem;
   }
 
-  /* Glass bars: wider gaps (same total width) and more frosted than desktop. */
+  /* Glass bars: wider gaps (same total width) and more frosted than desktop.
+     --cy is the globe's centre: mobile hero keyframe y = -0.56 → 78vh. */
   .hero-bars {
+    --cy: 78vh;
     --bar: calc(var(--r) * 0.62);
     --gap: calc(var(--r) * 0.12);
   }
@@ -348,43 +350,29 @@
     backdrop-filter: blur(0.45rem) saturate(1.6);
   }
 
+  /* The first screen shows only the top of the dashboard: the bezel and the
+     logo strip, cut just below it. The globe sits behind it (hero keyframe,
+     mobile y). */
   .hero-frame-wrap {
-    --peek: 19rem;
+    --peek: 7.8125rem;
   }
 
   .hero-frame .frame-inner {
     max-height: 30rem;
   }
 
-  /* Top bar: keep the design-system tag, drop
-     the breadcrumb and the Documentation chip to make room. */
-  .hero-frame .mock-crumb,
-  .hero-frame .mock-top .mock-chip:not(.mock-bell) {
+  /* No top bar, and the stat card is just the moving client logos: the
+     user count is in the proof rows one scroll later. The logo list keeps
+     its accessible name (aria-labelledby reads the hidden label). */
+  .hero-frame .mock-top,
+  .hero-frame .mock-hero-stat,
+  .hero-frame .mock-clients > .mock-tile-label {
     display: none;
   }
 
-  .hero-frame .mock-top-right {
-    flex: 1;
-    margin-left: 0;
-  }
-
-  .hero-frame .mock-live {
-    margin-right: auto;
-    white-space: nowrap;
-  }
-
+  /* The strip runs the card's full width; its edges already fade. */
   .hero-frame .mock-hero-card {
-    gap: 1.25rem;
-    padding: 1.25rem;
-  }
-
-  .hero-frame .mock-big {
-    font-size: 2.125rem;
-  }
-
-  /* Stat card on the first screen: drop the decorative greeting. */
-  .hero-frame .mock-greet {
-    display: none;
+    padding: 1rem 0;
   }
 
   .media-ph-label .todo {

@@ -173,11 +173,12 @@
   will-change: opacity, transform;
 }
 
-/* Portrait: the globe is sized by width (see ParticleMorph). */
+/* Portrait: the globe is sized by width (see ParticleMorph). Its centre
+   (--cy) changes with the hero keyframe's mobile override at ≤ 900px wide
+   (mobile.css), not with the shape of the screen. */
 @media (max-aspect-ratio: 1/1) {
   .hero-bars {
     --r: calc(0.366 * 90vw);
-    --cy: 63vh; /* mobile hero keyframe: y = -0.26 */
   }
 }
 
