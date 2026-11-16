@@ -32,6 +32,16 @@
     margin-top: 5rem;
   }
 
+  /* Phones: the card is just the logo strip, shown whole (nothing is cut
+     off at the screen's edge here), so no extra height and no fade. */
+  @media (max-width: 900px) {
+    .hero-frame .frame-inner {
+      min-height: 0;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+  }
+
   /* Logo strip: no movement; swipe or scroll it sideways instead. */
   .mock-marquee {
     overflow-x: auto;

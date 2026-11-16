@@ -305,8 +305,32 @@
   }
 
   /* ---------- Intro (pinned): hero ---------- */
+  /* The stage reaches the screen's bottom edge (100lvh), under a phone
+     browser's bottom bar (Safari's is see-through), like the fixed 3D layer.
+     --chrome-bar is how much of it that bar can cover when fully shown
+     (0 where the units match: desktop, most tablets). The logos stay above
+     the bar and the card carries on underneath it; the proof rows keep
+     clear of it. */
+  .intro {
+    --chrome-bar: calc(100lvh - 100svh);
+  }
+
+  .intro-stage {
+    height: 100vh;
+    height: 100lvh;
+  }
+
+  .proof-layer {
+    bottom: var(--chrome-bar);
+  }
+
+  /* The text block sits in the middle of the space between the header and
+     the card: equal 1.75rem gaps outside the header's 4rem, and auto
+     margins share the rest. */
   .hero-copy {
     padding-top: 5.75rem;
+    padding-bottom: 1.75rem;
+    margin-block: auto;
   }
 
   .hero-eyebrow {
@@ -351,22 +375,26 @@
   }
 
   /* The first screen shows only the top of the dashboard: the bezel and the
-     logo strip, cut just below it. The globe sits behind it (hero keyframe,
-     mobile y). */
+     logo strip (plus whatever the browser's bottom bar covers). The globe
+     sits behind it (hero keyframe, mobile y). */
   .hero-frame-wrap {
-    --peek: 5.6875rem;
+    --peek: calc(5.6875rem + var(--chrome-bar));
+    margin-top: 0;
   }
 
+  /* Tall enough that the bottom fade starts below the visible part. */
   .hero-frame .frame-inner {
+    min-height: calc(var(--peek) * 2);
     max-height: 30rem;
   }
 
-  /* No top bar, and the stat card is just the moving client logos: the
-     user count is in the proof rows one scroll later. The logo list keeps
+  /* Only the moving client logos: no top bar, stat or sample tiles (the
+     user count is in the proof rows one scroll later). The logo list keeps
      its accessible name (aria-labelledby reads the hidden label). */
   .hero-frame .mock-top,
   .hero-frame .mock-hero-stat,
-  .hero-frame .mock-clients > .mock-tile-label {
+  .hero-frame .mock-clients > .mock-tile-label,
+  .hero-frame .mock-tiles {
     display: none;
   }
 
