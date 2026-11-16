@@ -60,7 +60,7 @@ function FlagshipPhone({ p }: { p: Project }) {
         still={media.stills.card}
         screens={media.screens}
         label={`${p.name}: ${work.labels.screens}`}
-        sizes="(max-width: 900px) 160px, 250px"
+        sizes="(max-width: 900px) 185px, 280px"
         screenSizes="(max-width: 900px) 170px, 260px"
         className="flagship-still"
       />

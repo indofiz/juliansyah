@@ -153,6 +153,7 @@ export const work = {
     caseStudy: "Read the case study",
     /** Names the slideshow of app screens, after the project name. */
     screens: "app screens",
+    /** Accessible names of the phone itself, which pauses and plays the screens when tapped (no visible button). */
     pauseScreens: "Pause the screens",
     playScreens: "Play the screens",
     role: "Role",
@@ -211,7 +212,8 @@ export const projects: Project[] = [
         { src: "/projects/presensi-pkp/screens/login.webp", alt: "Sign-in screen: employee ID (NIK or NIP) and password", width: 1290, height: 2796 },
         { src: "/projects/presensi-pkp/screens/language.webp", alt: "First launch: choosing Bahasa Indonesia or English", width: 1290, height: 2796 },
       ],
-      stills: { card: presensiStills.threeQuarter, page: presensiStills.front },
+      // Front on both (user, 2026-11-16: the card used three-quarter left before).
+      stills: { card: presensiStills.front, page: presensiStills.front },
     },
     flagship: true,
     caseStudy: {

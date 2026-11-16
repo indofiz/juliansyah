@@ -7,6 +7,7 @@ Changes while building:
 - **Loading:** each screen loads just before its turn.
 - **Demo state:** none. The user dropped "Tap to try" on 2026-11-13 (TryDemo, the `demo` field and its labels are removed). The flagship phone is `FlagshipPhone` in ProjectCard.tsx.
 - **Safari:** checked by the user, works.
+- **2026-11-16, user's change:** the card uses the **front** view too (decision 2 below is now "front"); the three-quarter files are deleted (/studio can export them again). The **pause button is gone** on both pages: the phone itself is an invisible button (tap, click or Enter/Space pauses and plays; screen readers hear "Pause the screens"), so the slideshow still meets WCAG 2.2.2. The card phone keeps its height and is ~12% wider (15.4 → 17.2rem).
 
 Measured:
 - **Bytes when the card comes near:** ~92 KB (frame 15 + mask 3 + 2 screens 73). Before scrolling, mobile Lighthouse already loads ~44 KB of it: Chrome's lazy-load distance is large on slow connections, and CSS masks always load.

@@ -114,7 +114,7 @@
   }
 
   /* Studio phone: no float, screens cut instead of fading (they only
-     change when the visitor presses play). */
+     change when the visitor taps the phone). */
   .device-still.is-near .device-float {
     animation: none;
   }

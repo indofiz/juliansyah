@@ -6,20 +6,14 @@ import type { DeviceStill } from "./types";
  * the phone. The numbers are the export JSON's canvas size and `quadPx`.
  * Re-export both files together if the phone changes. No glare image: the
  * sheen is drawn in CSS (.device-screen::after), which saves ~33 KB.
+ * Other angles (e.g. three-quarter left, used on the card until 2026-11-16)
+ * can be exported again from /studio.
  */
 
 /** A 9:19.5 phone in points (430 × 932), the size content is laid out at. */
 const PHONE_SCREEN = { width: 430, height: 932 };
 
 export const presensiStills = {
-  threeQuarter: {
-    src: "/projects/presensi-pkp/phone-three-quarter-l.png",
-    mask: "/projects/presensi-pkp/phone-three-quarter-l-mask.webp",
-    width: 575,
-    height: 1345,
-    quad: [[10.453, 56.653], [531.308, 12.784], [511.614, 1343.337], [30.211, 1228.266]],
-    screen: PHONE_SCREEN,
-  },
   front: {
     src: "/projects/presensi-pkp/phone-front.png",
     mask: "/projects/presensi-pkp/phone-front-mask.webp",

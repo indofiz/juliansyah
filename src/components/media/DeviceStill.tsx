@@ -5,7 +5,6 @@ import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } fro
 import type { DeviceStill as Still, ImageRef } from "@/content/types";
 import { work } from "@/content/site";
 import { cssMatrix3d, squareToQuad } from "@/lib/homography";
-import { Icon } from "../ui/Icon";
 
 /**
  * A studio still of a device with real content in its screen
@@ -35,7 +34,7 @@ export function DeviceStill({
   /** Load at once with high priority: for a still above the fold (it may be the LCP). */
   eager?: boolean;
   onNearChange?: (near: boolean) => void;
-  /** Controls drawn over the box, unwarped (e.g. a pause button). */
+  /** Controls drawn over the box, unwarped and not floating (e.g. PhoneScreens' pause/play). */
   overlay?: ReactNode;
   children: ReactNode;
 }) {
@@ -117,10 +116,13 @@ function useAutoMotion() {
 
 /**
  * The studio phone showing real app screens, crossfading every 3.5 s while
- * it's near the viewport. It moves for longer than 5 s, so it has a pause
- * button. With reduced motion or Save-Data it holds the first screen until
- * someone presses play. Each screen loads just before its turn (the first
- * two once it's near), so the slideshow costs one screenshot at a time.
+ * it's near the viewport. It changes for longer than 5 s, so it must be
+ * stoppable (WCAG 2.2.2): there's no visible button (user's choice,
+ * 2026-11-16); the phone itself is the button, so tapping, clicking or
+ * Enter/Space on it pauses and plays, and screen readers hear "Pause the
+ * screens". With reduced motion or Save-Data it holds the first screen until
+ * someone taps it. Each screen loads just before its turn (the first two once
+ * it's near), so the slideshow costs one screenshot at a time.
  */
 export function PhoneScreens({
   still,
@@ -145,7 +147,7 @@ export function PhoneScreens({
   const [near, setNear] = useState(false);
   // `seen` is the furthest screen shown so far; screens up to seen + 1 are mounted.
   const [slide, setSlide] = useState({ index: 0, seen: 0 });
-  // "auto" follows the visitor's settings; the button switches to an explicit choice.
+  // "auto" follows the visitor's settings; tapping the phone switches to an explicit choice.
   const [choice, setChoice] = useState<"auto" | "play" | "pause">("auto");
   const many = screens.length > 1;
   const wantsPlay = many && (choice === "play" || (choice === "auto" && auto));
@@ -164,15 +166,14 @@ export function PhoneScreens({
     return () => clearInterval(id);
   }, [playing, screens.length]);
 
+  // Covers the whole phone and draws nothing but a focus ring.
   const toggle = many && (
     <button
       type="button"
-      className="loop-toggle device-toggle"
+      className="device-toggle"
       onClick={() => setChoice(wantsPlay ? "pause" : "play")}
       aria-label={wantsPlay ? work.labels.pauseScreens : work.labels.playScreens}
-    >
-      <Icon name={wantsPlay ? "pause" : "play"} size={14} />
-    </button>
+    />
   );
 
   return (
