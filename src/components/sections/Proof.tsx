@@ -1,4 +1,4 @@
-import { proof } from "@/content/site";
+import { getContent } from "@/content";
 import { Icon } from "../ui/Icon";
 import { Placeholder } from "../ui/Placeholder";
 import { Button, SectionHeader } from "../ui/primitives";
@@ -8,7 +8,8 @@ import { Button, SectionHeader } from "../ui/primitives";
  * intro). Each row is one line: icon, number, label. The rows share one grid
  * (subgrid), so numbers and labels line up in columns.
  */
-export function Proof() {
+export async function Proof() {
+  const { proof } = await getContent();
   return (
     <section id="proof" className="proof-layer" aria-labelledby="proof-title">
       <div className="container proof-grid">

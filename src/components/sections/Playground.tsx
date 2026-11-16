@@ -1,9 +1,10 @@
-import { playground } from "@/content/site";
+import { getContent } from "@/content";
 import { SectionHeader } from "../ui/primitives";
 import { PlaygroundTile } from "../playground/PlaygroundTile";
 
 /** Playground: small experiments in a grid (a swipe row on phones). */
-export function Playground() {
+export async function Playground() {
+  const { playground } = await getContent();
   return (
     <section id="playground" className="section playground" aria-labelledby="playground-title">
       <div className="container">

@@ -12,22 +12,24 @@ import { About } from "@/components/sections/About";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { Contact } from "@/components/sections/Contact";
 import { Footer } from "@/components/sections/Footer";
+import { getContent } from "@/content";
 import { jsonLdHtml, personJsonLd } from "@/lib/jsonLd";
 
 // Sections answer a visitor's questions in order: who are you (hero, proof),
 // can you do what I need (work, how I work, about: me and what I do,
 // playground), can I trust you (testimonials), how do I reach you (contact).
 // Section ids must match the keys in src/lib/sceneKeyframes.ts (same order).
-export default function Home() {
+export default async function Home() {
+  const t = await getContent();
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdHtml(personJsonLd())} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdHtml(personJsonLd(t))} />
       <SceneCanvas />
       <SmoothScroll />
       <ScrollScenes />
       <ScrollFx />
       <Carousels />
-      <SiteHeader />
+      <SiteHeader path="/" />
       <main id="main-content">
         <Intro />
         <Work />

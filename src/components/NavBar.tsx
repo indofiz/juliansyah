@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { nav } from "@/content/site";
+import { useContent } from "./ContentProvider";
 
 /**
  * Desktop nav pill (hidden on mobile, which uses MobileMenu).
@@ -14,6 +14,7 @@ import { nav } from "@/content/site";
  *  - Big at the top of the page, a bit smaller once scrolled (.is-compact).
  */
 export function NavBar() {
+  const { nav } = useContent();
   const navRef = useRef<HTMLElement>(null);
   const glowRef = useRef<HTMLSpanElement>(null);
   const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);

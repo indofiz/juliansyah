@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { contact, site } from "@/content/site";
 import { mailto } from "@/lib/mailto";
 import { Icon } from "../ui/Icon";
+import { useContent } from "../ContentProvider";
 
 type State = "idle" | "done" | "fail";
 
@@ -16,6 +16,7 @@ type State = "idle" | "done" | "fail";
  * status region.
  */
 export function CopyEmail() {
+  const { contact, email } = useContent();
   const [state, setState] = useState<State>("idle");
   const [hint, setHint] = useState("");
   const address = useRef<HTMLAnchorElement>(null);
@@ -28,7 +29,7 @@ export function CopyEmail() {
     let next: State = "done";
     let text: string = contact.copy.announce;
     try {
-      await navigator.clipboard.writeText(site.email);
+      await navigator.clipboard.writeText(email);
     } catch {
       const el = address.current;
       const selection = window.getSelection();
@@ -54,8 +55,8 @@ export function CopyEmail() {
 
   return (
     <div className="contact-email">
-      <a ref={address} href={mailto(site.email, contact.mail)}>
-        {site.email}
+      <a ref={address} href={mailto(email, contact.mail)}>
+        {email}
       </a>
       <button type="button" className="btn btn-ghost btn-sm contact-copy" data-state={state} onClick={copy} aria-label={contact.copy.label}>
         <Icon name={state === "done" ? "check" : "copy"} size={15} />

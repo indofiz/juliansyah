@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { LoopMedia } from "@/content/types";
 import { Icon } from "../ui/Icon";
 import { Placeholder } from "../ui/Placeholder";
+import { useContent } from "../ContentProvider";
 
 /**
  * A muted screen-recording loop.
@@ -14,6 +15,7 @@ import { Placeholder } from "../ui/Placeholder";
  * Without video files yet, a wireframe placeholder is shown instead.
  */
 export function LoopVideo({ media }: { media: LoopMedia }) {
+  const { video } = useContent();
   const ref = useRef<HTMLVideoElement>(null);
   const [paused, setPaused] = useState(true);
   const userPaused = useRef(false);
@@ -68,7 +70,7 @@ export function LoopVideo({ media }: { media: LoopMedia }) {
         {media.mp4 && <source src={media.mp4} type="video/mp4" />}
         {media.captions && <track kind="captions" src={media.captions} srcLang="en" label="English" default />}
       </video>
-      <button type="button" className="loop-toggle" onClick={toggle} aria-label={paused ? "Play video" : "Pause video"}>
+      <button type="button" className="loop-toggle" onClick={toggle} aria-label={paused ? video.play : video.pause}>
         <Icon name={paused ? "play" : "pause"} size={14} />
       </button>
     </div>

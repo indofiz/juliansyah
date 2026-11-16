@@ -1,7 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Icon, type IconName } from "./Icon";
-import { site } from "@/content/site";
+import { getContent } from "@/content";
+import { localHref } from "@/lib/locales";
 
 export function Badge({
   icon = "shield",
@@ -112,7 +113,7 @@ export function GlowFrame({
  * `decorative` renders it as plain, unfocusable markup (inside mock UIs);
  * each copy on a page needs its own `gradientId`.
  */
-export function Logo({
+export async function Logo({
   compact = false,
   decorative = false,
   gradientId = "lm-g",
@@ -121,6 +122,7 @@ export function Logo({
   decorative?: boolean;
   gradientId?: string;
 }) {
+  const { site, ui, locale } = await getContent();
   const content = (
     <>
       <svg className="logo-mark" viewBox="0 0 32 32" aria-hidden="true">
@@ -145,7 +147,7 @@ export function Logo({
   );
   if (decorative) return <span className="logo">{content}</span>;
   return (
-    <Link href="/" className="logo" aria-label={`${site.name} home`}>
+    <Link href={localHref("/", locale)} className="logo" aria-label={ui.home}>
       {content}
     </Link>
   );

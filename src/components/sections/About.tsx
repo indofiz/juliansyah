@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { about, socials } from "@/content/site";
+import { getContent } from "@/content";
+import type { LocalContent } from "@/content/locale";
 import type { AboutCard as Card } from "@/content/types";
 import { Icon, isColourLogo } from "../ui/Icon";
 import { Placeholder, isTodo } from "../ui/Placeholder";
@@ -8,7 +9,7 @@ import { SectionHeader } from "../ui/primitives";
 const external = (href: string) => (/^https?:\/\//.test(href) ? { target: "_blank", rel: "noopener noreferrer" } : {});
 
 /** Icon buttons for the "Who I am" card. A "TODO:" link shows as a dashed, unclickable tile. */
-function Socials() {
+function Socials({ about, socials }: Pick<LocalContent, "about" | "socials">) {
   return (
     <ul className="about-socials" aria-label={about.socialsLabel}>
       {socials.map((s) => (
@@ -29,7 +30,8 @@ function Socials() {
   );
 }
 
-function AboutCard({ c }: { c: Card }) {
+function AboutCard({ c, t }: { c: Card; t: Pick<LocalContent, "about" | "socials"> }) {
+  const { about } = t;
   // A stack logo (Flutter, TypeScript) tints its whole card in its brand colour.
   const logo = isColourLogo(c.icon) ? c.icon : undefined;
   return (
@@ -61,7 +63,7 @@ function AboutCard({ c }: { c: Card }) {
             ))}
           </ul>
         )}
-        {c.socials && <Socials />}
+        {c.socials && <Socials {...t} />}
       </div>
     </article>
   );
@@ -78,7 +80,9 @@ function AboutCard({ c }: { c: Card }) {
  * middle column instead, on phones the space closes up (.no-webgl, set by
  * SceneCanvas).
  */
-export function About() {
+export async function About() {
+  const t = await getContent();
+  const { about } = t;
   const cards = [...about.cards.left, ...about.cards.right];
   return (
     <section id="about" className="section about" aria-labelledby="about-title">
@@ -87,7 +91,7 @@ export function About() {
         <div className="about-grid" data-carousel>
           <div className="about-col">
             {about.cards.left.map((c) => (
-              <AboutCard key={c.id} c={c} />
+              <AboutCard key={c.id} c={c} t={t} />
             ))}
           </div>
           <div className="about-gap" aria-hidden="true">
@@ -95,7 +99,7 @@ export function About() {
           </div>
           <div className="about-col">
             {about.cards.right.map((c) => (
-              <AboutCard key={c.id} c={c} />
+              <AboutCard key={c.id} c={c} t={t} />
             ))}
           </div>
         </div>

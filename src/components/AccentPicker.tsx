@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useId, type CSSProperties } from "react";
-import { nav } from "@/content/site";
 import { setAccent, useAccentId } from "@/lib/accent";
 import { palettes } from "@/lib/palettes";
 import { usePopover } from "@/lib/usePopover";
+import { useContent } from "./ContentProvider";
 import { Icon } from "./ui/Icon";
 
 /**
@@ -14,6 +14,7 @@ import { Icon } from "./ui/Icon";
  * hidden) on phones.
  */
 export function AccentOptions() {
+  const { nav } = useContent();
   const current = useAccentId();
   const name = useId();
   return (
@@ -46,6 +47,7 @@ export function AccentOptions() {
  * away closes it.
  */
 export function AccentPicker() {
+  const { nav } = useContent();
   const { open, setOpen, root, button, onBlur } = usePopover();
   const popId = useId();
 

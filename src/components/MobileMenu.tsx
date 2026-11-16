@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { nav, site } from "@/content/site";
-import type { Locale } from "@/lib/locales";
+import { useContent } from "./ContentProvider";
 import { LanguageLinks } from "./LanguagePicker";
 import { Icon } from "./ui/Icon";
 
@@ -14,7 +13,8 @@ import { Icon } from "./ui/Icon";
  * buttons (desktop has a button in the header instead: LanguagePicker).
  * (The accent colours have their own orb in the header: AccentPicker.)
  */
-export function MobileMenu({ locale }: { locale: Locale }) {
+export function MobileMenu({ path }: { path: string }) {
+  const { nav, email } = useContent();
   const [open, setOpen] = useState(false);
   const burger = useRef<HTMLButtonElement>(null);
   const firstLink = useRef<HTMLAnchorElement>(null);
@@ -87,15 +87,15 @@ export function MobileMenu({ locale }: { locale: Locale }) {
           </ul>
           <div className="mm-footer">
             <div role="group" aria-label={nav.language.label}>
-              <LanguageLinks current={locale} className="mm-lang" tabIndex={tab} />
+              <LanguageLinks path={path} className="mm-lang" tabIndex={tab} />
             </div>
             <a href={nav.hire.href} className="btn btn-glow btn-block" onClick={close} tabIndex={tab}>
               {nav.hire.label}
             </a>
-            <a href={`mailto:${site.email}`} className="btn btn-ghost btn-block" onClick={close} tabIndex={tab}>
+            <a href={`mailto:${email}`} className="btn btn-ghost btn-block" onClick={close} tabIndex={tab}>
               {nav.email}
             </a>
-            <span className="mm-email">{site.email}</span>
+            <span className="mm-email">{email}</span>
           </div>
         </nav>
       </div>

@@ -1,5 +1,7 @@
 /**
- * All page copy lives here; the components only read from this file.
+ * All page copy lives here, in English. Components read it through
+ * getContent() (content/index.ts) or, client-side, useContent(), which give
+ * the page's language; Indonesian is a dictionary over this file (site.id.ts).
  * Types: ./types.ts. The previous site (v1) is preserved at git tag `v1-legacy`.
  *
  * Placeholders: any string starting with "TODO:" is unconfirmed and renders
@@ -758,3 +760,22 @@ export const footer = {
   smallPrint: "Built with Next.js, React Three Fiber and GSAP. The particle portrait is generated from a photo of me.",
   rights: "All rights reserved.",
 };
+
+/* ---------------------------------------------------------------------------
+ * 10. Interface text outside the sections
+ * ------------------------------------------------------------------------- */
+export const ui = {
+  skip: "Skip to main content",
+  /** The logo link's accessible name. */
+  home: `${site.name}, home`,
+  video: { play: "Play video", pause: "Pause video" },
+};
+
+/**
+ * Everything above as one object: the English content. The Indonesian
+ * version is made from it with the dictionary in site.id.ts (content/locale.ts).
+ * Components get the right one from getContent() (content/index.ts).
+ */
+export const content = { site, socials, nav, hero, proof, work, projects, caseStudyLabels, howIWork, about, playground, testimonials, contact, footer, ui };
+
+export type Content = typeof content;

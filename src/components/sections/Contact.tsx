@@ -1,13 +1,10 @@
 import Image from "next/image";
-import { about, contact, footer, site } from "@/content/site";
+import { getContent } from "@/content";
 import { mailto } from "@/lib/mailto";
 import { Icon } from "../ui/Icon";
 import { Placeholder, isTodo } from "../ui/Placeholder";
 import { Badge, Button } from "../ui/primitives";
 import { CopyEmail } from "../contact/CopyEmail";
-
-const mailHref = mailto(site.email, contact.mail);
-const whatsappHref = `https://wa.me/${contact.whatsapp.number}?text=${encodeURIComponent(contact.whatsapp.text)}`;
 
 /** A link, or its label as a dashed placeholder while the href is a "TODO:". */
 function MaybeLink({ href, label, download }: { href: string; label: string; download?: boolean }) {
@@ -29,13 +26,13 @@ function MaybeLink({ href, label, download }: { href: string; label: string; dow
 }
 
 /** "I reply with my questions {reply}." with the reply time (or its placeholder) in place. */
-function Step({ text }: { text: string }) {
+function Step({ text, reply }: { text: string; reply: string }) {
   const [before, after] = text.split("{reply}");
   if (after === undefined) return <>{text}</>;
   return (
     <>
       {before}
-      <Placeholder text={contact.card.reply} />
+      <Placeholder text={reply} />
       {after}
     </>
   );
@@ -47,8 +44,11 @@ function Step({ text }: { text: string }) {
  * they're free, what happens after you write, the time zone). One column
  * on ≤ 900px, with the card last.
  */
-export function Contact() {
+export async function Contact() {
+  const { about, contact, footer, site } = await getContent();
   const { card } = contact;
+  const mailHref = mailto(site.email, contact.mail);
+  const whatsappHref = `https://wa.me/${contact.whatsapp.number}?text=${encodeURIComponent(contact.whatsapp.text)}`;
   return (
     <section id="contact" className="section cta" aria-labelledby="contact-title">
       <div className="container">
@@ -97,7 +97,7 @@ export function Contact() {
               {card.steps.map((s) => (
                 <li key={s}>
                   <span>
-                    <Step text={s} />
+                    <Step text={s} reply={card.reply} />
                   </span>
                 </li>
               ))}

@@ -1,4 +1,5 @@
-import { footer, site, socials } from "@/content/site";
+import { getContent } from "@/content";
+import { localeInfo } from "@/lib/locales";
 import { Icon } from "../ui/Icon";
 import { Placeholder, isTodo } from "../ui/Placeholder";
 import { Logo } from "../ui/primitives";
@@ -7,10 +8,11 @@ const external = (href: string) => (/^https?:\/\//.test(href) ? { target: "_blan
 
 // Set at build time in next.config.ts, so the page stays static.
 const built = process.env.NEXT_PUBLIC_BUILD_DATE ?? "2026-11-11";
-const builtLabel = new Intl.DateTimeFormat("en-GB", { dateStyle: "long", timeZone: "UTC" }).format(new Date(built));
 
 /** Socials, link columns, résumé, last updated, giant glowing wordmark. */
-export function Footer() {
+export async function Footer() {
+  const { footer, site, socials, locale } = await getContent();
+  const builtLabel = new Intl.DateTimeFormat(localeInfo(locale).date, { dateStyle: "long", timeZone: "UTC" }).format(new Date(built));
   return (
     <footer id="footer" className="footer">
       <div className="container">

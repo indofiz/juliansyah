@@ -2,10 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { PlaygroundItem } from "@/content/types";
-import { playground } from "@/content/site";
 import { LoopVideo, MediaPlaceholder } from "../media/LoopVideo";
 import { Icon } from "../ui/Icon";
 import { Placeholder, isTodo } from "../ui/Placeholder";
+import { useContent } from "../ContentProvider";
 
 /**
  * One experiment. Nothing loads until the tile is near the viewport:
@@ -15,6 +15,7 @@ import { Placeholder, isTodo } from "../ui/Placeholder";
  *    waits for a click on "Load experiment".
  */
 export function PlaygroundTile({ item }: { item: PlaygroundItem }) {
+  const { playground } = useContent();
   const ref = useRef<HTMLElement>(null);
   const [near, setNear] = useState(false);
   const [reduce, setReduce] = useState(false);

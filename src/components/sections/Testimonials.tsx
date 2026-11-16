@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { Testimonial } from "@/content/types";
-import { testimonials } from "@/content/site";
+import { getContent } from "@/content";
 import { Icon } from "../ui/Icon";
 import { Placeholder, isTodo } from "../ui/Placeholder";
 import { SectionHeader } from "../ui/primitives";
@@ -46,7 +46,8 @@ function Quote({ t }: { t: Testimonial }) {
 }
 
 /** Kind words: two or three short quotes, just before Contact. */
-export function Testimonials() {
+export async function Testimonials() {
+  const { testimonials } = await getContent();
   return (
     <section id="testimonials" className="section testimonials" aria-labelledby="testimonials-title">
       <div className="container">

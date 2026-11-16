@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import type { DeviceStill as Still, ImageRef } from "@/content/types";
-import { work } from "@/content/site";
 import { cssMatrix3d, squareToQuad } from "@/lib/homography";
+import { useContent } from "../ContentProvider";
 
 /**
  * A studio still of a device with real content in its screen
@@ -143,6 +143,7 @@ export function PhoneScreens({
   /** Above the fold: the frame and the first screen load at once (see DeviceStill). */
   eager?: boolean;
 }) {
+  const { screens: screensLabel } = useContent();
   const auto = useAutoMotion();
   const [near, setNear] = useState(false);
   // `seen` is the furthest screen shown so far; screens up to seen + 1 are mounted.
@@ -172,7 +173,7 @@ export function PhoneScreens({
       type="button"
       className="device-toggle"
       onClick={() => setChoice(wantsPlay ? "pause" : "play")}
-      aria-label={wantsPlay ? work.labels.pauseScreens : work.labels.playScreens}
+      aria-label={wantsPlay ? screensLabel.pause : screensLabel.play}
     />
   );
 

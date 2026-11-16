@@ -1,10 +1,9 @@
 import Image from "next/image";
-import { hero } from "@/content/site";
+import { getContent } from "@/content";
+import type { LocalContent } from "@/content/locale";
 import { Icon } from "../ui/Icon";
 import { Logo } from "../ui/primitives";
 import { Sparkline, series } from "../ui/Sparkline";
-
-const d = hero.dashboard;
 
 /** One sparkline per tile. Seeded, so the server and the client draw the same line. */
 const sparks = [
@@ -19,8 +18,8 @@ const sparks = [
  * Screen readers get the first set as a list; the copy is hidden from them.
  * Pauses on hover; stands still with reduced motion.
  */
-function ClientMarquee() {
-  const { label, logos } = hero.dashboard.clients;
+function ClientMarquee({ clients }: { clients: LocalContent["hero"]["dashboard"]["clients"] }) {
+  const { label, logos } = clients;
   return (
     <div className="mock-clients">
       <span id="hero-clients-label" className="mock-tile-label">
@@ -53,7 +52,9 @@ function ClientMarquee() {
  * site.ts). Only the stat card is real (users, clients) and readable
  * by screen readers; the sample chrome and tiles around it are aria-hidden.
  */
-export function DashboardMock() {
+export async function DashboardMock() {
+  const { hero } = await getContent();
+  const d = hero.dashboard;
   return (
     <div className="mock">
       <aside className="mock-side" aria-hidden="true">
@@ -115,7 +116,7 @@ export function DashboardMock() {
               </p>
               <p className="mock-delta">{d.users.apps}</p>
             </div>
-            <ClientMarquee />
+            <ClientMarquee clients={d.clients} />
           </div>
 
           <div className="mock-tiles" aria-hidden="true">

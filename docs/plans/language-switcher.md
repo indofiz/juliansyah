@@ -1,10 +1,20 @@
 # Plan: language switcher (English / Bahasa Indonesia)
 
-Status: **step 0 built** (2026-11-16, `feat/portfolio-home`), with the
-default answers (A, menu row on phones). The GitHub button is replaced by the
-`EN` button and popover, and the phone menu has the language row. The links
-point to `/` and `/id`, and `/id` is a 404 until step 1. Waiting for your yes
-on the look before step 1.
+Status: **steps 0 and 1 built** (2026-11-16, `feat/portfolio-home`), with
+the default answers. The `/id` pages exist and the switch works; the
+Indonesian dictionary (`src/content/site.id.ts`) is still empty, so `/id`
+shows English. Next: step 2, the Indonesian copy.
+
+How step 1 came out, where it differs from the plan below:
+- Indonesian isn't a second copy of the content: `site.id.ts` is a
+  dictionary, English line → Indonesian line, applied over `site.ts` by
+  `content/locale.ts`. Links, images and numbers can't drift, and changing
+  an English line makes its translation show up in `npm run i18n:check`.
+- Client components get their strings from one context
+  (`ContentProvider`, set in the `[lang]` layout) instead of props, so
+  `site.ts` no longer ships to the browser.
+- Keeping the section on a switch only matters on phones: the desktop
+  header scrolls away with the hero, so its button is used at the top.
 
 ## In one paragraph
 

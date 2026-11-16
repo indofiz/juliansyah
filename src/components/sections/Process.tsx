@@ -1,4 +1,4 @@
-import { howIWork as h } from "@/content/site";
+import { getContent } from "@/content";
 import { StepIcon } from "../process/StepIcon";
 import { Button, SectionHeader } from "../ui/primitives";
 
@@ -17,7 +17,8 @@ import { Button, SectionHeader } from "../ui/primitives";
  * the lit step's picture shows as an image where the particles would be
  * (.no-webgl).
  */
-export function Process() {
+export async function Process() {
+  const { howIWork: h } = await getContent();
   return (
     <section id="process" className="process" aria-labelledby="process-title">
       <div className="process-track" data-steps-pin>

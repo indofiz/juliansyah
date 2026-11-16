@@ -1,11 +1,12 @@
-import { projects, work } from "@/content/site";
+import { getContent } from "@/content";
 import { flagshipProject } from "@/lib/projects";
 import { SectionHeader } from "../ui/primitives";
 import { FlagshipCard, ProjectCard } from "../work/ProjectCard";
 
 /** Selected work: the flagship you can try, then the rest. Each opens /work/<slug>. */
-export function Work() {
-  const flagship = flagshipProject();
+export async function Work() {
+  const { projects, work } = await getContent();
+  const flagship = flagshipProject(projects);
   const rest = projects.filter((p) => p !== flagship);
 
   return (

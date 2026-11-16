@@ -1,6 +1,8 @@
 import { Fragment } from "react";
 import type { Project } from "@/content/types";
-import { work } from "@/content/site";
+import { getContent } from "@/content";
+import type { LocalContent } from "@/content/locale";
+import { localHref, type Locale } from "@/lib/locales";
 import { BrowserMedia } from "../media/BrowserMedia";
 import { PhoneFrame } from "../media/DeviceFrame";
 import { LoopVideo } from "../media/LoopVideo";
@@ -10,24 +12,26 @@ import { Button } from "../ui/primitives";
 import { PhoneScreens } from "../media/DeviceStill";
 import { RatingLine } from "./StoreLinks";
 
-const href = (p: Project) => `/work/${p.slug}`;
+type Labels = LocalContent["work"]["labels"];
+
+const href = (p: Project, locale: Locale) => localHref(`/work/${p.slug}`, locale);
 
 /** Role · platform · year, as a small description list. */
-function Meta({ p }: { p: Project }) {
+function Meta({ p, labels }: { p: Project; labels: Labels }) {
   return (
     <dl className="work-meta">
       <div>
-        <dt>{work.labels.platform}</dt>
+        <dt>{labels.platform}</dt>
         <dd>{p.platforms.join(" · ")}</dd>
       </div>
       <div>
-        <dt>{work.labels.year}</dt>
+        <dt>{labels.year}</dt>
         <dd>
           <Placeholder text={p.year} />
         </dd>
       </div>
       <div>
-        <dt>{work.labels.role}</dt>
+        <dt>{labels.role}</dt>
         <dd>
           <Placeholder text={p.role} />
         </dd>
@@ -37,14 +41,14 @@ function Meta({ p }: { p: Project }) {
 }
 
 /** The store rating and the key technologies, in one row under the metric. */
-function Extras({ p }: { p: Project }) {
+function Extras({ p, labels }: { p: Project; labels: Labels }) {
   if (!p.rating && !p.keyTech?.length) return null;
   return (
     <div className="work-extras">
       {p.rating && <RatingLine rating={p.rating} className="rating-chip" />}
       {p.keyTech && p.keyTech.length > 0 && (
         <p className="work-tech">
-          <span className="sr-only">{work.labels.keyTech}: </span>
+          <span className="sr-only">{labels.keyTech}: </span>
           {p.keyTech.map((t, i) => (
             <Fragment key={t}>
               {i > 0 && <span aria-hidden="true"> · </span>}
@@ -75,14 +79,14 @@ function MetricLine({ p }: { p: Project }) {
  * when it has them (media.stills + media.screens), else the CSS phone with
  * its loop.
  */
-function FlagshipPhone({ p }: { p: Project }) {
+function FlagshipPhone({ p, labels }: { p: Project; labels: Labels }) {
   const { media } = p;
   if (media.stills && media.screens?.length) {
     return (
       <PhoneScreens
         still={media.stills.card}
         screens={media.screens}
-        label={`${p.name}: ${work.labels.screens}`}
+        label={`${p.name}: ${labels.screens}`}
         sizes="(max-width: 900px) 185px, 280px"
         screenSizes="(max-width: 900px) 170px, 260px"
         className="flagship-still"
@@ -97,12 +101,14 @@ function FlagshipPhone({ p }: { p: Project }) {
 }
 
 /** Big card: the phone on the left, the story on the right. */
-export function FlagshipCard({ p }: { p: Project }) {
+export async function FlagshipCard({ p }: { p: Project }) {
+  const { work, locale } = await getContent();
+  const { labels } = work;
   return (
     <article className="work-flagship" data-reveal aria-labelledby={`work-${p.slug}`}>
       <span className="work-flagship-glow" aria-hidden="true" />
       <div className="work-flagship-media">
-        <FlagshipPhone p={p} />
+        <FlagshipPhone p={p} labels={labels} />
       </div>
       <div className="work-flagship-body">
         {p.status && <span className="status status-live">{p.status}</span>}
@@ -113,10 +119,10 @@ export function FlagshipCard({ p }: { p: Project }) {
           <Placeholder text={p.summary} />
         </p>
         <MetricLine p={p} />
-        <Extras p={p} />
-        <Meta p={p} />
-        <Button href={href(p)} icon="arrowRight">
-          {work.labels.caseStudy}
+        <Extras p={p} labels={labels} />
+        <Meta p={p} labels={labels} />
+        <Button href={href(p, locale)} icon="arrowRight">
+          {labels.caseStudy}
           <span className="sr-only">: {p.name}</span>
         </Button>
       </div>
@@ -125,7 +131,9 @@ export function FlagshipCard({ p }: { p: Project }) {
 }
 
 /** Regular card. The title link stretches over the whole card. */
-export function ProjectCard({ p }: { p: Project }) {
+export async function ProjectCard({ p }: { p: Project }) {
+  const { work, locale } = await getContent();
+  const { labels } = work;
   return (
     <article className="work-card" data-reveal>
       <div className={`work-media work-media--${p.media.frame}`}>
@@ -139,14 +147,14 @@ export function ProjectCard({ p }: { p: Project }) {
       </div>
       <div className="work-body">
         <h3 className="work-title">
-          <a href={href(p)} className="work-link">
+          <a href={href(p, locale)} className="work-link">
             <Placeholder text={p.title} />
           </a>
         </h3>
         <MetricLine p={p} />
-        <Meta p={p} />
+        <Meta p={p} labels={labels} />
         <span className="work-cta" aria-hidden="true">
-          {work.labels.caseStudy}
+          {labels.caseStudy}
           <Icon name="arrowRight" size={14} />
         </span>
       </div>

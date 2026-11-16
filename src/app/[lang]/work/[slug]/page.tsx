@@ -1,7 +1,9 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { caseStudyLabels as L, projects, work } from "@/content/site";
+import { getContent } from "@/content";
+import { contentFor } from "@/content/locale";
+import { defaultLocale, languageAlternates, localHref } from "@/lib/locales";
 import { getProject, nextProject } from "@/lib/projects";
 import { caseStudyJsonLd, jsonLdHtml } from "@/lib/jsonLd";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -16,21 +18,24 @@ import { LoopVideo } from "@/components/media/LoopVideo";
 import { Icon } from "@/components/ui/Icon";
 import { Placeholder, isTodo } from "@/components/ui/Placeholder";
 
-// Every case study is prerendered at build time from site.ts; unknown slugs 404.
+// Every case study is prerendered at build time from site.ts, in every
+// language (the [lang] layout lists them); unknown slugs 404.
 export function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }));
+  return contentFor(defaultLocale).projects.map((p) => ({ slug: p.slug }));
 }
 
-export async function generateMetadata({ params }: PageProps<"/work/[slug]">): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<"/[lang]/work/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const p = getProject(slug);
+  const { projects, caseStudyLabels, locale } = await getContent();
+  const p = getProject(projects, slug);
   if (!p) return {};
-  const title = isTodo(p.name) ? "Case study" : p.name;
+  const title = isTodo(p.name) ? caseStudyLabels.ogEyebrow : p.name;
+  const path = `/work/${p.slug}`;
   return {
     title,
     description: p.summary,
-    alternates: { canonical: `/work/${p.slug}` },
-    openGraph: { type: "article", title, description: p.summary, url: `/work/${p.slug}` },
+    alternates: { canonical: localHref(path, locale), languages: languageAlternates(path) },
+    openGraph: { type: "article", title, description: p.summary, url: localHref(path, locale) },
     twitter: { card: "summary_large_image", title, description: p.summary },
     // Placeholder projects stay out of search results until they're real.
     robots: p.dummy ? { index: false, follow: true } : undefined,
@@ -48,24 +53,26 @@ export async function generateMetadata({ params }: PageProps<"/work/[slug]">): P
 export const instant = false;
 
 /** Case study: problem → my role → process → key decisions → result → next project. */
-export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]">) {
+export default async function CaseStudyPage({ params }: PageProps<"/[lang]/work/[slug]">) {
   const { slug } = await params;
-  const p = getProject(slug);
+  const t = await getContent();
+  const { caseStudyLabels: L, projects, work, locale } = t;
+  const p = getProject(projects, slug);
   if (!p) notFound();
   const cs = p.caseStudy;
-  const next = nextProject(p.slug);
+  const next = nextProject(projects, p.slug);
 
   return (
     <>
-      {!p.dummy && <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdHtml(caseStudyJsonLd(p))} />}
+      {!p.dummy && <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdHtml(caseStudyJsonLd(p, t))} />}
       <SmoothScroll />
-      <SiteHeader />
+      <SiteHeader path={`/work/${p.slug}`} />
       <main id="main-content" className="cs">
         <header className="cs-hero">
           <span className="cs-hero-glow" aria-hidden="true" />
           <div className="container cs-hero-grid">
             <div className="cs-hero-copy">
-              <Link className="link-quiet cs-back" href="/#work">
+              <Link className="link-quiet cs-back" href={localHref("/#work", locale)}>
                 <Icon name="arrowLeft" size={15} />
                 {L.back}
               </Link>
@@ -347,7 +354,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]"
 
           <nav className="cs-next" aria-label={L.next}>
             {/* prefetch: the next case study (static) is loaded before the click. */}
-            <Link href={`/work/${next.slug}`} className="cs-next-link" prefetch>
+            <Link href={localHref(`/work/${next.slug}`, locale)} className="cs-next-link" prefetch>
               <span className="cs-next-label">{L.next}</span>
               <span className="cs-next-title">
                 <Placeholder text={next.title} />

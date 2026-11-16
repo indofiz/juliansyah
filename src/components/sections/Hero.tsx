@@ -1,4 +1,4 @@
-import { hero, site } from "@/content/site";
+import { getContent } from "@/content";
 import { Icon } from "../ui/Icon";
 import { Button, GlowFrame } from "../ui/primitives";
 import { DashboardMock } from "../mocks/DashboardMock";
@@ -14,7 +14,8 @@ function Spark() {
 }
 
 /** Who are you? Greeting, one-line promise, what you get, and a preview of the design system. */
-export function Hero() {
+export async function Hero() {
+  const { hero, site } = await getContent();
   return (
     <section className="hero-layer" aria-labelledby="hero-title">
       <span className="hero-gradient" aria-hidden="true" />
