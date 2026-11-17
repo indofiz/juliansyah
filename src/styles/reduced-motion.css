@@ -1,0 +1,151 @@
+/* ==========================================================================
+   Reduced motion. Loaded last so it wins over desktop and mobile rules.
+   No pinning, no scrubbing, no autoplay: pinned scenes become normal
+   sections and everything that would fade in is simply there.
+   (Videos stay on their poster: see LoopVideo. The globe cuts between
+   states instead of moving: see ScrollScenes.)
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  /* ---------- Intro: hero and proof as two normal sections ---------- */
+  .intro {
+    height: auto;
+  }
+
+  .intro-stage {
+    position: relative;
+    height: auto;
+    overflow: visible;
+  }
+
+  .hero-layer,
+  .proof-layer {
+    position: relative;
+    inset: auto;
+  }
+
+  .hero-layer {
+    padding-bottom: 3rem;
+  }
+
+  .hero-frame-wrap {
+    height: auto;
+    margin-top: 5rem;
+  }
+
+  /* Phones: the card is just the logo strip, shown whole (nothing is cut
+     off at the screen's edge here), so no extra height and no fade. */
+  @media (max-width: 900px) {
+    .hero-frame .frame-inner {
+      min-height: 0;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+  }
+
+  /* Logo strip: no movement; swipe or scroll it sideways instead. */
+  .mock-marquee {
+    overflow-x: auto;
+    -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent);
+    mask-image: linear-gradient(90deg, #000 85%, transparent);
+  }
+
+  .mock-marquee-track {
+    animation: none;
+  }
+
+  .mock-marquee-set[aria-hidden] {
+    display: none;
+  }
+
+  .proof-layer {
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 5rem 0;
+    pointer-events: auto;
+  }
+
+  .proof-grid {
+    height: auto;
+  }
+
+  .proof-copy .sh > *,
+  .proof-actions,
+  .proof-row {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .status-live::before,
+  .hero-eyebrow-spark {
+    animation: none;
+  }
+
+  /* ---------- How I work: nothing pinned, every step lit ---------- */
+  .process-track {
+    height: auto;
+  }
+
+  .process-stage {
+    position: relative;
+    height: auto;
+  }
+
+  /* Desktop: one screen, content centred, so the globe (or without WebGL
+     its icon) lines up with the right-hand column (phones keep their own
+     layout). */
+  @media (min-width: 901px) {
+    .process-stage {
+      min-height: 100vh;
+      padding: 5rem 0;
+    }
+  }
+
+  .steps-fill {
+    height: 100%;
+  }
+
+  .step .step-title {
+    color: var(--text);
+  }
+
+  .step .step-text {
+    color: #c1bdb9;
+  }
+
+  /* Step icons: all lit, like the steps; the no-WebGL icon swaps without
+     fading. */
+  .step .step-icon {
+    opacity: 1;
+    transition: none;
+  }
+
+  .process-icon {
+    transition: none;
+  }
+
+  /* Studio phone: no float, screens cut instead of fading (they only
+     change when the visitor taps the phone). */
+  .device-still.is-near .device-float {
+    animation: none;
+  }
+
+  .device-slide {
+    transition: none;
+  }
+}
+
+/* ---------- Round WhatsApp button: no entrance, no lift ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .chat-fab,
+  .chat-fab-label,
+  .chat-fab-smile {
+    animation: none;
+    transition: none;
+  }
+
+  .chat-fab:hover,
+  .chat-fab:active {
+    translate: none;
+    scale: none;
+  }
+}

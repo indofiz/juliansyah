@@ -159,6 +159,24 @@ export function geometryShape(geometry: THREE.BufferGeometry, count: number, siz
 }
 
 /**
+ * An even, staggered (hexagonal) dot grid over a W × H area with spacing
+ * `g`: the portrait's halftone look (the step pictures use the same grid,
+ * lib/sdf.ts). `keep` gives
+ * each dot a 0–1 weight; dots at 0 are left out.
+ */
+function hexGrid(W: number, H: number, g: number, keep: (x: number, y: number) => number) {
+  const pts: [number, number, number][] = [];
+  const rowH = g * 0.866;
+  for (let r = 0, y = rowH / 2; y < H; r++, y += rowH) {
+    for (let x = r % 2 ? g : g / 2; x < W; x += g) {
+      const k = keep(x, y);
+      if (k > 0) pts.push([x, y, k]);
+    }
+  }
+  return pts;
+}
+
+/**
  * Portrait morph target from a "portrait map" (see scripts/make-portrait.py):
  * R = brightness, G = depth, B = mask.
  *
@@ -202,17 +220,7 @@ export async function loadPortraitShape(
     const b = data[i] / 255;
     return Math.min(1, 0.4 + 0.95 * b) * (0.12 + 0.88 * fade(y / H));
   };
-  const grid = (g: number) => {
-    const pts: [number, number, number][] = [];
-    const rowH = g * 0.866;
-    for (let r = 0, y = rowH / 2; y < H; r++, y += rowH) {
-      for (let x = r % 2 ? g : g / 2; x < W; x += g) {
-        const k = keepProb(x, y);
-        if (k > 0) pts.push([x, y, k]);
-      }
-    }
-    return pts;
-  };
+  const grid = (g: number) => hexGrid(W, H, g, keepProb);
 
   // Fixed dot spacing (fraction of the image height) so the halftone looks the
   // same whatever the photo's framing; widened only if that would need more

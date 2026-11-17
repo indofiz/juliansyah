@@ -12,18 +12,26 @@
   justify-content: center;
 }
 
-/* ---------- Intro: hero + stats as one pinned scene ---------- */
-/* Mobile / default: normal flow. Desktop (≥ 56.3125rem) pins the stage below. */
+/* ---------- Intro: hero + proof as one pinned scene ---------- */
+/* Pinned on every screen size (mobile positions are in mobile.css); with
+   reduced motion it becomes two normal sections (reduced-motion.css). */
 .intro {
   position: relative;
+  height: 300vh;
 }
 
 .intro-stage {
-  position: relative;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
 }
 
-.hero-layer {
-  position: relative;
+.hero-layer,
+.proof-layer {
+  position: absolute;
+  inset: 0;
 }
 
 /* Soft accent glow at the top of the hero, behind the nav and headline. */
@@ -36,7 +44,7 @@
   height: 100vh;
   pointer-events: none;
   background: radial-gradient(
-    95% 85% at 50% 0%,
+    47.5% 85% at 50% 0%,
     var(--hero-1) 0%,
     var(--hero-2) 30%,
     var(--hero-3) 60%,
@@ -54,30 +62,75 @@
   padding-top: clamp(6.25rem, 13vh, 8.25rem);
 }
 
-.hero-badge {
-  margin-bottom: 1.375rem;
-}
-
-.hero-copy h1 {
-  padding-bottom: 0.06em;
-}
-
-.hero-subtitle {
-  margin-top: 0.875rem;
-  font-size: clamp(1.1875rem, calc(1.7 * var(--vw)), 1.75rem);
+/* Greeting pill: "Hi, I'm Juliansyah ✳ Your Technology Partner". */
+.hero-eyebrow {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem 0.625rem;
+  margin-bottom: 1.5rem;
+  padding: 0.4375rem 1rem;
+  border-radius: 999px;
+  font-size: 0.9375rem;
   font-weight: 500;
-  letter-spacing: -0.015em;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.025);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.hero-eyebrow b {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.hero-eyebrow-tagline {
+  color: var(--text);
+}
+
+/* The ✳: accent, softly glowing, turning slowly (stands still with reduced motion). */
+.hero-eyebrow-spark {
+  flex: none;
+  width: 0.875rem;
+  height: 0.875rem;
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 0.25rem rgb(var(--accent-rgb) / 0.8));
+  animation: spark-turn 14s linear infinite;
+}
+
+@keyframes spark-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.hero-title {
+  max-width: 60rem;
+  font-size: clamp(2.75rem, calc(4.9 * var(--vw)), 5.5rem);
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+  padding-bottom: 0.06em;
+  text-wrap: balance;
 }
 
 .hero-text {
-  max-width: 35rem;
-  margin-top: 0.75rem;
-  font-size: 1.0938rem;
-  line-height: 1.45;
+  max-width: 41rem;
+  margin-top: 1.25rem;
+  font-size: 1.125rem;
+  line-height: 1.5;
   color: #ccc8c4;
+  text-wrap: balance;
 }
 
-.hero-cta {
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
   margin-top: 1.75rem;
 }
 
@@ -120,622 +173,868 @@
   will-change: opacity, transform;
 }
 
-/* Portrait: the globe is sized by width (see ParticleMorph). */
+/* Portrait: the globe is sized by width (see ParticleMorph). Its centre
+   (--cy) changes with the hero keyframe's mobile override at ≤ 900px wide
+   (mobile.css), not with the shape of the screen. */
 @media (max-aspect-ratio: 1/1) {
   .hero-bars {
     --r: calc(0.366 * 90vw);
-    --cy: 63vh; /* mobile hero keyframe: y = -0.26 */
   }
 }
 
+/* Design-system preview: a dashboard in a glow frame. The hero is a column:
+   copy at the top, and the dashboard pushed to the bottom so its first
+   --peek of height (bezel, top bar, stat card with the social buttons) ends
+   right at the bottom of the first screen. On short screens the copy wins
+   and the dashboard moves down. It slides away as you scroll. */
+.hero-layer {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-copy {
+  padding-bottom: 2rem;
+}
+
 .hero-frame-wrap {
+  --peek: 15rem;
   position: relative;
   z-index: 2;
-  margin-top: -22vh;
+  flex: none;
+  height: var(--peek);
+  margin-top: auto;
 }
 
 .hero-frame .frame-inner {
   max-height: 37.5rem;
 }
 
-/* Stats layer */
-.stats-layer {
-  position: relative;
-  padding: clamp(5rem, 12vh, 8.75rem) 0;
+/* Proof layer: copy left, globe centre, signals right. */
+.proof-layer {
+  display: flex;
+  align-items: center;
+  pointer-events: none;
 }
 
-.stats-grid {
+.proof-layer a,
+.proof-layer button {
+  pointer-events: auto;
+}
+
+.proof-grid {
   display: grid;
   grid-template-columns: minmax(18.75rem, 1fr) minmax(20rem, 1.15fr) minmax(20rem, 1fr);
   align-items: center;
   gap: 1.5rem;
 }
 
-.stats-copy .sh {
+.proof-copy .sh {
   margin-bottom: 1.625rem;
 }
 
-.stats-copy .h2 {
+.proof-copy .h2 {
   font-size: clamp(2.25rem, calc(3.9 * var(--vw)), 3.375rem);
 }
 
-.stats-copy .sh-text {
+.proof-copy .sh-text {
   font-size: 1rem;
   max-width: 18.75rem;
 }
 
-.stats-list {
+/* One line per stat: icon, number (white), label (accent). The rows are
+   subgrids of the list, so every number and every label shares a column.
+   Number and label sizes follow the list's own width (cqi), so the longest
+   label always fits its column, even where the root font hits its floor. */
+.proof-list {
+  container-type: inline-size;
   display: grid;
-  gap: 1.875rem;
+  grid-template-columns: 2.25rem auto 1fr;
+  column-gap: 1rem;
+  row-gap: 1.875rem;
 }
 
-.stats-list li {
+.proof-row {
+  grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: 2.25rem minmax(5.5rem, auto) 1fr;
+  grid-template-columns: subgrid;
   align-items: baseline;
-  gap: 1rem;
 }
 
-.stats-list svg {
+.proof-row > svg {
   align-self: center;
   justify-self: center;
   color: #fff;
 }
 
-.stats-list strong {
-  font-size: clamp(1.625rem, calc(2.4 * var(--vw)), 2.125rem);
+.proof-row strong {
+  font-size: clamp(1.25rem, 8.6cqi, 2.125rem);
   font-weight: 500;
   letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
-.stats-list span {
+.proof-row span {
   white-space: nowrap;
-  font-size: clamp(1.25rem, calc(1.9 * var(--vw)), 1.6875rem);
+  font-size: clamp(1rem, 6cqi, 1.5rem);
   font-weight: 500;
   letter-spacing: -0.015em;
   color: var(--accent);
 }
 
-/* Pin the stage for two screens of scroll and layer the hero over the stats
-   (all screen sizes; mobile positions are in mobile.css). */
-.intro {
-  height: 300vh;
+/* Hidden until the intro timeline fades them in (no flash on load, and the
+   buttons can't be clicked or focused while invisible). */
+.proof-copy .sh > *,
+.proof-actions,
+.proof-row {
+  opacity: 0;
+  visibility: hidden;
 }
 
-.intro-stage {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  height: 100svh;
+/* ---------- Selected work ---------- */
+.work-grid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+/* Shared card surface for the flagship and the regular cards. */
+.work-flagship,
+.work-card {
+  position: relative;
+  border-radius: var(--radius-xl);
   overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(120% 60% at 50% 0%, rgb(var(--accent-rgb) / 0.05), transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0) 45%),
+    #090806;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+    0 1.5rem 3rem rgba(0, 0, 0, 0.35);
 }
 
-.hero-layer,
-.stats-layer {
-  position: absolute;
-  inset: 0;
-}
-
-.hero-frame-wrap {
-  position: absolute;
-  top: 74vh;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-}
-
-.stats-layer {
-  display: flex;
+.work-flagship {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
   align-items: center;
-  padding: 0;
+  gap: clamp(2rem, calc(5 * var(--vw)), 5rem);
+  padding: clamp(2rem, calc(4 * var(--vw)), 3.5rem) clamp(2rem, calc(5 * var(--vw)), 4.5rem);
+}
+
+.work-flagship-glow {
+  position: absolute;
+  z-index: -1;
+  left: -8%;
+  top: 8%;
+  width: 52%;
+  height: 92%;
+  background: radial-gradient(closest-side, rgb(var(--accent-rgb) / 0.22), transparent);
+  filter: blur(2rem);
   pointer-events: none;
 }
 
-.stats-layer .btn {
+.work-flagship-media {
+  display: grid;
+  justify-items: center;
+  width: 100%;
+}
+
+.work-flagship-media .phone {
+  width: min(16.5rem, 100%);
+}
+
+.work-flagship-body {
+  display: grid;
+  justify-items: start;
+  gap: 1.25rem;
+}
+
+.work-flagship-title {
+  font-size: clamp(1.75rem, calc(2.9 * var(--vw)), 2.75rem);
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.work-summary {
+  max-width: 34rem;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.work-metric {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.375rem 0.75rem;
+}
+
+.work-metric strong {
+  font-size: clamp(1.75rem, calc(2.6 * var(--vw)), 2.5rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.work-metric span {
+  font-size: 0.9375rem;
+  color: var(--accent);
+}
+
+/* Rating chip + key technologies, one row under the metric. */
+.work-extras {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem 1rem;
+}
+
+.work-tech {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.work-tech strong {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.work-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 2rem;
+}
+
+.work-meta div {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.work-meta dt {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #948f8a;
+}
+
+.work-meta dd {
+  font-size: 0.9375rem;
+}
+
+.work-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.work-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-lg);
+  transition:
+    translate 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.5s ease;
+}
+
+.work-card:hover,
+.work-card:focus-within {
+  translate: 0 -0.3rem;
+  box-shadow:
+    inset 0 0 0 1px rgb(var(--accent-rgb) / 0.22),
+    0 2rem 4rem rgba(0, 0, 0, 0.5),
+    0 0 3.5rem -1.5rem rgb(var(--accent-rgb) / 0.45);
+}
+
+/* Media peeks up from the bottom of its area. It sits above the card link
+   but lets clicks through, except on its own pause button. */
+.work-media {
+  position: relative;
+  z-index: 2;
+  height: 15rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1.75rem 1.5rem 0;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent);
+  mask-image: linear-gradient(180deg, #000 70%, transparent);
+}
+
+.work-media::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgb(var(--accent-200-rgb) / 0.14) 1px, transparent 1.4px);
+  background-size: 0.875rem 0.875rem;
+  -webkit-mask-image: radial-gradient(60% 70% at 50% 40%, #000, transparent);
+  mask-image: radial-gradient(60% 70% at 50% 40%, #000, transparent);
+}
+
+.work-media .loop-toggle {
   pointer-events: auto;
 }
 
-/* Hidden until the intro timeline fades them in (avoids a flash on load). */
-.stats-copy .sh > *,
-.stats-copy .btn-row,
-.stat-row {
-  opacity: 0;
+.work-media--phone .phone {
+  width: 9.5rem;
 }
 
-/* ---------- Services (cards around the morph shape) ---------- */
-.services {
-  min-height: 110vh;
+.work-media--browser .browser {
+  width: 100%;
 }
 
-.services-title {
-  max-width: 41.25rem;
-  margin: 0 auto clamp(2.5rem, 6vh, 4.375rem);
-  text-align: center;
-}
-
-.services-grid {
+.work-body {
+  flex: 1;
   display: grid;
-  grid-template-columns: minmax(17.5rem, 23.75rem) 1fr minmax(17.5rem, 23.75rem);
-  gap: 1.5rem;
+  align-content: start;
+  gap: 0.875rem;
+  padding: 0.75rem 1.5rem 1.5rem;
 }
 
-.services-col {
-  display: grid;
-  gap: 1.125rem;
-}
-
-.svc-card {
-  display: grid;
-  grid-template-columns: 3.25rem 1fr;
-  gap: 1.125rem;
-  padding: 1.5rem 1.375rem 1.5rem;
-  overflow: hidden;
-}
-
-.svc-card.tone-sky {
-  background:
-    radial-gradient(90% 70% at 50% 110%, rgb(var(--sky-rgb) / 0.24), transparent 70%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0)),
-    #070707;
-  box-shadow: inset 0 0 0 1px rgb(var(--sky-rgb) / 0.35);
-}
-
-.svc-card.tone-indigo {
-  background:
-    radial-gradient(90% 80% at 90% 110%, rgba(99, 102, 241, 0.3), transparent 70%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0)),
-    #07070b;
-  box-shadow: inset 0 0 0 1px rgba(129, 132, 255, 0.55), 0 0 1.875rem rgba(99, 102, 241, 0.12);
-}
-
-.svc-icon {
-  width: 3.25rem;
-  height: 3.25rem;
-  display: grid;
-  place-items: center;
-  border-radius: 0.8125rem;
-  color: var(--accent-pale);
-  background: linear-gradient(160deg, var(--accent-700), var(--accent-900));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 0 0 1px rgb(var(--accent-rgb) / 0.2);
-}
-
-.svc-icon.tone-sky {
-  color: #d2f1ff;
-  background: linear-gradient(160deg, #1f566e, #0d212b);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 0 0 1px rgb(var(--sky-rgb) / 0.3);
-}
-
-.svc-icon.tone-indigo {
-  color: #dfe0ff;
-  background: linear-gradient(160deg, #3b3d9e, #1b1c4a);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), inset 0 0 0 1px rgba(129, 132, 255, 0.35);
-}
-
-.svc-body h3 {
-  font-size: 1.3125rem;
+.work-title {
+  font-size: 1.25rem;
+  line-height: 1.25;
   letter-spacing: -0.015em;
 }
 
-.svc-body p {
-  margin: 0.5rem 0 1rem;
-  font-size: 0.9375rem;
-  line-height: 1.45;
-  color: #bfbbb7;
+/* The title link covers the whole card. */
+.work-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
 }
 
-/* ---------- Work table ---------- */
-.table-glow {
+.work-link:focus-visible {
+  outline: none;
+}
+
+.work-card:has(.work-link:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.work-card .work-metric strong {
+  font-size: 1.5rem;
+}
+
+.work-card .work-meta {
+  gap: 0.5rem 1.25rem;
+}
+
+.work-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.work-card:hover .work-cta svg {
+  transform: translateX(0.2rem);
+}
+
+.work-cta svg {
+  transition: transform 0.25s;
+}
+
+/* ---------- Case study pages (/work/[slug]) ---------- */
+.cs {
   position: relative;
-  border-radius: 1.5rem;
-  padding: 0.125rem;
-  background: linear-gradient(180deg, rgb(var(--accent-rgb) / 0.55), rgb(var(--accent-rgb) / 0.12) 18%, rgb(var(--accent-rgb) / 0.08));
+  z-index: var(--z-page);
+}
+
+.cs-hero {
+  position: relative;
+  padding: clamp(7rem, 16vh, 9.5rem) 0 clamp(3rem, 8vh, 5rem);
+  overflow: hidden;
   isolation: isolate;
 }
 
-.table-glow::before {
-  content: "";
+.cs-hero-glow {
   position: absolute;
-  top: 0;
-  left: 14%;
-  right: 14%;
-  height: 0.25rem;
-  border-radius: 0.25rem;
-  background: linear-gradient(90deg, transparent, var(--accent-bright) 15%, var(--accent-50) 50%, var(--accent-bright) 85%, transparent);
-  box-shadow: 0 0 0.875rem var(--accent-bright), 0 0 2.5rem rgb(var(--accent-rgb) / 0.8);
-  z-index: 2;
-}
-
-.table-glow::after {
-  content: "";
-  position: absolute;
-  top: -4.375rem;
-  left: 18%;
-  right: 18%;
-  height: 7.5rem;
-  background: radial-gradient(50% 50% at 50% 80%, rgb(var(--accent-rgb) / 0.55), transparent 75%);
-  filter: blur(1rem);
   z-index: -1;
+  inset: 0 0 auto;
+  height: 100vh;
+  pointer-events: none;
+  background: radial-gradient(95% 85% at 50% 0%, var(--hero-1) 0%, var(--hero-2) 30%, var(--hero-3) 60%, var(--hero-4) 85%, transparent 100%);
 }
 
-.table {
-  border-radius: 1.375rem;
-  padding: 0.375rem 1.375rem 0.625rem;
-  background:
-    linear-gradient(180deg, rgb(var(--accent-rgb) / 0.09), rgb(var(--accent-rgb) / 0.015) 30%, rgba(0, 0, 0, 0)),
-    #0a0907;
-}
-
-.table-row {
+.cs-hero-grid {
   display: grid;
-  grid-template-columns: 2.2fr 0.9fr 1.2fr 1fr 0.9fr;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
   align-items: center;
-  gap: 0.75rem;
-  min-height: 4.5rem;
-  padding: 0 0.25rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  gap: clamp(2rem, calc(5 * var(--vw)), 5rem);
+}
+
+.cs-hero-grid:has(.cs-media--browser) {
+  grid-template-columns: 1fr;
+}
+
+.cs-hero-copy {
+  display: grid;
+  justify-items: start;
+  gap: 1.25rem;
+}
+
+.cs-back {
+  margin-left: -0.25rem;
+  color: var(--muted);
+}
+
+.cs-eyebrow {
+  font-size: 0.9375rem;
+  color: var(--accent);
+}
+
+.cs-title {
+  font-size: clamp(2.25rem, calc(4 * var(--vw)), 3.75rem);
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  padding-bottom: 0.05em;
+  text-wrap: balance;
+}
+
+.cs-summary {
+  max-width: 38rem;
+  font-size: 1.125rem;
+  line-height: 1.55;
+  color: #ccc8c4;
+}
+
+.cs-facts {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  justify-content: start;
+  gap: 1rem 2.5rem;
+  margin-top: 0.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.cs-facts div {
+  display: grid;
+  align-content: start;
+  gap: 0.375rem;
+}
+
+.cs-facts dt {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #948f8a;
+}
+
+.cs-facts dd {
   font-size: 1rem;
-  font-weight: 500;
-  transition: background 0.2s;
 }
 
-.table-row:last-child {
-  border-bottom: 0;
+.cs-facts .cs-facts-metric {
+  font-size: 1.5rem;
+  color: var(--accent-bright);
 }
 
-a.table-row:hover {
-  background: rgb(var(--accent-rgb) / 0.04);
+.cs-media--phone .phone {
+  width: min(17rem, 100%);
+  margin: 0 auto;
 }
 
-.table-head {
-  min-height: 3rem;
+/* Rating and store badges under the facts. */
+.cs-get {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  margin-top: 0.5rem;
+}
+
+/* **Bold** words in the copy (Placeholder) read brighter than the text around them. */
+.cs-prose p strong,
+.cs-checks strong,
+.cs-steps p strong,
+.cs-decision p strong,
+.cs-compare strong {
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Before and after: the app's column carries the accent. */
+.cs-compare {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.015);
+  box-shadow: inset 0 0 0 1px var(--border);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.cs-compare th,
+.cs-compare td {
+  width: 50%;
+  padding: 1rem 1.25rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.cs-compare th {
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--dim);
+  color: #948f8a;
 }
 
-.table-project {
-  display: flex;
-  align-items: center;
-  gap: 0.875rem;
-}
-
-.table-project b {
-  display: block;
-  font-size: 1.125rem;
-  font-weight: 500;
-}
-
-.table-project small {
-  font-size: 0.7812rem;
+.cs-compare td {
+  border-top: 1px solid var(--border);
   color: var(--muted);
 }
 
-.table-avatar {
-  width: 2.125rem;
-  height: 2.125rem;
-  flex: none;
-  display: grid;
-  place-items: center;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: rgba(0, 0, 0, 0.75);
-  box-shadow: inset 0 -0.1875rem 0.375rem rgba(0, 0, 0, 0.2), inset 0 0.125rem 0.1875rem rgba(255, 255, 255, 0.35);
+.cs-compare th:last-child,
+.cs-compare td:last-child {
+  background: rgb(var(--accent-rgb) / 0.06);
+  box-shadow: inset 1px 0 0 rgb(var(--accent-rgb) / 0.22);
 }
 
-.right {
-  text-align: right;
-  justify-self: end;
-}
-
-.table-cat {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  font-size: 0.875rem;
-  color: #cbc7c3;
-}
-
-.table-note {
-  margin-top: 2.25rem;
-  text-align: center;
-  font-size: 0.875rem;
-  color: var(--dim);
-}
-
-/* ---------- Pricing ---------- */
-.plans {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.125rem;
-}
-
-.plan {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  padding: 2.125rem 1.625rem 2.5rem;
-  border-radius: var(--radius-lg);
-  background:
-    radial-gradient(110% 55% at 50% 0%, rgb(var(--accent-rgb) / 0.12), transparent 65%),
-    linear-gradient(180deg, #0e0c0a, #050404);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
-}
-
-.plan.popular {
-  background:
-    radial-gradient(110% 60% at 50% 0%, rgb(var(--accent-rgb) / 0.22), transparent 65%),
-    linear-gradient(180deg, #120f0b, #050404);
-  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.45), 0 -0.625rem 2.5rem -1.125rem rgb(var(--accent-rgb) / 0.9);
-}
-
-.plan.popular::before {
-  content: "";
-  position: absolute;
-  top: -1px;
-  left: 10%;
-  right: 10%;
-  height: 0.1875rem;
-  border-radius: 0.1875rem;
-  background: linear-gradient(90deg, transparent, var(--accent-bright) 20%, var(--accent-50) 50%, var(--accent-bright) 80%, transparent);
-  box-shadow: 0 0 0.75rem var(--accent-bright);
-}
-
-.plan-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  min-height: 2.125rem;
-}
-
-.plan h3 {
-  font-size: 1.875rem;
-  letter-spacing: 0.005em;
-}
-
-.plan-text {
-  margin-top: 1.125rem;
-  min-height: 4.5rem;
-  font-size: 1rem;
-  line-height: 1.45;
-  color: #b2aea9;
-}
-
-.plan-actions {
-  display: grid;
-  gap: 0.625rem;
-  margin-top: 1.5rem;
-}
-
-.plan-list {
-  display: grid;
-  gap: 0.75rem;
-  margin-top: 1.875rem;
-  font-size: 0.9375rem;
-  color: #bab6b2;
-}
-
-.plan-list li {
-  position: relative;
-  padding-left: 1rem;
-}
-
-.plan-list li::before {
-  content: "";
-  position: absolute;
-  left: 0.125rem;
-  top: 0.62em;
-  width: 0.25rem;
-  height: 0.25rem;
-  border-radius: 999px;
-  background: #85807b;
-}
-
-.plan-list li:first-child {
-  color: #fff;
-  font-weight: 500;
-}
-
-/* ---------- Estimator ---------- */
-.est-panel {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(2rem, calc(5 * var(--vw)), 4.375rem);
-  align-items: center;
-  padding: clamp(3rem, 8vh, 6rem) clamp(1.5rem, calc(3 * var(--vw)), 2.5rem);
-  border-radius: 1.625rem;
-  overflow: hidden;
-  background:
-    radial-gradient(60% 45% at 75% 0%, rgb(var(--accent-rgb) / 0.12), transparent 70%),
-    linear-gradient(180deg, #0b0907, #060504);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-}
-
-.est-glow {
-  position: absolute;
-  left: 30%;
-  right: 30%;
-  bottom: -40%;
-  height: 80%;
-  background: radial-gradient(50% 50% at 50% 50%, rgb(var(--accent-bright-rgb) / 0.8), rgb(var(--accent-rgb) / 0.25) 50%, transparent 75%);
-  filter: blur(1.125rem);
-  pointer-events: none;
-}
-
-.est-dots {
-  left: 36%;
-  right: 30%;
-  bottom: 0;
-  height: 60%;
-  opacity: 0.7;
-  -webkit-mask-image: radial-gradient(60% 70% at 50% 100%, #000, transparent);
-  mask-image: radial-gradient(60% 70% at 50% 100%, #000, transparent);
-}
-
-.est-left,
-.est-right {
-  position: relative;
-  z-index: 1;
-}
-
-.est-heading {
-  margin-bottom: 1.125rem;
-  font-size: 1.375rem;
-  color: #dcd9d5;
-}
-
-.tiers {
-  display: grid;
-  gap: 0.625rem;
-}
-
-.tier-row {
-  display: grid;
-  grid-template-columns: auto 1fr auto auto;
-  align-items: center;
-  gap: 1rem;
-  min-height: 3.5rem;
-  padding: 0 1rem;
-  border-radius: 0.75rem;
-  text-align: left;
-  background: #121212;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
-  transition: background 0.25s, box-shadow 0.25s;
-}
-
-.tier-row:hover {
-  background: #1a1815;
-}
-
-.tier-row.on {
-  background: linear-gradient(90deg, rgb(var(--accent-rgb) / 0.16), rgb(var(--accent-rgb) / 0.03) 60%, #121212);
-  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.25);
-}
-
-.tier-pill {
-  padding: 0.4375rem 0.8125rem;
-  border-radius: 999px;
-  font-size: 0.7188rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  color: var(--accent-pale);
-  background: var(--accent-800);
-}
-
-.tier-row.on .tier-pill {
-  color: var(--accent-ink);
-  background: linear-gradient(180deg, var(--accent), var(--accent-2));
-  box-shadow: 0 0 0.875rem rgb(var(--accent-rgb) / 0.45);
-}
-
-.tier-row.last:not(.on) .tier-pill {
-  color: #c4c4c4;
-  background: #3d3c3a;
-}
-
-.tier-name {
-  font-size: 0.9375rem;
-  color: #98938f;
-}
-
-.tier-name em {
-  margin-left: 0.375rem;
-  font-style: normal;
-  color: #74706b;
-}
-
-.tier-row.on .tier-name,
-.tier-row.on .tier-name em {
-  color: #fff;
-}
-
-.tier-plus {
-  padding: 0.5rem 0.875rem;
-  border-radius: 999px;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: #e7e5e3;
-  background: #3d3c3a;
-}
-
-.tier-total {
-  min-width: 5.125rem;
-  text-align: right;
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-.tier-row.on .tier-total {
+.cs-compare th:last-child {
   color: var(--accent);
 }
 
-.est-title-row {
+.cs-compare td:last-child {
+  color: #e6e2de;
+}
+
+.cs-compare-after {
   display: flex;
-  align-items: center;
-  gap: 0.875rem;
-  flex-wrap: wrap;
-}
-
-.est-title {
-  font-size: clamp(2rem, calc(3.2 * var(--vw)), 2.75rem);
-}
-
-.est-text {
-  max-width: 25rem;
-  margin-top: 0.875rem;
-  font-size: 0.8438rem;
-  line-height: 1.5;
-  color: #a9a4a0;
-}
-
-.est-stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
   gap: 0.625rem;
-  margin: 1.5rem 0 1.125rem;
 }
 
-.est-stat {
+.cs-compare-after svg {
+  margin-top: 0.25rem;
+  color: var(--accent);
+}
+
+/* Built with: named groups of chips. */
+.cs-stack {
   display: grid;
-  justify-items: center;
-  gap: 0.25rem;
-  padding: 1rem 0.5rem;
-  border-radius: 0.75rem;
-  background: rgba(255, 255, 255, 0.02);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.09);
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 1.5rem 2rem;
 }
 
-.est-stat b {
-  font-size: 1.375rem;
+.cs-stack-group {
+  display: grid;
+  align-content: start;
+  gap: 0.625rem;
+}
+
+.cs-stack-group h3 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.cs-stack .tags li {
+  font-size: 0.8125rem;
   font-weight: 500;
 }
 
-.est-stat small {
-  font-size: 0.75rem;
+/* Screens: the phone-and-tablet picture, then each screen in the studio phone. */
+.cs-screens {
+  display: grid;
+  gap: 3rem;
+}
+
+.cs-devices {
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+}
+
+.cs-devices figcaption {
+  font-size: 0.875rem;
   color: var(--muted);
 }
 
-.est-cta {
-  margin-bottom: 0.75rem;
+/* The tablet on the left; the phone in front of its bottom-right corner. */
+.cs-devices-pair {
+  position: relative;
+  width: min(100%, 34rem);
 }
 
-/* ---------- Process ---------- */
+.cs-tablet {
+  width: 82%;
+  margin-inline: 0;
+}
+
+.cs-pair-phone {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 28%;
+}
+
+/* The two float out of step. */
+.cs-pair-phone .device-float {
+  animation-delay: -3s;
+}
+
+.cs-gallery {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1.5rem 1.25rem;
+}
+
+.cs-gallery figure {
+  display: grid;
+  justify-items: center;
+  gap: 0.875rem;
+}
+
+.cs-gallery figcaption {
+  font-size: 0.875rem;
+  line-height: 1.35;
+  text-align: center;
+  color: var(--muted);
+}
+
+.cs-shot {
+  width: 100%;
+}
+
+/* Six phones side by side: no float, they'd look busy. */
+.cs-shot.is-near .device-float {
+  animation: none;
+}
+
+@media (max-width: 1100px) {
+  .cs-gallery {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .cs-shot {
+    max-width: 13rem;
+  }
+}
+
+.cs-body {
+  display: grid;
+  gap: clamp(3.5rem, 9vh, 6rem);
+  padding-bottom: clamp(4rem, 10vh, 7rem);
+}
+
+.cs-block {
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.32fr) minmax(0, 1fr);
+  gap: 2rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.cs-h2 {
+  font-size: 1.5rem;
+}
+
+.cs-prose {
+  display: grid;
+  gap: 1.25rem;
+  max-width: 46rem;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: #c7c3bf;
+}
+
+.cs-checks {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.cs-checks li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.cs-checks svg {
+  margin-top: 0.3rem;
+  color: var(--accent);
+}
+
+.cs-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem;
+}
+
+.cs-steps li {
+  display: grid;
+  align-content: start;
+  gap: 0.5rem;
+  padding: 1.25rem;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.cs-step-n {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.cs-steps h3,
+.cs-decision h3 {
+  font-size: 1.125rem;
+  line-height: 1.25;
+}
+
+.cs-steps p,
+.cs-decision p {
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.cs-decisions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.cs-decision {
+  display: grid;
+  align-content: start;
+  gap: 0.625rem;
+  padding: 1.5rem;
+}
+
+.cs-tradeoff b {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.cs-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 1rem;
+}
+
+.cs-metrics li {
+  display: grid;
+  align-content: start;
+  gap: 0.375rem;
+  padding: 1.25rem;
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgb(var(--accent-rgb) / 0.07), rgb(var(--accent-rgb) / 0.02));
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.18);
+}
+
+.cs-metrics strong {
+  font-size: 1.75rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.cs-metrics span {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.cs-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+}
+
+.cs-link-todo {
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+
+.cs-next-link {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.5rem 2rem;
+  padding: clamp(1.5rem, calc(3 * var(--vw)), 2.5rem);
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(60% 120% at 100% 50%, rgb(var(--accent-rgb) / 0.12), transparent 70%),
+    #090806;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+  transition: box-shadow 0.3s;
+}
+
+.cs-next-link:hover {
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.35);
+}
+
+.cs-next-label {
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.cs-next-title {
+  font-size: clamp(1.375rem, calc(2.4 * var(--vw)), 2rem);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.cs-next-link svg {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  color: var(--accent);
+  transition: transform 0.3s;
+}
+
+.cs-next-link:hover svg {
+  transform: translateX(0.3rem);
+}
+
+/* ---------- How I work: copy | picture | steps (main's "Seamless from Call to Launch") ---------- */
+/* The track is taller than the screen and the stage sticks, so the step
+   picture (the "process" keyframe in sceneKeyframes.ts) holds still in the
+   middle column, as main's globe does, while the steps fill. Without WebGL,
+   its image sits on the globe's centre:
+     --globe-x  50% + keyframe x × 50%       (x 0 → 50%)
+     --globe-r  the globe's radius on screen: scale × min(100vh, 62.5vw) / 3.06
+                (ParticleMorph; scale 0.72 → 0.235) */
 .process {
-  min-height: 100vh;
+  --globe-x: 50%;
+  --globe-r: calc(0.235 * min(100vh, 62.5vw));
+}
+
+.process-track {
+  height: 220vh;
+}
+
+.process-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
   display: flex;
   align-items: center;
 }
 
 .process-grid {
   display: grid;
-  grid-template-columns: minmax(20rem, 1fr) minmax(18.75rem, 1fr) minmax(20rem, 1fr);
+  /* Equal outer columns keep the middle one, and the picture (1.8 globe
+     radii wide, lib/stepScenes.ts PICTURE_BOX, plus its haze), on the
+     window's centre, clear of the copy and the step track. */
+  grid-template-columns: minmax(16rem, 0.95fr) minmax(18rem, 1.1fr) minmax(16rem, 0.95fr);
+  grid-template-areas: "copy globe steps";
   align-items: center;
   gap: 1.5rem;
+}
+
+.process-copy {
+  grid-area: copy;
 }
 
 .process-copy .sh {
@@ -747,11 +1046,77 @@ a.table-row:hover {
   font-size: 1rem;
 }
 
+/* Desktop: an empty column; the globe and its step pictures are WebGL
+   (ParticleMorph). Without WebGL the lit step's picture shows instead,
+   still, where the globe's centre would be, placed against the stage (a
+   share of the screen, not of the column). Its box is 1.9 × 2.4 globe
+   radii, the picture placed in it as the particles place it (StepIcon
+   `art`, npm run step-art). */
+.process-globe {
+  grid-area: globe;
+}
+
+.process-icons {
+  display: none;
+}
+
+.no-webgl .process-icons {
+  display: block;
+  position: absolute;
+  left: var(--globe-x);
+  top: 50%;
+  width: calc(var(--globe-r) * 1.9);
+  aspect-ratio: 19 / 24;
+  translate: -50% -50%;
+  filter: drop-shadow(0 0 1.25rem rgb(var(--accent-rgb) / 0.45));
+}
+
+.process-icon {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.process-icon.on {
+  opacity: 1;
+}
+
+/* A step picture as an image (StepIcon): its accent mask over the accent,
+   its light mask over the particles' rim colour. -webkit- first: Lightning
+   CSS keeps both that way round. */
+.step-picture::before,
+.step-picture::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  -webkit-mask: var(--mask) center / contain no-repeat;
+  mask: var(--mask) center / contain no-repeat;
+}
+
+.step-picture::after {
+  background: var(--scene-rim);
+  -webkit-mask-image: var(--mask-light);
+  mask-image: var(--mask-light);
+}
+
+/* Each step's own icon (StepIcon): phones only (mobile.css), where the
+   globe shows only Discover. */
+.step-icon {
+  display: none;
+}
+
+/* Steps: main's track that fills, numbered dots, grey titles that light up. */
 .steps {
+  grid-area: steps;
   position: relative;
-  display: grid;
-  gap: clamp(3rem, 9vh, 5.625rem);
   padding-left: 4.125rem;
+}
+
+.steps-list {
+  display: grid;
+  gap: clamp(1.5rem, 5.5vh, 3.25rem);
 }
 
 .steps-track {
@@ -771,7 +1136,7 @@ a.table-row:hover {
   left: 0;
   right: 0;
   top: 0;
-  height: 0%;
+  height: 8%;
   border-radius: 999px;
   background: linear-gradient(180deg, rgb(var(--accent-rgb) / 0.12), rgb(var(--accent-rgb) / 0.5) 70%, var(--accent-200));
   box-shadow: 0 0 1.375rem rgb(var(--accent-rgb) / 0.6);
@@ -792,9 +1157,9 @@ a.table-row:hover {
   border-radius: 999px;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #100e0b;
-  background: #f5f3f1;
-  box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.06);
+  color: var(--bg);
+  background: var(--text);
+  box-shadow: 0 0 0 0.25rem rgb(255 255 255 / 0.06);
 }
 
 .step-label {
@@ -820,237 +1185,357 @@ a.table-row:hover {
 }
 
 .step.on .step-title {
-  color: #fff;
+  color: var(--text);
 }
 
 .step.on .step-text {
   color: #c1bdb9;
 }
 
-/* ---------- Spotlight (sticky) ---------- */
-.spotlight {
-  position: relative;
-}
-
-.spot-sticky {
-  position: sticky;
-  top: 0;
-  height: 100vh;
+/* ---------- Playground ---------- */
+.pg-grid {
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.pg-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0) 45%),
+    #090806;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+}
+
+.pg-media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pg-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #000;
+}
+
+.pg-load {
+  position: absolute;
+  left: 50%;
+  bottom: 1rem;
+  transform: translateX(-50%);
+}
+
+.pg-body {
+  flex: 1;
+  display: grid;
+  align-content: start;
+  gap: 0.625rem;
+  padding: 1.25rem 1.375rem 1.375rem;
+}
+
+.pg-title {
+  font-size: 1.125rem;
+  line-height: 1.25;
+}
+
+.pg-text {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.pg-foot {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: clamp(2rem, calc(4 * var(--vw)), 4rem);
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin-top: 0.25rem;
 }
 
-.spot-screen .mock {
-  grid-template-columns: 11.625rem 1fr;
+/* ---------- About: three cards either side of the particle portrait ---------- */
+.about {
+  min-height: 110vh;
 }
 
-.spot-screen .mock-top .mock-chip:not(.mock-bell) {
+/* Two lines: "From Design to Production," / "Under One Roof." In em, so it
+   holds at every font size. */
+.about .sh .h2 {
+  max-width: 13em;
+  text-wrap: balance;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: minmax(17.5rem, 23.75rem) minmax(0, 1fr) minmax(17.5rem, 23.75rem);
+  grid-template-rows: repeat(3, auto);
+  gap: 1.125rem 1.5rem;
+}
+
+/* Both columns share the grid's three rows, so the cards line up across the
+   portrait like main's "Under One Roof" layout. */
+.about-col {
+  grid-row: 1 / -1;
+  display: grid;
+  grid-template-rows: subgrid;
+}
+
+.about-card {
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1fr);
+  align-content: start;
+  gap: 1.125rem;
+  padding: 1.5rem 1.375rem;
+  overflow: hidden;
+}
+
+.about-card-icon {
+  width: 3.25rem;
+  height: 3.25rem;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  border-radius: 0.8125rem;
+  color: var(--accent-pale);
+  background: linear-gradient(160deg, var(--accent-700), var(--accent-900));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 0 0 1px rgb(var(--accent-rgb) / 0.2);
+}
+
+/* Stack cards (Flutter, TypeScript) take their logo's brand colour instead
+   of the accent, like the highlighted cards in main's reference: a tinted
+   icon tile, a wash from the top-right corner, an even 1px border all
+   round, and tinted tool chips. Each brand sets four rgb
+   triplets: --logo (bright), --logo-pale (text), --logo-700/900 (tile). */
+.about-card[data-logo="flutter"] {
+  --logo-rgb: 71 197 251;
+  --logo-pale-rgb: 191 233 253;
+  --logo-700-rgb: 14 64 99;
+  --logo-900-rgb: 6 24 40;
+}
+
+/* TypeScript's #3178c6, lifted a little so the border and wash read on near-black. */
+.about-card[data-logo="typescript"] {
+  --logo-rgb: 72 146 228;
+  --logo-pale-rgb: 196 221 248;
+  --logo-700-rgb: 22 58 102;
+  --logo-900-rgb: 8 22 42;
+}
+
+.about-card[data-logo] {
+  background:
+    radial-gradient(85% 75% at 100% 0%, rgb(var(--logo-rgb) / 0.13), transparent 70%),
+    radial-gradient(70% 55% at 0% 100%, rgb(var(--logo-rgb) / 0.06), transparent 70%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.008) 45%, rgba(255, 255, 255, 0)),
+    #070707;
+  box-shadow: inset 0 0 0 1px rgb(var(--logo-rgb) / 0.42);
+}
+
+.about-card[data-logo] .about-card-icon {
+  background: linear-gradient(160deg, rgb(var(--logo-700-rgb)), rgb(var(--logo-900-rgb)));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 0 0 1px rgb(var(--logo-rgb) / 0.22);
+}
+
+.about-card[data-logo] .tags li {
+  color: rgb(var(--logo-pale-rgb));
+  background: rgb(var(--logo-rgb) / 0.07);
+  box-shadow: inset 0 0 0 1px rgb(var(--logo-rgb) / 0.2);
+}
+
+.about-avatar {
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--accent-900);
+  box-shadow:
+    0 0 0 1px rgb(var(--accent-rgb) / 0.35),
+    0 0 1.25rem -0.25rem rgb(var(--accent-rgb) / 0.55);
+}
+
+.about-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about-card-body h3 {
+  font-size: 1.3125rem;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+
+.about-card-body > p {
+  margin-top: 0.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: #c4bfba;
+}
+
+.about-card .tags {
+  margin-top: 0.875rem;
+}
+
+/* "Who I am": a location line under the title and social buttons under the text. */
+.about-card-body > .about-place {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-top: 0.3125rem;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.about-place svg {
+  color: var(--accent);
+}
+
+.about-socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.about-social {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: grid;
+  place-items: center;
+  border-radius: 0.625rem;
+  color: #dbd8d5;
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.09);
+  transition: color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+a.about-social:hover,
+a.about-social:focus-visible {
+  color: var(--accent-pale);
+  background: rgb(var(--accent-rgb) / 0.1);
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.45);
+}
+
+/* Link not filled in yet (a "TODO:" href in site.ts). */
+.about-social.is-todo {
+  color: var(--muted);
+  background: none;
+  box-shadow: none;
+  outline: 1px dashed rgb(var(--accent-rgb) / 0.55);
+  outline-offset: -1px;
+  cursor: help;
+}
+
+/* The particle portrait forms here. Without WebGL the real photo stands in. */
+.about-gap {
+  grid-row: 1 / -1;
+  display: grid;
+  place-items: center;
+}
+
+.about-gap-photo {
   display: none;
 }
 
-.spot-screen .mock-crumb {
-  white-space: nowrap;
-}
-
-.spot-screen .mock-tr {
-  font-size: 0.6875rem;
-  grid-template-columns: 1.5fr 0.9fr 0.9fr 1fr 0.9fr;
-}
-
-.spot-frame-inner {
-  display: grid;
-  height: min(35rem, 62vh);
-}
-
-.spot-layer {
-  grid-area: 1 / 1;
-  opacity: 0;
-  transform: translateY(0.875rem) scale(0.99);
-  transition: opacity 0.55s ease, transform 0.55s ease;
-}
-
-.spot-layer.on {
-  opacity: 1;
-  transform: none;
-}
-
-.spot-title {
-  font-size: clamp(3rem, calc(5.4 * var(--vw)), 4.75rem);
-}
-
-.spot-text {
-  max-width: 26.25rem;
-  margin-top: 1rem;
-  font-size: 1.125rem;
-  line-height: 1.45;
-  color: var(--dim);
-}
-
-.spot-features {
-  display: grid;
-  gap: 1.875rem;
-  margin-top: 2.75rem;
-}
-
-.spot-features li {
-  position: relative;
-  padding-left: 1.375rem;
-}
-
-.spot-features li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.4375rem;
-  width: 0.25rem;
-  height: 1.125rem;
-  border-radius: 0.25rem;
-  background: rgb(var(--accent-rgb) / 0.25);
-  transition: background 0.4s, box-shadow 0.4s;
-}
-
-.spot-features li.on::before {
-  background: var(--accent);
-  box-shadow: 0 0 0.625rem var(--accent), 0 0 1.25rem rgb(var(--accent-rgb) / 0.6);
-}
-
-.spot-features h3 {
-  font-size: 1.3125rem;
-  color: #88847f;
-  transition: color 0.4s;
-}
-
-.spot-features p {
-  max-width: 23.75rem;
-  margin-top: 0.5rem;
-  font-size: 1rem;
-  line-height: 1.45;
-  color: #5c5854;
-  transition: color 0.4s;
-}
-
-.spot-features li.on h3 {
-  color: #fff;
-}
-
-.spot-features li.on p {
-  color: #a39f9a;
-}
-
-/* ---------- Assistant (purple) ---------- */
-.assistant {
-  overflow: hidden;
-  padding-top: 2.5rem;
-}
-
-.assistant-ambient {
-  position: absolute;
-  top: -10%;
-  left: 15%;
-  right: 15%;
-  height: 70%;
-  background: radial-gradient(50% 45% at 50% 30%, rgba(139, 92, 246, 0.28), transparent 70%);
-  filter: blur(1.875rem);
-  pointer-events: none;
-}
-
-.assistant-inner {
-  position: relative;
-  display: grid;
-  justify-items: center;
-}
-
-.orb {
-  position: relative;
-  width: 12.5rem;
-  height: 12.5rem;
-  margin-bottom: 2.25rem;
-  border-radius: 999px;
-  background: radial-gradient(circle at 34% 28%, #fbf7ff 0%, #d8c7ff 10%, #a483ff 28%, #7445f0 52%, #3a1a8c 78%, #1b0d42 100%);
+.no-webgl .about-gap-photo {
+  display: block;
+  width: min(100%, 20rem);
+  height: auto;
+  border-radius: 50%;
   box-shadow:
-    0 0 4.375rem 0.625rem rgba(139, 92, 246, 0.5),
-    0 0 10rem 2.5rem rgba(139, 92, 246, 0.22),
-    inset -1.5rem -1.875rem 3.75rem rgba(18, 4, 55, 0.7),
-    inset 0.875rem 0.75rem 1.875rem rgba(255, 255, 255, 0.28);
-  overflow: hidden;
-  animation: orb-float 6s ease-in-out infinite;
+    0 0 0 1px rgb(var(--accent-rgb) / 0.3),
+    0 0 4rem -0.5rem rgb(var(--accent-rgb) / 0.45);
 }
 
-.orb-swirl {
-  position: absolute;
-  inset: -20%;
-  background: conic-gradient(from 0deg, transparent 0 20%, rgba(255, 255, 255, 0.55) 28%, transparent 40%, rgba(196, 170, 255, 0.4) 62%, transparent 75%);
-  filter: blur(0.875rem);
-  mix-blend-mode: screen;
-  animation: orb-spin 9s linear infinite;
-}
-
-@keyframes orb-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes orb-float {
-  50% {
-    transform: translateY(-0.625rem);
-  }
-}
-
-.assistant-frame {
-  width: 100%;
-  max-width: 56.25rem;
-}
-
-/* ---------- Featured ---------- */
-.featured {
-  padding-top: clamp(7.5rem, 18vh, 12.5rem);
-}
-
-.featured-title {
-  max-width: 51.25rem;
-}
-
-.featured .btn-row {
-  margin-top: 0.75rem;
-}
-
-/* ---------- Portal ---------- */
-.portal {
-  overflow: hidden;
-}
-
-.portal-grid {
+/* ---------- Testimonials ---------- */
+.quotes {
   display: grid;
-  grid-template-columns: minmax(20rem, 0.9fr) 1.6fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.quote {
+  display: grid;
+  align-content: space-between;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 1.75rem;
+}
+
+.quote-mark {
+  color: var(--accent);
+}
+
+.quote blockquote p {
+  font-size: 1.125rem;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+}
+
+.quote-by {
+  display: flex;
   align-items: center;
-  gap: clamp(1.75rem, calc(4 * var(--vw)), 3.75rem);
-  padding-left: max(var(--gutter), calc((100vw - var(--container)) / 2));
+  gap: 0.875rem;
 }
 
-.portal-frame {
-  margin-right: -2.5rem;
+.quote-by > span:last-child {
+  display: grid;
+  gap: 0.25rem;
 }
 
-.portal-frame .frame {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+.quote-by small {
+  font-size: 0.8125rem;
+  color: var(--muted);
 }
 
-/* ---------- CTA ---------- */
+.quote-avatar {
+  width: 3rem;
+  height: 3rem;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  object-fit: cover;
+  font-weight: 600;
+  color: var(--accent-pale);
+  background: linear-gradient(160deg, var(--accent-700), var(--accent-900));
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.3);
+}
+
+/* ---------- Contact ---------- */
+/* Frosted glass: the globe rises behind it (the "contact" keyframe). Left:
+   what to do. Right: what to expect, on a darker surface of its own so its
+   text never sits on the bare glow. One column on ≤ 900px (mobile.css).
+   The tint is 0.78, not lighter: the globe passes behind the text while the
+   panel scrolls in, and muted text has to stay ≥ 4.5:1 over it. */
 .cta-panel {
   position: relative;
   min-height: 35rem;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(19rem, 0.75fr);
   align-items: center;
+  gap: clamp(2rem, calc(4 * var(--vw)), 4rem);
   padding: clamp(2.5rem, calc(6 * var(--vw)), 5rem) clamp(1.5rem, calc(5 * var(--vw)), 4rem);
   border-radius: 1.625rem;
   overflow: hidden;
-  background: #070604;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  background: rgba(7, 6, 4, 0.78);
+  -webkit-backdrop-filter: blur(1rem) saturate(1.4);
+  backdrop-filter: blur(1rem) saturate(1.4);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   isolation: isolate;
+}
+
+.cta-copy .badge {
+  margin-bottom: 1.25rem;
 }
 
 .cta-glow-corner {
@@ -1090,80 +1575,258 @@ a.table-row:hover {
 .cta-copy {
   position: relative;
   z-index: 2;
-  max-width: 51.25rem;
+  min-width: 0;
 }
 
 .cta-title {
   font-size: clamp(2.5rem, calc(4.6 * var(--vw)), 4.625rem);
   letter-spacing: -0.035em;
   padding-bottom: 0.05em;
+  text-wrap: balance;
 }
 
 .cta-text {
+  max-width: 34em;
   margin: 1.25rem 0 1.75rem;
   font-size: 1.0625rem;
   color: var(--muted);
 }
 
-.candles {
+.cta-actions {
+  margin-bottom: 1.5rem;
+}
+
+/* The address (pre-filled mailto) and Copy. The bottom margin leaves room
+   for the "address selected" hint, so it never pushes anything down. */
+.contact-email {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2.25rem;
+  font-size: clamp(1.125rem, calc(1.6 * var(--vw)), 1.375rem);
+  font-weight: 500;
+}
+
+.contact-email a {
+  text-decoration: underline;
+  text-decoration-color: rgb(255 255 255 / 0.22);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  transition: text-decoration-color 0.2s;
+}
+
+.contact-email a:hover {
+  text-decoration-color: var(--accent);
+}
+
+.contact-copy {
+  gap: 0.5rem;
+}
+
+.contact-copy-label {
+  display: grid;
+}
+
+.contact-copy-label > span {
+  grid-area: 1 / 1;
+}
+
+.contact-copy-label > span:not([data-on]) {
+  visibility: hidden;
+}
+
+.contact-copy[data-state="done"] {
+  color: var(--accent-pale);
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.55);
+}
+
+.contact-hint {
   position: absolute;
-  right: 6%;
-  top: 8%;
-  bottom: 12%;
-  width: 34%;
+  left: 0;
+  top: calc(100% + 0.5rem);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  white-space: nowrap;
+  color: var(--accent-pale);
+  opacity: 0;
+  transition: opacity 0.2s;
 }
 
-.candle {
-  position: absolute;
-  width: 1.875rem;
-  transform: translateX(-50%);
-  background-image:
-    radial-gradient(circle, rgb(var(--accent-pale-rgb) / 0.95) 0.05rem, transparent 0.0813rem),
-    radial-gradient(circle, rgb(var(--accent-bright-rgb) / 0.75) 0.0563rem, transparent 0.0875rem),
-    radial-gradient(circle, rgb(var(--accent-rgb) / 0.6) 0.0437rem, transparent 0.075rem);
-  background-size: 0.3125rem 0.25rem, 0.4375rem 0.375rem, 0.1875rem 0.5625rem;
-  background-position: 0 0, 0.125rem 0.1875rem, 1px 0.3125rem;
-  filter: drop-shadow(0 0 0.3125rem rgb(var(--accent-rgb) / 0.9));
-  -webkit-mask-image: radial-gradient(50% 50% at 50% 50%, #000 55%, rgba(0, 0, 0, 0.35) 85%, transparent 100%);
-  mask-image: radial-gradient(50% 50% at 50% 50%, #000 55%, rgba(0, 0, 0, 0.35) 85%, transparent 100%);
-  animation: candle-drift 3.2s ease-in-out infinite alternate;
+.contact-hint[data-show] {
+  opacity: 1;
 }
 
-.candle:nth-child(2n) {
-  animation-delay: -1.4s;
+.cta-hiring {
+  font-size: 0.9375rem;
+  color: var(--muted);
 }
 
-.candle::before,
-.candle::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  width: 0.4375rem;
-  transform: translateX(-50%);
-  background-image: inherit;
-  background-size: 0.1875rem 0.3125rem, 0.25rem 0.4375rem, 0.125rem 0.5625rem;
+.cta-hiring a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: rgb(255 255 255 / 0.25);
+  text-underline-offset: 0.25em;
 }
 
-.candle::before {
-  bottom: 96%;
-  height: var(--up);
+.cta-hiring a:hover {
+  text-decoration-color: var(--accent);
 }
 
-.candle::after {
-  top: 96%;
-  height: var(--down);
+/* What to expect. No blur of its own: the panel behind is already frosted,
+   and a second backdrop blur over the WebGL canvas costs every frame. */
+.cta-card {
+  position: relative;
+  z-index: 2;
+  padding: clamp(1.25rem, calc(2 * var(--vw)), 1.75rem);
+  border-radius: 1.25rem;
+  background: rgb(10 8 6 / 0.82);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 1.5rem 3rem -1.5rem rgb(0 0 0 / 0.6);
 }
 
-@keyframes candle-drift {
-  to {
-    background-position: 0 -0.5rem, 0.125rem -0.75rem, 1px -0.375rem;
+.cta-card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+.cta-card-avatar {
+  width: 3rem;
+  height: 3rem;
+  flex: none;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--accent-900);
+  box-shadow:
+    0 0 0 1px rgb(var(--accent-rgb) / 0.35),
+    0 0 1.25rem -0.25rem rgb(var(--accent-rgb) / 0.55);
+}
+
+.cta-card-name {
+  font-size: 1.0625rem;
+  font-weight: 500;
+}
+
+.cta-card-sub {
+  margin-top: 0.125rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+/* Availability: the status pill, allowed to wrap. */
+.cta-avail {
+  height: auto;
+  min-height: 1.875rem;
+  margin-top: 1.125rem;
+  padding: 0.3125rem 0.75rem;
+  line-height: 1.35;
+  text-align: left;
+}
+
+.cta-avail::before {
+  flex: none;
+}
+
+.cta-card-title {
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+  letter-spacing: 0;
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+.cta-steps {
+  display: grid;
+  gap: 0.875rem;
+  margin-top: 0.875rem;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.cta-steps li {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  align-items: start;
+  gap: 0.75rem;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  counter-increment: step;
+}
+
+.cta-steps li::before {
+  content: counter(step);
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-top: -0.0625rem;
+  border-radius: 50%;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--accent-pale);
+  background: rgb(var(--accent-rgb) / 0.12);
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.35);
+}
+
+.cta-card-place {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.cta-card-place svg {
+  flex: none;
+  color: var(--accent);
+}
+
+/* Touch screens: every target at least 44px. The hiring links grow their
+   tap area with padding and take it back with margin, so the line keeps its
+   layout. */
+@media (pointer: coarse) {
+  .contact-email a {
+    padding: 0.75rem 0;
   }
+
+  .contact-copy {
+    min-height: 2.75rem;
+  }
+
+  .cta-hiring a,
+  .cta-hiring .todo {
+    display: inline-block;
+    padding-block: 0.8125rem;
+    margin-block: -0.8125rem;
+  }
+}
+
+.mm-links {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.mm-links a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 1.5rem;
+  font-weight: 500;
 }
 
 /* ---------- Footer ---------- */
 .footer {
   position: relative;
-  z-index: 1;
+  z-index: var(--z-page);
   margin-top: 2.5rem;
   padding-top: 4.5rem;
   overflow: hidden;
@@ -1219,7 +1882,7 @@ a.table-row:hover {
   gap: 1rem;
 }
 
-.footer-col h4 {
+.footer-col h2 {
   font-size: 0.9375rem;
   font-weight: 500;
   letter-spacing: 0;
@@ -1332,7 +1995,9 @@ a.table-row:hover {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 1rem;
-  padding: 2.25rem 0 1.875rem;
+  /* The bottom clears the round WhatsApp button, so at the very end of the
+     page it never covers this line. */
+  padding: 2.25rem 0 calc(var(--chat-size) + var(--chat-gap) + 0.75rem);
   font-size: 0.875rem;
   color: #938f8a;
 }
@@ -1351,18 +2016,51 @@ a.table-row:hover {
   .header-actions > .btn-ghost {
     display: none;
   }
-  .stats-grid,
+  .proof-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .work-list {
+    grid-template-columns: 1fr 1fr;
+  }
+  .proof-globe-space {
+    display: none;
+  }
+  /* Narrow desktop windows (16px type): tighter columns and smaller steps
+     so copy | picture | steps still fits one pinned screen. */
   .process-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.1fr) minmax(0, 0.95fr);
   }
-  .stats-globe-space,
-  .process-globe-space {
-    display: none;
+  .process .h2 {
+    font-size: 2.25rem;
   }
-  .services-grid {
-    grid-template-columns: 1fr 1fr;
+  .steps-list {
+    gap: 1.5rem;
   }
-  .services-gap {
-    display: none;
+  .step-title {
+    font-size: 1.25rem;
+  }
+  .step-text {
+    font-size: 0.875rem;
+  }
+  .pg-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .quotes {
+    grid-template-columns: 1fr;
+  }
+  /* Narrow desktop windows: equal thirds so the portrait keeps its column;
+     icons sit above the text to leave the copy room. */
+  .about-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .about-card {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.875rem;
+    padding: 1.25rem;
+  }
+  .about-card-icon {
+    width: 2.75rem;
+    height: 2.75rem;
   }
 }

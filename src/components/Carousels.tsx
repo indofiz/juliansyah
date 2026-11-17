@@ -7,7 +7,7 @@ import { useEffect } from "react";
  * Markup: a scroller with [data-carousel], followed by a sibling
  * [data-carousel-nav] that is either
  *   .carousel-bar   one <span> thumb: sized to the visible share, moved with scroll
- *   .carousel-dots  one <span> per slide; the current one gets .on
+ *   .carousel-dots  one <button> per slide; the current one gets .on
  * Dots are clickable and scroll to their slide. On desktop the scrollers are
  * normal grids and the indicators are hidden by CSS.
  */

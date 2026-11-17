@@ -1,115 +1,100 @@
-# Juliansyah — portfolio (v2)
+# Juliansyah — portfolio
 
 > **Looking for the previous site?** The original Tailwind portfolio (v1, with
 > separate About / Projects / Contact pages) is preserved at git tag
-> `v1-legacy` and branch `legacy/v1`:
-> `git checkout v1-legacy` (or `git worktree add ../juliansyah-v1 legacy/v1`).
-> Its old URLs redirect to the matching section here (see `next.config.ts`).
-> This design first shipped with a mint-green accent; that version is at git
-> tag `v2-mint`.
+> `v1-legacy` and branch `legacy/v1`. Its old URLs redirect here (see
+> `next.config.ts`). The first particle version (mint accent) is at tag `v2-mint`.
 
-A Next.js portfolio landing page with a glowing particle globe that changes as
-you scroll, wrapped in a dark, amber-glow ("Ember") design system: gradient headings,
-glowing pill buttons, icon badges, glow-framed app screens, dotted textures and
-scroll-lit lists.
+A Next.js portfolio for a Flutter developer, front-end developer and UI/UX
+designer in Jakarta. A glowing particle globe and a particle portrait move
+with the scroll, inside a dark, amber-glow ("Ember") design system.
 
 ## Run it
 
 ```bash
 npm install
-npm run dev
+npm run dev       # http://localhost:3000
+npm run lint
+npm run build
 ```
 
-Open http://localhost:3000.
+## The page answers four questions, in order
 
-## Sections (in order)
+| # | Section | id | Answers | Notes |
+| --- | --- | --- | --- | --- |
+| 1 | Hero | `hero` | Who are you? | Greeting pill (name ✳ tagline), headline (the only h1), description, two CTAs, design-system dashboard whose stat card is real (12K+ users, moving strip of client logos in colour) inside sample chrome. **Pinned**: the copy slides up and the dashboard slides down while the globe rises |
+| 2 | Track record | `proof` | Can I trust you? | Second screen of the pinned intro: one-line stats (icon, white number, amber label) around the centred globe; View work / Learn more on desktop |
+| 3 | Selected work | `work` | Can you do what I need? | Flagship card with the studio phone showing the app's real screens, then project cards. Each opens `/work/[slug]` |
+| 4 | How I work | `process` | What's it like to work with you? | Main's "Seamless from Call to Launch" layout: copy, the particles in the middle, four steps (Discover, Design, Build, Launch) on a track that fills as you scroll, and the particles forming the lit step's 3D picture (telescope, a UI/UX design window, code window and gear, rocket) in a meshy haze of particles. The section opens on the telescope, never the earth. **Pinned** on desktop; phones stack title, telescope, steps (each with its icon), buttons |
+| 5 | About | `about` | Who are you, and can you do what I need? | Main's "Under One Roof" layout, titled "From Design to Production, Under One Roof.": three cards a side (Who I am, then five expertise cards with their tools) with the particle portrait forming in the empty middle column. Phones: title, portrait, then a card carousel. Without WebGL the real photo fills the middle column |
+| 6 | Playground | `playground` | Can you do what I need? | Experiments that load near the viewport and pause off screen |
+| 7 | Testimonials | `testimonials` | Can I trust you? | Short quotes, just before Contact |
+| 8 | Contact | `contact` | How do I reach you? | Email + copy, book a call, reply time, availability. The globe rises behind the frosted panel |
+| – | Footer | `footer` | | Socials, résumé, last updated (build date) |
 
-| # | Section | id | Pattern |
-| --- | --- | --- | --- |
-| 1–2 | Intro (hero + stats) | `hero` / `about` | **Pinned scene on desktop.** Scrolling slides the headline up and the dashboard down while the globe rises to the centre, then the stats fade in around it. Normal scrolling on mobile |
-| 3 | Services | `services` | Globe dissolves → sinks → your portrait builds up from the bottom between 3 + 3 cards, with a light sweep and a small mouse turn |
-| 4 | Work | `work` | Project index in a glowing table, rows light up on scroll |
-| – | Pricing | `pricing` | *Not rendered.* Three plans, middle one highlighted |
-| – | Estimator | `estimator` | *Not rendered.* Clickable scope tiers update four stat boxes |
-| 7 | Process | `process` | Globe centre, steps with a track that fills on scroll |
-| 8 | Case study | `spotlight` | Sticky: scrolling switches the active feature and the framed screen |
-| 9 | Assistant | `assistant` | Purple orb, purple-framed chat with clickable suggestions |
-| 10 | Featured | `featured` | Statement, purple button pair, framed analytics screen |
-| 11 | Skills bento | `capabilities` | Six cards (Flutter, UI/UX, front-end, design systems, motion, performance). Each illustration is a small live UI that plays on hover, or while centred in view on touch screens |
-| – | Portal | `portal` | *Not rendered.* Framed client-portal UI bleeding off the right edge, working toggles |
-| 13 | CTA | `cta` | Panel whose glow slides from the corner to the bottom, rising particle bars |
-| 14 | Footer | `footer` | Link columns, button cards, giant glowing wordmark |
+Case studies live at `/work/[slug]` (problem → my role → process → key
+decisions → result → next project), prerendered from `projects` in
+`src/content/site.ts`, each with its own Open Graph image and CreativeWork
+JSON-LD. Projects marked `dummy: true` are noindex and left out of the sitemap.
+
+## Content and placeholders
+
+**All copy lives in `src/content/site.ts`** (types in `src/content/types.ts`);
+components never hard-code text. Any string that starts with `TODO:` is a
+placeholder: it renders with a dashed outline so it can't ship unnoticed.
+List them all:
+
+```bash
+grep -n "TODO:" src/content/site.ts
+```
+
+**Screen recordings** (`LoopMedia`): put `webm` + `mp4` + a `poster` in
+`public/work/<slug>/` and reference them on the project's `media`. They play
+muted, inline and looped, load only near the viewport, pause off screen and
+never autoplay with reduced motion or Save-Data. Until then a wireframe
+placeholder is shown.
+
+**Studio phone**: a project with `media.stills` and `media.screens` (Presensi)
+shows its real screens inside the 3D phone rendered in `/studio` (dev only),
+on the flagship card and its case study. Re-export the stills from the studio
+if the phone changes: see `docs/plans/phone-3d-on-site.md`.
 
 ## Fits every screen size
 
 All sizes are in `rem`. On screens ≥ 1024px wide the root font size scales
 with the window (`tokens.css`), so the page behaves like the 1440×900 design
-zoomed in or out: same proportions at 1440px, 2560px or 4K. It follows the
-tighter of width and height, so short and ultrawide windows still fit. For
-fluid values use `calc(N * var(--vw))` instead of `Nvw`: `--vw` is 1% of the
-design width on desktop and a real `1vw` on mobile. Below 1024px it's a normal
-responsive layout with a 16px base.
+zoomed in or out. Use `calc(N * var(--vw))` instead of `Nvw` for fluid values.
+Below 1024px it's a normal responsive layout with a 16px base; phone rules
+(≤ 900px) live in `src/styles/mobile.css`.
 
-When adding CSS, write sizes in `rem` (px ÷ 16, so `24px → 1.5rem`). Keep
-`1px` for hairlines. Icons take their `size` in design px and convert to rem
-themselves.
+## Motion and accessibility
 
-## Mobile (≤ 900px)
-
-Follows the reference's phone layout: fixed header with a ☰ full-screen menu
-(hides on scroll down, returns on scroll up), the same pinned hero → stats
-intro, your portrait above a swipe carousel of service cards, swipe carousels
-for plans and capabilities (glowing bar / dash indicators), centred section
-headers, stacked buttons, and a 2-column footer. All mobile rules live in
-`src/styles/mobile.css`; carousel indicators are driven by
-`src/components/Carousels.tsx` (`data-carousel` + `data-carousel-nav`).
-Globe/portrait positions on mobile are the `mobile` overrides in
-`sceneKeyframes.ts`.
-
-## Skills bento
-
-Cards and copy: `capabilities` in `src/content/site.ts`. Illustrations:
-`src/components/bento/Arts.tsx` (markup) and `src/styles/bento.css` (look and
-animations, all keyed off `.bento-card:is(:hover, .is-active)`).
-`src/components/bento/BentoFx.tsx` scales each illustration to its card,
-moves the hover spotlight and tilt, and on touch screens plays a card while
-it's in view.
-
-**Your Flutter screenshots:** the phone shows a dummy travel app for now. Put
-two portrait PNGs (e.g. 390×844) in `public/work/` and list them in
-`flutterScreens` in `site.ts`; the phone then swipes from the first to the
-second on hover.
+- `prefers-reduced-motion`: nothing pins or scrubs (`src/styles/reduced-motion.css`,
+  loaded last), videos stay on their poster, the globe cuts between states
+  instead of moving and its drift stands still, and How I work shows every
+  step lit.
+- Visible focus ring everywhere (`:focus-visible` in `tokens.css`); the
+  mobile menu moves focus in and returns it on Escape.
+- One h1 per page; every section is labelled by its heading.
 
 ## Where to edit
 
 | What | File |
 | --- | --- |
-| **All copy, numbers, projects, plans** | `src/content/site.ts` |
+| **All copy, projects, case studies, numbers** | `src/content/site.ts` |
 | Colors, radii, fonts (design tokens) | `src/styles/tokens.css` |
-| Accent colour (whole site) | the `--accent-*` ramp in `tokens.css` + `src/lib/theme.ts` (WebGL) |
-| Buttons, badges, cards, glow frames, nav | `src/styles/components.css` |
+| Accent colours (the visitor's palette picker, whole site and WebGL) | `src/lib/palettes.ts` (the only place they live; `npm run palette` derives a new one) |
+| Buttons, badges, cards, frames, device frames, nav | `src/styles/components.css` |
 | Section layouts | `src/styles/sections.css` and `src/components/sections/*` |
-| Mock app screens inside frames | `src/components/mocks/*` and `src/styles/mocks.css` |
-| Scroll choreography of the globe | `src/lib/sceneKeyframes.ts` |
-| Pinned intro timing (headline up, dashboard down, stats in) | intro timeline in `src/components/ScrollFx.tsx` |
-| Other scroll effects (reveals, steps, CTA glow, beams) | `src/components/ScrollFx.tsx` |
-| Outer shell "dance" (radius, speed, strands) and lighting | `src/components/canvas/shaders.ts` |
-| Particle look (size, glow, drift, sinking) | `src/components/canvas/shaders.ts` |
-| Particle count, bloom strength | `src/components/canvas/Scene.tsx` |
-
-**Hidden sections:** Pricing, Estimator and Portal still exist in
-`src/components/sections/` but aren't in `page.tsx` or `sceneKeyframes.ts`.
-To bring one back, update its copy in `site.ts` and re-add both entries in the
-same position.
-
-**Replacing the mock screens with real work:** the framed screens are built in
-HTML so the page works out of the box. When you have screenshots, drop an
-`<img>` inside `<GlowFrame>` instead of the mock component.
+| Scroll choreography of the particles | `src/lib/sceneKeyframes.ts` |
+| Pinned intro timing (headline up, dashboard down, proof in) | intro timeline in `src/components/ScrollFx.tsx` |
+| How I work step pictures (small 3D scenes the particles form) | `src/lib/stepScenes.ts` (scenes), `src/lib/sdf.ts` (shapes, light, dots, halo); run `npm run step-art` after a change to redraw the phone icons and no-WebGL images in `public/process/` |
+| Particle look, count, bloom | `src/components/canvas/shaders.ts`, `Scene.tsx` |
 
 **Adding a section:** add a `<section id="my-section">` to `page.tsx` and a
 `"my-section": { ... }` entry to `sceneKeyframes.ts` in the same order. The
-globe's transition into it plays while that section scrolls from the bottom of
-the screen to the top. Use the `hidden` preset if the globe shouldn't show.
+particles' transition into it plays while that section scrolls from the
+bottom of the screen to the top. Use the `hidden` preset if they shouldn't show.
 
 ## How the globe works
 
@@ -145,7 +130,7 @@ Lenis smooth scroll ──▶ GSAP ScrollTrigger (scrub) ──▶ sceneState �
   `ParticleMorph.tsx`. If you move or resize the hero globe, update `--cy` /
   `--r` in `.hero-bars`; adjust `--bar` / `--gap` for panel width and spacing.
 
-## Your portrait (the head in the services section)
+## Your portrait (in the About section)
 
 The particle cloud forms your head and shoulders, wearing a VR headset, as
 a dim dotted 2.5D relief: real depth from a depth map, so it turns a few
@@ -176,8 +161,7 @@ transparent PNG). Your original photo stays in `assets/`, which isn't served.
 (how deep the relief is), `dotSpacing` (gap between dots as a fraction of the
 height; bigger = coarser halftone).
 The headset's shape and size are in `add_headset()` in
-`scripts/make-portrait.py` (it's placed from the detected eyes). Position per section is in `sceneKeyframes.ts`
-(`services`). Shine speed/width and the mouse turn are in `shaders.ts` and
+`scripts/make-portrait.py` (it's placed from the detected eyes). Position is the `about` keyframe in `sceneKeyframes.ts`. Shine speed/width and the mouse turn are in `shaders.ts` and
 `ParticleMorph.tsx` (`uMouse`).
 
 How the depth is made: background removed by colour keying; OpenCV finds the
@@ -205,6 +189,18 @@ ocean is dark.
 
 ## Performance notes
 
-- 42k particles on desktop, 16k on screens ≤ 768px (`Scene.tsx`).
-- Pixel ratio is capped at 1.75; the globe isn't drawn while faded out.
-- "Reduce motion" users get native scrolling, no reveals and static lists.
+- The particle scene (three.js + post-processing, the largest script) starts
+  on the first interaction, or 3 s after load, so it never competes with the
+  headline (LCP) or hydration.
+- Particle budget (`Scene.tsx`): 42k on desktop, 16k on screens ≤ 768px,
+  6k and no bloom when WebGL runs without a GPU. Pixel ratio starts at up to
+  1.75; `QualityGovernor` measures the real frame rate while the particles
+  are on screen and steps it down (1.5, 1.25, 1) below 48 fps, then turns
+  bloom off below 28 fps. It never steps back up during a visit.
+- The globe spins on its own, one turn about every 80 s
+  (`GLOBE_SPIN_SPEED` in `ParticleMorph.tsx`); still with reduced motion.
+- The render loop stops while the particles are faded out (most of the page).
+- Videos, iframes and playground items load only near the viewport.
+- Lighthouse 13.6, mobile profile, local production build (2026-11-11):
+  homepage 80 / 100 / 100 / 100, case study 98 / 100 / 100 / 100
+  (performance / accessibility / best practices / SEO). LCP 1.1 s.

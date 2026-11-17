@@ -1,6 +1,7 @@
-import { site } from "@/content/site";
-import { Icon } from "./ui/Icon";
+import { getContent } from "@/content";
 import { Button, Logo } from "./ui/primitives";
+import { AccentPicker } from "./AccentPicker";
+import { LanguagePicker } from "./LanguagePicker";
 import { MobileMenu } from "./MobileMenu";
 import { NavBar } from "./NavBar";
 
@@ -8,23 +9,23 @@ import { NavBar } from "./NavBar";
  * Desktop: logo + actions scroll away with the hero; the nav pill stays fixed.
  * Mobile: the header is fixed (hides on scroll down, returns on scroll up)
  * with a hamburger menu instead of the nav pill.
+ *
+ * `path` is this page without its language ("/" or "/work/<slug>"), so the
+ * language links lead to the same page in the other language.
  */
-export function SiteHeader() {
+export async function SiteHeader({ path }: { path: string }) {
+  const { nav } = await getContent();
   return (
     <>
       <div className="site-header">
         <Logo />
         <div className="header-actions">
-          <a className="icon-btn" href={site.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-            <Icon name="github" size={19} />
-          </a>
-          <Button variant="ghost" href={`mailto:${site.email}`}>
-            Email me
+          <AccentPicker />
+          <LanguagePicker path={path} />
+          <Button variant="glow" href={nav.hire.href} className="header-cta">
+            {nav.hire.label}
           </Button>
-          <Button variant="glow" href="#cta" className="header-cta">
-            Hire me
-          </Button>
-          <MobileMenu />
+          <MobileMenu path={path} />
         </div>
       </div>
 

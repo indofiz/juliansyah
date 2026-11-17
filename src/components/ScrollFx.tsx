@@ -3,26 +3,29 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { sceneState, showStepIcon } from "@/lib/sceneState";
+import type { StepId } from "@/lib/stepScenes";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 /**
- * DOM scroll effects (the particle globe is handled by ScrollScenes):
- *  - intro            pinned hero → stats scene, see Intro.tsx
+ * DOM scroll effects (the particle globe's path is handled by ScrollScenes):
+ *  - intro            pinned hero → proof scene, see Intro.tsx
  *  - [data-reveal]    fade up once when it enters the viewport
- *  - [data-light]     brightens progressively while scrolling (table rows)
  *  - hero bars        frosted panels: in on load, out once you scroll, back in at the top
- *  - [data-steps]     progress track fills and the current step lights up
- *  - [data-cta]       corner glow slides to the bottom, particle bars rise
+ *  - [data-steps]     How I work: the track fills, the current step lights up
+ *                     and the globe turns into its picture
+ *  - [data-cta]       contact panel: corner glow slides to the bottom
  */
 export function ScrollFx() {
   useGSAP(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // ---- Intro: pinned hero → stats (all screen sizes) ----------------------
-    // The intro section is 300vh with a sticky 100vh stage, so this timeline
-    // spans two screens of scroll: 1 timeline unit = 1 screen.
-    {
+    // ---- Intro: pinned hero → proof (all screen sizes) -----------------------
+    // The intro wrapper is 300vh with a sticky 100vh stage, so this timeline
+    // spans two screens of scroll: 1 timeline unit = 1 screen. With reduced
+    // motion nothing pins (reduced-motion.css) and this is skipped.
+    if (!reduce) {
       const tl = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom bottom", scrub: 0.8 },
@@ -31,19 +34,11 @@ export function ScrollFx() {
       tl.to(".hero-gradient", { opacity: 0, duration: 0.8 }, 0)
         .to(".hero-copy", { y: () => -window.innerHeight * 0.55, opacity: 0, duration: 0.75, ease: "power1.in" }, 0)
         .to(".hero-frame-wrap", { y: () => window.innerHeight * 0.8, duration: 0.9, ease: "power2.in" }, 0)
-        // Screen 2: stats copy and rows fade in around the centred globe.
-        .fromTo(
-          ".stats-copy .sh > *, .stats-copy .btn-row",
-          { opacity: 0, y: 28 },
-          { opacity: 1, y: 0, duration: 0.3, stagger: 0.07, ease: "power2.out" },
-          0.95,
-        )
-        .fromTo(
-          ".stat-row",
-          { opacity: 0, x: 30 },
-          { opacity: 1, x: 0, duration: 0.28, stagger: 0.09, ease: "power2.out" },
-          1.05,
-        )
+        // Screen 2: track-record copy, buttons and rows fade in around the
+        // centred globe. autoAlpha also sets visibility, so the buttons can't
+        // be clicked or tabbed to while they're invisible.
+        .fromTo(".proof-copy .sh > *, .proof-actions", { autoAlpha: 0, y: 28 }, { autoAlpha: 1, y: 0, duration: 0.3, stagger: 0.07, ease: "power2.out" }, 0.95)
+        .fromTo(".proof-row", { autoAlpha: 0, x: 30 }, { autoAlpha: 1, x: 0, duration: 0.28, stagger: 0.09, ease: "power2.out" }, 1.05)
         // Hold before the stage releases.
         .to({}, { duration: 0.35 }, 1.65);
     }
@@ -83,8 +78,70 @@ export function ScrollFx() {
       if (window.scrollY <= atTop.end) showBars(0.5);
     }
 
+    // ---- How I work: steps and the pictures on the globe ---------------------
+    // The track fills, the current step lights up and the globe turns into
+    // its picture (lib/stepScenes.ts). Desktop: the track is pinned
+    // ([data-steps-pin], a tall track with a sticky stage), so this spans the
+    // pinned scroll while the picture holds still; after Launch the rocket
+    // stays, to dissolve into About's portrait. Phones and reduced motion:
+    // nothing pins; it runs while the list scrolls past. With reduced motion
+    // every step stays lit and the track full (reduced-motion.css); the
+    // pictures swap at once.
+    //
+    // This only picks WHICH picture: the lit step's on desktop (Discover
+    // above the track), Discover on phones (their steps show their own
+    // icons). WHETHER a picture shows instead of the earth is `pictures` in
+    // lib/sceneKeyframes.ts, scrubbed with the rest of the scene: it turns on
+    // while the particles are still faded out from Work, so the section
+    // never shows the earth, and off once About's portrait has broken up, so
+    // contact and the hero always get the earth. The picture follows the
+    // track's own progress on every change (jumps and refreshes included),
+    // so it never waits on another trigger. Without WebGL the lit step's
+    // picture shows as an image where the globe would be ([data-step-icon]).
+    document.querySelectorAll<HTMLElement>("[data-steps]").forEach((list) => {
+      const section = list.closest<HTMLElement>("section") ?? list;
+      const fill = list.querySelector<HTMLElement>(".steps-fill");
+      const steps = gsap.utils.toArray<HTMLElement>(".step", list);
+      const ids = steps.map((s) => s.dataset.step as StepId);
+      const fallbacks = gsap.utils.toArray<HTMLElement>("[data-step-icon]", section);
+      const pin = list.closest<HTMLElement>("[data-steps-pin]");
+      let current = 0;
+
+      // Compared with the scene's own target, so a picture picked elsewhere
+      // (the dev keys in ParticleMorph) is put right on the next change.
+      const showIcon = (id: StepId) => {
+        if (id !== sceneState.iconTarget) showStepIcon(id, { instant: reduce });
+      };
+
+      gsap.matchMedia().add({ desktop: "(min-width: 901px)", mobile: "(max-width: 900px)" }, (ctx) => {
+        const desktop = Boolean(ctx.conditions?.desktop);
+        const pinned = desktop && Boolean(pin) && !reduce;
+
+        const update = (self: ScrollTrigger) => {
+          if (fill && !reduce) fill.style.height = `${Math.max(8, self.progress * 100)}%`;
+          const i = Math.min(steps.length - 1, Math.floor(self.progress * steps.length));
+          if (i !== current) {
+            current = i;
+            steps.forEach((s, k) => s.classList.toggle("on", k === i));
+            fallbacks.forEach((a, k) => a.classList.toggle("on", k === i));
+          }
+          showIcon(desktop ? ids[current] : ids[0]);
+        };
+
+        const track = ScrollTrigger.create({
+          trigger: pinned ? pin : list,
+          start: pinned ? "top top" : "top 75%",
+          end: pinned ? "bottom bottom" : "bottom 45%",
+          onUpdate: update,
+          onRefresh: update,
+        });
+        update(track);
+        // Back to Discover when the layout changes.
+        return () => showIcon(ids[0]);
+      });
+    });
+
     if (reduce) {
-      gsap.set("[data-light]", { opacity: 1 });
       gsap.set(".cta-glow-bottom", { opacity: 1 });
       return;
     }
@@ -99,42 +156,10 @@ export function ScrollFx() {
       });
     });
 
-    gsap.utils.toArray<HTMLElement>("[data-light]").forEach((el) => {
-      gsap.fromTo(
-        el,
-        { opacity: 0.16 },
-        { opacity: 1, ease: "none", scrollTrigger: { trigger: el, start: "top 82%", end: "top 58%", scrub: true } },
-      );
-    });
-
-    document.querySelectorAll<HTMLElement>("[data-steps]").forEach((list) => {
-      const fill = list.querySelector<HTMLElement>(".steps-fill");
-      const steps = Array.from(list.querySelectorAll<HTMLElement>(".step"));
-      ScrollTrigger.create({
-        trigger: list,
-        start: "top 75%",
-        end: "bottom 45%",
-        scrub: true,
-        onUpdate: (self) => {
-          if (fill) fill.style.height = `${Math.max(8, self.progress * 100)}%`;
-          const current = Math.min(steps.length - 1, Math.floor(self.progress * steps.length));
-          steps.forEach((s, i) => s.classList.toggle("on", i === current));
-        },
-      });
-    });
-
     document.querySelectorAll<HTMLElement>("[data-cta]").forEach((panel) => {
       const st = { trigger: panel, start: "top 85%", end: "center 45%", scrub: true };
       gsap.to(panel.querySelector(".cta-glow-corner"), { opacity: 0, ease: "none", scrollTrigger: st });
       gsap.to(panel.querySelector(".cta-glow-bottom"), { opacity: 1, ease: "none", scrollTrigger: st });
-      gsap.from(panel.querySelectorAll(".candle"), {
-        y: 80,
-        opacity: 0,
-        duration: 1.3,
-        ease: "power3.out",
-        stagger: 0.12,
-        scrollTrigger: { trigger: panel, start: "top 65%" },
-      });
     });
 
     // Layout can shift once fonts load; re-measure trigger positions.

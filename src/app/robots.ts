@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
-import { site } from "@/content/site";
+import { contentFor } from "@/content/locale";
+import { defaultLocale } from "@/lib/locales";
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: { userAgent: "*", allow: "/" },
-    sitemap: `${site.url}/sitemap.xml`,
+    sitemap: `${contentFor(defaultLocale).site.url}/sitemap.xml`,
   };
 }

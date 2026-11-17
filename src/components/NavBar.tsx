@@ -2,28 +2,26 @@
 
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { nav } from "@/content/site";
-import { Icon } from "./ui/Icon";
+import { useContent } from "./ContentProvider";
 
 /**
  * Desktop nav pill (hidden on mobile, which uses MobileMenu).
  *
- *  - An accent glow lives inside the frosted pill. Idle, it drifts slowly
- *    around the centre and breathes; hovering an item slides it behind that
- *    item. Leaving the nav sends it back to drifting.
+ *  - The frost is a layer (.nav-glass: blur, tint, grain; see components.css)
+ *    and the glow lives inside it. Idle, the glow drifts slowly
+ *    around the centre and breathes; hovering or focusing a link slides it
+ *    behind that link. Leaving the nav sends it back to drifting.
  *  - Big at the top of the page, a bit smaller once scrolled (.is-compact).
- *  - Opening a dropdown grows the pill back up (.is-open), the chevron flips
- *    and a card drops in under the item.
  */
 export function NavBar() {
+  const { nav } = useContent();
   const navRef = useRef<HTMLElement>(null);
   const glowRef = useRef<HTMLSpanElement>(null);
-  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const idle = useRef<gsap.core.Timeline | null>(null);
   const [active, setActive] = useState<number | null>(null);
   const [compact, setCompact] = useState(false);
 
-  // Big at the top of the page, a bit smaller once you scroll.
   useEffect(() => {
     const onScroll = () => setCompact(window.scrollY > 24);
     onScroll();
@@ -98,52 +96,32 @@ export function NavBar() {
     });
   };
 
-  const openItem = active !== null && "items" in nav[active];
-
   return (
     <nav
       ref={navRef}
-      className={`nav ${compact ? "is-compact" : ""} ${openItem ? "is-open" : ""}`}
-      aria-label="Main"
+      className={`nav ${compact ? "is-compact" : ""}`}
+      aria-label={nav.menu.label}
       onPointerLeave={release}
       onBlur={(e) => {
         if (!navRef.current?.contains(e.relatedTarget as Node)) release();
       }}
     >
-      <span className="nav-glow-clip" aria-hidden="true">
+      <span className="nav-glass" aria-hidden="true">
         <span className="nav-glow" ref={glowRef} />
       </span>
-      {nav.map((item, i) => (
-        <div
-          className={`nav-item ${active === i ? "is-active" : ""}`}
-          key={item.label}
+      {nav.links.map((item, i) => (
+        <a
+          key={item.href}
           ref={(el) => {
             itemRefs.current[i] = el;
           }}
+          href={item.href}
+          className={`nav-link ${active === i ? "is-active" : ""}`}
           onPointerEnter={() => focusItem(i)}
           onFocus={() => focusItem(i)}
         >
-          {"items" in item ? (
-            <>
-              <button className="nav-link" aria-haspopup="true" aria-expanded={active === i}>
-                {item.label}
-                <Icon name="chevronDown" size={15} />
-              </button>
-              <div className="nav-menu" role="menu">
-                {item.items.map((sub) => (
-                  <a key={sub.href} href={sub.href} role="menuitem" onClick={release}>
-                    <span>{sub.label}</span>
-                    <Icon name="chevronRight" size={14} />
-                  </a>
-                ))}
-              </div>
-            </>
-          ) : (
-            <a className="nav-link" href={item.href}>
-              {item.label}
-            </a>
-          )}
-        </div>
+          {item.label}
+        </a>
       ))}
     </nav>
   );

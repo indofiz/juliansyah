@@ -1,7 +1,8 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
 import { Icon, type IconName } from "./Icon";
-import { site } from "@/content/site";
-import { theme } from "@/lib/theme";
+import { getContent } from "@/content";
+import { localHref } from "@/lib/locales";
 
 export function Badge({
   icon = "shield",
@@ -11,7 +12,7 @@ export function Badge({
 }: {
   icon?: IconName;
   children: ReactNode;
-  variant?: "plain" | "purple";
+  variant?: "plain";
   className?: string;
 }) {
   return (
@@ -22,7 +23,7 @@ export function Badge({
   );
 }
 
-type BtnVariant = "glow" | "ghost" | "ghost-accent" | "light" | "soft" | "purple" | "purple-ghost";
+type BtnVariant = "glow" | "ghost" | "ghost-accent" | "light";
 
 export function Button({
   href = "#",
@@ -30,6 +31,7 @@ export function Button({
   size,
   block,
   icon,
+  iconEnd,
   tone,
   children,
   className = "",
@@ -39,6 +41,8 @@ export function Button({
   size?: "sm" | "lg";
   block?: boolean;
   icon?: IconName;
+  /** Icon after the label (e.g. ↗); it nudges in its own direction on hover. */
+  iconEnd?: IconName;
   tone?: string;
   children: ReactNode;
   className?: string;
@@ -51,11 +55,13 @@ export function Button({
     <a href={href} className={cls} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
       {icon && <Icon name={icon} size={16} />}
       {children}
+      {iconEnd && <Icon name={iconEnd} size={16} className={`btn-icon-end btn-icon-${iconEnd}`} />}
     </a>
   );
 }
 
 export function SectionHeader({
+  id,
   badge,
   badgeIcon,
   title,
@@ -64,6 +70,8 @@ export function SectionHeader({
   as: Tag = "h2",
   reveal = true,
 }: {
+  /** Id of the heading, for aria-labelledby on the section. */
+  id?: string;
   badge?: string;
   badgeIcon?: IconName;
   title: ReactNode;
@@ -76,7 +84,9 @@ export function SectionHeader({
   return (
     <header className={`sh ${align === "left" ? "left" : ""}`} data-reveal={reveal ? "" : undefined}>
       {badge && <Badge icon={badgeIcon}>{badge}</Badge>}
-      <Tag className="h2 grad-text">{title}</Tag>
+      <Tag id={id} className="h2 grad-text">
+        {title}
+      </Tag>
       {text && <p className="sh-text">{text}</p>}
     </header>
   );
@@ -84,37 +94,48 @@ export function SectionHeader({
 
 export function GlowFrame({
   children,
-  purple,
   className = "",
   innerClassName = "",
 }: {
   children: ReactNode;
-  purple?: boolean;
   className?: string;
   innerClassName?: string;
 }) {
   return (
-    <div className={`frame ${purple ? "purple" : ""} ${className}`}>
+    <div className={`frame ${className}`}>
       <div className={`frame-inner ${innerClassName}`}>{children}</div>
     </div>
   );
 }
 
-/** Small orb mark + two-tone spaced wordmark. Replace with your own logo. */
-export function Logo({ compact = false }: { compact?: boolean }) {
-  return (
-    <a href="#hero" className="logo" aria-label={`${site.name} home`}>
+/**
+ * Small orb mark + two-tone spaced wordmark. Replace with your own logo.
+ * `decorative` renders it as plain, unfocusable markup (inside mock UIs);
+ * each copy on a page needs its own `gradientId`.
+ */
+export async function Logo({
+  compact = false,
+  decorative = false,
+  gradientId = "lm-g",
+}: {
+  compact?: boolean;
+  decorative?: boolean;
+  gradientId?: string;
+}) {
+  const { site, ui, locale } = await getContent();
+  const content = (
+    <>
       <svg className="logo-mark" viewBox="0 0 32 32" aria-hidden="true">
         <defs>
-          <radialGradient id="lm-g" cx="35%" cy="30%" r="75%">
-            <stop offset="0" style={{ stopColor: theme.logo.light }} />
-            <stop offset="0.45" style={{ stopColor: theme.logo.mid }} />
-            <stop offset="1" style={{ stopColor: theme.logo.dark }} />
+          <radialGradient id={gradientId} cx="35%" cy="30%" r="75%">
+            <stop offset="0" style={{ stopColor: "var(--logo-light)" }} />
+            <stop offset="0.45" style={{ stopColor: "var(--accent)" }} />
+            <stop offset="1" style={{ stopColor: "var(--accent-800)" }} />
           </radialGradient>
         </defs>
-        <circle cx="16" cy="16" r="11" fill="url(#lm-g)" />
-        <ellipse cx="16" cy="16" rx="15" ry="5.5" fill="none" style={{ stroke: theme.logo.ring }} strokeWidth="1.4" transform="rotate(-24 16 16)" opacity="0.85" />
-        <circle cx="25.5" cy="10" r="1.6" style={{ fill: theme.logo.dot }} />
+        <circle cx="16" cy="16" r="11" fill={`url(#${gradientId})`} />
+        <ellipse cx="16" cy="16" rx="15" ry="5.5" fill="none" style={{ stroke: "var(--accent-bright)" }} strokeWidth="1.4" transform="rotate(-24 16 16)" opacity="0.85" />
+        <circle cx="25.5" cy="10" r="1.6" style={{ fill: "var(--accent-50)" }} />
       </svg>
       {!compact && (
         <span>
@@ -122,6 +143,12 @@ export function Logo({ compact = false }: { compact?: boolean }) {
           <span className="logo-second">{site.wordmark.second}</span>
         </span>
       )}
-    </a>
+    </>
+  );
+  if (decorative) return <span className="logo">{content}</span>;
+  return (
+    <Link href={localHref("/", locale)} className="logo" aria-label={ui.home}>
+      {content}
+    </Link>
   );
 }

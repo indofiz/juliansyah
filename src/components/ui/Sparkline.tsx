@@ -1,4 +1,3 @@
-import { theme } from "@/lib/theme";
 
 /** Deterministic pseudo-random series so server and client render the same chart. */
 export function series(seed: number, n = 24, trend = 0.6, noise = 0.5) {
@@ -21,7 +20,7 @@ export function Sparkline({
   values,
   width = 160,
   height = 48,
-  color = theme.accent,
+  color = "var(--accent)",
   fill = true,
   strokeWidth = 1.6,
   className,

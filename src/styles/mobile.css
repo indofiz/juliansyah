@@ -1,11 +1,10 @@
 /* ==========================================================================
-   Mobile (≤ 900px). Loaded last; desktop styles are untouched.
-   Layout follows the reference's phone version: compact centred type,
-   pinned intro, swipe carousels with glowing indicators, stacked CTAs.
+   Mobile (≤ 900px). Loaded after the desktop styles, which it overrides:
+   compact centred type, pinned intro, swipe carousels with glowing
+   indicators, stacked buttons. (reduced-motion.css is loaded after this.)
    ========================================================================== */
 
 /* Carousel indicators and the burger exist only on mobile. */
-.carousel-bar,
 .carousel-dots,
 .burger,
 .mobile-menu {
@@ -71,30 +70,49 @@
     position: fixed;
     height: 4rem;
     padding: 0.75rem var(--gutter);
-    background: transparent;
-    border-bottom: 1px solid transparent;
     transform: none;
-    transition: transform 0.35s ease, background 0.3s ease, border-color 0.3s ease;
+    transition: transform 0.35s ease;
   }
 
-  /* Neutral frosted glass once the page has scrolled (matches the desktop nav),
-     with the same faint accent breath in the middle. */
-  .site-header.is-scrolled {
-    border-bottom-color: rgba(255, 255, 255, 0.1);
-    background:
+  /* Frosted glass once the page has scrolled (same recipe as the desktop
+     pill), with a faint accent breath in the middle. It lives on ::before,
+     never on the header itself: a backdrop-filter on the header would make it
+     the containing block of the fixed .mobile-menu inside it, and the menu
+     would shrink to the header's strip instead of covering the screen.
+     Faded with opacity, since a blur can't be transitioned on and off. */
+  .site-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: var(--glass-tint);
+    background-image:
+      var(--glass-grain),
       radial-gradient(40% 120% at 50% 50%, rgb(var(--accent-2-rgb) / 0.1), transparent 75%),
-      rgba(17, 17, 17, 0.62);
-    -webkit-backdrop-filter: blur(1rem) saturate(1.5);
-    backdrop-filter: blur(1rem) saturate(1.5);
+      var(--glass-sheen);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .site-header.is-scrolled::before {
+    opacity: 1;
   }
 
   .site-header.is-hidden {
     transform: translateY(-110%);
   }
 
+  /* The menu has its own glass; the header's would double it up. */
   html.menu-open .site-header {
     transform: none;
-    background: transparent;
+  }
+
+  html.menu-open .site-header::before {
+    opacity: 0;
   }
 
   html.menu-open {
@@ -112,8 +130,10 @@
     height: 1.625rem;
   }
 
+  /* The language button too: phones switch language in the menu. */
   .header-actions > .icon-btn,
-  .header-actions > .btn-ghost {
+  .header-actions > .btn-ghost,
+  .header-actions > .lang-picker {
     display: none;
   }
 
@@ -128,6 +148,75 @@
   html.menu-open .header-cta {
     opacity: 0;
     pointer-events: none;
+  }
+
+  /* ---------- Accent picker: orb in the header, swatch column ---------- */
+  .accent-picker {
+    position: relative;
+    z-index: 2;
+    transition: opacity 0.3s;
+  }
+
+  html.menu-open .accent-picker {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  /* While the column is open the header holds still: hidden, its transform
+     would make it the containing block of the fixed column and drag it up. */
+  html.accent-open .site-header {
+    transform: none;
+  }
+
+  /* Round swatches only, on the right edge, centred on the screen. The names
+     stay for screen readers. */
+  .accent-pop {
+    position: fixed;
+    top: 50%;
+    right: 0.75rem;
+    min-width: 0;
+    padding: 0.25rem;
+    border-radius: 999px;
+    transform: translate(0.5rem, -50%);
+  }
+
+  .accent-pop.is-open {
+    transform: translate(0, -50%);
+  }
+
+  .accent-pop-title,
+  .accent-check {
+    display: none;
+  }
+
+  .accent-options {
+    gap: 0;
+  }
+
+  .accent-option {
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border-radius: 999px;
+  }
+
+  .accent-option:hover {
+    background: none;
+  }
+
+  .accent-swatch {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .accent-name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 
   .burger {
@@ -163,9 +252,11 @@
     display: block;
     overflow-y: auto;
     padding: 5.5rem var(--gutter) 2rem;
-    background: rgba(6, 5, 3, 0.95);
-    -webkit-backdrop-filter: blur(1.125rem);
-    backdrop-filter: blur(1.125rem);
+    /* Frosted: the page stays faintly visible, soft, behind the links. */
+    background-color: var(--glass-tint-menu);
+    background-image: var(--glass-grain);
+    -webkit-backdrop-filter: blur(1.75rem) saturate(1.5);
+    backdrop-filter: blur(1.75rem) saturate(1.5);
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s;
@@ -208,6 +299,38 @@
     margin-top: 0.5rem;
   }
 
+  /* Language: two halves of one pill, the current one filled. */
+  .mm-lang {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+    padding: 0.25rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: inset 0 0 0 1px var(--border-strong);
+  }
+
+  .mm-lang .lang-option {
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.75rem;
+    padding: 0 0.75rem;
+    border-radius: 999px;
+  }
+
+  .mm-lang .lang-name {
+    flex: none;
+  }
+
+  .mm-lang .lang-option[aria-current] {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .mm-lang .lang-check {
+    display: none;
+  }
+
   .mm-email {
     margin-top: 0.5rem;
     text-align: center;
@@ -216,32 +339,65 @@
   }
 
   /* ---------- Intro (pinned): hero ---------- */
+  /* The stage reaches the screen's bottom edge (100lvh), under a phone
+     browser's bottom bar (Safari's is see-through), like the fixed 3D layer.
+     --chrome-bar is how much of it that bar can cover when fully shown
+     (0 where the units match: desktop, most tablets). The logos stay above
+     the bar and the card carries on underneath it; the proof rows keep
+     clear of it. */
+  .intro {
+    --chrome-bar: calc(100lvh - 100svh);
+  }
+
+  .intro-stage {
+    height: 100vh;
+    height: 100lvh;
+  }
+
+  .proof-layer {
+    bottom: var(--chrome-bar);
+  }
+
+  /* The text block sits in the middle of the space between the header and
+     the card: equal 1.75rem gaps outside the header's 4rem, and auto
+     margins share the rest. */
   .hero-copy {
-    padding-top: 6.25rem;
+    padding-top: 5.75rem;
+    padding-bottom: 1.75rem;
+    margin-block: auto;
   }
 
-  .hero-badge {
+  .hero-eyebrow {
     margin-bottom: 1rem;
-  }
-
-  .hero-subtitle {
-    max-width: 20rem;
-    margin-top: 0.5rem;
-    font-size: 0.9375rem;
-  }
-
-  .hero-text {
-    max-width: 19rem;
-    margin-top: 0.5rem;
+    padding: 0.3125rem 0.875rem;
+    gap: 0.25rem 0.5rem;
     font-size: 0.8125rem;
   }
 
-  .hero-cta {
+  .hero-eyebrow-spark {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  .hero-title {
+    font-size: 2.25rem;
+    letter-spacing: -0.035em;
+  }
+
+  .hero-text {
+    max-width: 22rem;
+    margin-top: 0.875rem;
+    font-size: 0.9375rem;
+  }
+
+  .hero-actions {
     margin-top: 1.25rem;
   }
 
-  /* Glass bars: wider gaps (same total width) and more frosted than desktop. */
+  /* Glass bars: wider gaps (same total width) and more frosted than desktop.
+     --cy is the globe's centre: mobile hero keyframe y = -0.64 → 82vh. */
   .hero-bars {
+    --cy: 82vh;
     --bar: calc(var(--r) * 0.62);
     --gap: calc(var(--r) * 0.12);
   }
@@ -252,89 +408,123 @@
     backdrop-filter: blur(0.45rem) saturate(1.6);
   }
 
+  /* The first screen shows only the top of the dashboard: the bezel and the
+     logo strip (plus whatever the browser's bottom bar covers). The globe
+     sits behind it (hero keyframe, mobile y). */
   .hero-frame-wrap {
-    top: 80vh;
+    --peek: calc(5.6875rem + var(--chrome-bar));
+    margin-top: 0;
   }
 
+  /* Tall enough that the bottom fade starts below the visible part. */
   .hero-frame .frame-inner {
-    max-height: 22rem;
+    min-height: calc(var(--peek) * 2);
+    max-height: 30rem;
   }
 
-  .hero-frame .mock-top .mock-chip:not(.mock-bell),
-  .hero-frame .mock-live {
+  /* Only the moving client logos: no top bar, stat or sample tiles (the
+     user count is in the proof rows one scroll later). The logo list keeps
+     its accessible name (aria-labelledby reads the hidden label). */
+  .hero-frame .mock-top,
+  .hero-frame .mock-hero-stat,
+  .hero-frame .mock-clients > .mock-tile-label,
+  .hero-frame .mock-tiles {
     display: none;
   }
 
+  /* The strip sits straight on the dashboard: no panel border, fill,
+     padding or dot texture. Its edges already fade. */
   .hero-frame .mock-hero-card {
-    flex-direction: column;
-    align-items: flex-start;
-    min-height: 0;
-    padding: 1.25rem;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
   }
 
-  .hero-frame .mock-big {
-    font-size: 2.125rem;
+  .hero-frame .mock-hero-card .dots {
+    display: none;
   }
 
-  /* ---------- Intro (pinned): stats over the globe ---------- */
-  .stats-layer {
+  .media-ph-label .todo {
+    font-size: 0.625rem;
+  }
+
+  /* ---------- Intro (pinned): proof over the globe ---------- */
+  .proof-layer {
     align-items: stretch;
   }
 
-  .stats-grid {
+  .proof-grid {
     display: flex;
     flex-direction: column;
     height: 100%;
-    padding-top: 5.5rem;
+    padding-top: 5.25rem;
+    padding-bottom: 2rem;
     gap: 1rem;
   }
 
-  .stats-copy .sh {
+  .proof-copy .sh {
     margin-bottom: 0;
   }
 
-  .stats-copy .h2 {
+  .proof-copy .h2 {
     font-size: 1.75rem;
   }
 
-  .stats-copy .sh-text {
+  .proof-copy .sh-text {
     max-width: 17rem;
     font-size: 0.8125rem;
   }
 
-  .stats-copy .btn-row,
-  .stats-globe-space {
+  .proof-actions,
+  .proof-globe-space {
     display: none;
   }
 
-  .stats-list {
+  /* The list sits over the lower half of the globe: a soft dark glow behind
+     it and a text shadow keep the numbers readable (no card). */
+  .proof-list {
+    container-type: normal; /* it shrink-wraps here, so no size container */
+    position: relative;
+    isolation: isolate;
+    align-self: center;
     margin-top: auto;
-    margin-bottom: 17vh;
-    gap: 1.125rem;
+    margin-bottom: 6vh;
+    grid-template-columns: 1.5rem auto 1fr;
+    column-gap: 0.75rem;
+    row-gap: 1.125rem;
   }
 
-  .stats-list li {
-    grid-template-columns: 1.5rem 4.75rem 1fr;
-    gap: 0.75rem;
+  .proof-list::before {
+    content: "";
+    position: absolute;
+    inset: -2.5rem -3rem;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(closest-side, rgba(5, 3, 1, 0.78), rgba(5, 3, 1, 0.45) 60%, transparent);
   }
 
-  .stats-list svg {
+  .proof-row strong,
+  .proof-row span {
+    text-shadow: 0 0 0.75rem rgba(5, 3, 1, 0.9), 0 1px 0.125rem rgba(5, 3, 1, 0.8);
+  }
+
+  .proof-row > svg {
     width: 1.25rem !important;
     height: 1.25rem !important;
   }
 
-  .stats-list strong {
+  .proof-row strong {
     font-size: 1.375rem;
   }
 
-  .stats-list span {
+  .proof-row span {
     font-size: 1rem;
   }
 
   /* ---------- Carousels (shared) ---------- */
-  .services-grid,
-  .plans,
-  .bento {
+  .pg-grid,
+  .about-grid {
     display: flex;
     gap: 0.875rem;
     margin: 0 calc(-1 * var(--gutter));
@@ -347,316 +537,241 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  .services-grid::-webkit-scrollbar,
-  .plans::-webkit-scrollbar,
-  .bento::-webkit-scrollbar {
+  .pg-grid::-webkit-scrollbar,
+  .about-grid::-webkit-scrollbar {
     display: none;
-  }
-
-  .carousel-bar {
-    position: relative;
-    display: block;
-    width: 72%;
-    height: 3px;
-    margin: 1.5rem auto 0;
-    border-radius: 3px;
-    background: rgba(255, 255, 255, 0.08);
-    overflow: hidden;
-  }
-
-  .carousel-bar span {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: calc(var(--w, 0.3) * 100%);
-    border-radius: 3px;
-    background: linear-gradient(90deg, rgb(var(--accent-rgb) / 0.35), var(--accent-bright));
-    box-shadow: 0 0 10px var(--accent);
-    transform: translateX(calc(var(--p, 0) * (1 / var(--w, 0.3) - 1) * 100%));
   }
 
   .carousel-dots {
     display: flex;
     justify-content: center;
-    gap: 0.5rem;
-    margin-top: 1.25rem;
+    gap: 0.375rem;
+    margin-top: 0.75rem;
   }
 
-  .carousel-dots span {
+  /* Each dot is a button with a 24px-tall hit area; the line is drawn inside. */
+  .carousel-dots > * {
+    position: relative;
     width: 1.75rem;
+    height: 1.5rem;
+    cursor: pointer;
+  }
+
+  .carousel-dots > *::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
     height: 3px;
+    margin-top: -1.5px;
     border-radius: 3px;
     background: rgba(255, 255, 255, 0.14);
-    cursor: pointer;
     transition: background 0.3s, box-shadow 0.3s;
   }
 
-  .carousel-dots span.on {
+  .carousel-dots > .on::before {
     background: var(--accent);
     box-shadow: 0 0 8px var(--accent);
   }
 
-  /* ---------- Services: portrait above, card carousel below ---------- */
-  .services {
-    min-height: 0;
-    padding: 34vh 0 3rem;
+  /* ---------- Selected work ---------- */
+  .work-flagship {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem 1.25rem 1.75rem;
   }
 
-  .services-title {
-    max-width: 18rem;
-    margin-bottom: 40vh;
-    font-size: 1.75rem;
+  .work-flagship-glow {
+    left: 0;
+    width: 100%;
+    height: 55%;
   }
 
-  .services-col {
-    display: contents;
-  }
-
-  .services-gap {
-    display: none;
-  }
-
-  .svc-card {
-    flex: 0 0 82%;
-    grid-template-columns: 2.75rem 1fr;
-    gap: 0.875rem;
-    padding: 1.25rem 1.125rem;
-    scroll-snap-align: center;
-  }
-
-  .svc-icon {
-    width: 2.75rem;
-    height: 2.75rem;
-  }
-
-  .svc-body h3 {
-    font-size: 1.125rem;
-  }
-
-  .svc-body p {
-    margin: 0.375rem 0 0.875rem;
-    font-size: 0.8125rem;
-  }
-
-  .svc-card .btn {
-    height: 2rem;
-    padding: 0 0.875rem;
-    font-size: 0.75rem;
-  }
-
-  /* ---------- Work: three-column glowing table ---------- */
-  .table {
-    padding: 0.25rem 0.875rem 0.5rem;
-  }
-
-  .table-row {
-    grid-template-columns: 1.6fr auto auto;
-    gap: 0.75rem;
-    min-height: 3.5rem;
-    font-size: 0.8125rem;
-  }
-
-  .table-row > :nth-child(2),
-  .table-row > :nth-child(3) {
-    display: none;
-  }
-
-  .table-head {
-    min-height: 2.5rem;
-    font-size: 0.625rem;
-  }
-
-  .table-project {
-    gap: 0.625rem;
-  }
-
-  .table-project b {
-    font-size: 0.875rem;
-  }
-
-  .table-project small {
-    font-size: 0.6875rem;
-  }
-
-  .table-avatar {
-    width: 1.75rem;
-    height: 1.75rem;
-    font-size: 0.625rem;
-  }
-
-  .table-row .status {
-    height: 1.5rem;
-    padding: 0 0.5rem;
-    font-size: 0.6875rem;
-  }
-
-  .table-cat {
-    font-size: 0.75rem;
-  }
-
-  .table-cat svg {
-    display: none;
-  }
-
-  .table-note {
-    margin-top: 1.5rem;
-    font-size: 0.75rem;
-  }
-
-  /* ---------- Pricing: plan carousel ---------- */
-  .plan {
-    flex: 0 0 84%;
-    padding: 1.75rem 1.25rem 2rem;
-    scroll-snap-align: center;
-  }
-
-  .plan h3 {
-    font-size: 1.375rem;
-  }
-
-  .plan-text {
-    min-height: 0;
-    margin-top: 0.875rem;
-    font-size: 0.8125rem;
-  }
-
-  .plan-actions {
-    margin-top: 1.25rem;
-  }
-
-  .plan-list {
-    gap: 0.625rem;
-    margin-top: 1.5rem;
-    font-size: 0.8125rem;
-  }
-
-  /* ---------- Estimator: centred, stacked ---------- */
-  .est-panel {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-    padding: 3rem 1.125rem 2.5rem;
+  .work-flagship-body {
+    justify-items: center;
+    gap: 1rem;
     text-align: center;
   }
 
-  .est-left,
-  .est-right {
-    display: contents;
+  .work-flagship-title {
+    font-size: 1.5rem;
   }
 
-  .est-left > *,
-  .est-right > * {
-    position: relative;
-    z-index: 1;
+  .work-summary {
+    font-size: 0.9375rem;
   }
 
-  .est-title-row {
-    order: 1;
-    flex-direction: column-reverse;
+  .work-metric,
+  .work-extras,
+  .work-flagship .work-meta {
     justify-content: center;
-    gap: 0.875rem;
   }
 
-  .est-title {
+  .work-metric strong {
     font-size: 1.75rem;
   }
 
-  .est-text {
-    order: 2;
-    max-width: 19rem;
-    margin: 0.75rem auto 0;
-    font-size: 0.8125rem;
+  .work-flagship-media .phone {
+    width: 11rem;
   }
 
-  .est-heading {
-    order: 3;
-    margin: 1.75rem 0 0.75rem;
+  .work-media {
+    height: 13.5rem;
+  }
+
+  .work-title {
+    font-size: 1.125rem;
+  }
+
+  /* ---------- Case study pages ---------- */
+  .cs-hero {
+    padding-top: 6rem;
+  }
+
+  .cs-hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cs-title {
+    font-size: 2rem;
+  }
+
+  .cs-summary {
     font-size: 1rem;
-    text-align: left;
   }
 
-  .tiers {
-    order: 4;
-    gap: 0.5rem;
+  .cs-facts {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 1.5rem;
   }
 
-  .tier-row {
-    grid-template-columns: auto 1fr auto;
-    gap: 0.625rem;
-    min-height: 3.25rem;
-    padding: 0 0.75rem;
+  .cs-media--phone .phone {
+    width: 14rem;
   }
 
-  .tier-pill {
-    padding: 0.375rem 0.625rem;
-    font-size: 0.625rem;
+  .cs-block {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding-top: 1.75rem;
   }
 
-  .tier-name {
-    font-size: 0.8125rem;
+  .cs-prose {
+    font-size: 0.9375rem;
   }
 
-  .tier-plus {
+  .cs-decisions {
+    grid-template-columns: 1fr;
+  }
+
+  .cs-compare {
+    font-size: 0.875rem;
+  }
+
+  .cs-compare th,
+  .cs-compare td {
+    padding: 0.875rem 0.875rem;
+  }
+
+  .cs-compare-after svg {
     display: none;
   }
 
-  .tier-total {
-    min-width: 0;
-    font-size: 0.875rem;
+  /* Screens: one swipeable row, edge to edge. */
+  .cs-gallery {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 10rem;
+    overflow-x: auto;
+    margin-inline: calc(-1 * var(--gutter));
+    padding: 0.25rem var(--gutter) 0.75rem;
+    scroll-padding-inline: var(--gutter);
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
   }
 
-  .est-stats {
-    order: 5;
-    grid-template-columns: 1fr;
-    gap: 0.625rem;
-    margin: 1.25rem 0 1rem;
+  .cs-gallery::-webkit-scrollbar {
+    display: none;
   }
 
-  .est-stat {
-    padding: 1.125rem 0.5rem;
+  .cs-gallery li {
+    scroll-snap-align: start;
   }
 
-  .est-stat b {
-    font-size: 1.375rem;
-  }
-
-  .est-cta {
-    order: 6;
-    font-size: 0.875rem;
-  }
-
-  .est-right .btn-row {
-    order: 7;
-  }
-
-  /* ---------- Process ---------- */
+  /* ---------- How I work: title, globe, steps, buttons (nothing pinned) ---------- */
+  /* The globe (mobile "process" keyframe: x 0, y -0.15, scale 1.05) forms
+     under the title, its centre 57.5% of a screen below the section's top
+     (50% + 0.15 × 50%); its radius on screen is scale × width / 3.4
+     (ParticleMorph). The globe's space shares the first row with the title
+     and reaches just past the globe, so the steps start below it whatever
+     the title's height. */
   .process {
-    min-height: 0;
+    --globe-r: calc(1.05 * 100vw / 3.4);
+    --globe-cy: 57.5vh;
+    --pad: 4.5rem;
+    padding: var(--pad) 0;
+  }
+
+  .process-track {
+    height: auto;
+  }
+
+  .process-stage {
+    position: relative;
+    height: auto;
+    display: block;
   }
 
   .process-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 3rem;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "top" "steps" "actions";
+    align-items: start;
+    gap: 0;
   }
 
-  .process-globe-space {
-    display: none;
-  }
-
+  /* Its header and buttons join the grid, so the buttons can go last. */
   .process-copy {
-    padding-bottom: 8rem;
+    display: contents;
+  }
+
+  .process-copy .sh {
+    grid-area: top;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 0;
   }
 
   .process-copy .sh-text {
     max-width: 19rem;
   }
 
+  .process-globe {
+    grid-area: top;
+    position: relative;
+    height: calc(var(--globe-cy) - var(--pad) + var(--globe-r) * 1.35);
+  }
+
+  /* Without WebGL there's no globe: its space closes up, and the icons
+     beside the steps carry the pictures. */
+  .no-webgl .process-globe {
+    height: 0;
+  }
+
+  .no-webgl .process-icons {
+    display: none;
+  }
+
+  .process-actions {
+    grid-area: actions;
+    margin-top: 2.5rem;
+  }
+
   .steps {
-    gap: 2.75rem;
     padding-left: 3.5rem;
+  }
+
+  .steps-list {
+    gap: 2.25rem;
   }
 
   .steps-track {
@@ -679,230 +794,127 @@
     font-size: 1.125rem;
   }
 
+  /* Each step's icon, top right: the picture the globe turns into on
+     desktop (here the globe holds Discover and fades as the steps scroll
+     over it). Dim like the grey titles, lit with its step. */
+  .step-icon {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    opacity: 0.3;
+    transition:
+      opacity 0.4s,
+      filter 0.4s;
+  }
+
+  .step.on .step-icon {
+    opacity: 1;
+    filter: drop-shadow(0 0 0.5rem rgb(var(--accent-rgb) / 0.5));
+  }
+
   .step-text {
     font-size: 0.8125rem;
   }
 
-  /* ---------- Case study ---------- */
-  .spotlight {
-    height: auto !important;
-  }
-
-  .spot-sticky {
-    position: relative;
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    padding: 4.5rem var(--gutter);
-  }
-
-  .spot-screen {
-    order: 2;
-  }
-
-  .spot-copy {
-    text-align: center;
-  }
-
-  .spot-title {
-    font-size: 2.25rem;
-  }
-
-  .spot-text {
-    max-width: 19rem;
-    margin: 0.75rem auto 0;
-    font-size: 0.875rem;
-  }
-
-  .spot-features {
-    gap: 1.25rem;
-    margin-top: 1.75rem;
-    text-align: left;
-  }
-
-  .spot-features h3 {
-    font-size: 1rem;
-  }
-
-  .spot-features p {
-    font-size: 0.8125rem;
-  }
-
-  .spot-frame-inner {
-    height: 26rem;
-  }
-
-  /* ---------- Assistant ---------- */
-  .assistant-ambient {
-    left: -20%;
-    right: -20%;
-    height: 55%;
-    background: radial-gradient(50% 50% at 50% 30%, rgba(139, 92, 246, 0.45), transparent 72%);
-  }
-
-  .orb {
-    width: 8.5rem;
-    height: 8.5rem;
-    margin-bottom: 1.75rem;
-  }
-
-  .chat {
-    min-height: 24rem;
-  }
-
-  /* ---------- Featured ---------- */
-  .featured {
-    padding-top: 4.5rem;
-  }
-
-  .featured .btn-row {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  /* ---------- Skills bento: card carousel ---------- */
-  .bento {
-    grid-template-rows: none;
-  }
-
-  .bento-card {
+  /* ---------- Playground: swipe row ---------- */
+  .pg-tile {
     flex: 0 0 84%;
-    height: 28rem;
     scroll-snap-align: center;
   }
 
-  .bento--uiux,
-  .bento--frontend {
-    flex-direction: column;
-  }
-
-  .bento--uiux .bento-copy,
-  .bento--frontend .bento-copy,
-  .bento-card .bento-copy {
-    order: 0;
-    width: auto;
-    padding: 0 1.25rem 1.25rem;
-  }
-
-  .bento-title {
-    gap: 0.625rem;
-  }
-
-  .bento-icon {
-    width: 1.875rem;
-    height: 1.875rem;
-  }
-
-  .bento-copy h3 {
-    font-size: 1.125rem;
-  }
-
-  .bento-card .bento-copy p {
-    margin-top: 0.5rem;
-    font-size: 0.8125rem;
-  }
-
-  .bento-tags {
-    margin-top: 0.75rem;
-  }
-
-  .bento-tags li {
+  /* ---------- Tool chips (shared) ---------- */
+  .tags li {
     font-size: 0.6875rem;
   }
 
-  /* ---------- Portal ---------- */
-  .portal-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 0 var(--gutter);
+  /* ---------- About: title, portrait space, then a card carousel ---------- */
+  .about {
+    min-height: 0;
   }
 
-  .portal-frame {
-    width: 100%;
-    margin-right: 0;
+  /* The particle portrait forms in this space (mobile "about" keyframe). */
+  .about .sh {
+    margin-bottom: 46svh;
   }
 
-  .portal-frame .frame {
-    border-radius: var(--radius-xl);
+  .no-webgl .about .sh {
+    margin-bottom: 0.5rem;
   }
 
-  .portal-mock {
-    gap: 1rem;
-    padding: 1.25rem 1rem 1.75rem;
+  .about-col {
+    display: contents;
   }
 
-  .portal-title {
-    font-size: 1.125rem;
-  }
-
-  .portal-label {
-    font-size: 1rem;
-  }
-
-  .portal-toggle-card {
-    padding: 1rem;
-  }
-
-  .portal-toggle-card b {
-    font-size: 0.875rem;
-  }
-
-  .portal-toggle-card small {
-    font-size: 0.6875rem;
-  }
-
-  .portal-stat b {
-    font-size: 1.5rem;
-  }
-
-  .portal-input {
-    min-width: 0;
-    font-size: 0.6875rem;
-  }
-
-  .portal-link .portal-icon:nth-child(n + 3) {
+  .about-gap {
     display: none;
   }
 
-  /* ---------- CTA: particle bars on top, stacked buttons ---------- */
+  .about-card {
+    flex: 0 0 82%;
+    grid-template-columns: 2.75rem minmax(0, 1fr);
+    gap: 0.875rem;
+    padding: 1.25rem 1.125rem;
+    scroll-snap-align: center;
+  }
+
+  .about-card-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .about-card-body h3 {
+    font-size: 1.125rem;
+  }
+
+  .about-card-body > p {
+    margin-top: 0.375rem;
+    font-size: 0.875rem;
+  }
+
+  .about-card .tags {
+    margin-top: 0.75rem;
+  }
+
+  /* ---------- Testimonials ---------- */
+  .quote {
+    padding: 1.375rem;
+  }
+
+  .quote blockquote p {
+    font-size: 1rem;
+  }
+
+  /* ---------- Contact: one column, the card last ---------- */
   .cta-panel {
-    flex-direction: column;
-    align-items: stretch;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.75rem;
     min-height: 0;
-    padding: 0 1.25rem 2rem;
+    padding: 2rem 1.25rem 2.5rem;
     text-align: center;
   }
 
-  .candles {
-    order: -1;
-    position: relative;
-    top: auto;
-    right: auto;
-    bottom: auto;
-    width: 100%;
-    height: 15rem;
-    opacity: 1;
+  /* The panel is tall here, so glows sized in % would sit behind the text.
+     Fixed sizes keep them in their corners: the top one lights the badge,
+     the bottom one rises behind the card. */
+  .cta-glow-corner {
+    top: -7rem;
+    left: -5rem;
+    width: 17rem;
+    height: 13rem;
   }
 
-  .cta-glow-corner {
-    top: -18%;
-    left: -15%;
-    width: 130%;
-    height: 55%;
+  .cta-glow-bottom {
+    left: 5%;
+    right: 5%;
+    bottom: -9rem;
+    height: 20rem;
   }
 
   .cta-dots {
-    top: 0;
-    bottom: auto;
-    left: 0;
-    width: 100%;
-    height: 45%;
-  }
-
-  .cta-copy {
-    max-width: none;
+    height: 14rem;
   }
 
   .cta-title {
@@ -910,7 +922,7 @@
   }
 
   .cta-text {
-    margin: 0.75rem 0 1.25rem;
+    margin: 0.75rem auto 1.25rem;
     font-size: 0.875rem;
   }
 
@@ -919,8 +931,37 @@
     gap: 0.625rem;
   }
 
+  /* 48px tall: thumbs, not cursors. */
   .cta .btn {
     width: 100%;
+    height: auto;
+    min-height: 3rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    flex-wrap: wrap;
+    white-space: normal;
+  }
+
+  .contact-email {
+    justify-content: center;
+    gap: 0.5rem 0.75rem;
+    font-size: 1.0625rem;
+  }
+
+  .cta .contact-email .btn {
+    width: auto;
+  }
+
+  .contact-hint {
+    left: 50%;
+    translate: -50% 0;
+  }
+
+  .cta-card {
+    justify-self: center;
+    width: 100%;
+    max-width: 30rem;
+    text-align: left;
   }
 
   /* ---------- Footer ---------- */
@@ -960,7 +1001,7 @@
     gap: 0.75rem;
   }
 
-  .footer-col h4,
+  .footer-col h2,
   .footer-col a {
     font-size: 0.875rem;
   }
@@ -1007,5 +1048,34 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 0.5rem 1.25rem;
+  }
+}
+
+/* One work card per row on phones. */
+@media (max-width: 640px) {
+  /* Contact: the address and Copy don't fit side by side, so they stack. */
+  .contact-email {
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .work-list {
+    grid-template-columns: 1fr;
+  }
+
+  /* Wider cards: 12px from the screen edge whatever the gutter (the section
+     title keeps the gutter every section uses), with 16px inside. */
+  .work-grid {
+    margin-inline: calc(0.75rem - var(--gutter));
+  }
+
+  .work-flagship {
+    padding-inline: 1rem;
+  }
+
+  .work-media,
+  .work-body {
+    padding-inline: 1rem;
   }
 }
