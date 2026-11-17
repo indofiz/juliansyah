@@ -19,6 +19,8 @@
  *                                agent-browser's encoder falls behind on an Intel Mac
  *     "fps": 30,
  *     "settle": 3000,            ms to wait after load, so intro animations finish
+ *     "tail": 600,               ms to keep recording after the last stop, so fades (e.g. a
+ *                                header going transparent at the top) finish on camera
  *     "stops": [                 in order; the first frame is the page at the top
  *       { "hold": 900 },
  *       { "to": "#about", "ms": 1400, "hold": 900 },
@@ -27,6 +29,12 @@
  *     ]
  *   }
  * `to` is a CSS selector (scrolls to its top), a number of pixels, or "end".
+ * A stop can also `run` a line of JavaScript in the page instead of
+ * scrolling, e.g. to put a slider back on its first slide before the
+ * scroll returns to the top. `"setup"` (top level) runs once after `settle`,
+ * before the still or the recording, followed by `"setupWait"` ms.
+ * `"initScript"` (top level) runs before the page's own scripts, e.g. to
+ * stop a slider advancing so the first and last frames match.
  * End the tour back at 0, so the first and last frames match and the loop
  * has no jump.
  *
@@ -36,6 +44,7 @@
  */
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 
 const [url, tourPath, out] = process.argv.slice(2);
@@ -60,8 +69,12 @@ const evalJs = (js) => {
     return raw;
   }
 };
+// `"initScript"` runs before the page's own scripts, e.g. to pause a slider's timer.
+const initScript = tour.initScript && path.join(os.tmpdir(), `record-scroll-init-${process.pid}.js`);
+if (initScript) fs.writeFileSync(initScript, tour.initScript);
 const launch = (windowHeight) =>
   ab([
+    ...(initScript ? ["--init-script", initScript] : []),
     "--args",
     `--force-device-scale-factor=${scale},--window-size=${width},${windowHeight},--hide-scrollbars`,
     "open",
@@ -96,6 +109,10 @@ evalJs(`(async () => {
   return JSON.stringify(document.images.length);
 })()`);
 ab(["wait", String(tour.settle ?? 3000)]);
+if (tour.setup) {
+  evalJs(`(() => { ${tour.setup}; return "ok"; })()`);
+  ab(["wait", String(tour.setupWait ?? 1000)]);
+}
 
 if (still) {
   evalJs("scrollTo(0, 0)");
@@ -106,8 +123,13 @@ if (still) {
 }
 
 // The tour runs in the page, so its timing doesn't depend on CLI round trips.
+// `run` steps become real functions in the injected script (no eval in the page, so a CSP can't block them).
+const runs = tour.stops.map((st, i) => (st.run ? `${i}: () => { ${st.run} },` : "")).join("\n    ");
 const tourJs = `(() => {
   const stops = ${JSON.stringify(tour.stops)};
+  const runs = {
+    ${runs}
+  };
   const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
   const max = () => document.documentElement.scrollHeight - innerHeight;
   const target = (to) =>
@@ -124,23 +146,42 @@ const tourJs = `(() => {
     };
     requestAnimationFrame(step);
   });
+  // Chrome's screencast only sends a frame when the page repaints, so the last
+  // state of a fade can go missing once nothing moves. A 1 px, near-invisible
+  // pixel that changes every frame keeps the frames coming.
+  const tick = document.createElement("div");
+  tick.style.cssText = "position:fixed;left:0;top:0;width:1px;height:1px;opacity:0.01;pointer-events:none;z-index:2147483647";
+  document.body.append(tick);
+  let ticking = true, n = 0;
+  const loop = () => {
+    if (!ticking) return;
+    tick.style.background = n++ % 2 ? "#000" : "#fff";
+    requestAnimationFrame(loop);
+  };
+  loop();
   window.__tourDone = false;
   setTimeout(async () => {
-    for (const s of stops) {
+    for (const [i, s] of stops.entries()) {
+      if (runs[i]) runs[i]();
       if (s.to !== undefined) await glide(s.to, s.ms ?? 1200);
       await wait(s.hold ?? 0);
     }
+    await wait(${tour.tail ?? 600});
+    ticking = false;
+    tick.remove();
     window.__tourDone = true;
   }, 0);
   return "started";
 })()`;
 
-const total = tour.stops.reduce((n, s) => n + (s.ms ?? (s.to !== undefined ? 1200 : 0)) + (s.hold ?? 0), 0);
+const total = tour.stops.reduce((n, s) => n + (s.ms ?? (s.to !== undefined ? 1200 : 0)) + (s.hold ?? 0), tour.tail ?? 600);
 fs.mkdirSync(path.dirname(path.resolve(out)), { recursive: true });
 evalJs("scrollTo(0, 0)");
 ab(["record", "start", path.resolve(out), "--fps", String(fps)]);
 evalJs(tourJs);
 ab(["wait", "--fn", "window.__tourDone === true", "--timeout", String(total + 15000)]);
+// Captured frames can trail the page a little on a heavy site.
+ab(["wait", "300"]);
 console.log(ab(["record", "stop", "--json"]));
 ab(["close"]);
 console.log(`tour ${(total / 1000).toFixed(1)} s → ${out}`);

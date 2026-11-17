@@ -105,9 +105,10 @@ export function ScrollVideo({ src, trigger }: { src: VideoSources; trigger: "hov
     }
 
     // "view": the card plays while mostly on screen and rewinds when it
-    // leaves; the case study hero (it starts low on the first screen) plays
-    // once a fifth of it shows, and just pauses.
-    const min = trigger === "hover" ? 0.6 : 0.2;
+    // leaves; the case study hero (it starts low on the first screen, lower
+    // still under a three-line title) plays once a tenth of it shows, and
+    // just pauses.
+    const min = trigger === "hover" ? 0.6 : 0.1;
     const io = new IntersectionObserver(
       ([e]) => {
         if (e.intersectionRatio < min) stop(trigger === "hover");

@@ -102,11 +102,26 @@ export type MockNavItem = { icon: IconName; label: string; tail?: "chevron" | "h
 export type CaseStudy = {
   /** The problem, in the client's words where possible. */
   problem: string[];
-  /** Old way vs new way, one pair per row. Shown right after the problem. */
-  compare?: { beforeTitle: string; afterTitle: string; rows: { before: string; after: string }[] };
+  /**
+   * Old way vs new way, one pair per row. Shown right after the problem.
+   * `shots`: screenshots of the two, side by side above the rows (16:10, in
+   * browser frames), e.g. the old site from the Wayback Machine and the new one.
+   */
+  compare?: {
+    beforeTitle: string;
+    afterTitle: string;
+    rows: { before: string; after: string }[];
+    shots?: { before: ImageRef & { caption: string }; after: ImageRef & { caption: string } };
+  };
   role: { summary: string; did: string[] };
   process: { title: string; text: string }[];
-  /** "Built with": the stack in named groups, shown as chips. */
+  /**
+   * Brand and pattern: the brand colours as swatches (`hex` exactly as the
+   * site uses it) and close-ups of where the identity shows on the page.
+   * Shown after the key decisions.
+   */
+  brand?: { colors: { label: string; hex: string }[]; details: (ImageRef & { caption: string })[] };
+    /** "Built with": the stack in named groups, shown as chips. */
   stack?: { group: string; items: string[] }[];
   decisions: { title: string; why: string; tradeoff?: string }[];
   /** More real screens, each in the studio phone (needs `media.stills`), with a short caption under it. */

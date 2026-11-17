@@ -18,7 +18,7 @@ crf_vp9=${4:-36}
 crf_h264=${5:-26}
 
 mkdir -p "$(dirname "$out")"
-vf="scale=${width}:-2:flags=lanczos,fps=30,format=yuv420p"
+vf="scale=${width}:-2:flags=lanczos,format=yuv420p"  # keeps the recording's frame rate
 log=$(mktemp -t vp9pass)
 
 ffmpeg -y -hide_banner -loglevel error -i "$in" -an -vf "$vf" \

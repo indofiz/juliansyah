@@ -11,7 +11,7 @@ import { ChatButton } from "@/components/ChatButton";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { Footer } from "@/components/sections/Footer";
 import { BrowserMedia } from "@/components/media/BrowserMedia";
-import { PhoneFrame } from "@/components/media/DeviceFrame";
+import { BrowserFrame, PhoneFrame } from "@/components/media/DeviceFrame";
 import Image from "next/image";
 import { DeviceStill, PhoneScreens } from "@/components/media/DeviceStill";
 import { RatingLine, StoreBadges } from "@/components/work/StoreLinks";
@@ -161,31 +161,45 @@ export default async function CaseStudyPage({ params }: PageProps<"/[lang]/work/
               <h2 id="cs-compare" className="cs-h2">
                 {L.compare}
               </h2>
-              <table className="cs-compare">
-                <thead>
-                  <tr>
-                    <th scope="col">{cs.compare.beforeTitle}</th>
-                    <th scope="col">{cs.compare.afterTitle}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {cs.compare.rows.map((r) => (
-                    <tr key={r.before}>
-                      <td>
-                        <Placeholder text={r.before} />
-                      </td>
-                      <td>
-                        <div className="cs-compare-after">
-                          <Icon name="check" size={16} />
-                          <span>
-                            <Placeholder text={r.after} />
-                          </span>
-                        </div>
-                      </td>
+              <div className="cs-compare-wrap">
+                {cs.compare.shots && (
+                  <div className="cs-ba">
+                    {[cs.compare.shots.before, cs.compare.shots.after].map((shot) => (
+                      <figure key={shot.src} className="cs-ba-figure">
+                        <BrowserFrame bar={false}>
+                          <Image className="browser-shot" src={shot.src} alt={shot.alt} fill sizes="(max-width: 900px) 92vw, 560px" />
+                        </BrowserFrame>
+                        <figcaption>{shot.caption}</figcaption>
+                      </figure>
+                    ))}
+                  </div>
+                )}
+                <table className="cs-compare">
+                  <thead>
+                    <tr>
+                      <th scope="col">{cs.compare.beforeTitle}</th>
+                      <th scope="col">{cs.compare.afterTitle}</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {cs.compare.rows.map((r) => (
+                      <tr key={r.before}>
+                        <td>
+                          <Placeholder text={r.before} />
+                        </td>
+                        <td>
+                          <div className="cs-compare-after">
+                            <Icon name="check" size={16} />
+                            <span>
+                              <Placeholder text={r.after} />
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </section>
           )}
 
@@ -274,6 +288,31 @@ export default async function CaseStudyPage({ params }: PageProps<"/[lang]/work/
               ))}
             </div>
           </section>
+
+          {cs.brand && (
+            <section className="cs-block" aria-labelledby="cs-brand">
+              <h2 id="cs-brand" className="cs-h2">
+                {L.brand}
+              </h2>
+              <div className="cs-brand">
+                <ul className="cs-swatches">
+                  {cs.brand.colors.map((c) => (
+                    <li key={c.hex}>
+                      <span className="cs-swatch" style={{ background: c.hex }} aria-hidden="true" />
+                      <span className="cs-swatch-name">{c.label}</span>
+                      <code>{c.hex}</code>
+                    </li>
+                  ))}
+                </ul>
+                {cs.brand.details.map((d) => (
+                  <figure key={d.src} className="cs-detail">
+                    <Image src={d.src} alt={d.alt} width={d.width} height={d.height} sizes="(max-width: 900px) 92vw, 760px" />
+                    <figcaption>{d.caption}</figcaption>
+                  </figure>
+                ))}
+              </div>
+            </section>
+          )}
 
           {(cs.gallery?.length || cs.tablet) && p.media.stills && (
             <section className="cs-block" aria-labelledby="cs-screens">

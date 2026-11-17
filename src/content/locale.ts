@@ -9,7 +9,7 @@ export type LocalContent = Content & { locale: Locale };
 const dictionaries: Partial<Record<Locale, Record<string, string>>> = { id };
 
 /** Strings under these keys are identifiers or categories, never words to translate. */
-const keep = new Set(["slug", "id", "icon", "kind", "frame", "tail", "platforms", "src", "mask", "glare", "poster", "webm", "mp4", "captions", "device"]);
+const keep = new Set(["slug", "id", "icon", "kind", "frame", "tail", "platforms", "src", "mask", "glare", "poster", "webm", "mp4", "captions", "device", "hex"]);
 
 /**
  * A copy of `value` with every string that has a dictionary entry swapped,

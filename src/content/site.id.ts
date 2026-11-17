@@ -236,6 +236,76 @@ export const id: Record<string, string> = {
   "Best Practices": "Praktik Terbaik",
   "out of 100": "dari 100",
 
+  /* ---- Malinau ---- */
+  "Modernised a regency's official portal, from one screen of icon links to a home for its services, news and announcements.":
+    "Memodernisasi portal resmi sebuah kabupaten, dari satu layar ikon tautan menjadi rumah bagi layanan, berita, dan pengumumannya.",
+  "A new official portal for Malinau Regency in North Kalimantan, in Indonesian and English. It replaced a single screen of icon links with a site for public services, news, announcements, events and documents, in the brand colours the regency asked for, with Dayak patterns through the design.":
+    "Portal resmi baru untuk Kabupaten Malinau di Kalimantan Utara, dalam bahasa Indonesia dan Inggris. Portal ini menggantikan satu layar berisi ikon tautan dengan situs untuk layanan publik, berita, pengumuman, kegiatan, dan dokumen, dalam warna brand yang diminta kabupaten, dengan motif Dayak di seluruh desainnya.",
+  "public services linked from the homepage": "layanan publik yang ditautkan dari beranda",
+  "Malinau Regency Portal, homepage": "Portal Kabupaten Malinau, halaman beranda",
+  "Malinau Regency Portal · Next.js": "Portal Kabupaten Malinau · Next.js",
+  "Malinau Regency Portal homepage: “Welcome to Malinau Regency Portal” over a photo of a man in Dayak ceremonial dress, above the four values Indah, Tertib, Makmur and Unggul":
+    "Beranda Portal Kabupaten Malinau: “Welcome to Malinau Regency Portal” di atas foto seorang pria berpakaian adat Dayak, di atas empat nilai Indah, Tertib, Makmur, dan Unggul",
+  "Malinau Regency's old homepage was a single screen of eleven icon links over a photo. In February 2025 one of them still pointed to COVID-19 information, and services, news and data each sat behind an icon of its own.":
+    "Beranda lama Kabupaten Malinau hanya satu layar berisi sebelas ikon tautan di atas sebuah foto. Pada Februari 2025 salah satunya masih mengarah ke informasi COVID-19, dan layanan, berita, serta data masing-masing ada di balik ikonnya sendiri.",
+  "The aim was to modernise it: one portal where residents find public services, news and announcements, in the brand colours the regency asked for, and recognisably Malinau's.":
+    "Tujuannya memodernisasi portal itu: satu portal tempat warga menemukan layanan publik, berita, dan pengumuman, dalam warna brand yang diminta kabupaten, dan langsung terasa khas Malinau.",
+  "The old homepage, February 2025": "Beranda lama, Februari 2025",
+  "The new portal": "Portal baru",
+  "One screen of eleven icon links over a photo": "Satu layar berisi sebelas ikon tautan di atas sebuah foto",
+  "A full homepage: main services first, then news, announcements, gallery and video":
+    "Beranda lengkap: layanan utama lebih dulu, lalu berita, pengumuman, galeri, dan video",
+  "Each service behind its own icon": "Setiap layanan di balik ikonnya sendiri",
+  "**13 public services** in one grid, the main ones in a carousel under the hero":
+    "**13 layanan publik** dalam satu grid, layanan utamanya dalam carousel di bawah hero",
+  "A COVID-19 link still on the front page in 2025": "Tautan COVID-19 masih ada di halaman depan pada 2025",
+  "Latest announcements with their dates and documents": "Pengumuman terbaru lengkap dengan tanggal dan dokumennya",
+  "The old Malinau homepage: eleven icon links, among them Informasi Covid-19, over a photo of Dayak dancers":
+    "Beranda lama Malinau: sebelas ikon tautan, di antaranya Informasi Covid-19, di atas foto penari Dayak",
+  "Before: malinau.go.id in February 2025 (Wayback Machine)": "Sebelum: malinau.go.id pada Februari 2025 (Wayback Machine)",
+  "The new Malinau Regency Portal homepage": "Beranda baru Portal Kabupaten Malinau",
+  "After: the new portal": "Sesudah: portal baru",
+  "Indonesian and English versions, switched from the header": "Versi bahasa Indonesia dan Inggris, dipilih dari header",
+  "Pages for the profile, news, events, announcements and the document repository":
+    "Halaman profil, berita, kegiatan, pengumuman, dan repositori dokumen",
+  "The brand colours the regency asked for": "Warna brand yang diminta kabupaten",
+  "Navy **#003466** and orange **#FE7700** are set once as brand colours and carry the section titles, the panels and the main buttons, so every page reads as the regency's.":
+    "Navy **#003466** dan oranye **#FE7700** ditetapkan sekali sebagai warna brand dan dipakai untuk judul bagian, panel, dan tombol utama, sehingga setiap halaman terasa milik kabupaten.",
+  "Dayak patterns, used with restraint": "Motif Dayak, dipakai secukupnya",
+  "Dayak ornaments frame the main services, sit in the corners of the regent's welcome and the announcements, and open the footer as a coloured band, so the portal looks like Malinau without getting in the way of the content.":
+    "Ornamen Dayak membingkai layanan utama, mengisi sudut sambutan bupati dan pengumuman, serta membuka footer sebagai pita berwarna, sehingga portal terasa khas Malinau tanpa mengganggu konten.",
+  "Services before news": "Layanan sebelum berita",
+  "The main services sit straight under the hero, so someone who came for a service reaches it without scrolling past the latest news.":
+    "Layanan utama berada tepat di bawah hero, sehingga orang yang datang untuk sebuah layanan langsung menemukannya tanpa melewati berita terbaru.",
+  "Two languages": "Dua bahasa",
+  "Every visitor can switch between Indonesian and English from the header.": "Setiap pengunjung bisa beralih antara bahasa Indonesia dan Inggris dari header.",
+  "Main Services on the portal: Dayak ornaments in both top corners, the title in navy, the orange SAGET button in the header":
+    "Layanan Utama di portal: ornamen Dayak di kedua sudut atas, judul berwarna navy, tombol SAGET oranye di header",
+  "Dayak ornaments frame the main services; navy titles, the orange button in the header.":
+    "Ornamen Dayak membingkai layanan utama; judul navy, tombol oranye di header.",
+  "The portal's footer, opened by a band of Dayak pattern in yellow, teal and grey": "Footer portal, dibuka oleh pita motif Dayak berwarna kuning, toska, dan abu-abu",
+  "A band of Dayak pattern opens the footer.": "Pita motif Dayak membuka footer.",
+  "Visit the live site": "Kunjungi situsnya",
+  "Brand and pattern": "Brand dan motif",
+  "I was the front-end developer: I built what residents see and use, in Next.js, from the homepage to the news, events and document pages.":
+    "Saya front-end developer-nya: saya membangun semua yang dilihat dan dipakai warga dengan Next.js, dari beranda hingga halaman berita, kegiatan, dan dokumen.",
+  "The homepage in Next.js: main services first, then news, announcements, gallery and video":
+    "Beranda dengan Next.js: layanan utama lebih dulu, lalu berita, pengumuman, galeri, dan video",
+  "The regency's navy and orange set once as brand colours, and the Dayak ornaments placed in the layout":
+    "Navy dan oranye milik kabupaten ditetapkan sekali sebagai warna brand, dan ornamen Dayak ditempatkan di layout",
+  "Responsive layouts with Tailwind CSS, from phone to desktop": "Layout responsif dengan Tailwind CSS, dari ponsel hingga desktop",
+  "Built the homepage so the main services sit straight under the hero, before news, announcements, the gallery and video.":
+    "Membangun beranda sehingga layanan utama berada tepat di bawah hero, sebelum berita, pengumuman, galeri, dan video.",
+  "Set the regency's navy and orange once as brand colours and placed the Dayak ornaments where they frame content without competing with it.":
+    "Menetapkan navy dan oranye milik kabupaten sekali sebagai warna brand dan menempatkan ornamen Dayak di tempat yang membingkai konten tanpa bersaing dengannya.",
+  "Languages and content": "Bahasa dan konten",
+  "Indonesian and English routes in Next.js; photos and documents load from the regency's own CDN.":
+    "Rute bahasa Indonesia dan Inggris di Next.js; foto dan dokumen dimuat dari CDN milik kabupaten sendiri.",
+  "Live since 2025 at malinau.go.id, it's where the regency now publishes its news, announcements and documents, in Indonesian and English, with its services one click from the homepage.":
+    "Aktif sejak 2025 di malinau.go.id, portal ini kini menjadi tempat kabupaten menerbitkan berita, pengumuman, dan dokumennya, dalam bahasa Indonesia dan Inggris, dengan layanannya satu klik dari beranda.",
+  "Brand navy": "Navy brand",
+  "Brand orange": "Oranye brand",
+
   /* ---- Case study headings ---- */
   "All work": "Semua karya",
   "The problem": "Masalahnya",
@@ -388,6 +458,11 @@ export const unchanged: string[] = [
   "GSAP",
   "Rive",
   "Lighthouse",
+  "Front end",
+  "Front-end developer",
+  "Layout",
+  "Tailwind CSS",
+  "shadcn/ui",
   "SEO",
   "desktop",
   "mobile",
