@@ -170,6 +170,18 @@ export const work = {
     /** "4.5 on Google Play": shown with a star; the count goes in `ratings`. */
     ratingOn: "on",
     ratings: "ratings",
+    /** Lighthouse rings (work/ScoreRings.tsx). Caption: "<title> · <desktop|mobile>". */
+    lighthouse: {
+      title: "Lighthouse",
+      desktop: "desktop",
+      mobile: "mobile",
+      performance: "Performance",
+      accessibility: "Accessibility",
+      bestPractices: "Best Practices",
+      seo: "SEO",
+      /** Screen readers hear "Performance: 92 out of 100". */
+      outOf: "out of 100",
+    },
   },
 };
 
@@ -411,16 +423,20 @@ export const projects: Project[] = [
     // every page designed and built by them. It went live and has since been replaced.
     // No links: neither the company's site nor any copy of the build is shown.
     client: "PT Alnair Inovasi Solusindo (Alindo)",
-    role: "UI/UX designer and front-end developer",
+    // The user, 2026-11-17: "UI UX | Front End", as written.
+    role: "UI UX | Front End",
     platforms: ["Design", "Web"],
     year: "2026",
-    // Waiting on the HTML folder: Lighthouse run locally.
-    metric: { value: "TODO: Lighthouse score", label: "TODO: what it measures (performance, accessibility…)" },
+    // Lighthouse 13.6 on the local build, median of 5 runs, 2026-11-17
+    // (docs/evidence/alindo/lighthouse.md). Chosen by the user. Mobile performance was 60.
+    metric: { value: "92", label: "Lighthouse performance, desktop" },
+    lighthouse: { device: "desktop", performance: 92, accessibility: 92, bestPractices: 96, seo: 100 },
     media: {
       frame: "browser",
       label: "Alindo company website, homepage",
       caption: "Alindo · HTML and Tailwind",
-      // Screenshot by the user, 2026-11-15: 2880×1800, the scrollbar cropped off, scaled to 2560×1600.
+      // The local build at 1440×900, 2×, scaled to 2560×1600 (scripts/record-scroll.mjs with a
+      // .png): the frame both scroll videos start and end on, so they fade in without a shift.
       screens: [
         {
           src: "/projects/alindo/screens/home.webp",
@@ -429,6 +445,12 @@ export const projects: Project[] = [
           height: 1600,
         },
       ],
+      // Recorded from the local build, 2026-11-17 (scripts/tours/alindo-*.json).
+      // card: hero → About → Services → back up, 8 s, 960×600. page: the whole homepage, 18 s, 1280×800.
+      scroll: {
+        card: { webm: "/projects/alindo/video/card.webm", mp4: "/projects/alindo/video/card.mp4" },
+        page: { webm: "/projects/alindo/video/full.webm", mp4: "/projects/alindo/video/full.mp4" },
+      },
     },
     // Noindex until the metric and result are in.
     dummy: true,
@@ -485,12 +507,163 @@ export const projects: Project[] = [
       ],
       result: {
         text: "TODO: client feedback, or what changed after it went live in 2026.",
-        metrics: [{ value: "TODO: Lighthouse scores", label: "TODO: from the HTML folder" }],
+        // The Lighthouse scores show as rings above (project.lighthouse).
+        metrics: [],
       },
     },
   },
+  {
+    slug: "malinau-portal",
+    name: "Malinau Regency Portal",
+    title: "Modernised a regency's official portal, from one screen of icon links to a home for its services, news and announcements.",
+    summary:
+      "A new official portal for Malinau Regency in North Kalimantan, in Indonesian and English. It replaced a single screen of icon links with a site for public services, news, announcements, events and documents, in the brand colours the regency asked for, with Dayak patterns through the design.",
+    // The user, 2026-11-17: their role was the front end; the purpose was to modernise the
+    // portal; the colours follow the brand the regency asked for, with Dayak patterns. The rest
+    // of the copy was left to me ("by your perspective"), so it only says what the live site and
+    // the Wayback Machine show: no invented numbers or feedback. They've since left, and no code
+    // is kept: read from the live site and the Wayback Machine on 2026-11-17. Old site (jQuery) last archived 2025-02-21; new one first archived
+    // 2025-10-28, footer "© 2025".
+    client: "Pemerintah Kabupaten Malinau",
+    role: "Front-end developer",
+    platforms: ["Web"],
+    year: "2025",
+    // No score, at the user's request. Counted on the live homepage, 2026-11-17.
+    metric: { value: "13", label: "public services linked from the homepage" },
+    media: {
+      frame: "browser",
+      label: "Malinau Regency Portal, homepage",
+      caption: "Malinau Regency Portal · Next.js",
+      // The live site at 1440×900, 2×, scaled to 2560×1600, the hero slider held on its first
+      // photo (scripts/tours/malinau-*.json): the frame both scroll videos start and end on.
+      screens: [
+        {
+          src: "/projects/malinau/screens/home.webp",
+          alt: "Malinau Regency Portal homepage: “Welcome to Malinau Regency Portal” over a photo of a man in Dayak ceremonial dress, above the four values Indah, Tertib, Makmur and Unggul",
+          width: 2560,
+          height: 1600,
+        },
+      ],
+      // Recorded from the live site, 2026-11-17. card: hero → main services → services → news →
+      // back up, 10 s, 960×600. page: the whole homepage, 21 s, 1280×800.
+      scroll: {
+        card: { webm: "/projects/malinau/video/card.webm", mp4: "/projects/malinau/video/card.mp4" },
+        page: { webm: "/projects/malinau/video/full.webm", mp4: "/projects/malinau/video/full.mp4" },
+      },
+    },
+    caseStudy: {
+      problem: [
+        "Malinau Regency's old homepage was a single screen of eleven icon links over a photo. In February 2025 one of them still pointed to COVID-19 information, and services, news and data each sat behind an icon of its own.",
+        "The aim was to modernise it: one portal where residents find public services, news and announcements, in the brand colours the regency asked for, and recognisably Malinau's.",
+      ],
+      compare: {
+        beforeTitle: "The old homepage, February 2025",
+        afterTitle: "The new portal",
+        rows: [
+          {
+            before: "One screen of eleven icon links over a photo",
+            after: "A full homepage: main services first, then news, announcements, gallery and video",
+          },
+          {
+            before: "Each service behind its own icon",
+            after: "**13 public services** in one grid, the main ones in a carousel under the hero",
+          },
+          {
+            before: "A COVID-19 link still on the front page in 2025",
+            after: "Latest announcements with their dates and documents",
+          },
+        ],
+        shots: {
+          before: {
+            src: "/projects/malinau/screens/before-2025-02.webp",
+            alt: "The old Malinau homepage: eleven icon links, among them Informasi Covid-19, over a photo of Dayak dancers",
+            width: 1440,
+            height: 900,
+            caption: "Before: malinau.go.id in February 2025 (Wayback Machine)",
+          },
+          after: {
+            src: "/projects/malinau/screens/home.webp",
+            alt: "The new Malinau Regency Portal homepage",
+            width: 2560,
+            height: 1600,
+            caption: "After: the new portal",
+          },
+        },
+      },
+      role: {
+        summary: "I was the front-end developer: I built what residents see and use, in Next.js, from the homepage to the news, events and document pages.",
+        did: [
+          "The homepage in Next.js: main services first, then news, announcements, gallery and video",
+          "The regency's navy and orange set once as brand colours, and the Dayak ornaments placed in the layout",
+          "Indonesian and English versions, switched from the header",
+          "Pages for the profile, news, events, announcements and the document repository",
+          "Responsive layouts with Tailwind CSS, from phone to desktop",
+        ],
+      },
+      process: [
+        {
+          title: "Layout",
+          text: "Built the homepage so the main services sit straight under the hero, before news, announcements, the gallery and video.",
+        },
+        {
+          title: "Brand and pattern",
+          text: "Set the regency's navy and orange once as brand colours and placed the Dayak ornaments where they frame content without competing with it.",
+        },
+        {
+          title: "Languages and content",
+          text: "Indonesian and English routes in Next.js; photos and documents load from the regency's own CDN.",
+        },
+      ],
+      // Read from the live site's response headers, HTML and CSS, 2026-11-17.
+      stack: [{ group: "Front end", items: ["Next.js", "Tailwind CSS", "shadcn/ui"] }],
+      decisions: [
+        {
+          title: "The brand colours the regency asked for",
+          why: "Navy **#003466** and orange **#FE7700** are set once as brand colours and carry the section titles, the panels and the main buttons, so every page reads as the regency's.",
+        },
+        {
+          title: "Dayak patterns, used with restraint",
+          why: "Dayak ornaments frame the main services, sit in the corners of the regent's welcome and the announcements, and open the footer as a coloured band, so the portal looks like Malinau without getting in the way of the content.",
+        },
+        {
+          title: "Services before news",
+          why: "The main services sit straight under the hero, so someone who came for a service reaches it without scrolling past the latest news.",
+        },
+        {
+          title: "Two languages",
+          why: "Every visitor can switch between Indonesian and English from the header.",
+        },
+      ],
+      brand: {
+        colors: [
+          { label: "Brand navy", hex: "#003466" },
+          { label: "Brand orange", hex: "#FE7700" },
+        ],
+        details: [
+          {
+            src: "/projects/malinau/screens/detail-services.webp",
+            alt: "Main Services on the portal: Dayak ornaments in both top corners, the title in navy, the orange SAGET button in the header",
+            width: 1600,
+            height: 556,
+            caption: "Dayak ornaments frame the main services; navy titles, the orange button in the header.",
+          },
+          {
+            src: "/projects/malinau/screens/detail-footer.webp",
+            alt: "The portal's footer, opened by a band of Dayak pattern in yellow, teal and grey",
+            width: 1600,
+            height: 556,
+            caption: "A band of Dayak pattern opens the footer.",
+          },
+        ],
+      },
+      result: {
+        text: "Live since 2025 at malinau.go.id, it's where the regency now publishes its news, announcements and documents, in Indonesian and English, with its services one click from the homepage.",
+        metrics: [],
+      },
+      links: [{ label: "Visit the live site", href: "https://malinau.go.id" }],
+    },
+  },
   dummyProject("dummy-flutter-app", "Flutter", "phone"),
-  dummyProject("dummy-design", "Design", "browser"),
 ];
 
 /** Headings on the case study pages (/work/<slug>). */
@@ -514,6 +687,8 @@ export const caseStudyLabels = {
   links: "Links",
   next: "Next project",
   ogEyebrow: "Case study",
+  /** Brand colours and close-ups of the identity (caseStudy.brand). */
+  brand: "Brand and pattern",
 };
 
 /* ---------------------------------------------------------------------------

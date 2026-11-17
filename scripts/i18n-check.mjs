@@ -27,7 +27,7 @@ const { id, unchanged } = await import("../src/content/site.id.ts");
 // Not words to translate: identifiers, names and numbers (same as content/locale.ts
 // skips, plus names that read the same in every language).
 const skipKeys = new Set([
-  "slug", "id", "icon", "kind", "frame", "tail", "platforms", "src", "mask", "glare", "poster", "webm", "mp4", "captions", "href",
+  "slug", "id", "icon", "kind", "frame", "tail", "platforms", "src", "mask", "glare", "poster", "webm", "mp4", "captions", "device", "hex", "href",
   "name", "first", "second", "city", "region", "timeZone", "utcOffset", "client", "store", "checked", "year", "number",
 ]);
 const isWords = (s) => /\p{L}/u.test(s) && !s.startsWith("TODO:") && !/^(https?:|mailto:|\/)/.test(s) && !/^[\w.+-]+@[\w.-]+$/.test(s);

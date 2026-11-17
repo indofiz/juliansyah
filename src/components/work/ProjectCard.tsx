@@ -11,6 +11,7 @@ import { Placeholder } from "../ui/Placeholder";
 import { Button } from "../ui/primitives";
 import { PhoneScreens } from "../media/DeviceStill";
 import { RatingLine } from "./StoreLinks";
+import { ScoreRings } from "./ScoreRings";
 
 type Labels = LocalContent["work"]["labels"];
 
@@ -142,7 +143,7 @@ export async function ProjectCard({ p }: { p: Project }) {
             <LoopVideo media={p.media} />
           </PhoneFrame>
         ) : (
-          <BrowserMedia media={p.media} sizes="(max-width: 640px) 90vw, (max-width: 1023px) 45vw, 370px" />
+          <BrowserMedia media={p.media} sizes="(max-width: 640px) 90vw, (max-width: 1023px) 45vw, 370px" scroll="card" />
         )}
       </div>
       <div className="work-body">
@@ -151,7 +152,7 @@ export async function ProjectCard({ p }: { p: Project }) {
             <Placeholder text={p.title} />
           </a>
         </h3>
-        <MetricLine p={p} />
+        {p.lighthouse ? <ScoreRings scores={p.lighthouse} labels={labels.lighthouse} /> : <MetricLine p={p} />}
         <Meta p={p} labels={labels} />
         <span className="work-cta" aria-hidden="true">
           {labels.caseStudy}

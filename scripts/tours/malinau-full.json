@@ -1,0 +1,21 @@
+{
+  "viewport": [1440, 900],
+  "scale": 0.8889,
+  "fps": 25,
+  "settle": 4000,
+  "tail": 1200,
+  "//": "The hero slider advances on a 5 s interval; pausing it keeps the first photo, so the loop starts and ends on the same frame.",
+  "initScript": "const setInterval0 = window.setInterval; window.setInterval = function (fn, ms, ...rest) { return ms === 5000 ? 0 : setInterval0.call(this, fn, ms, ...rest); };",
+  "stops": [
+    {"hold": 1000},
+    {"to": 900, "ms": 1200, "hold": 800},
+    {"to": 1498, "ms": 800, "hold": 1000},
+    {"to": 2522, "ms": 1000, "hold": 1000},
+    {"to": 3285, "ms": 900, "hold": 1000},
+    {"to": 4496, "ms": 1000, "hold": 1000},
+    {"to": 5340, "ms": 900, "hold": 900},
+    {"to": 6264, "ms": 900, "hold": 900},
+    {"to": "end", "ms": 900, "hold": 1200},
+    {"to": 0, "ms": 2400, "hold": 800}
+  ]
+}

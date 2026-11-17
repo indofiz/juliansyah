@@ -660,6 +660,83 @@
   color: var(--text);
 }
 
+/* Before and after, as screenshots above the rows (e.g. the old site from
+   the Wayback Machine and the new one). */
+/* The screenshots and the rows share the content column. */
+.cs-compare-wrap {
+  min-width: 0;
+}
+
+.cs-ba {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.cs-ba-figure {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.cs-ba-figure figcaption,
+.cs-detail figcaption {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+/* Brand and pattern: colour swatches, then close-ups of the page. */
+.cs-brand {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 48rem;
+}
+
+.cs-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+}
+
+.cs-swatches li {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  column-gap: 0.75rem;
+  align-items: center;
+}
+
+.cs-swatch {
+  grid-row: span 2;
+  width: 2.75rem;
+  aspect-ratio: 1;
+  border-radius: 0.75rem;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+
+.cs-swatch-name {
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.cs-swatches code {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.cs-detail {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.cs-detail img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 1rem 2.5rem rgba(0, 0, 0, 0.35);
+}
+
 /* Before and after: the app's column carries the accent. */
 .cs-compare {
   width: 100%;

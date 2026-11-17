@@ -50,7 +50,19 @@ export type LoopMedia = {
    * case study, `tablet` for the case study's tablet screenshot.
    */
   stills?: { card: DeviceStill; page: DeviceStill; tablet?: DeviceStill };
+  /**
+   * Browser frame only: recordings of the page scrolling, played over the
+   * still in `screens[0]` (media/ScrollVideo.tsx). `card` plays on the
+   * homepage card while it's hovered or focused (on touch screens, while it's
+   * on screen); `page` plays on the case study hero. Each starts and ends on
+   * the still's frame, so it loops without a jump. Recorded with
+   * scripts/record-scroll.mjs, compressed with scripts/encode-scroll.sh.
+   */
+  scroll?: { card?: VideoSources; page?: VideoSources };
 };
+
+/** One recording in two formats: WebM (VP9) first, MP4 (H.264) for Safari. */
+export type VideoSources = { webm: string; mp4: string };
 
 /**
  * A still of a device whose screen is see-through, exported from /studio
@@ -90,11 +102,26 @@ export type MockNavItem = { icon: IconName; label: string; tail?: "chevron" | "h
 export type CaseStudy = {
   /** The problem, in the client's words where possible. */
   problem: string[];
-  /** Old way vs new way, one pair per row. Shown right after the problem. */
-  compare?: { beforeTitle: string; afterTitle: string; rows: { before: string; after: string }[] };
+  /**
+   * Old way vs new way, one pair per row. Shown right after the problem.
+   * `shots`: screenshots of the two, side by side above the rows (16:10, in
+   * browser frames), e.g. the old site from the Wayback Machine and the new one.
+   */
+  compare?: {
+    beforeTitle: string;
+    afterTitle: string;
+    rows: { before: string; after: string }[];
+    shots?: { before: ImageRef & { caption: string }; after: ImageRef & { caption: string } };
+  };
   role: { summary: string; did: string[] };
   process: { title: string; text: string }[];
-  /** "Built with": the stack in named groups, shown as chips. */
+  /**
+   * Brand and pattern: the brand colours as swatches (`hex` exactly as the
+   * site uses it) and close-ups of where the identity shows on the page.
+   * Shown after the key decisions.
+   */
+  brand?: { colors: { label: string; hex: string }[]; details: (ImageRef & { caption: string })[] };
+    /** "Built with": the stack in named groups, shown as chips. */
   stack?: { group: string; items: string[] }[];
   decisions: { title: string; why: string; tradeoff?: string }[];
   /** More real screens, each in the studio phone (needs `media.stills`), with a short caption under it. */
@@ -106,6 +133,20 @@ export type CaseStudy = {
   tablet?: ImageRef & { caption: string };
   result: { text: string; metrics: Metric[] };
   links?: Link[];
+};
+
+/**
+ * Lighthouse category scores (0–100) from one measured run, drawn as
+ * PageSpeed's rings (work/ScoreRings.tsx). Never estimated: keep the report
+ * beside the numbers (docs/evidence/<project>/).
+ */
+export type LighthouseScores = {
+  /** Which run the numbers come from; named in the caption. */
+  device: "desktop" | "mobile";
+  performance: number;
+  accessibility: number;
+  bestPractices: number;
+  seo: number;
 };
 
 /** Where to get a live app. `name` is the app's name in the stores. */
@@ -129,6 +170,8 @@ export type Project = {
   status?: string;
   /** The one result shown on the card. */
   metric: Metric;
+  /** Lighthouse rings: on the card in place of `metric`, and in the case study's result. */
+  lighthouse?: LighthouseScores;
   /** A few key technologies, shown in bold on the card, e.g. ["Clean Architecture", "BLoC", "Firebase"]. */
   keyTech?: string[];
   /** Store links: badges on the case study. */

@@ -1053,6 +1053,11 @@
 
 /* One work card per row on phones. */
 @media (max-width: 640px) {
+  /* Before and after screenshots: one above the other. */
+  .cs-ba {
+    grid-template-columns: 1fr;
+  }
+
   /* Contact: the address and Copy don't fit side by side, so they stack. */
   .contact-email {
     flex-direction: column;

@@ -862,6 +862,24 @@
   object-position: top;
 }
 
+/* The page scrolling, over the still (media/ScrollVideo.tsx). Hidden until
+   it plays, so the still shows while it loads and after it stops. */
+.scroll-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.scroll-video.is-on {
+  opacity: 1;
+}
+
 /* Softer version of .fade-bottom for frames that carry real content. */
 .fade-bottom-soft .frame-inner {
   -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent 100%);
@@ -913,6 +931,116 @@
   transform: translateX(-50%);
   z-index: 3;
   pointer-events: none;
+}
+
+/* ---------- Lighthouse rings (work/ScoreRings.tsx) ----------
+   PageSpeed's gauges: the arc in the band's colour over a disc and track
+   tinted with it, the number in the middle, the category underneath.
+   Bands as PageSpeed: 90–100 green, 50–89 orange, 0–49 red. */
+.scores {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.scores--sm {
+  --ring: 2.875rem;
+  --ring-value: 0.875rem;
+}
+
+.scores--lg {
+  --ring: 5.5rem;
+  --ring-value: 1.75rem;
+  gap: 1.25rem;
+}
+
+.scores-caption {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #948f8a;
+}
+
+.scores-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.scores--lg .scores-list {
+  max-width: 36rem;
+  gap: 1rem;
+}
+
+.score {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.score--pass {
+  --score: #0cce6b;
+}
+
+.score--average {
+  --score: #ffa400;
+}
+
+.score--fail {
+  --score: #ff4e42;
+}
+
+.score-ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--ring);
+  aspect-ratio: 1;
+}
+
+.score-ring svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.score-base {
+  fill: var(--score);
+  fill-opacity: 0.1;
+  stroke: var(--score);
+  stroke-opacity: 0.16;
+  stroke-width: 2.6;
+}
+
+.score-arc {
+  fill: none;
+  stroke: var(--score);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+}
+
+.score-value {
+  position: relative;
+  font-size: var(--ring-value);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--score);
+}
+
+.score-label {
+  font-size: 0.75rem;
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+.scores--lg .score-label {
+  font-size: 0.9375rem;
+  color: var(--text);
 }
 
 /* ---------- Loop video (media/LoopVideo.tsx) ---------- */
