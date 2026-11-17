@@ -423,7 +423,8 @@ export const projects: Project[] = [
     // every page designed and built by them. It went live and has since been replaced.
     // No links: neither the company's site nor any copy of the build is shown.
     client: "PT Alnair Inovasi Solusindo (Alindo)",
-    role: "UI/UX designer and front-end developer",
+    // The user, 2026-11-17: "UI UX | Front End", as written.
+    role: "UI UX | Front End",
     platforms: ["Design", "Web"],
     year: "2026",
     // Lighthouse 13.6 on the local build, median of 5 runs, 2026-11-17

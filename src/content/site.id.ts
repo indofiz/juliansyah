@@ -191,7 +191,6 @@ export const id: Record<string, string> = {
     "Mendesain ulang situs perusahaan IT agar pengunjung langsung tahu apa yang dikerjakannya sejak layar pertama.",
   "A redesign of the company website for Alindo, an IT company offering six services and six products, from web and mobile apps to AI and cloud. I worked alone, from UX and visual design in Figma to the HTML, Tailwind and JavaScript build.":
     "Desain ulang situs perusahaan Alindo, perusahaan IT dengan enam layanan dan enam produk, dari aplikasi web dan mobile hingga AI dan cloud. Saya mengerjakannya sendiri, dari desain UX dan visual di Figma hingga build HTML, Tailwind, dan JavaScript.",
-  "UI/UX designer and front-end developer": "UI/UX designer dan front-end developer",
   "Alindo company website, homepage": "Situs perusahaan Alindo, halaman beranda",
   "Alindo · HTML and Tailwind": "Alindo · HTML dan Tailwind",
   "Alindo homepage: the headline “Engineering Digital Solutions for a Better Tomorrow” above four reasons to choose Alindo":
@@ -460,6 +459,7 @@ export const unchanged: string[] = [
   "Lighthouse",
   "Front end",
   "Front-end developer",
+  "UI UX | Front End",
   "Layout",
   "Tailwind CSS",
   "shadcn/ui",
