@@ -15,6 +15,7 @@ import { PhoneFrame } from "@/components/media/DeviceFrame";
 import Image from "next/image";
 import { DeviceStill, PhoneScreens } from "@/components/media/DeviceStill";
 import { RatingLine, StoreBadges } from "@/components/work/StoreLinks";
+import { ScoreRings } from "@/components/work/ScoreRings";
 import { LoopVideo } from "@/components/media/LoopVideo";
 import { Icon } from "@/components/ui/Icon";
 import { Placeholder, isTodo } from "@/components/ui/Placeholder";
@@ -317,18 +318,21 @@ export default async function CaseStudyPage({ params }: PageProps<"/[lang]/work/
               {L.result}
             </h2>
             <div className="cs-prose">
-              <ul className="cs-metrics">
-                {cs.result.metrics.map((m) => (
-                  <li key={m.label}>
-                    <strong>
-                      <Placeholder text={m.value} />
-                    </strong>
-                    <span>
-                      <Placeholder text={m.label} />
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              {p.lighthouse && <ScoreRings scores={p.lighthouse} labels={work.labels.lighthouse} size="lg" />}
+              {cs.result.metrics.length > 0 && (
+                <ul className="cs-metrics">
+                  {cs.result.metrics.map((m) => (
+                    <li key={m.label}>
+                      <strong>
+                        <Placeholder text={m.value} />
+                      </strong>
+                      <span>
+                        <Placeholder text={m.label} />
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
               <p>
                 <Placeholder text={cs.result.text} />
               </p>

@@ -120,6 +120,20 @@ export type CaseStudy = {
   links?: Link[];
 };
 
+/**
+ * Lighthouse category scores (0–100) from one measured run, drawn as
+ * PageSpeed's rings (work/ScoreRings.tsx). Never estimated: keep the report
+ * beside the numbers (docs/evidence/<project>/).
+ */
+export type LighthouseScores = {
+  /** Which run the numbers come from; named in the caption. */
+  device: "desktop" | "mobile";
+  performance: number;
+  accessibility: number;
+  bestPractices: number;
+  seo: number;
+};
+
 /** Where to get a live app. `name` is the app's name in the stores. */
 export type StoreLinks = { name: string; appStore?: string; googlePlay?: string };
 
@@ -141,6 +155,8 @@ export type Project = {
   status?: string;
   /** The one result shown on the card. */
   metric: Metric;
+  /** Lighthouse rings: on the card in place of `metric`, and in the case study's result. */
+  lighthouse?: LighthouseScores;
   /** A few key technologies, shown in bold on the card, e.g. ["Clean Architecture", "BLoC", "Firebase"]. */
   keyTech?: string[];
   /** Store links: badges on the case study. */

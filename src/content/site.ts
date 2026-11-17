@@ -170,6 +170,18 @@ export const work = {
     /** "4.5 on Google Play": shown with a star; the count goes in `ratings`. */
     ratingOn: "on",
     ratings: "ratings",
+    /** Lighthouse rings (work/ScoreRings.tsx). Caption: "<title> · <desktop|mobile>". */
+    lighthouse: {
+      title: "Lighthouse",
+      desktop: "desktop",
+      mobile: "mobile",
+      performance: "Performance",
+      accessibility: "Accessibility",
+      bestPractices: "Best Practices",
+      seo: "SEO",
+      /** Screen readers hear "Performance: 92 out of 100". */
+      outOf: "out of 100",
+    },
   },
 };
 
@@ -417,6 +429,7 @@ export const projects: Project[] = [
     // Lighthouse 13.6 on the local build, median of 5 runs, 2026-11-17
     // (docs/evidence/alindo/lighthouse.md). Chosen by the user. Mobile performance was 60.
     metric: { value: "92", label: "Lighthouse performance, desktop" },
+    lighthouse: { device: "desktop", performance: 92, accessibility: 92, bestPractices: 96, seo: 100 },
     media: {
       frame: "browser",
       label: "Alindo company website, homepage",
@@ -493,11 +506,8 @@ export const projects: Project[] = [
       ],
       result: {
         text: "TODO: client feedback, or what changed after it went live in 2026.",
-        metrics: [
-          { value: "92", label: "Lighthouse performance, desktop" },
-          { value: "92", label: "Lighthouse accessibility" },
-          { value: "100", label: "Lighthouse SEO" },
-        ],
+        // The Lighthouse scores show as rings above (project.lighthouse).
+        metrics: [],
       },
     },
   },

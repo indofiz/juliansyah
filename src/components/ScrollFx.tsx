@@ -156,6 +156,16 @@ export function ScrollFx() {
       });
     });
 
+    // Lighthouse rings (work/ScoreRings.tsx) fill in from empty, like PageSpeed's.
+    gsap.utils.toArray<SVGCircleElement>(".score-arc").forEach((arc) => {
+      gsap.from(arc, {
+        attr: { "stroke-dasharray": "0 100" },
+        duration: 1.4,
+        ease: "power2.out",
+        scrollTrigger: { trigger: arc, start: "top 92%" },
+      });
+    });
+
     document.querySelectorAll<HTMLElement>("[data-cta]").forEach((panel) => {
       const st = { trigger: panel, start: "top 85%", end: "center 45%", scrub: true };
       gsap.to(panel.querySelector(".cta-glow-corner"), { opacity: 0, ease: "none", scrollTrigger: st });
