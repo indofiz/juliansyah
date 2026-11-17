@@ -48,8 +48,9 @@ const hidden = { x: 0, y: 0.6, scale: 0.7, globeSpin: 4.8, shapeSpin: 0.6, morph
  * The portrait scattered into a faded cloud (after about). The step picture
  * switches off here, unseen (morph 1 or more and fading out), so contact
  * re-forms the earth.
+ * Hidden for launch: only Playground and Kind words use it.
  */
-const scattered = { x: 0, y: 0.25, scale: 0.85, globeSpin: 4.8, shapeSpin: 0.3, morph: 1, sink: 0, opacity: 0, pictures: 0, mobile: { y: 0.5 } };
+// const scattered = { x: 0, y: 0.25, scale: 0.85, globeSpin: 4.8, shapeSpin: 0.3, morph: 1, sink: 0, opacity: 0, pictures: 0, mobile: { y: 0.5 } };
 
 export const sceneKeyframes: Record<string, SceneKeyframe> = {
   // Big globe rising from the bottom of the hero, behind the dashboard preview
@@ -130,8 +131,10 @@ export const sceneKeyframes: Record<string, SceneKeyframe> = {
 
   // The portrait breaks apart where it formed and fades as the playground
   // arrives; the quotes stay on a clean background.
-  playground: scattered,
-  testimonials: scattered,
+  // Hidden for launch: Playground and Kind words. A key without its section
+  // would make Contact start from `scattered` and cut the portrait in one frame.
+  // playground: scattered,
+  // testimonials: scattered,
 
   // Contact bookends the page: the globe re-forms below the fold and rises
   // behind the frosted contact panel, as it did behind the hero (the earth,

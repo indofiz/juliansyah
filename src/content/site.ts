@@ -44,7 +44,8 @@ export const nav = {
   links: [
     { label: "Work", href: "/#work" },
     { label: "About", href: "/#about" },
-    { label: "Playground", href: "/#playground" },
+    // Hidden for launch: Playground.
+    // { label: "Playground", href: "/#playground" },
     { label: "Contact", href: "/#contact" },
   ] satisfies Link[],
   hire: { label: "Hire me", href: "/#contact" },
@@ -747,14 +748,16 @@ export const footer = {
       links: [
         { label: "Selected work", href: "/#work" },
         { label: "How I work", href: "/#process" },
-        { label: "Playground", href: "/#playground" },
+        // Hidden for launch: Playground.
+        // { label: "Playground", href: "/#playground" },
       ],
     },
     {
       title: "About",
       links: [
         { label: "About me", href: "/#about" },
-        { label: "Kind words", href: "/#testimonials" },
+        // Hidden for launch: Kind words.
+        // { label: "Kind words", href: "/#testimonials" },
         { label: "Contact", href: "/#contact" },
       ],
     },
