@@ -148,4 +148,11 @@
     translate: none;
     scale: none;
   }
+
+  /* Scroll-throughs never load here (ScrollVideo.tsx); this also covers
+     turning reduced motion on after one has started. */
+  .scroll-video,
+  .browser-view .loop-toggle {
+    display: none;
+  }
 }

@@ -142,7 +142,7 @@ export async function ProjectCard({ p }: { p: Project }) {
             <LoopVideo media={p.media} />
           </PhoneFrame>
         ) : (
-          <BrowserMedia media={p.media} sizes="(max-width: 640px) 90vw, (max-width: 1023px) 45vw, 370px" />
+          <BrowserMedia media={p.media} sizes="(max-width: 640px) 90vw, (max-width: 1023px) 45vw, 370px" scroll="card" />
         )}
       </div>
       <div className="work-body">

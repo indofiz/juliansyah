@@ -414,13 +414,15 @@ export const projects: Project[] = [
     role: "UI/UX designer and front-end developer",
     platforms: ["Design", "Web"],
     year: "2026",
-    // Waiting on the HTML folder: Lighthouse run locally.
-    metric: { value: "TODO: Lighthouse score", label: "TODO: what it measures (performance, accessibility…)" },
+    // Lighthouse 13.6 on the local build, median of 5 runs, 2026-11-17
+    // (docs/evidence/alindo/lighthouse.md). Chosen by the user. Mobile performance was 60.
+    metric: { value: "92", label: "Lighthouse performance, desktop" },
     media: {
       frame: "browser",
       label: "Alindo company website, homepage",
       caption: "Alindo · HTML and Tailwind",
-      // Screenshot by the user, 2026-11-15: 2880×1800, the scrollbar cropped off, scaled to 2560×1600.
+      // The local build at 1440×900, 2×, scaled to 2560×1600 (scripts/record-scroll.mjs with a
+      // .png): the frame both scroll videos start and end on, so they fade in without a shift.
       screens: [
         {
           src: "/projects/alindo/screens/home.webp",
@@ -429,6 +431,12 @@ export const projects: Project[] = [
           height: 1600,
         },
       ],
+      // Recorded from the local build, 2026-11-17 (scripts/tours/alindo-*.json).
+      // card: hero → About → Services → back up, 8 s, 960×600. page: the whole homepage, 18 s, 1280×800.
+      scroll: {
+        card: { webm: "/projects/alindo/video/card.webm", mp4: "/projects/alindo/video/card.mp4" },
+        page: { webm: "/projects/alindo/video/full.webm", mp4: "/projects/alindo/video/full.mp4" },
+      },
     },
     // Noindex until the metric and result are in.
     dummy: true,
@@ -485,7 +493,11 @@ export const projects: Project[] = [
       ],
       result: {
         text: "TODO: client feedback, or what changed after it went live in 2026.",
-        metrics: [{ value: "TODO: Lighthouse scores", label: "TODO: from the HTML folder" }],
+        metrics: [
+          { value: "92", label: "Lighthouse performance, desktop" },
+          { value: "92", label: "Lighthouse accessibility" },
+          { value: "100", label: "Lighthouse SEO" },
+        ],
       },
     },
   },

@@ -862,6 +862,24 @@
   object-position: top;
 }
 
+/* The page scrolling, over the still (media/ScrollVideo.tsx). Hidden until
+   it plays, so the still shows while it loads and after it stops. */
+.scroll-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.scroll-video.is-on {
+  opacity: 1;
+}
+
 /* Softer version of .fade-bottom for frames that carry real content. */
 .fade-bottom-soft .frame-inner {
   -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent 100%);

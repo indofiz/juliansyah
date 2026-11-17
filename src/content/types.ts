@@ -50,7 +50,19 @@ export type LoopMedia = {
    * case study, `tablet` for the case study's tablet screenshot.
    */
   stills?: { card: DeviceStill; page: DeviceStill; tablet?: DeviceStill };
+  /**
+   * Browser frame only: recordings of the page scrolling, played over the
+   * still in `screens[0]` (media/ScrollVideo.tsx). `card` plays on the
+   * homepage card while it's hovered or focused (on touch screens, while it's
+   * on screen); `page` plays on the case study hero. Each starts and ends on
+   * the still's frame, so it loops without a jump. Recorded with
+   * scripts/record-scroll.mjs, compressed with scripts/encode-scroll.sh.
+   */
+  scroll?: { card?: VideoSources; page?: VideoSources };
 };
+
+/** One recording in two formats: WebM (VP9) first, MP4 (H.264) for Safari. */
+export type VideoSources = { webm: string; mp4: string };
 
 /**
  * A still of a device whose screen is see-through, exported from /studio

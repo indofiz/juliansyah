@@ -135,7 +135,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/[lang]/work/
                   <LoopVideo media={p.media} />
                 </PhoneFrame>
               ) : (
-                <BrowserMedia media={p.media} sizes="(max-width: 1440px) 92vw, 1280px" eager />
+                <BrowserMedia media={p.media} sizes="(max-width: 1440px) 92vw, 1280px" eager scroll="page" />
               )}
             </figure>
           </div>

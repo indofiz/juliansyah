@@ -1,0 +1,12 @@
+{
+  "viewport": [1440, 900],
+  "scale": 0.6667,
+  "fps": 30,
+  "settle": 3000,
+  "stops": [
+    { "hold": 900 },
+    { "to": "#about", "ms": 1400, "hold": 900 },
+    { "to": "#services", "ms": 1200, "hold": 1200 },
+    { "to": 0, "ms": 1600, "hold": 700 }
+  ]
+}

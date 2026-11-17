@@ -1,0 +1,16 @@
+{
+  "viewport": [1440, 900],
+  "scale": 0.8889,
+  "fps": 30,
+  "settle": 3000,
+  "stops": [
+    { "hold": 1000 },
+    { "to": "#about", "ms": 1400, "hold": 900 },
+    { "to": "#services", "ms": 1100, "hold": 1200 },
+    { "to": "#clients", "ms": 1300, "hold": 1400 },
+    { "to": "#partners", "ms": 1100, "hold": 700 },
+    { "to": "#alliance", "ms": 800, "hold": 700 },
+    { "to": "end", "ms": 900, "hold": 1300 },
+    { "to": 0, "ms": 2200, "hold": 800 }
+  ]
+}

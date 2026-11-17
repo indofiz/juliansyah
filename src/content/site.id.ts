@@ -230,6 +230,9 @@ export const id: Record<string, string> = {
   "Motion that follows the scroll": "Animasi yang mengikuti scroll",
   "GSAP's ScrollTrigger brings each section in as it reaches the screen: the reasons to choose Alindo, a split reveal for About, a dark reveal for the services and a scatter for the client logos.":
     "ScrollTrigger dari GSAP memunculkan setiap bagian saat masuk ke layar: alasan memilih Alindo, split reveal untuk About, dark reveal untuk layanan, dan efek scatter untuk logo klien.",
+  "Lighthouse performance, desktop": "Performa Lighthouse, desktop",
+  "Lighthouse accessibility": "Aksesibilitas Lighthouse",
+  "Lighthouse SEO": "SEO Lighthouse",
 
   /* ---- Case study headings ---- */
   "All work": "Semua karya",
